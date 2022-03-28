@@ -4,9 +4,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{44E3B7EB-B8F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{73B62753-B4C5-4303-AF1D-53BC0F22A191}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp", "src\BlazorApp\BlazorApp.csproj", "{9C693BDB-387A-49AD-8118-EA27733EA71B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9C693BDB-387A-49AD-8118-EA27733EA71B} = {44E3B7EB-B8F9-4542-8E6B-DE518A6AA2E8}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C693BDB-387A-49AD-8118-EA27733EA71B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C693BDB-387A-49AD-8118-EA27733EA71B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C693BDB-387A-49AD-8118-EA27733EA71B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C693BDB-387A-49AD-8118-EA27733EA71B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
