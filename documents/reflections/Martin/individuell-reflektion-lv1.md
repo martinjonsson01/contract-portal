@@ -1,5 +1,5 @@
 # Individuella reflektioner för Martin
-## Vecka 12
+## Läsvecka 1
 
 Just nu har jag lite erfarenhet av agila arbetssätt, och jag vill lära mig hur man i praktiken kan implementera ett agilt arbetssätt med en riktig stakeholder i spel. För att göra detta har jag röstat på att vi arbetar med en extern stakeholder, och det har gått igenom.
 
