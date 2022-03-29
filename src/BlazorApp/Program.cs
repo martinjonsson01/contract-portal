@@ -1,28 +1,48 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using BlazorApp.Data;
+namespace BlazorApp;
 
-var builder = WebApplication.CreateBuilder(args);
+using Data;
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+/// <summary>
+///     Test.
+/// </summary>
+public static class Program
 {
-    app.UseExceptionHandler("/Error");
+    /// <summary>
+    ///     Test.
+    /// </summary>
+    /// <param name="args">Arguments.</param>
+    public static void Main(string[] args)
+    {
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+        // Add services to the container.
+        builder.Services.AddRazorPages();
+        builder.Services.AddServerSideBlazor();
+        builder.Services.AddSingleton<WeatherForecastService>();
+
+        WebApplication app = builder.Build();
+
+        static void TestingMethod()
+        {
+            Console.WriteLine("gamer");
+        }
+
+        TestingMethod();
+
+        const int test = 1;
+        Console.WriteLine(test);
+
+        // Configure the HTTP request pipeline.
+        if (!app.Environment.IsDevelopment())
+            app.UseExceptionHandler("/Error");
+
+        app.UseStaticFiles();
+
+        app.UseRouting();
+
+        app.MapBlazorHub();
+        app.MapFallbackToPage("/_Host");
+
+        app.Run();
+    }
 }
-
-
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
-
-app.Run();
