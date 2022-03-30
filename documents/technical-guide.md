@@ -54,4 +54,4 @@ Use this document as guidance whenever you encounter something that is new to yo
 
 ## Entity Framework Core
 * [Basic tutorial](https://docs.microsoft.com/en-us/learn/modules/persist-data-ef-core/)
-* [How to use in Blazor *server* apps](https://docs.microsoft.com/en-us/aspnet/core/blazor/fundamentals/dependency-injection?view=aspnetcore-6.0)
+* [How to use in Blazor *server* apps](https://docs.microsoft.com/en-us/aspnet/core/blazor/blazor-server-ef-core?view=aspnetcore-6.0)
