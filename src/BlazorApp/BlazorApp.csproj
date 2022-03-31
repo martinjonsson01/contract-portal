@@ -8,10 +8,10 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <AnalysisLevel>latest-recommended</AnalysisLevel>
+        <AnalysisLevel>latest-all</AnalysisLevel>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <NoWarn>CA1812;SA1633;SA1101;SA1642;SA1503</NoWarn>
+        <NoWarn>CA1812;CA1848;SA1633;SA1101;SA1642;SA1503;SA1309</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
