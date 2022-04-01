@@ -1,6 +1,6 @@
 ---
 name: User Story Template
-about: Describe this issue template's purpose here.
+about: An issue representing a user story which conveys a value proposition and acceptance criteria.
 title: ''
 labels: user story
 assignees: ''
