@@ -14,6 +14,7 @@ Use this document as guidance whenever you encounter something that is new to yo
   * [Pattern matching](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/functional/pattern-matching)
   * [Nullable reference types tutorial](https://docs.microsoft.com/en-us/learn/modules/csharp-null-safety/)
   * [LINQ basics](https://docs.microsoft.com/en-us/dotnet/csharp/linq/query-expression-basics)
+    * [LINQ cheat sheet](https://vslapp.files.wordpress.com/2011/11/linq-cheatsheet.pdf)
   * [Lambda expressions](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/lambda-expressions)
   * [async / await and concurrency](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/async/)
 
