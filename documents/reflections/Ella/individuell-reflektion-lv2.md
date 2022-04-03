@@ -1,4 +1,4 @@
-#Självreflektion läsvecka 2
+# Självreflektion läsvecka 2
 
 * what do I want to learn or understand better?
 Jag vill lära mig mer om C#. Det ska även bli spännande att se hur vi tar oss 
