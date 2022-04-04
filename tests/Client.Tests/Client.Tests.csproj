@@ -40,4 +40,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Client\Client.csproj" />
+  </ItemGroup>
+
 </Project>
