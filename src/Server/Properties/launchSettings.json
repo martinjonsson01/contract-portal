@@ -24,6 +24,12 @@
             "workingDirectory": "$(ProjectDir)",
             "commandLineArgs": "watch run"
         },
+        "CI checks": {
+            "commandName": "Executable",
+            "executablePath": "dotnet.exe",
+            "workingDirectory": "$(ProjectDir)//..//..",
+            "commandLineArgs": "test --no-build --verbosity=minimal -p:CollectCoverage=true -p:Threshold=80 -p:ThresholdType=branch"
+        },
         "IIS Express": {
             "commandName": "IISExpress",
             "launchBrowser": true,
