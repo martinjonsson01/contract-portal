@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 using Domain;
 
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +20,16 @@ public class WeatherForecastController : ControllerBase
     public WeatherForecastController(ILogger<WeatherForecastController> logger) => _logger = logger;
 
     [HttpGet]
-    public IEnumerable<WeatherForecast> Get() =>
-        Enumerable.Range(1, 5).Select(index => new WeatherForecast
-                  {
-                      Date = DateTime.Now.AddDays(index),
-                      TemperatureC = Random.Shared.Next(-20, 55),
-                      Summary = _summaries[Random.Shared.Next(_summaries.Length)],
-                  })
-                  .ToArray();
+    public IEnumerable<WeatherForecast> Get()
+    {
+        _logger.LogInformation("This is an example of logging, {PlaceHolder}", 123);
+        return Enumerable.Range(1, 5).Select(index =>
+                             new WeatherForecast
+                             {
+                                 Date = DateTime.Now.AddDays(index),
+                                 TemperatureC = RandomNumberGenerator.GetInt32(-20, 55),
+                                 Summary = _summaries[RandomNumberGenerator.GetInt32(_summaries.Length)],
+                             })
+                         .ToArray();
+    }
 }
