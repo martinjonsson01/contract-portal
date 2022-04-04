@@ -1,6 +1,6 @@
-namespace BlazorApp;
+using BlazorApp.Data;
 
-using Data;
+namespace BlazorApp;
 
 /// <summary>
 ///     Test.
@@ -16,32 +16,31 @@ public static class Program
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddRazorPages();
-        builder.Services.AddServerSideBlazor();
-        builder.Services.AddSingleton<WeatherForecastService>();
+        _ = builder.Services.AddRazorPages();
+        _ = builder.Services.AddServerSideBlazor();
+        _ = builder.Services.AddSingleton<WeatherForecastService>();
 
         WebApplication app = builder.Build();
 
-        static void TestingMethod()
-        {
-            Console.WriteLine("gamer");
-        }
-
         TestingMethod();
+
+        static void TestingMethod() => Console.WriteLine("gamer");
 
         const int test = 1;
         Console.WriteLine(test);
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
-            app.UseExceptionHandler("/Error");
+        {
+            _ = app.UseExceptionHandler("/Error");
+        }
 
-        app.UseStaticFiles();
+        _ = app.UseStaticFiles();
 
-        app.UseRouting();
+        _ = app.UseRouting();
 
-        app.MapBlazorHub();
-        app.MapFallbackToPage("/_Host");
+        _ = app.MapBlazorHub();
+        _ = app.MapFallbackToPage("/_Host");
 
         app.Run();
     }
