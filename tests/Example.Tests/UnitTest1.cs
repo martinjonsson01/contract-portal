@@ -1,6 +1,6 @@
 using System.Globalization;
 
-using BlazorApp.Data;
+using Client.Pages;
 
 using Xunit;
 using Xunit.Abstractions;
@@ -16,7 +16,7 @@ public class UnitTest1
     [Fact]
     public void Test_WillAlways_Succeed()
     {
-        var forecast = new WeatherForecast();
+        var forecast = new FetchData.WeatherForecast();
         _testOutputHelper.WriteLine(forecast.Date.ToString(CultureInfo.InvariantCulture));
         Assert.True(true);
     }
