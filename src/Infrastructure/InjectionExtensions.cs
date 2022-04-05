@@ -7,15 +7,17 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Infrastructure;
 
 /// <summary>
-/// Injects infrastructure.
+///     Injects infrastructure.
 /// </summary>
 public static class InjectionExtensions
 {
     /// <summary>
-    /// Registers infrastructure services.
+    ///     Registers infrastructure services.
     /// </summary>
     /// <param name="services">The existing services.</param>
     /// <returns>The same service container.</returns>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
-        => services.AddSingleton<IWeatherRepository, WeatherRepository>();
+    {
+        return services.AddSingleton<IWeatherRepository, WeatherRepository>();
+    }
 }

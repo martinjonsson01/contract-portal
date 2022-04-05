@@ -15,5 +15,7 @@ public static class InjectionExtensions
     /// <param name="services">The existing services.</param>
     /// <returns>The same service container.</returns>
     public static IServiceCollection AddApplication(this IServiceCollection services)
-        => services.AddSingleton<IWeatherService, SwedenWeatherService>();
+    {
+        return services.AddSingleton<IWeatherService, SwedenWeatherService>();
+    }
 }
