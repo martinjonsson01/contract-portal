@@ -9,7 +9,7 @@ namespace Infrastructure;
 /// <summary>
 /// Injects infrastructure.
 /// </summary>
-public static class DependencyInjection
+public static class InjectionExtensions
 {
     /// <summary>
     /// Registers infrastructure services.
