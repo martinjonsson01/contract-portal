@@ -7,7 +7,7 @@ using Domain;
 namespace Infrastructure.Weather;
 
 /// <summary>
-/// Implements using PostgreSQL.
+///     Implements using fakes.
 /// </summary>
 public class WeatherRepository : IWeatherRepository
 {
@@ -17,15 +17,19 @@ public class WeatherRepository : IWeatherRepository
     };
 
     /// <summary>
-    /// Gets the forecasts from the database.
+    ///     Gets the forecasts from the database.
     /// </summary>
-    public IEnumerable<WeatherForecast> Forecasts =>
-        Enumerable.Range(1, 5).Select(index =>
-                      new WeatherForecast
-                      {
-                          Date = DateTime.Now.AddDays(index),
-                          TemperatureC = RandomNumberGenerator.GetInt32(-20, 55),
-                          Summary = _summaries[RandomNumberGenerator.GetInt32(_summaries.Length)],
-                      })
-                  .ToArray();
+    public IEnumerable<WeatherForecast> Forecasts => GenerateForecasts();
+
+    private static IEnumerable<WeatherForecast> GenerateForecasts()
+    {
+        return Enumerable.Range(1, 5).Select(index =>
+                             new WeatherForecast
+                             {
+                                 Date = DateTime.Now.AddDays(index),
+                                 TemperatureC = RandomNumberGenerator.GetInt32(-20, 55),
+                                 Summary = _summaries[RandomNumberGenerator.GetInt32(_summaries.Length)],
+                             })
+                         .ToArray();
+    }
 }

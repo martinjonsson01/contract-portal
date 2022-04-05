@@ -13,8 +13,14 @@ public class SwedenWeatherService : IWeatherService
     ///     Construct weather service.
     /// </summary>
     /// <param name="repo">The weather repository.</param>
-    public SwedenWeatherService(IWeatherRepository repo) => _repo = repo;
+    public SwedenWeatherService(IWeatherRepository repo)
+    {
+        _repo = repo;
+    }
 
     /// <inheritdoc />
-    public IEnumerable<WeatherForecast> FetchLatestWeather() => _repo.Forecasts.Take(2);
+    public IEnumerable<WeatherForecast> FetchLatestWeather()
+    {
+        return _repo.Forecasts.Take(2);
+    }
 }
