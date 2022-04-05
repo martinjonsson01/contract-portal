@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-
-using Application.Weather;
 
 using Bogus;
 
@@ -24,7 +21,7 @@ public class WeatherServiceTests
         var mockRepo = new Mock<IWeatherRepository>();
         List<WeatherForecast> mockWeathers = new Faker<WeatherForecast>().Generate(10);
         mockRepo.Setup(repo => repo.Forecasts).Returns(mockWeathers);
-        var cut = new WeatherService(mockRepo.Object);
+        var cut = new SwedenWeatherService(mockRepo.Object);
 
         // Act
         IEnumerable<WeatherForecast> forcasts = cut.FetchLatestWeather();

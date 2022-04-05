@@ -14,14 +14,14 @@ namespace Server.Controllers;
 public class WeatherForecastController : ControllerBase
 {
     private readonly ILogger<WeatherForecastController> _logger;
-    private readonly WeatherService _weather;
+    private readonly IWeatherService _weather;
 
     /// <summary>
     ///     Instantiates the weather controller.
     /// </summary>
     /// <param name="logger">The logger to use when documenting events.</param>
     /// <param name="weather">The weather repository.</param>
-    public WeatherForecastController(ILogger<WeatherForecastController> logger, WeatherService weather)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherService weather)
     {
         _logger = logger;
         _weather = weather;

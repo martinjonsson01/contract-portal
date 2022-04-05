@@ -1,3 +1,5 @@
+using Application;
+
 using Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -5,6 +7,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
 WebApplication app = builder.Build();
