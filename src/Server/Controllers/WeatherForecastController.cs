@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
 
+/// <summary>
+///     Endpoint for weather forecasting requests.
+/// </summary>
 [ApiController]
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
@@ -17,8 +20,16 @@ public class WeatherForecastController : ControllerBase
 
     private readonly ILogger<WeatherForecastController> _logger;
 
+    /// <summary>
+    ///     Instantiates the weather controller.
+    /// </summary>
+    /// <param name="logger">The logger to use when documenting events.</param>
     public WeatherForecastController(ILogger<WeatherForecastController> logger) => _logger = logger;
 
+    /// <summary>
+    ///     Gets the upcoming <see cref="WeatherForecast" />s.
+    /// </summary>
+    /// <returns>The upcoming <see cref="WeatherForecast" />s.</returns>
     [HttpGet]
     public IEnumerable<WeatherForecast> Get()
     {

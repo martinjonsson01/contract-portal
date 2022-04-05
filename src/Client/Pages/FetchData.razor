@@ -42,6 +42,7 @@ else
 @code {
     private WeatherForecast[]? _forecasts;
 
+    /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
         _forecasts = await _http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
