@@ -14,13 +14,12 @@ namespace Client.Tests;
 
 public static class ServiceExtensions
 {
-
     public static MockHttpMessageHandler AddMockHttpClient(this TestServiceProvider services)
     {
         var mockHttpHandler = new MockHttpMessageHandler();
         var httpClient = mockHttpHandler.ToHttpClient();
         httpClient.BaseAddress = new Uri("http://localhost");
-        services.AddSingleton<HttpClient>(httpClient);
+        services.AddSingleton(httpClient);
         return mockHttpHandler;
     }
 
@@ -28,7 +27,7 @@ public static class ServiceExtensions
     {
         request.Respond(req =>
         {
-            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            var response = new HttpResponseMessage { StatusCode = HttpStatusCode.OK, };
             response.Content = new StringContent(JsonSerializer.Serialize(content));
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return response;
@@ -40,7 +39,7 @@ public static class ServiceExtensions
     {
         request.Respond(req =>
         {
-            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            var response = new HttpResponseMessage { StatusCode = HttpStatusCode.OK, };
             response.Content = new StringContent(JsonSerializer.Serialize(contentProvider()));
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return response;

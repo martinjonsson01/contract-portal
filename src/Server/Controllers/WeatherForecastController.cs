@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-
 using Application.Weather;
 
 using Domain;

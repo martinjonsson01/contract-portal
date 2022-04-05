@@ -1,19 +1,10 @@
-﻿using System.Diagnostics.Metrics;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading;
-
-using Bunit;
+﻿using Bunit;
 
 using Client.Pages;
 
 using Domain;
 
 using FluentAssertions;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
 
 using RichardSzalay.MockHttp;
 
