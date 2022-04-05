@@ -1,18 +1,4 @@
-﻿using System;
-
-using Bunit;
-
-using Client.Pages;
-
-using Domain;
-
-using FluentAssertions;
-
-using RichardSzalay.MockHttp;
-
-using Xunit;
-
-namespace Client.Tests.Pages;
+﻿namespace Client.Tests.Pages;
 
 public class FetchDataTests : IDisposable
 {
