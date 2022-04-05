@@ -1,16 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Bogus;
-
-using Domain;
-
-using FluentAssertions;
-
-using Moq;
-
-using Xunit;
-
-namespace Application.Tests.Weather;
+﻿namespace Application.Tests.Weather;
 
 public class WeatherServiceTests
 {
