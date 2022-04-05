@@ -1,22 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Application.Weather;
-
-using Bogus;
-
-using Domain;
-
-using FluentAssertions;
-
-using Microsoft.Extensions.Logging;
-
-using Moq;
-
-using Server.Controllers;
-
-using Xunit;
-
-namespace Server.Tests.Controllers;
+﻿namespace Server.Tests.Controllers;
 
 public class WeatherForecastControllerTests
 {
