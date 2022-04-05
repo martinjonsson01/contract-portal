@@ -1,4 +1,6 @@
-﻿using Bunit;
+﻿using System;
+
+using Bunit;
 
 using Client.Pages;
 
@@ -12,18 +14,33 @@ using Xunit;
 
 namespace Client.Tests.Pages;
 
-public class FetchDataTests
+public class FetchDataTests : IDisposable
 {
-    [Fact]
-    public void CounterShouldIncrementWhenClicked()
-    {
-        // Arrange: render the Counter.razor component
-        using var ctx = new TestContext();
-        MockHttpMessageHandler mockHttp = ctx.Services.AddMockHttpClient();
-        mockHttp.When("/WeatherForecast").RespondJson(new WeatherForecast[1]);
-        IRenderedComponent<FetchData> cut = ctx.RenderComponent<FetchData>();
+    private readonly TestContext _context;
+    private readonly MockHttpMessageHandler _mockHttp;
 
-        // Assert: first find the <p> element, then verify its content
+    public FetchDataTests()
+    {
+        _context = new TestContext();
+        _mockHttp = _context.Services.AddMockHttpClient();
+    }
+
+    public void Dispose()
+    {
+        _context.Dispose();
+        _mockHttp.Dispose();
+    }
+
+    [Fact]
+    public void FetchData_ShouldSayLoading_WhenThereAreNoForecasts()
+    {
+        // Arrange
+        _mockHttp.When("/WeatherForecast").RespondJson(new WeatherForecast[1]);
+
+        // Act
+        IRenderedComponent<FetchData> cut = _context.RenderComponent<FetchData>();
+
+        // Assert
         cut.Find("p em").TextContent.Should().BeEquivalentTo("Loading...");
     }
 }
