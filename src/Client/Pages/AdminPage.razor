@@ -1,0 +1,93 @@
+@page "/admin"
+@using Domain.Contracts
+@using Newtonsoft.Json
+@using System.Net.Http.Headers
+@inject ILogger<AdminPage> _logger
+@inject HttpClient _http
+
+<h3>Admin page</h3>
+
+<h4>Create a contract</h4>
+
+<EditForm Model="@_contract" OnSubmit="Upload">
+    <div class="mb-3">
+        <label for="title" class="form-label">Titel</label>
+        <InputText id="title" class="form-control" placeholder="Skriv titel här..." @bind-Value="@_contract.Title"/>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label" placeholder="Skriv beskrivning här...">Beskrivning</label>
+        <InputTextArea id="description" class="form-control" @bind-Value="@_contract.Description"/>
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Bild</label>
+        <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Spara</button>
+</EditForm>
+
+@code {
+
+    private bool _shouldRender;
+
+    private readonly Contract _contract = new() { Title = string.Empty, Description = string.Empty, ImagePath = string.Empty, };
+    private MultipartFormDataContent? _content;
+
+    /// <inheritdoc />
+    protected override bool ShouldRender()
+    {
+        return _shouldRender;
+    }
+
+    private void OnFileChosen(InputFileChangeEventArgs arg)
+    {
+        _shouldRender = false;
+        long maxFileSize = 1024 * 1024 * 15;
+
+        _content = new MultipartFormDataContent();
+        IBrowserFile file = arg.File;
+
+        try
+        {
+            var fileContent =
+                new StreamContent(file.OpenReadStream(maxFileSize));
+
+            fileContent.Headers.ContentType =
+                new MediaTypeHeaderValue(file.ContentType);
+
+            _content.Add(
+                fileContent,
+                "\"files\"",
+                file.Name);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogInformation(
+                "{FileName} not uploaded: {Message}",
+                file.Name, ex.Message);
+        }
+
+        _shouldRender = true;
+    }
+
+    private async Task Upload()
+    {
+        Console.WriteLine("trying to submit");
+        if (_content is null) return; // TODO: show error
+
+        Console.WriteLine(JsonConvert.SerializeObject(_contract, Formatting.Indented));
+
+    // TODO: upload contract strings
+        HttpResponseMessage response = await _http.PostAsync("/Filesave", _content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("successfully uploaded");
+    // TODO: show upload confirmation
+        }
+
+        _content.Dispose();
+    }
+
+}
