@@ -1,6 +1,26 @@
 ﻿@page "/Contracts"
-<Contract Name="SJ" ImagePath="images/sj.png"></Contract>
+@inject HttpClient _http
+@if (_contracts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (Contract contract in _contracts)
+    {
+        <Contract Name=@contract.Name ImagePath=@contract.ImagePath/>
+    }
+
+}
+
 
 @code {
+    private Contract[]? _contracts;
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        _contracts = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/All");
+    }
 
 }
