@@ -5,4 +5,18 @@
 /// </summary>
 public class Contract
 {
+    /// <summary>
+    ///     Gets or sets the title of the contract supplier.
+    /// </summary>
+    public string Title { get; set; } = "No name";
+
+    /// <summary>
+    ///     Gets or sets the description.
+    /// </summary>
+    public string Description { get; set; } = "No description.";
+
+    /// <summary>
+    ///     Gets or sets image to the supplier logo.
+    /// </summary>
+    public string ImagePath { get; set; } = "images/sj.png";
 }
