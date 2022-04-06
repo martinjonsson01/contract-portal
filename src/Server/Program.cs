@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
+builder.Services.AddSwaggerGen();
 
 WebApplication app = builder.Build();
 
@@ -16,6 +17,8 @@ WebApplication app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
+    _ = app.UseSwagger();
+    _ = app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Blazor API V1"); });
 }
 else
 {
