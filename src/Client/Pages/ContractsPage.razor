@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Domain.Contracts
 @inject HttpClient _http
 @if (_contracts == null)
 {
@@ -6,9 +7,9 @@
 }
 else
 {
-    @foreach (Contract contract in _contracts)
+    @foreach (var contract in _contracts)
     {
-        <Contract Name=@contract.Name ImagePath=@contract.ImagePath/>
+        <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath/>
     }
 
 }
