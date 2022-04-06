@@ -1,8 +1,18 @@
-﻿<card>
-    <img src="images/sj.png"/>
-    <h3>SJ</h3>
-</card>
+﻿<div class="card" style="max-width: 30%;">
+    <img src="@ImagePath" class="img-thumbnail img-fluid"/>
+    <h3>@Name</h3>
+</div>
 
 @code {
+    /// <summary>
+    /// Name of the company.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public string? Name { get; set; }
 
+    /// <summary>
+    /// Image path to the company logo.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public string? ImagePath { get; set; }
 }
