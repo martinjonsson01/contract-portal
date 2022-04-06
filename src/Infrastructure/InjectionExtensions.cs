@@ -18,6 +18,6 @@ public static class InjectionExtensions
     /// <returns>The same service container.</returns>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        return services.AddSingleton<IWeatherRepository, WeatherRepository>();
+        return services.AddSingleton<IWeatherRepository, SwedishWeatherRepository>();
     }
 }

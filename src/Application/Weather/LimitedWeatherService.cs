@@ -3,17 +3,18 @@
 namespace Application.Weather;
 
 /// <summary>
-///     Contains Sweden-specific weather logic.
+///     Contains weather logic that limits how much is available.
 /// </summary>
-public class SwedenWeatherService : IWeatherService
+public class LimitedWeatherService : IWeatherService
 {
+    private const int Limit = 2;
     private readonly IWeatherRepository _repo;
 
     /// <summary>
     ///     Construct weather service.
     /// </summary>
     /// <param name="repo">The weather repository.</param>
-    public SwedenWeatherService(IWeatherRepository repo)
+    public LimitedWeatherService(IWeatherRepository repo)
     {
         _repo = repo;
     }
@@ -21,6 +22,6 @@ public class SwedenWeatherService : IWeatherService
     /// <inheritdoc />
     public IEnumerable<WeatherForecast> FetchLatestWeather()
     {
-        return _repo.Forecasts.Take(2);
+        return _repo.Forecasts.Take(Limit);
     }
 }

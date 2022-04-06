@@ -7,9 +7,9 @@ using Domain;
 namespace Infrastructure.Weather;
 
 /// <summary>
-///     Implements using fakes.
+///     Implements fetching Swedish weather using fakes.
 /// </summary>
-public class WeatherRepository : IWeatherRepository
+public class SwedishWeatherRepository : IWeatherRepository
 {
     private static readonly string[] _summaries =
     {
