@@ -1,5 +1,4 @@
 ﻿using Application.Contracts;
-using Application.Weather;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +16,6 @@ public static class InjectionExtensions
     /// <returns>The same service container.</returns>
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        return services.AddSingleton<IWeatherService, LimitedWeatherService>()
-                       .AddTransient<IContractService, ContractService>();
+        return services.AddTransient<IContractService, ContractService>();
     }
 }
