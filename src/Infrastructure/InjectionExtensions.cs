@@ -1,6 +1,8 @@
 ﻿using Application.Contracts;
+using Application.Images;
 
 using Infrastructure.Contracts;
+using Infrastructure.Images;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +20,7 @@ public static class InjectionExtensions
     /// <returns>The same service container.</returns>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        return services.AddSingleton<IContractRepository, FakeContractRepository>();
+        return services.AddSingleton<IContractRepository, FakeContractRepository>()
+                       .AddSingleton<IImageRepository, LocalImageFileRepository>();
     }
 }
