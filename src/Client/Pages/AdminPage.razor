@@ -12,7 +12,7 @@
 <EditForm Model="@_contract" OnSubmit="Upload">
     <div class="mb-3">
         <label for="title" class="form-label">Titel</label>
-        <InputText id="title" class="form-control" placeholder="Skriv titel här..." @bind-Value="@_contract.Title"/>
+        <InputText id="title" class="form-control" placeholder="Skriv titel här..." @bind-Value="@_contract.Name"/>
     </div>
     <div class="mb-3">
         <label for="description" class="form-label" placeholder="Skriv beskrivning här...">Beskrivning</label>
@@ -31,7 +31,7 @@
 
     private bool _shouldRender;
 
-    private readonly Contract _contract = new() { Title = string.Empty, Description = string.Empty, ImagePath = string.Empty, };
+    private readonly Contract _contract = new() { Name = string.Empty, Description = string.Empty, ImagePath = string.Empty, };
     private MultipartFormDataContent? _content;
 
     /// <inheritdoc />

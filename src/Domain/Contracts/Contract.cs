@@ -6,9 +6,9 @@
 public class Contract
 {
     /// <summary>
-    ///     Gets or sets the title of the contract supplier.
+    ///     Gets or sets the name of the contract supplier.
     /// </summary>
-    public string Title { get; set; } = "No name";
+    public string Name { get; set; } = "No name";
 
     /// <summary>
     ///     Gets or sets the description.

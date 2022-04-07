@@ -1,6 +1,6 @@
-﻿using Application.Weather;
+﻿using Application.Contracts;
 
-using Infrastructure.Weather;
+using Infrastructure.Contracts;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +18,6 @@ public static class InjectionExtensions
     /// <returns>The same service container.</returns>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        return services.AddSingleton<IWeatherRepository, SwedishWeatherRepository>();
+        return services.AddSingleton<IContractRepository, FakeContractRepository>();
     }
 }
