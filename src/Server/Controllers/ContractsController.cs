@@ -1,4 +1,5 @@
 ﻿using Application.Contracts;
+using Application.Images;
 
 using Domain.Contracts;
 
@@ -13,15 +14,18 @@ namespace Server.Controllers;
 [Route("api/v1/[controller]")]
 public class ContractsController : Controller
 {
-    private readonly IContractService _contract;
+    private readonly IContractService _contracts;
+    private readonly IImageService _images;
 
     /// <summary>
     /// Constructs contract API.
     /// </summary>
-    /// <param name="contract">The contract logic.</param>
-    public ContractsController(IContractService contract)
+    /// <param name="contracts">The contract logic.</param>
+    /// <param name="images">The image handling logic.</param>
+    public ContractsController(IContractService contracts, IImageService images)
     {
-        _contract = contract;
+        _contracts = contracts;
+        _images = images;
     }
 
     /// <summary>
@@ -31,6 +35,17 @@ public class ContractsController : Controller
     [HttpGet("All")]
     public IEnumerable<Contract> AllContracts()
     {
-        return _contract.FetchAllContracts();
+        return _contracts.FetchAllContracts();
+    }
+
+    /// <summary>
+    /// Uploads a new contract image file.
+    /// </summary>
+    /// <param name="file">The image to upload and store on the server.</param>
+    /// <returns>The identifier of the stored image.</returns>
+    [HttpPost("new/image")]
+    public async Task<ActionResult<string>> UploadImageAsync(IFormFile file)
+    {
+        return await _images.TryStoreAsync(file.OpenReadStream());
     }
 }

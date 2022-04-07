@@ -39,7 +39,7 @@
     private void OnFileChosen(InputFileChangeEventArgs arg)
     {
         _shouldRender = false;
-        long maxFileSize = 1024 * 1024 * 15;
+        const long maxFileSize = 1024 * 1024 * 15;
 
         _content = new MultipartFormDataContent();
         IBrowserFile file = arg.File;
@@ -75,7 +75,7 @@
         Console.WriteLine(JsonConvert.SerializeObject(_contract, Formatting.Indented));
 
     // TODO: upload contract strings
-        HttpResponseMessage response = await _http.PostAsync("/Filesave", _content);
+        HttpResponseMessage response = await _http.PostAsync("/api/v1/contracts/new", _content);
 
         if (response.IsSuccessStatusCode)
         {
