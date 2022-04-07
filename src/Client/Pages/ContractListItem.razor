@@ -1,10 +1,12 @@
-﻿<div> @Name </div>
+﻿<div class="list-group-item"> @Name </div>
 
 
 @code {
+
     /// <summary>
     /// Name of the company.
     /// </summary>
     [Parameter, EditorRequired,]
     public string? Name { get; set; }
+
 }

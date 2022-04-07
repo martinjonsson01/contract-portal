@@ -1,7 +1,34 @@
 @page "/admin"
+@using Domain.Contracts
+@inject HttpClient _http
 
 <h3>Admin page</h3>
+@if (_contracts == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var contract in _contracts)
+        {
+            <ContractListItem Name=@contract.Name/>
+        }
+    </div>
+}
+
 
 @code {
+
+    private Contract[]? _contracts;
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        _contracts = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/All");
+    }
+
 
 }
