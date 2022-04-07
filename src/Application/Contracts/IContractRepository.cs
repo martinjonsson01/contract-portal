@@ -10,5 +10,5 @@ public interface IContractRepository
     /// <summary>
     /// Gets all contracts.
     /// </summary>
-    public IEnumerable<Contract> Contracts { get; }
+    public ICollection<Contract> Contracts { get; }
 }

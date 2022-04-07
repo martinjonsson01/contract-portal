@@ -1,4 +1,5 @@
 ﻿using Application.Contracts;
+using Application.Exceptions;
 using Application.Images;
 
 using Domain.Contracts;
@@ -64,5 +65,28 @@ public class ContractsController : Controller
             _logger.LogInformation("Error occured during image upload: {Error}", e.Message);
             return BadRequest();
         }
+    }
+
+    /// <summary>
+    /// Creates a new contract.
+    /// </summary>
+    /// <param name="contract">The contract to add.</param>
+    /// <returns>The identifier of the stored image.</returns>
+    /// <response code="400">The ID of the contract was already taken.</response>
+    [HttpPost("new/image")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult CreateContract(Contract contract)
+    {
+        try
+        {
+            _contracts.Add(contract);
+        }
+        catch (IdentifierAlreadyTakenException e)
+        {
+            _logger.LogInformation("ID of contract was already taken: {Error}", e.Message);
+            return BadRequest();
+        }
+
+        return Ok();
     }
 }

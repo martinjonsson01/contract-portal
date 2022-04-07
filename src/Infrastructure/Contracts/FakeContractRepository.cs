@@ -18,5 +18,5 @@ public class FakeContractRepository : IContractRepository
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> Contracts { get; }
+    public ICollection<Contract> Contracts { get; }
 }

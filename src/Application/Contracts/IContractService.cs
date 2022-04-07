@@ -12,4 +12,10 @@ public interface IContractService
     /// </summary>
     /// <returns>All contracts.</returns>
     IEnumerable<Contract> FetchAllContracts();
+
+    /// <summary>
+    /// Adds a new contract.
+    /// </summary>
+    /// <param name="contract">The new contract.</param>
+    void Add(Contract contract);
 }
