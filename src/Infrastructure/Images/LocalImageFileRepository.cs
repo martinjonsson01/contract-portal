@@ -38,6 +38,9 @@ public class LocalImageFileRepository : IImageRepository
         if (imageStream is null)
             throw new ArgumentNullException(nameof(imageStream));
 
+        if (!ImageVerifier.IsValid(imageStream))
+            throw new InvalidImageException();
+
         FileType type = imageStream.DetectMimeType();
         string fileName = $"{Path.GetRandomFileName()}.{type.Extension}";
         string path = Path.Combine(_directoryPath, fileName);
