@@ -4,8 +4,6 @@
 #pragma warning disable IDE0005
 global using System.Collections.Generic;
 
-global using Application.Weather;
-
 global using Server.Controllers;
 
 global using Bogus;
