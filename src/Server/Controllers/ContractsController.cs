@@ -16,16 +16,19 @@ public class ContractsController : Controller
 {
     private readonly IContractService _contracts;
     private readonly IImageService _images;
+    private readonly ILogger<ContractsController> _logger;
 
     /// <summary>
     /// Constructs contract API.
     /// </summary>
     /// <param name="contracts">The contract logic.</param>
     /// <param name="images">The image handling logic.</param>
-    public ContractsController(IContractService contracts, IImageService images)
+    /// <param name="logger">The logging provider.</param>
+    public ContractsController(IContractService contracts, IImageService images, ILogger<ContractsController> logger)
     {
         _contracts = contracts;
         _images = images;
+        _logger = logger;
     }
 
     /// <summary>
@@ -46,6 +49,10 @@ public class ContractsController : Controller
     [HttpPost("new/image")]
     public async Task<ActionResult<string>> UploadImageAsync(IFormFile file)
     {
-        return await _images.TryStoreAsync(file.OpenReadStream());
+        if (file is null)
+            throw new ArgumentNullException(nameof(file));
+
+        _logger.LogInformation("Trying to upload an image file: {Name}", file.Name);
+        return await _images.TryStoreAsync(file.OpenReadStream()).ConfigureAwait(false);
     }
 }

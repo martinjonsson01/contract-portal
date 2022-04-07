@@ -3,6 +3,8 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using MimeDetective.InMemory;
+
 namespace Infrastructure.Images;
 
 /// <summary>
@@ -12,6 +14,7 @@ public class LocalImageFileRepository : IImageRepository
 {
     private readonly IHostEnvironment _environment;
     private readonly ILogger<LocalImageFileRepository> _logger;
+    private readonly string _directoryPath;
 
     /// <summary>
     ///     Constructs a local image file repository with a given environment.
@@ -22,6 +25,7 @@ public class LocalImageFileRepository : IImageRepository
     {
         _environment = environment;
         _logger = logger;
+        _directoryPath = CreateImageDirectory();
     }
 
     /// <summary>
@@ -34,12 +38,9 @@ public class LocalImageFileRepository : IImageRepository
         if (imageStream is null)
             throw new ArgumentNullException(nameof(imageStream));
 
-        string fileName = Path.GetRandomFileName();
-        string path = Path.Combine(
-            _environment.ContentRootPath,
-            _environment.EnvironmentName,
-            "unsafe_uploads",
-            fileName);
+        FileType type = imageStream.DetectMimeType();
+        string fileName = $"{Path.GetRandomFileName()}.{type.Extension}";
+        string path = Path.Combine(_directoryPath, fileName);
 
 #pragma warning disable CA2007
         await using var fs = new FileStream(path, FileMode.Create);
@@ -48,5 +49,27 @@ public class LocalImageFileRepository : IImageRepository
 
         _logger.LogInformation("{FileName} saved at {Path}", fileName, path);
         return fileName;
+    }
+
+    private string CreateImageDirectory()
+    {
+        string directoryPath = Path.Combine(
+            _environment.ContentRootPath,
+            _environment.EnvironmentName,
+            "unsafe_uploads");
+        try
+        {
+            if (!Directory.Exists(directoryPath))
+                _ = Directory.CreateDirectory(directoryPath);
+        }
+        catch (IOException e)
+        {
+            _logger.LogError(
+                "Unable to create local image file directory at path {Path} because of {Exception}",
+                _directoryPath,
+                e.Message);
+        }
+
+        return directoryPath;
     }
 }

@@ -75,11 +75,12 @@
         Console.WriteLine(JsonConvert.SerializeObject(_contract, Formatting.Indented));
 
     // TODO: upload contract strings
-        HttpResponseMessage response = await _http.PostAsync("/api/v1/contracts/new", _content);
+        HttpResponseMessage response = await _http.PostAsync("/api/v1/contracts/new/image", _content);
 
         if (response.IsSuccessStatusCode)
         {
-            Console.WriteLine("successfully uploaded");
+            string fileIdentifier = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"successfully uploaded {fileIdentifier}");
     // TODO: show upload confirmation
         }
 
