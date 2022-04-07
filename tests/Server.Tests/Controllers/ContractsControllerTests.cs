@@ -18,7 +18,7 @@ public class ContractsControllerTests : System.IDisposable
     public void Get_AllContracts()
     {
         // Arrange
-        List<Contract>? fakeContracts = new Faker<Contract>().Generate(10);
+        List<Contract> fakeContracts = new Faker<Contract>().Generate(10);
         _mockContracts.Setup(service => service.FetchAllContracts()).Returns(fakeContracts);
 
         // Act

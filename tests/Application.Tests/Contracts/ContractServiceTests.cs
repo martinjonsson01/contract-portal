@@ -6,7 +6,7 @@ namespace Application.Tests.Contracts;
 public class ContractServiceTests
 {
     [Fact]
-    public void FetchAllContracts_ReturnsALlContractsInTheDatabase()
+    public void FetchAllContracts_ReturnsAllContractsInTheDatabase()
     {
         // Arrange
         const int numberOfContracts = 10;
