@@ -18,15 +18,19 @@ public class ContractCardTests : IDisposable
     public void ContractCard_ContainsGivenInformation()
     {
         // Arrange
-        IRenderedComponent<ContractCard> cut =
-            _context.RenderComponent<ContractCard>(parameters =>
-                parameters.Add(property => property.Name, "Sj")
-                    .Add(property => property.ImagePath, "/img/test"));
+        const string name = "SJ";
+        const string path = "test";
+
+        static void ParameterBuilder(ComponentParameterCollectionBuilder<ContractCard> parameters) =>
+            parameters.Add(property => property.Name, name)
+                      .Add(property => property.ImagePath, path);
 
         // Act
+        IRenderedComponent<ContractCard> cut =
+            _context.RenderComponent<ContractCard>(ParameterBuilder);
 
         // Assert
-        cut.Find("h3").TextContent.Should().BeEquivalentTo("SJ");
-        cut.Find("img").OuterHtml.Should().Contain("/img/test");
+        cut.Find("#contract-name").TextContent.Should().Contain(name);
+        cut.Find("#contract-thumbnail").OuterHtml.Should().Contain(path);
     }
 }

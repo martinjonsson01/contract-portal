@@ -36,14 +36,15 @@ public class ContractsPageTests : IDisposable
     public void ContractPage_ShouldContainContract_WhenItHasFetchedAContract()
     {
         // Arrange
-        var contract = new Contract() { Name = "SJ", ImagePath = "/img/test" };
+        const string name = "SJ";
+        var contract = new Contract() { Name = name, ImagePath = "/img/test" };
         _mockHttp.When("/api/v1/Contracts/All").RespondJson(new[] { contract });
 
         // Act
         IRenderedComponent<ContractsPage> cut = _context.RenderComponent<ContractsPage>();
-        cut.WaitForElement("h3");
+        cut.WaitForElement(".card");
 
         // Assert
-        cut.Find("h3").TextContent.Should().BeEquivalentTo("SJ");
+        cut.Find(".card").TextContent.Should().Contain(name);
     }
 }
