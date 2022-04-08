@@ -8,7 +8,7 @@ public class AdminPageTests : UITestFixture
     public void AdminPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
     {
         // Arrange
-        MockHttp.When("/").RespondJson(new Contract[1]);
+        MockHttp.When("/api/v1/Contracts/All").RespondJson(new Contract[1]);
 
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
