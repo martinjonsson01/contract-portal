@@ -1,6 +1,10 @@
-﻿using Domain.Contracts;
+﻿using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-namespace Client.Tests.Pages;
+using Domain.Contracts;
+
+namespace Presentation.Tests.Client.Pages;
 
 public class ContractsPageTests : UITestFixture
 {
@@ -8,7 +12,12 @@ public class ContractsPageTests : UITestFixture
     public void ContractPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
     {
         // Arrange
-        MockHttp.When("/").RespondJson(new Contract[1]);
+        MockHttp.When("/api/v1/Contracts/All").Respond(async () =>
+        {
+            // Simulate slow network.
+            await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        });
 
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();

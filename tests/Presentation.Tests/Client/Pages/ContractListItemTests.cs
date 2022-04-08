@@ -1,4 +1,4 @@
-﻿namespace Client.Tests.Pages;
+﻿namespace Presentation.Tests.Client.Pages;
 
 public class ContractListItemTests : IDisposable
 {

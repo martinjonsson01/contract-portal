@@ -1,4 +1,4 @@
-﻿namespace Client.Tests.Pages;
+﻿namespace Presentation.Tests.Client;
 
 public class UITestFixture : IDisposable
 {
