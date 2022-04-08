@@ -1,14 +1,13 @@
 ﻿namespace Presentation.Tests.Client;
 
-public abstract class BlazorTestFixture : IDisposable
+public class UITestFixture : IDisposable
 {
-    protected BlazorTestFixture()
+    protected UITestFixture()
     {
-        Context = new TestContext();
         MockHttp = Context.Services.AddMockHttpClient();
     }
 
-    protected TestContext Context { get; }
+    protected TestContext Context { get; } = new TestContext();
 
     protected MockHttpMessageHandler MockHttp { get; }
 

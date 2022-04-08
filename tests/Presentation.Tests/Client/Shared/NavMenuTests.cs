@@ -2,7 +2,7 @@
 
 namespace Presentation.Tests.Client.Shared;
 
-public class NavMenuTests : BlazorTestFixture
+public class NavMenuTests : UITestFixture
 {
     [Fact]
     public void ToggleNavMenu_ShowsNavBar_WhenClicked()

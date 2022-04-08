@@ -2,7 +2,7 @@
 
 namespace Presentation.Tests.Client.Pages;
 
-public class ContractsPageTests : BlazorTestFixture
+public class ContractsPageTests : UITestFixture
 {
     [Fact]
     public void ContractPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
@@ -23,7 +23,7 @@ public class ContractsPageTests : BlazorTestFixture
         // Arrange
         const string name = "SJ";
         var contract = new Contract() { Name = name, ImagePath = "/img/test" };
-        MockHttp.When("/api/v1/Contracts/All").RespondJson(new[] { contract });
+        MockHttp.When("/api/v1/Contracts/All").RespondJson(new[] { contract, });
 
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
