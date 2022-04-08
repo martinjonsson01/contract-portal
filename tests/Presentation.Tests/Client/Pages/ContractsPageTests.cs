@@ -7,9 +7,6 @@ public class ContractsPageTests : UITestFixture
     [Fact]
     public void ContractPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
     {
-        // Arrange
-        MockHttp.When("/").RespondJson(new Contract[1]);
-
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
 
