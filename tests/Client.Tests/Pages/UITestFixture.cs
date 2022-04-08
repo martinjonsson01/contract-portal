@@ -9,7 +9,7 @@ public class UITestFixture : IDisposable
 
     protected TestContext Context { get; } = new TestContext();
 
-    protected MockHttpMessageHandler MockHttp { get; set; }
+    protected MockHttpMessageHandler MockHttp { get; }
 
     public void Dispose()
     {
