@@ -48,7 +48,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Server\Server.csproj" />
-    <ProjectReference Include="..\..\src\Client\Client.csproj"/>
+    <ProjectReference Include="..\..\src\Client\Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Server" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,8 @@
 ﻿using Application.Contracts;
+
 using Domain.Contracts;
 
-namespace Presentation.Tests.Controllers;
+namespace Presentation.Tests.Server.Controllers;
 
 public class ContractsControllerTests : System.IDisposable
 {

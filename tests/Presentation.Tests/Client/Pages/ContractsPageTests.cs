@@ -1,6 +1,6 @@
 ﻿using Domain.Contracts;
 
-namespace Presentation.Tests.Pages;
+namespace Presentation.Tests.Client.Pages;
 
 public class ContractsPageTests : BlazorTestFixture
 {

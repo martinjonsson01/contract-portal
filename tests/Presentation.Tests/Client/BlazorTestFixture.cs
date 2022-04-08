@@ -1,4 +1,4 @@
-﻿namespace Presentation.Tests;
+﻿namespace Presentation.Tests.Client;
 
 public abstract class BlazorTestFixture : IDisposable
 {
