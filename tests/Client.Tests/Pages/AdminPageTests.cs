@@ -2,31 +2,16 @@
 
 namespace Client.Tests.Pages;
 
-public class AdminPageTests : IDisposable
+public class AdminPageTests : UITestFixture
 {
-    private readonly TestContext _context;
-    private readonly MockHttpMessageHandler _mockHttp;
-
-    public AdminPageTests()
-    {
-        _context = new TestContext();
-        _mockHttp = _context.Services.AddMockHttpClient();
-    }
-
-    public void Dispose()
-    {
-        _context.Dispose();
-        _mockHttp.Dispose();
-    }
-
     [Fact]
     public void AdminPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
     {
         // Arrange
-        _mockHttp.When("/").RespondJson(new Contract[1]);
+        MockHttp.When("/").RespondJson(new Contract[1]);
 
         // Act
-        IRenderedComponent<ContractsPage> cut = _context.RenderComponent<ContractsPage>();
+        IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
 
         // Assert
         cut.Find("p em").TextContent.Should().BeEquivalentTo("Loading...");
@@ -37,10 +22,10 @@ public class AdminPageTests : IDisposable
     {
         // Arrange
         IEnumerable<Contract> fakeContracts = new Faker<Contract>().Generate(10);
-        _mockHttp.When("/api/v1/Contracts/All").RespondJson(fakeContracts);
+        MockHttp.When("/api/v1/Contracts/All").RespondJson(fakeContracts);
 
         // Act
-        IRenderedComponent<Admin> cut = _context.RenderComponent<Admin>();
+        IRenderedComponent<Admin> cut = Context.RenderComponent<Admin>();
         cut.WaitForElement(".list-group");
 
         // Assert
