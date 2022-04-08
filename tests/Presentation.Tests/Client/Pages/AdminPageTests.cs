@@ -1,4 +1,8 @@
-﻿using Domain.Contracts;
+﻿using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+using Domain.Contracts;
 
 namespace Presentation.Tests.Client.Pages;
 
@@ -7,6 +11,14 @@ public class AdminPageTests : UITestFixture
     [Fact]
     public void AdminPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
     {
+        // Arrange
+        MockHttp.When("/api/v1/Contracts/All").Respond(async () =>
+        {
+            // Simulate slow network.
+            await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        });
+
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
 
