@@ -13,5 +13,4 @@ global using Moq;
 
 global using Xunit;
 
-
 #pragma warning restore IDE0005
