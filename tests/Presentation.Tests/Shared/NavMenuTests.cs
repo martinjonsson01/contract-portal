@@ -1,6 +1,6 @@
 ﻿using Client.Shared;
 
-namespace Client.Tests.Shared;
+namespace Presentation.Tests.Shared;
 
 public class NavMenuTests : BlazorTestFixture
 {

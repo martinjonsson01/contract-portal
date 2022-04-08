@@ -5,7 +5,7 @@ using System.Text.Json;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Client.Tests;
+namespace Presentation.Tests;
 
 public static class ServiceExtensions
 {
