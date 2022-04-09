@@ -21,6 +21,11 @@ public class Contract
     public string Description { get; set; } = "No description.";
 
     /// <summary>
+    ///     Gets or sets the instructions on how to use the discount.
+    /// </summary>
+    public string Instructions { get; set; } = "Det finns inga instruktioner.";
+
+    /// <summary>
     ///     Gets or sets image to the supplier logo.
     /// </summary>
     public string ImagePath { get; set; } = "images/sj.png";

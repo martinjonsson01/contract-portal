@@ -17,6 +17,10 @@
         <InputTextArea id="description" class="form-control" placeholder="Skriv beskrivning här..." @bind-Value="@_contract.Description"/>
     </div>
     <div class="mb-3">
+        <label for="instructions" class="form-label" >Hur man nyttjar erbjudandet</label>
+        <InputTextArea id="instructions" class="form-control" placeholder="Skriv instruktioner här..." @bind-Value="@_contract.Instructions"/>
+    </div>
+    <div class="mb-3">
         <label for="image" class="form-label">Bild</label>
         <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
     </div>
@@ -28,7 +32,7 @@
 
     private bool _shouldRender;
 
-    private readonly Contract _contract = new() { Name = string.Empty, Description = string.Empty, ImagePath = string.Empty, };
+    private readonly Contract _contract = new() { Name = string.Empty, Description = string.Empty, Instructions = string.Empty, ImagePath = string.Empty, };
     private MultipartFormDataContent? _content;
 
     /// <inheritdoc />
