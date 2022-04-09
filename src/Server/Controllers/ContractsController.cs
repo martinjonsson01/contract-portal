@@ -45,13 +45,13 @@ public class ContractsController : Controller
     /// <summary>
     /// Uploads a new contract image file.
     /// </summary>
-    /// <param name="file">The image to upload and store on the server.</param>
     /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The uploaded file is not a valid image.</response>
     [HttpPost("new/image")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<string>> UploadImageAsync(IFormFile file)
+    public async Task<ActionResult<string>> UploadImageAsync()
     {
+        IFormFile file = Request.Form.Files[0];
         if (file is null)
             throw new ArgumentNullException(nameof(file));
 
@@ -73,7 +73,7 @@ public class ContractsController : Controller
     /// <param name="contract">The contract to add.</param>
     /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The ID of the contract was already taken.</response>
-    [HttpPost("new/image")]
+    [HttpPost("new/contract")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult CreateContract(Contract contract)
     {

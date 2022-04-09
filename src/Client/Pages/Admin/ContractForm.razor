@@ -1,6 +1,7 @@
 ﻿@using Domain.Contracts
 @using Newtonsoft.Json
 @using System.Net.Http.Headers
+@using System.Text.Json
 @inject ILogger<AdminPage> _logger
 @inject HttpClient _http
 
@@ -39,30 +40,30 @@
     private void OnFileChosen(InputFileChangeEventArgs arg)
     {
         _shouldRender = false;
-        const long maxFileSize = 1024 * 1024 * 15;
+        const long maxFileSize = 1024 * 1024 * 100;
 
         _content = new MultipartFormDataContent();
-        IBrowserFile file = arg.File;
+        StreamContent fileContent;
 
         try
         {
-            var fileContent =
-                new StreamContent(file.OpenReadStream(maxFileSize));
-
-            fileContent.Headers.ContentType =
-                new MediaTypeHeaderValue(file.ContentType);
-
-            _content.Add(
-                fileContent,
-                "\"files\"",
-                file.Name);
+            fileContent = new StreamContent(arg.File.OpenReadStream(maxFileSize));
         }
-        catch (Exception ex)
+        catch (IOException ex)
         {
             _logger.LogInformation(
                 "{FileName} not uploaded: {Message}",
-                file.Name, ex.Message);
+                arg.File.Name, ex.Message);
+            return;
         }
+
+        fileContent.Headers.ContentType =
+            new MediaTypeHeaderValue(arg.File.ContentType);
+
+        _content.Add(
+            fileContent,
+            "\"image\"",
+            arg.File.Name);
 
         _shouldRender = true;
     }
@@ -74,17 +75,34 @@
 
         Console.WriteLine(JsonConvert.SerializeObject(_contract, Formatting.Indented));
 
-    // TODO: upload contract strings
-        HttpResponseMessage response = await _http.PostAsync("/api/v1/contracts/new/image", _content);
+        HttpResponseMessage response = await _http.PostAsync("/api/v1/Contracts/new/image", _content);
 
         if (response.IsSuccessStatusCode)
         {
             string fileIdentifier = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"successfully uploaded {fileIdentifier}");
-    // TODO: show upload confirmation
+            _contract.ImagePath = fileIdentifier;
+
+            await UploadContract();
+            return;
         }
 
         _content.Dispose();
+
+        // TODO: show error
+    }
+
+    private async Task UploadContract()
+    {
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/contracts/new/contract", _contract);
+        if (response.IsSuccessStatusCode)
+        {
+            // TODO: show upload confirmation
+            Console.WriteLine("successfully uploaded!");
+            return;
+        }
+
+        // TODO: show error
     }
 
 }
