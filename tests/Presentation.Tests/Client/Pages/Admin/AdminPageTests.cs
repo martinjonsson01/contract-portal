@@ -32,6 +32,7 @@ public class AdminPageTests : UITestFixture
     public void AdminPage_ShouldContainCorrectAmountOfContract()
     {
         // Arrange
+        Context.JSInterop.SetupVoid("Blazor._internal.InputFile.init", _ => true);
         IEnumerable<Contract> fakeContracts = new Faker<Contract>().Generate(10);
         MockHttp.When("/api/v1/Contracts/All").RespondJson(fakeContracts);
 
