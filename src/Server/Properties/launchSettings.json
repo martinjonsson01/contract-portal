@@ -24,12 +24,6 @@
             "workingDirectory": "$(ProjectDir)",
             "commandLineArgs": "watch run"
         },
-        "CI checks": {
-            "commandName": "Executable",
-            "executablePath": "dotnet.exe",
-            "workingDirectory": "$(ProjectDir)//..//..",
-            "commandLineArgs": "test --verbosity=minimal -p:CollectCoverage=true -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutputFormat=cobertura -p:ExcludeByFile=\\\"**/Program.cs,**/Error.cshtml,**/Error.cshtml.cs\\\" -p:ExcludeByAttribute=\\\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\\\""
-        },
         "IIS Express": {
             "commandName": "IISExpress",
             "launchBrowser": true,
