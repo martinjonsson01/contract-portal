@@ -1,3 +1,5 @@
+[![.NET build and test](https://github.com/martinjonsson01/contract-portal/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/martinjonsson01/contract-portal/actions/workflows/dotnet.yml)
+
 # Contract Portal
 A website for working with a contract portfolio that can be bought into by other corporations. The central function of the portal allows for viewing these contracts and using them to receive discounts on purchases.
 

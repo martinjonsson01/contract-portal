@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.CodeDom.Compiler;
+using System.Diagnostics;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,6 +11,7 @@ namespace Server.Pages;
 /// </summary>
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 [IgnoreAntiforgeryToken]
+[GeneratedCode("DotnetTemplate", "1.0.0.0")]
 public class ErrorModel : PageModel
 {
     /// <summary>

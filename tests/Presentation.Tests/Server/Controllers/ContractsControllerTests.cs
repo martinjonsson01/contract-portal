@@ -1,9 +1,10 @@
 ﻿using Application.Contracts;
+
 using Domain.Contracts;
 
-namespace Server.Tests.Controllers;
+namespace Presentation.Tests.Server.Controllers;
 
-public class ContractsControllerTests : System.IDisposable
+public class ContractsControllerTests : IDisposable
 {
     private readonly ContractsController _cut;
     private readonly Mock<IContractService> _mockContracts;
