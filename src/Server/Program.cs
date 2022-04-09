@@ -38,6 +38,7 @@ string imagesDirectory = Path.Combine(
     app.Environment.ContentRootPath,
     app.Environment.EnvironmentName,
     "unsafe_uploads");
+Directory.CreateDirectory(imagesDirectory);
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(imagesDirectory),
