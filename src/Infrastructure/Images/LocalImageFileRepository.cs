@@ -62,8 +62,7 @@ public class LocalImageFileRepository : IImageRepository
             "unsafe_uploads");
         try
         {
-            if (!Directory.Exists(directoryPath))
-                _ = Directory.CreateDirectory(directoryPath);
+            _ = Directory.CreateDirectory(directoryPath);
         }
         catch (IOException e)
         {
