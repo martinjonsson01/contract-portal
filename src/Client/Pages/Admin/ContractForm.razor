@@ -79,9 +79,9 @@
 
         if (response.IsSuccessStatusCode)
         {
-            string fileIdentifier = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"successfully uploaded {fileIdentifier}");
-            _contract.ImagePath = fileIdentifier;
+            string imageLocation = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"successfully uploaded {imageLocation}");
+            _contract.ImagePath = imageLocation;
 
             await UploadContract();
             return;

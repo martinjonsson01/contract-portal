@@ -29,6 +29,7 @@ public class ImagesController : BaseApiController<ImagesController>
     /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The uploaded file is not a valid image.</response>
     [HttpPost]
+    [Produces("text/plain")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<string>> UploadImageAsync()
     {
@@ -39,7 +40,8 @@ public class ImagesController : BaseApiController<ImagesController>
         Logger.LogInformation("Trying to upload an image file: {Name}", file.Name);
         try
         {
-            return await _images.StoreAsync(file.OpenReadStream()).ConfigureAwait(false);
+            string imageName = await _images.StoreAsync(file.OpenReadStream()).ConfigureAwait(false);
+            return Ok($"/images/{imageName}");
         }
         catch (InvalidImageException e)
         {
