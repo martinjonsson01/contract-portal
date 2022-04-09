@@ -4,7 +4,7 @@ using Domain.Contracts;
 
 namespace Presentation.Tests.Server.Controllers;
 
-public class ContractsControllerTests : IDisposable
+public class ContractsControllerTests
 {
     private readonly ContractsController _cut;
     private readonly Mock<IContractService> _mockContracts;
@@ -12,7 +12,7 @@ public class ContractsControllerTests : IDisposable
     public ContractsControllerTests()
     {
         _mockContracts = new Mock<IContractService>();
-        _cut = new ContractsController(_mockContracts.Object);
+        _cut = new ContractsController(Mock.Of<ILogger<ContractsController>>(), _mockContracts.Object);
     }
 
     [Fact]
@@ -27,10 +27,5 @@ public class ContractsControllerTests : IDisposable
 
         // Assert
         actualWeather.Should().BeEquivalentTo(fakeContracts);
-    }
-
-    public void Dispose()
-    {
-        _cut.Dispose();
     }
 }
