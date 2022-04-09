@@ -7,7 +7,7 @@
 
 <h4>Skapa nytt kontrakt</h4>
 
-<EditForm Model="@_contract" OnSubmit="Upload">
+<EditForm Model="@_contract" OnSubmit="OnSubmit">
     <div class="mb-3">
         <label for="title" class="form-label">Titel</label>
         <InputText id="title" class="form-control" placeholder="Skriv titel här..." @bind-Value="@_contract.Name"/>
@@ -22,7 +22,7 @@
     </div>
     <div class="mb-3">
         <label for="image" class="form-label">Bild</label>
-        <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
+        <InputFile  id="image" class="form-control" OnChange="OnFileChosen"/>
     </div>
 
     <button type="submit" class="btn btn-primary">Spara</button>
@@ -90,28 +90,36 @@
         _shouldRender = true;
     }
 
-    private async Task Upload()
+    private async Task OnSubmit()
     {
-        Console.WriteLine("trying to submit");
-        if (_content is null) return; // TODO: show error
+        if (!await UploadImage()) return;
 
-        Console.WriteLine(JsonConvert.SerializeObject(_contract, Formatting.Indented));
+        await UploadContract();
+    }
 
-        HttpResponseMessage response = await _http.PostAsync("/api/v1/images", _content);
+    private async Task<bool> UploadImage()
+    {
+        if (_content is null) return false;
 
-        if (response.IsSuccessStatusCode)
+        try
         {
-            string imageLocation = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"successfully uploaded {imageLocation}");
-            _contract.ImagePath = imageLocation;
+            Console.WriteLine(JsonConvert.SerializeObject(_contract, Formatting.Indented));
 
-            await UploadContract();
-            return;
+            HttpResponseMessage response = await _http.PostAsync("/api/v1/images", _content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string imageLocation = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"successfully uploaded {imageLocation}");
+                _contract.ImagePath = imageLocation;
+                return true;
+            }
+            return false;
         }
-
-        _content.Dispose();
-
-    // TODO: show error
+        finally
+        {
+            _content.Dispose();
+        }
     }
 
     private async Task UploadContract()
@@ -119,14 +127,10 @@
         HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/contracts/new/contract", _contract);
         if (response.IsSuccessStatusCode)
         {
-    // TODO: show upload confirmation
             Console.WriteLine("successfully uploaded!");
             await OnContractUploaded.InvokeAsync(_contract);
             _contract = CreateEmptyContract();
-            return;
         }
-
-    // TODO: show error
     }
 
 }
