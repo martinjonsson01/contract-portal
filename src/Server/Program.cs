@@ -28,6 +28,8 @@ else
     _ = app.UseHsts();
 }
 
+app.UseHttpLogging();
+
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
