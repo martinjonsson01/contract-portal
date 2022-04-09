@@ -13,12 +13,12 @@ public class Contract
     /// <summary>
     ///     Gets or sets the name of the contract supplier.
     /// </summary>
-    public string Name { get; set; } = "No name";
+    public string Name { get; set; } = "Inget namn";
 
     /// <summary>
     ///     Gets or sets the description.
     /// </summary>
-    public string Description { get; set; } = "No description.";
+    public string Description { get; set; } = "Det finns ingen beskrivning.";
 
     /// <summary>
     ///     Gets or sets the instructions on how to use the discount.
