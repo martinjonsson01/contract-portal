@@ -13,11 +13,11 @@
         <InputText id="title" class="form-control" placeholder="Skriv titel här..." @bind-Value="@_contract.Name"/>
     </div>
     <div class="mb-3">
-        <label for="description" class="form-label" >Beskrivning</label>
+        <label for="description" class="form-label">Beskrivning</label>
         <InputTextArea id="description" class="form-control" placeholder="Skriv beskrivning här..." @bind-Value="@_contract.Description"/>
     </div>
     <div class="mb-3">
-        <label for="instructions" class="form-label" >Hur man nyttjar erbjudandet</label>
+        <label for="instructions" class="form-label">Hur man nyttjar erbjudandet</label>
         <InputTextArea id="instructions" class="form-control" placeholder="Skriv instruktioner här..." @bind-Value="@_contract.Instructions"/>
     </div>
     <div class="mb-3">
@@ -30,9 +30,27 @@
 
 @code {
 
+    /// <summary>
+    /// Called when a contract has been submitted successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Contract> OnContractUploaded { get; set; } = EventCallback<Contract>.Empty;
+
     private bool _shouldRender;
 
-    private readonly Contract _contract = new() { Name = string.Empty, Description = string.Empty, Instructions = string.Empty, ImagePath = string.Empty, };
+    private Contract _contract = CreateEmptyContract();
+
+    private static Contract CreateEmptyContract()
+    {
+        return new Contract
+        {
+            Name = string.Empty,
+            Description = string.Empty,
+            Instructions = string.Empty,
+            ImagePath = string.Empty,
+        };
+    }
+
     private MultipartFormDataContent? _content;
 
     /// <inheritdoc />
@@ -93,7 +111,7 @@
 
         _content.Dispose();
 
-        // TODO: show error
+    // TODO: show error
     }
 
     private async Task UploadContract()
@@ -101,12 +119,14 @@
         HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/contracts/new/contract", _contract);
         if (response.IsSuccessStatusCode)
         {
-            // TODO: show upload confirmation
+    // TODO: show upload confirmation
             Console.WriteLine("successfully uploaded!");
+            await OnContractUploaded.InvokeAsync(_contract);
+            _contract = CreateEmptyContract();
             return;
         }
 
-        // TODO: show error
+    // TODO: show error
     }
 
 }
