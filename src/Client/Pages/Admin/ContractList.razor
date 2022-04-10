@@ -1,0 +1,44 @@
+﻿@using Domain.Contracts
+@inject HttpClient _http
+
+@if (_contracts == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var contract in _contracts)
+        {
+            <ContractListItem Name=@contract.Name/>
+        }
+    </div>
+}
+
+
+@code {
+
+    private List<Contract>? _contracts;
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        _contracts = await _http.GetFromJsonAsync<List<Contract>>("/api/v1/Contracts/All");
+    }
+
+
+    /// <summary>
+    /// Adds a contract to the list.
+    /// </summary>
+    /// <param name="contract">The contract to add.</param>
+    public void Add(Contract contract)
+    {
+        _contracts?.Add(contract);
+        InvokeAsync(StateHasChanged);
+    }
+
+
+}
+
