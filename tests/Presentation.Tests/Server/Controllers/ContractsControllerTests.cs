@@ -1,6 +1,7 @@
 ﻿using Application.Contracts;
 
 using Domain.Contracts;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Tests.Server.Controllers;
 
@@ -27,5 +28,47 @@ public class ContractsControllerTests
 
         // Assert
         actualWeather.Should().BeEquivalentTo(fakeContracts);
+    }
+
+    [Fact]
+    public void Remove_ReturnsOk_WhenIDExists()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        _mockContracts.Setup(service => service.Remove(id)).Returns(true);
+
+        // Act
+        IActionResult actual = _cut.Remove(id);
+
+        // Assert
+        actual.Should().BeOfType<OkResult>();
+    }
+
+    [Fact]
+    public void Remove_CallsContractService_WhenIDExists()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        _mockContracts.Setup(service => service.Remove(id)).Returns(true);
+
+        // Act
+        IActionResult actual = _cut.Remove(id);
+
+        // Assert
+        _mockContracts.Verify(o => o.Remove(id), Times.Once);
+    }
+
+    [Fact]
+    public void Remove_ReturnsNotFound_WhenIDDoesNotExist()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        _mockContracts.Setup(service => service.Remove(id)).Returns(false);
+
+        // Act
+        IActionResult actual = _cut.Remove(id);
+
+        // Assert
+        actual.Should().BeOfType<NotFoundResult>();
     }
 }

@@ -18,4 +18,11 @@ public interface IContractService
     /// </summary>
     /// <param name="contract">The new contract.</param>
     void Add(Contract contract);
+
+    /// <summary>
+    /// Removes the specified contract.
+    /// </summary>
+    /// <param name="id">The id of the contract to be removed.</param>
+    /// <returns>Whether the removal was successful.</returns>
+    bool Remove(Guid id);
 }

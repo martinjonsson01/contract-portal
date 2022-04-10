@@ -59,4 +59,33 @@ public class ContractServiceTests
         // Assert
         add.Should().NotThrow();
     }
+
+    [Fact]
+    public void RemovingContract_DoesReturnTrue_WhenAContractExists()
+    {
+        // Arrange
+        var contract = new Contract();
+        _mockRepo.Setup(repository => repository.Remove(contract.Id)).Returns(true);
+
+        // Act
+        bool actual = _cut.Remove(contract.Id);
+
+        // // Assert
+        actual.Should().BeTrue();
+    }
+
+    [Fact]
+    public void RemovingContract_DoesReturnFalse_WhenNoContractsExists()
+    {
+        // Arrange
+        _mockRepo.Setup(repository => repository.All).Returns(new List<Contract>());
+
+        var id = Guid.NewGuid();
+
+        // Act
+        bool actual = _cut.Remove(id);
+
+        // Assert
+        actual.Should().BeFalse();
+    }
 }
