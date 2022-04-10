@@ -61,7 +61,7 @@ public class ContractServiceTests
     }
 
     [Fact]
-    public void RemovingContractFromRepo_DoesReturnTrue_WhenContractExists()
+    public void RemovingContract_DoesReturnTrue_WhenAContractExists()
     {
         // Arrange
         var contract = new Contract();
@@ -75,7 +75,7 @@ public class ContractServiceTests
     }
 
     [Fact]
-    public void RemovingContractFrom_DoesReturnFalse_WhenRepoIsEmpty()
+    public void RemovingContract_DoesReturnFalse_WhenNoContractsExists()
     {
         // Arrange
         _mockRepo.Setup(repository => repository.All).Returns(new List<Contract>());
