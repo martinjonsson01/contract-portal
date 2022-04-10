@@ -14,4 +14,4 @@ Denna första vecka har vi inte helt kommit igång med arbetssättet Scrum, men 
 Vid utformandet av detta har jag varit närvarande och aktivt deltagit i diskussionen och beslutsprocessen, och delat med mig av min kunskap kring Scrum, även om den ännu är aningen begränsad. 
 
 * **What is my contribution towards the team’s deliveries?**  
-Inlämningarna den första veckan har bestått av det sociala kontraktet samt team-reflektionerna. Jag har bidragit till båda dessa genom att aktivt delta i de diskussioner vi har haft där vi har tagit fram dessa dokument.
+Inlämningen den första veckan har främst bestått av det sociala kontraktet. Jag har bidragit till detta genom att aktivt delta i de diskussioner vi har haft där vi har tagit fram dokumentet.
