@@ -31,7 +31,7 @@ public class ContractsControllerTests
     }
 
     [Fact]
-    public void Remove_ReturnsOk_WhenIDExisting()
+    public void Remove_ReturnsOk_WhenIDExists()
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -45,7 +45,7 @@ public class ContractsControllerTests
     }
 
     [Fact]
-    public void Remove_CallContractService_WhenIDExisting()
+    public void Remove_CallsContractService_WhenIDExists()
     {
         // Arrange
         var id = Guid.NewGuid();

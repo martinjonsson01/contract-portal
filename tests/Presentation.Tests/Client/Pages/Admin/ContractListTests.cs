@@ -70,16 +70,16 @@ public class ContractListTests : UITestFixture
         MockHttp.When(HttpMethod.Delete, $"/api/v1/Contracts/{firstContract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
 
         IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
-        const string itemSelector = ".list-group-item";
-        cut.WaitForElement(".btn.btn-danger");
+        const string removeButton = ".btn.btn-danger";
+        cut.WaitForElement(removeButton);
 
         // Act
-        await cut.Find(".btn.btn-danger").ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
-        cut.WaitForState(() => cut.FindAll(".btn.btn-danger").Count == 1);
+        await cut.Find(removeButton).ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+        cut.WaitForState(() => cut.FindAll(removeButton).Count == 1);
 
         // Assert
         Expression<Func<IElement, bool>>
             elementWithNewName = contract => contract.TextContent.Contains(firstContract.Name);
-        cut.FindAll(itemSelector).Should().NotContain(elementWithNewName);
+        cut.FindAll(".list-group-item").Should().NotContain(elementWithNewName);
     }
 }
