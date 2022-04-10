@@ -24,7 +24,7 @@ public class ContractServiceTests
         // Arrange
         const int numberOfContracts = 10;
         List<Contract> mockContracts = new Faker<Contract>().Generate(numberOfContracts);
-        _mockRepo.Setup(repository => repository.Contracts).Returns(mockContracts);
+        _mockRepo.Setup(repository => repository.All).Returns(mockContracts);
 
         // Act
         IEnumerable<Contract> contracts = _cut.FetchAllContracts();
@@ -38,7 +38,7 @@ public class ContractServiceTests
     {
         // Arrange
         var contract = new Contract();
-        _mockRepo.Setup(repository => repository.Contracts).Returns(new[] { contract, });
+        _mockRepo.Setup(repository => repository.All).Returns(new[] { contract, });
 
         // Act
         Action add = () => _cut.Add(contract);
@@ -51,7 +51,7 @@ public class ContractServiceTests
     public void AddingContract_DoesNotThrow_IfIDIsUnique()
     {
         // Arrange
-        _mockRepo.Setup(repository => repository.Contracts).Returns(new List<Contract>());
+        _mockRepo.Setup(repository => repository.All).Returns(new List<Contract>());
 
         // Act
         Action add = () => _cut.Add(new Contract());
