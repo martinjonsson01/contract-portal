@@ -1,0 +1,139 @@
+﻿@using Domain.Contracts
+@using Newtonsoft.Json
+@using System.Net.Http.Headers
+@using System.Text.Json
+@inject ILogger<AdminPage> _logger
+@inject HttpClient _http
+
+<h4>Skapa nytt kontrakt</h4>
+
+<EditForm Model="@_contract" OnSubmit="OnSubmit">
+    <div class="mb-3">
+        <label for="title" class="form-label">Titel</label>
+        <InputText id="title" class="form-control" placeholder="T.ex. företagets namn" @bind-Value="@_contract.Name"/>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Beskrivning</label>
+        <InputTextArea id="description" class="form-control" placeholder="T.ex. vad företaget står för" @bind-Value="@_contract.Description"/>
+    </div>
+    <div class="mb-3">
+        <label for="instructions" class="form-label">Hur man nyttjar erbjudandet</label>
+        <InputTextArea id="instructions" class="form-control" placeholder="T.ex. vilken webbsida man ska gå in på" @bind-Value="@_contract.Instructions"/>
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Bild</label>
+        <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spara</button>
+</EditForm>
+
+@code {
+
+    /// <summary>
+    /// Called when a contract has been submitted successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Contract> OnContractUploaded { get; set; } = EventCallback<Contract>.Empty;
+
+    private bool _shouldRender;
+
+    private Contract _contract = CreateEmptyContract();
+
+    private MultipartFormDataContent? _content;
+
+    private static Contract CreateEmptyContract()
+    {
+        return new Contract
+        {
+            Name = string.Empty,
+            Description = string.Empty,
+            Instructions = string.Empty,
+            ImagePath = string.Empty,
+        };
+    }
+
+    /// <inheritdoc />
+    protected override bool ShouldRender()
+    {
+        return _shouldRender;
+    }
+
+    private void OnFileChosen(InputFileChangeEventArgs arg)
+    {
+        _shouldRender = false;
+
+        _content = new MultipartFormDataContent();
+        StreamContent fileContent;
+
+        const long bitsInAKilobyte = 1024;
+        const long kilobytesInAMegabyte = 1024;
+        const long maxFileSize = bitsInAKilobyte * kilobytesInAMegabyte * 100;
+
+        try
+        {
+            fileContent = new StreamContent(arg.File.OpenReadStream(maxFileSize));
+        }
+        catch (IOException ex)
+        {
+            _logger.LogInformation(
+                "{FileName} not uploaded: {Message}",
+                arg.File.Name, ex.Message);
+            return;
+        }
+
+        fileContent.Headers.ContentType =
+            new MediaTypeHeaderValue(arg.File.ContentType);
+
+        _content.Add(
+            fileContent,
+            "\"image\"",
+            arg.File.Name);
+
+        _shouldRender = true;
+    }
+
+    private async Task OnSubmit()
+    {
+        if (!await UploadImage()) return;
+
+        await UploadContract();
+    }
+
+    private async Task<bool> UploadImage()
+    {
+        if (_content is null) return false;
+
+        try
+        {
+            Console.WriteLine(JsonConvert.SerializeObject(_contract, Formatting.Indented));
+
+            HttpResponseMessage response = await _http.PostAsync("/api/v1/images", _content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string imageLocation = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"successfully uploaded {imageLocation}");
+                _contract.ImagePath = imageLocation;
+                return true;
+            }
+            return false;
+        }
+        finally
+        {
+            _content.Dispose();
+        }
+    }
+
+    private async Task UploadContract()
+    {
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/contracts/new/contract", _contract);
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("successfully uploaded!");
+            await OnContractUploaded.InvokeAsync(_contract);
+            _contract = CreateEmptyContract();
+        }
+    }
+
+}

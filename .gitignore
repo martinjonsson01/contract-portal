@@ -8,6 +8,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Coverage reports
+Coverage/
+# Image uploads
+**/unsafe_uploads
+
 # User-specific files
 *.rsuser
 *.suo
