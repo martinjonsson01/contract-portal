@@ -40,6 +40,8 @@
 
     private Contract _contract = CreateEmptyContract();
 
+    private MultipartFormDataContent? _content;
+
     private static Contract CreateEmptyContract()
     {
         return new Contract
@@ -50,8 +52,6 @@
             ImagePath = string.Empty,
         };
     }
-
-    private MultipartFormDataContent? _content;
 
     /// <inheritdoc />
     protected override bool ShouldRender()
