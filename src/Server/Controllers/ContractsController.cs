@@ -68,6 +68,8 @@ public class ContractsController : BaseApiController<ContractsController>
     [HttpDelete("{id:guid}")]
     public IActionResult Remove(Guid id)
     {
-        return _contracts.Remove(id) ? Ok() : Conflict();
+        return _contracts.Remove(id) ?
+            Ok() :
+            NotFound();
     }
 }

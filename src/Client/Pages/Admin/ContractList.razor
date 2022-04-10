@@ -45,7 +45,9 @@ else
     /// <param name="contract">The contract to remove.</param>
     private void OnContractRemoved(Contract contract)
     {
-        _contracts?.Remove(contract);
+        // Using null forgiving operator because because _contracts
+        // can not be null when remove button is pressed.
+        _contracts!.Remove(contract);
         InvokeAsync(StateHasChanged);
     }
 }

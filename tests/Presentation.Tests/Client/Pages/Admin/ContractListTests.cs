@@ -8,6 +8,7 @@ using AngleSharp.Dom;
 using Client.Pages.Admin;
 
 using Domain.Contracts;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Presentation.Tests.Client.Pages.Admin;
 
@@ -57,5 +58,28 @@ public class ContractListTests : UITestFixture
 
         // Assert
         add.Should().NotThrow();
+    }
+
+    [Fact]
+    public async Task RemovingContract_RendersWithoutTheContractAsync()
+    {
+        // Arrange
+        var firstContract = new Contract() { Name = "first", };
+        Contract[] contracts = { firstContract, new Contract() { Name = "Second", }, };
+        MockHttp.When("/api/v1/Contracts/All").RespondJson(contracts);
+        MockHttp.When(HttpMethod.Delete, $"/api/v1/Contracts/{firstContract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
+
+        IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
+        const string itemSelector = ".list-group-item";
+        cut.WaitForElement(".btn.btn-danger");
+
+        // Act
+        await cut.Find(".btn.btn-danger").ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+        cut.WaitForState(() => cut.FindAll(".btn.btn-danger").Count == 1);
+
+        // Assert
+        Expression<Func<IElement, bool>>
+            elementWithNewName = contract => contract.TextContent.Contains(firstContract.Name);
+        cut.FindAll(itemSelector).Should().NotContain(elementWithNewName);
     }
 }

@@ -31,8 +31,6 @@ public class FakeContractRepository : IContractRepository
     /// <inheritdoc />
     public bool Remove(Guid id)
     {
-        Contract? contractToRemove = _contracts.Find(o => o.Id == id);
-
-        return contractToRemove is not null && _contracts.Remove(contractToRemove);
+        return _contracts.RemoveAll(o => o.Id == id) > 0;
     }
 }

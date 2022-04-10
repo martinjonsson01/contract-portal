@@ -4,7 +4,7 @@
 <div id="@Contract.Name" class="list-group-item d-flex justify-content-between" style="max-width: 50%">
      @Contract.Name
 
-     <button type="button" class="btn btn-danger" @onclick="@(() => RemoveContract())">
+     <button type="button" class="btn btn-danger" @onclick="RemoveContract">
          Ta bort
      </button>
 </div>
@@ -29,7 +29,6 @@
         HttpResponseMessage response = await _http.DeleteAsync($"api/v1/Contracts/{Contract.Id}");
         if (response.IsSuccessStatusCode)
         {
-            // callback to Parent
             await OnContractRemoved.InvokeAsync(Contract);
         }
     }
