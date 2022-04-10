@@ -12,7 +12,7 @@ else
     <div class="list-group">
         @foreach (var contract in _contracts)
         {
-            <ContractListItem Contract=@contract/>
+            <ContractListItem Contract=@contract OnContractRemoved=@OnContractRemoved/>
         }
     </div>
 }
@@ -40,15 +40,13 @@ else
     }
 
     /// <summary>
-    /// Rempves a contract from the list.
+    /// Removes a contract from the list.
     /// </summary>
     /// <param name="contract">The contract to remove.</param>
-    public void Remove(Contract contract)
+    private void OnContractRemoved(Contract contract)
     {
         _contracts?.Remove(contract);
         InvokeAsync(StateHasChanged);
     }
-
-
 }
 
