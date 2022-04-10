@@ -18,6 +18,10 @@ Clone the repository: `git clone https://github.com/martinjonsson01/contract-por
 1. Stay in the root folder (the one containing `ContractPortal.sln`)
 2. Run tests: `dotnet test`
 
+### Running code test coverage
+1. Stay in the root folder (the one containing `ContractPortal.sln`)
+2. Run the coverage script: `./coverage.bat`
+
 ## Architecture
 The design of this program is based off of the [onion architecture](https://code-maze.com/onion-architecture-in-aspnetcore/).
 
