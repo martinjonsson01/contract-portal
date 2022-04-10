@@ -59,4 +59,15 @@ public class ContractsController : BaseApiController<ContractsController>
 
         return Ok();
     }
+
+    /// <summary>
+    /// Removes the specified contract.
+    /// </summary>
+    /// <param name="id">Id of the contract to be removed.</param>
+    /// <returns>If the contract was successfully removed.</returns>
+    [HttpDelete("{id:guid}")]
+    public IActionResult Remove(Guid id)
+    {
+        return _contracts.Remove(id) ? Ok() : Conflict();
+    }
 }

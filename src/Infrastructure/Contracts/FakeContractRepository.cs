@@ -9,7 +9,7 @@ namespace Infrastructure.Contracts;
 /// </summary>
 public class FakeContractRepository : IContractRepository
 {
-    private readonly ICollection<Contract> _contracts;
+    private readonly List<Contract> _contracts;
 
     /// <summary>
     /// Creates a fake contract for SJ.
@@ -26,5 +26,13 @@ public class FakeContractRepository : IContractRepository
     public void Add(Contract contract)
     {
         _contracts.Add(contract);
+    }
+
+    /// <inheritdoc />
+    public bool Remove(Guid id)
+    {
+        Contract? contractToRemove = _contracts.Find(o => o.Id == id);
+
+        return contractToRemove is not null && _contracts.Remove(contractToRemove);
     }
 }

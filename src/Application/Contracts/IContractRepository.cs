@@ -18,4 +18,11 @@ public interface IContractRepository
     /// </summary>
     /// <param name="contract">The new contract instance.</param>
     void Add(Contract contract);
+
+    /// <summary>
+    /// Removes the contract with the given ID.
+    /// </summary>
+    /// <param name="id">The id of the contract to be removed.</param>
+    /// <returns>If the removal was successful.</returns>
+    public bool Remove(Guid id);
 }

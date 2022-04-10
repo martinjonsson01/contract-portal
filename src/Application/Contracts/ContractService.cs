@@ -32,4 +32,10 @@ public class ContractService : IContractService
 
         _repo.Add(contract);
     }
+
+    /// <inheritdoc />
+    public bool Remove(Guid id)
+    {
+        return _repo.Remove(id);
+    }
 }

@@ -8,7 +8,7 @@ public class Contract
     /// <summary>
     /// Gets the unique identifier.
     /// </summary>
-    public Guid Id { get; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
     ///     Gets or sets the name of the contract supplier.
