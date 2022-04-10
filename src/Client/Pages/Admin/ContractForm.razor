@@ -22,7 +22,7 @@
     </div>
     <div class="mb-3">
         <label for="image" class="form-label">Bild</label>
-        <InputFile  id="image" class="form-control" OnChange="OnFileChosen"/>
+        <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
     </div>
 
     <button type="submit" class="btn btn-primary">Spara</button>
@@ -62,10 +62,13 @@
     private void OnFileChosen(InputFileChangeEventArgs arg)
     {
         _shouldRender = false;
-        const long maxFileSize = 1024 * 1024 * 100;
 
         _content = new MultipartFormDataContent();
         StreamContent fileContent;
+
+        const long bitsInAKilobyte = 1024;
+        const long kilobytesInAMegabyte = 1024;
+        const long maxFileSize = bitsInAKilobyte * kilobytesInAMegabyte * 100;
 
         try
         {
