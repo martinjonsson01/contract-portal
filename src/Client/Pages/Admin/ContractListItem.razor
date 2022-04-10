@@ -1,12 +1,24 @@
-﻿<div id="@Name" class="list-group-item" style="max-width: 50%"> @Name </div>
+﻿@using Domain.Contracts
+@inject HttpClient _http
+
+<div id="@Contract.Name" class="list-group-item d-flex justify-content-between" style="max-width: 50%">
+     @Contract.Name
+
+     <button type="button" class="btn btn-danger" @onclick="@(() => RemoveContract())">
+         Ta bort
+     </button>
+</div>
 
 
 @code {
-
     /// <summary>
-    /// Name of the company.
+    /// The contract.
     /// </summary>
     [Parameter, EditorRequired,]
-    public string? Name { get; set; }
+    public Contract Contract { get; set; } = new();
 
+    private void RemoveContract()
+    {
+        _http.DeleteAsync($"api/v1/Contracts/{Contract.Id}");
+    }
 }
