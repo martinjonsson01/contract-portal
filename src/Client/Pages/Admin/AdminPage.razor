@@ -1,0 +1,19 @@
+@page "/admin"
+@using Domain.Contracts
+
+<h3>Adminsida</h3>
+
+<ContractForm OnContractUploaded="OnNewContractAdded"/>
+<hr/>
+<ContractList @ref="@_contractList"/>
+
+@code {
+
+    private ContractList _contractList = null!;
+
+    private void OnNewContractAdded(Contract contract)
+    {
+        _contractList.Add(contract);
+    }
+
+}

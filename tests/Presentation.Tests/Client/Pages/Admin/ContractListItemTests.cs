@@ -1,4 +1,6 @@
-﻿namespace Presentation.Tests.Client.Pages;
+﻿using Client.Pages.Admin;
+
+namespace Presentation.Tests.Client.Pages.Admin;
 
 public class ContractListItemTests : IDisposable
 {

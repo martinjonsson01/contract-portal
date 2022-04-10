@@ -10,5 +10,12 @@ public interface IContractRepository
     /// <summary>
     /// Gets all contracts.
     /// </summary>
-    public IEnumerable<Contract> Contracts { get; }
+    /// <returns>All currently existing contracts.</returns>
+    IEnumerable<Contract> All { get; }
+
+    /// <summary>
+    /// Adds a new contract to store.
+    /// </summary>
+    /// <param name="contract">The new contract instance.</param>
+    void Add(Contract contract);
 }

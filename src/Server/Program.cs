@@ -2,6 +2,8 @@ using Application;
 
 using Infrastructure;
 
+using Microsoft.Extensions.FileProviders;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -28,7 +30,20 @@ else
     _ = app.UseHsts();
 }
 
+app.UseHttpLogging();
+
 app.UseHttpsRedirection();
+
+string imagesDirectory = Path.Combine(
+    app.Environment.ContentRootPath,
+    app.Environment.EnvironmentName,
+    "unsafe_uploads");
+Directory.CreateDirectory(imagesDirectory);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(imagesDirectory),
+    RequestPath = "/images",
+});
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();

@@ -9,14 +9,22 @@ namespace Infrastructure.Contracts;
 /// </summary>
 public class FakeContractRepository : IContractRepository
 {
+    private readonly ICollection<Contract> _contracts;
+
     /// <summary>
     /// Creates a fake contract for SJ.
     /// </summary>
     public FakeContractRepository()
     {
-        Contracts = new List<Contract>() { new Contract() { Name = "SJ", ImagePath = "images/sj.png", }, };
+        _contracts = new List<Contract> { new Contract() { Name = "SJ", ImagePath = "images/sj.png", }, };
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> Contracts { get; }
+    public IEnumerable<Contract> All => new List<Contract>(_contracts);
+
+    /// <inheritdoc />
+    public void Add(Contract contract)
+    {
+        _contracts.Add(contract);
+    }
 }
