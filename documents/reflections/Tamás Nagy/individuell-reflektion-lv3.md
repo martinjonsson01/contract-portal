@@ -10,7 +10,7 @@
   Eftersom jag också siktar på att delta på mer parprogrammering kan jag förhoppningsvis dela med mig av mina nyfunna kunskaper.
 
 *  What is my contribution towards the team’s use of Scrum?
-  * Jag försöker att ingripa vid de tillfällena när jag upptäcker att vi avviker från Scrum på våra gemensamma möten. 
+   * Jag försöker att ingripa vid de tillfällena när jag upptäcker att vi avviker från Scrum på våra gemensamma möten. 
 
 * What is my contribution towards the team’s deliveries?
   * Jag har varit aktiv de flesta gemensamma möten och fört dialog med stakeholders kontinuerligt. Under sprintplaneringsmötet 
