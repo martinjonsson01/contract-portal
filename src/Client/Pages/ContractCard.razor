@@ -1,6 +1,16 @@
-﻿<div class="card" style="max-width: 30%;">
+﻿@inject IJSRuntime _js
+
+<button class="card" style="max-width: 30%;" @onclick="OpenModal">
     <img id="contract-thumbnail"src="@ImagePath" class="img-thumbnail img-fluid"/>
     <h3 id="contract-name">@Name</h3>
+</button>
+
+<div class="modal" id="contract-details" @ref="_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          TETS
+        </div>
+      </div>
 </div>
 
 @code {
@@ -15,4 +25,11 @@
     /// </summary>
     [Parameter, EditorRequired,]
     public string? ImagePath { get; set; }
+
+    private ElementReference _modal;
+    private async Task OpenModal()
+    {
+        await _js.InvokeVoidAsync("openModal",_modal);
+    }
+
 }
