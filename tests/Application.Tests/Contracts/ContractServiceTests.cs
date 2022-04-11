@@ -24,7 +24,7 @@ public class ContractServiceTests
         // Arrange
         const int numberOfContracts = 10;
         List<Contract> mockContracts = new Faker<Contract>().Generate(numberOfContracts);
-        _mockRepo.Setup(repository => repository.Contracts).Returns(mockContracts);
+        _mockRepo.Setup(repository => repository.All).Returns(mockContracts);
 
         // Act
         IEnumerable<Contract> contracts = _cut.FetchAllContracts();
@@ -38,7 +38,7 @@ public class ContractServiceTests
     {
         // Arrange
         var contract = new Contract();
-        _mockRepo.Setup(repository => repository.Contracts).Returns(new[] { contract, });
+        _mockRepo.Setup(repository => repository.All).Returns(new[] { contract, });
 
         // Act
         Action add = () => _cut.Add(contract);
@@ -51,12 +51,41 @@ public class ContractServiceTests
     public void AddingContract_DoesNotThrow_IfIDIsUnique()
     {
         // Arrange
-        _mockRepo.Setup(repository => repository.Contracts).Returns(new List<Contract>());
+        _mockRepo.Setup(repository => repository.All).Returns(new List<Contract>());
 
         // Act
         Action add = () => _cut.Add(new Contract());
 
         // Assert
         add.Should().NotThrow();
+    }
+
+    [Fact]
+    public void RemovingContract_DoesReturnTrue_WhenAContractExists()
+    {
+        // Arrange
+        var contract = new Contract();
+        _mockRepo.Setup(repository => repository.Remove(contract.Id)).Returns(true);
+
+        // Act
+        bool actual = _cut.Remove(contract.Id);
+
+        // // Assert
+        actual.Should().BeTrue();
+    }
+
+    [Fact]
+    public void RemovingContract_DoesReturnFalse_WhenNoContractsExists()
+    {
+        // Arrange
+        _mockRepo.Setup(repository => repository.All).Returns(new List<Contract>());
+
+        var id = Guid.NewGuid();
+
+        // Act
+        bool actual = _cut.Remove(id);
+
+        // Assert
+        actual.Should().BeFalse();
     }
 }

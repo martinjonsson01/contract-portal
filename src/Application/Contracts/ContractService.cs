@@ -21,15 +21,21 @@ public class ContractService : IContractService
     /// <inheritdoc />
     public IEnumerable<Contract> FetchAllContracts()
     {
-        return _repo.Contracts;
+        return _repo.All;
     }
 
     /// <inheritdoc />
     public void Add(Contract contract)
     {
-        if (_repo.Contracts.Any(otherContract => contract.Id.Equals(otherContract.Id)))
+        if (_repo.All.Any(otherContract => contract.Id.Equals(otherContract.Id)))
             throw new IdentifierAlreadyTakenException();
 
-        _repo.Contracts.Add(contract);
+        _repo.Add(contract);
+    }
+
+    /// <inheritdoc />
+    public bool Remove(Guid id)
+    {
+        return _repo.Remove(id);
     }
 }

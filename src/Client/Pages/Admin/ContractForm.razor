@@ -10,19 +10,19 @@
 <EditForm Model="@_contract" OnSubmit="OnSubmit">
     <div class="mb-3">
         <label for="title" class="form-label">Titel</label>
-        <InputText id="title" class="form-control" placeholder="Skriv titel här..." @bind-Value="@_contract.Name"/>
+        <InputText id="title" class="form-control" placeholder="T.ex. företagets namn" @bind-Value="@_contract.Name"/>
     </div>
     <div class="mb-3">
         <label for="description" class="form-label">Beskrivning</label>
-        <InputTextArea id="description" class="form-control" placeholder="Skriv beskrivning här..." @bind-Value="@_contract.Description"/>
+        <InputTextArea id="description" class="form-control" placeholder="T.ex. vad företaget står för" @bind-Value="@_contract.Description"/>
     </div>
     <div class="mb-3">
         <label for="instructions" class="form-label">Hur man nyttjar erbjudandet</label>
-        <InputTextArea id="instructions" class="form-control" placeholder="Skriv instruktioner här..." @bind-Value="@_contract.Instructions"/>
+        <InputTextArea id="instructions" class="form-control" placeholder="T.ex. vilken webbsida man ska gå in på" @bind-Value="@_contract.Instructions"/>
     </div>
     <div class="mb-3">
         <label for="image" class="form-label">Bild</label>
-        <InputFile  id="image" class="form-control" OnChange="OnFileChosen"/>
+        <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
     </div>
 
     <button type="submit" class="btn btn-primary">Spara</button>
@@ -40,6 +40,8 @@
 
     private Contract _contract = CreateEmptyContract();
 
+    private MultipartFormDataContent? _content;
+
     private static Contract CreateEmptyContract()
     {
         return new Contract
@@ -51,8 +53,6 @@
         };
     }
 
-    private MultipartFormDataContent? _content;
-
     /// <inheritdoc />
     protected override bool ShouldRender()
     {
@@ -62,10 +62,13 @@
     private void OnFileChosen(InputFileChangeEventArgs arg)
     {
         _shouldRender = false;
-        const long maxFileSize = 1024 * 1024 * 100;
 
         _content = new MultipartFormDataContent();
         StreamContent fileContent;
+
+        const long bitsInAKilobyte = 1024;
+        const long kilobytesInAMegabyte = 1024;
+        const long maxFileSize = bitsInAKilobyte * kilobytesInAMegabyte * 100;
 
         try
         {
