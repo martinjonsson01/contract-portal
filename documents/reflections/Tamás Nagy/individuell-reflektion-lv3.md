@@ -9,7 +9,7 @@
   * Jag har redan börjat och skall även fortsätta med att kolla på olika guider och videos om språken för att blir bättre själv. 
   Eftersom jag också siktar på att delta på mer parprogrammering kan jag förhoppningsvis dela med mig av mina nyfunna kunskaper.
 
- *  What is my contribution towards the team’s use of Scrum?
+*  What is my contribution towards the team’s use of Scrum?
   * Jag försöker att ingripa vid de tillfällena när jag upptäcker att vi avviker från Scrum på våra gemensamma möten. 
 
 * What is my contribution towards the team’s deliveries?
