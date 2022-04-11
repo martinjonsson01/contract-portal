@@ -1,7 +1,7 @@
-#Individuell reflektion
+# Individuell reflektion
 
 * What do I want to learn or understand better?
-  *Jag vill fortsätta att lära mig mer om de programmeringsspråk vi använder 
+  * Jag vill fortsätta att lära mig mer om de programmeringsspråk vi använder 
   och hur allt hänger ihop. Det känns som att hands on-erfarenhet genom våra 
   user stories är ett bra sätt för detta.
 
