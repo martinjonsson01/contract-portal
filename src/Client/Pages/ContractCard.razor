@@ -1,6 +1,6 @@
 ﻿@inject IJSRuntime _js
 
-<button class="card" style="max-width: 30%;" @onclick="OpenModal">
+<button class="card" style="max-width: 30%;" data-bs-toggle="modal" data-bs-target="#contract-details">
     <img id="contract-thumbnail"src="@ImagePath" class="img-thumbnail img-fluid"/>
     <h3 id="contract-name">@Name</h3>
 </button>
@@ -27,9 +27,4 @@
     public string? ImagePath { get; set; }
 
     private ElementReference _modal;
-    private async Task OpenModal()
-    {
-        await _js.InvokeVoidAsync("openModal",_modal);
-    }
-
 }
