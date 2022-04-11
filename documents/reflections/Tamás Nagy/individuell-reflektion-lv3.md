@@ -1,5 +1,5 @@
-#Individuell reflektion Tamás
-##LV3
+# Individuell reflektion Tamás
+## LV3
 
 * What do I want to learn or understand better?
   * Jag vill fortsätta fördjupa mig i hur C#, Blazor och HTML fungerar samt hur integrationen mellan de olika språken fungerar. 
