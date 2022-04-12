@@ -1,5 +1,4 @@
 ﻿using Application.Contracts;
-
 using Domain.Contracts;
 
 namespace Infrastructure.Contracts;
@@ -32,5 +31,11 @@ public class FakeContractRepository : IContractRepository
     public bool Remove(Guid id)
     {
         return _contracts.RemoveAll(o => o.Id == id) > 0;
+    }
+
+    /// <inheritdoc />
+    public IEnumerable<Contract> Favorites()
+    {
+        return _contracts.FindAll(contract => contract.IsFavorite);
     }
 }
