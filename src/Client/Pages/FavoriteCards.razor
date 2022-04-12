@@ -12,10 +12,20 @@
     else
     {
         <div id="favorite-cards-container" class=".d-flex">
-            @foreach (var contract in _contracts)
+            @if (_contracts.Length > 0)
             {
-                <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath/>
+                @foreach (var contract in _contracts)
+                {
+                    <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath/>
+                }
             }
+            else
+            {
+                <p>
+                    <em>There are no favorite marked contracts</em>
+                </p>
+            }
+
         </div>
     }
 </div>
