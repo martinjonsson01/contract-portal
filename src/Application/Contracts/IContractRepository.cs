@@ -14,6 +14,11 @@ public interface IContractRepository
     IEnumerable<Contract> All { get; }
 
     /// <summary>
+    /// Gets the most recent contracts that the user has viewed.
+    /// </summary>
+    IEnumerable<Contract> Recent { get; }
+
+    /// <summary>
     /// Adds a new contract to store.
     /// </summary>
     /// <param name="contract">The new contract instance.</param>
