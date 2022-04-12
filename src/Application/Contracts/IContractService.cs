@@ -14,6 +14,12 @@ public interface IContractService
     IEnumerable<Contract> FetchAllContracts();
 
     /// <summary>
+    /// Gets the three most recently viewed contracts.
+    /// </summary>
+    /// <returns>Three contracts.</returns>
+    IEnumerable<Contract> FetchRecentContracts();
+
+    /// <summary>
     /// Adds a new contract.
     /// </summary>
     /// <param name="contract">The new contract.</param>
