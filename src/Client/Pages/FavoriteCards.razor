@@ -1,22 +1,24 @@
 ﻿@using Domain.Contracts
 @inject HttpClient _http
 
-<div id="favorite-contracts" class=".d-flex" >
+<div id="favorite-contracts">
+    <h3>Favorite Contracts</h3>
     @if (_contracts == null)
     {
-        <p><em>Loading...</em></p>
+        <p>
+            <em>Loading...</em>
+        </p>
     }
     else
     {
-        @foreach (var contract in _contracts)
-        {
-            <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath/>
-        }
-
+        <div id="favorite-cards-container" class=".d-flex">
+            @foreach (var contract in _contracts)
+            {
+                <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath/>
+            }
+        </div>
     }
 </div>
-
-
 
 @code {
     private Contract[]? _contracts;
