@@ -9,7 +9,7 @@
 
         @foreach (Contract contract in _recent)
         {
-            <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath/>
+            <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath Contract=@contract/>
         }
         <hr/>
     }

@@ -1,5 +1,8 @@
-﻿<div class="card" style="max-width: 30%;">
-    <img id="contract-thumbnail"src="@ImagePath" class="img-thumbnail img-fluid"/>
+﻿@using Domain.Contracts
+@inject HttpClient _http
+
+<div class="card" style="max-width: 30%;" @onclick="AddToRecentlyViewed">
+    <img id="contract-thumbnail" src="@ImagePath" class="img-thumbnail img-fluid"/>
     <h3 id="contract-name">@Name</h3>
 </div>
 
@@ -15,4 +18,16 @@
     /// </summary>
     [Parameter, EditorRequired,]
     public string? ImagePath { get; set; }
+
+    /// <summary>
+    /// The contract object.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public Contract? Contract { get; set; }
+
+    private async Task AddToRecentlyViewed()
+    {
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/Contracts/AddRecent", Contract);
+        Console.Write(response);
+    }
 }
