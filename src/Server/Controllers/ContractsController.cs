@@ -1,8 +1,6 @@
 ﻿using Application.Contracts;
 using Application.Exceptions;
-
 using Domain.Contracts;
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -48,6 +46,15 @@ public class ContractsController : BaseApiController<ContractsController>
     }
 
     /// <summary>
+    /// Marks the contract as favorite.
+    /// </summary>
+    /// <param name="id">The id of the contract to mark. </param>
+    public void MarkFavorite(Guid id)
+    {
+        _contracts.MarkFavorite(id);
+    }
+
+    /// <summary>
     /// Creates a new contract.
     /// </summary>
     /// <param name="contract">The contract to add.</param>
@@ -78,8 +85,6 @@ public class ContractsController : BaseApiController<ContractsController>
     [HttpDelete("{id:guid}")]
     public IActionResult Remove(Guid id)
     {
-        return _contracts.Remove(id) ?
-            Ok() :
-            NotFound();
+        return _contracts.Remove(id) ? Ok() : NotFound();
     }
 }
