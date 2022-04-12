@@ -25,9 +25,18 @@
     [Parameter, EditorRequired,]
     public Contract? Contract { get; set; }
 
+    /// <summary>
+    /// Called when a contract has been clicked successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback OnRecentlyViewedChanged { get; set; } = EventCallback.Empty;
+
     private async Task AddToRecentlyViewed()
     {
         HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/Contracts/AddRecent", Contract);
-        Console.Write(response);
+        if (response.IsSuccessStatusCode)
+        {
+            await OnRecentlyViewedChanged.InvokeAsync();
+        }
     }
 }

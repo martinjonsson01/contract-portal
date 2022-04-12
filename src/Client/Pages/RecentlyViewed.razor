@@ -26,4 +26,12 @@
         _recent = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
     }
 
+    /// <summary>
+    /// Tells the component to render itself again.
+    /// </summary>
+    public void ReRender()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
 }
