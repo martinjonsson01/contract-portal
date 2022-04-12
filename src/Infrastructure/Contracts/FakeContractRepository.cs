@@ -38,4 +38,12 @@ public class FakeContractRepository : IContractRepository
     {
         return _contracts.FindAll(contract => contract.IsFavorite);
     }
+
+    /// <inheritdoc />
+    public void MarkFavorite(Guid id)
+    {
+        Contract? contract = _contracts.Find(contract => contract.Id == id);
+        if (contract != null)
+            contract.IsFavorite = true;
+    }
 }
