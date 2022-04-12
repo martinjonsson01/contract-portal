@@ -6,11 +6,12 @@
     {
         <h3>Senast besökta</h3>
 
-
-        @foreach (Contract contract in _recent)
-        {
-            <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath Contract=@contract/>
-        }
+        <div class="d-flex flex-row justify-content-around flex-wrap">
+            @foreach (Contract contract in _recent)
+            {
+                <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath Contract=@contract/>
+            }
+        </div>
         <hr/>
     }
 }
