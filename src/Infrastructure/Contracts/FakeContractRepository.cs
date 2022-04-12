@@ -15,7 +15,7 @@ public class FakeContractRepository : IContractRepository
     /// </summary>
     public FakeContractRepository()
     {
-        _contracts = new List<Contract> { new Contract() { Name = "SJ", ImagePath = "images/sj.png", }, };
+        _contracts = new List<Contract> { new Contract() { Name = "SJ", ImagePath = "images/sj.png", IsFavorite = true }, };
     }
 
     /// <inheritdoc />

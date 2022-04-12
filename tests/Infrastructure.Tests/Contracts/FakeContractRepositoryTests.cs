@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Domain.Contracts;
 using Infrastructure.Contracts;
 
 namespace Infrastructure.Tests.Contracts;
+
 public class FakeContractRepositoryTests
 {
     private readonly FakeContractRepository _cut;
@@ -36,5 +38,17 @@ public class FakeContractRepositoryTests
 
         // Assert
         actual.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Favorites_ReturnCorrectAmountOfFavoriteContracts()
+    {
+        // Arrange
+
+        // Act
+        IEnumerable<Contract> favorites = _cut.Favorites();
+
+        // Assert
+        favorites.Should().ContainSingle();
     }
 }
