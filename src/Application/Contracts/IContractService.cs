@@ -14,9 +14,9 @@ public interface IContractService
     IEnumerable<Contract> FetchAllContracts();
 
     /// <summary>
-    /// Gets the three most recently viewed contracts.
+    /// Gets the most recent contracts that the user has viewed.
     /// </summary>
-    /// <returns>Three contracts.</returns>
+    /// <returns>Top most recently viewed contracts.</returns>
     IEnumerable<Contract> FetchRecentContracts();
 
     /// <summary>
