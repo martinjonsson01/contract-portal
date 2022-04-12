@@ -26,11 +26,11 @@ p {
 h1, h2 {
     font-family: 'Merriweather', Helvetica, Arial, sans-serif;
     letter-spacing: 0;
+    font-weight: 600;
 }
 
 h1 {
     font-size: 100px;
-    font-weight: 600;
 }
 
 h1:focus {
@@ -40,7 +40,6 @@ h1:focus {
 h2 {
     font-size: 55px;
     line-height: 75px;
-    font-weight: 600;
 }
 
 h3 {
