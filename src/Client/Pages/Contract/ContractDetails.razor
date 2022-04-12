@@ -1,8 +1,9 @@
 ﻿@using Domain.Contracts
 
-<div class="modal" id="contract-details">
+<div class="modal" id="@("id_" + Contract?.Id)">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+            <img id="contract-thumbnail" src="@Contract?.ImagePath" class="img-thumbnail img-fluid"/>
             <h1>@Contract?.Name</h1>
         </div>
       </div>
