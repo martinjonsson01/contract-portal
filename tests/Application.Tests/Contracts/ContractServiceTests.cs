@@ -34,6 +34,21 @@ public class ContractServiceTests
     }
 
     [Fact]
+    public void FetchRecentContracts_ReturnsOnlyRecentContractsFromTheDatabase()
+    {
+        // Arrange
+        const int numberOfContracts = 3;
+        List<Contract> mockContracts = new Faker<Contract>().Generate(numberOfContracts);
+        _mockRepo.Setup(repository => repository.Recent).Returns(mockContracts);
+
+        // Act
+        IEnumerable<Contract> contracts = _cut.FetchRecentContracts();
+
+        // Assert
+        contracts.Should().HaveCount(numberOfContracts);
+    }
+
+    [Fact]
     public void AddingContract_ThrowsIDException_IfIDAlreadyTaken()
     {
         // Arrange
