@@ -1,5 +1,4 @@
 ﻿using Application.Contracts;
-
 using Domain.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,10 +23,10 @@ public class ContractsControllerTests
         _mockContracts.Setup(service => service.FetchAllContracts()).Returns(fakeContracts);
 
         // Act
-        IEnumerable<Contract> actualWeather = _cut.AllContracts();
+        IEnumerable<Contract> allContracts = _cut.AllContracts();
 
         // Assert
-        actualWeather.Should().BeEquivalentTo(fakeContracts);
+        allContracts.Should().BeEquivalentTo(fakeContracts);
     }
 
     [Fact]
@@ -70,5 +69,19 @@ public class ContractsControllerTests
 
         // Assert
         actual.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public void Gets_Favorites()
+    {
+        // Arrange
+        List<Contract> fakeContracts = new Faker<Contract>().Generate(10);
+        _mockContracts.Setup(service => service.FetchFavorites()).Returns(fakeContracts);
+
+        // Act
+        IEnumerable<Contract> favorites = _cut.Favorites();
+
+        // Assert
+        favorites.Should().BeEquivalentTo(fakeContracts);
     }
 }
