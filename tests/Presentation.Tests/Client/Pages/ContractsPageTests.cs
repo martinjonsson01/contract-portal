@@ -2,6 +2,8 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using Client.Pages.Contract;
+
 using Domain.Contracts;
 
 namespace Presentation.Tests.Client.Pages;

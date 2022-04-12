@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 using Client.Pages.Admin;
+using Client.Pages.Contract;
 
 using Domain.Contracts;
 

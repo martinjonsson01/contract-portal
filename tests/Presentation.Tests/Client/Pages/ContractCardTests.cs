@@ -1,4 +1,8 @@
-﻿namespace Presentation.Tests.Client.Pages;
+﻿using Client.Pages.Contract;
+
+using Domain.Contracts;
+
+namespace Presentation.Tests.Client.Pages;
 
 public class ContractCardTests : UITestFixture
 {
@@ -8,10 +12,10 @@ public class ContractCardTests : UITestFixture
         // Arrange
         const string name = "SJ";
         const string path = "test";
+        var contract = new Contract { Name = name, ImagePath = path, };
 
-        static void ParameterBuilder(ComponentParameterCollectionBuilder<ContractCard> parameters) =>
-            parameters.Add(property => property.Name, name)
-                      .Add(property => property.ImagePath, path);
+        void ParameterBuilder(ComponentParameterCollectionBuilder<ContractCard> parameters) =>
+            parameters.Add(property => property.Contract, contract);
 
         // Act
         IRenderedComponent<ContractCard> cut =
