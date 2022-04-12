@@ -2,7 +2,7 @@
 @using Domain.Contracts
 @inject HttpClient _http
 
-<RecentlyViewed Recent=@_recent/>
+<RecentlyViewed/>
 
 @if (_contracts == null)
 {
@@ -20,13 +20,11 @@ else
 
 @code {
     private Contract[]? _contracts;
-    private Contract[]? _recent;
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
         _contracts = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/All");
-        _recent = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
     }
 
 }

@@ -1,12 +1,13 @@
 ﻿@using Domain.Contracts
-@if (Recent != null)
+@inject HttpClient _http
+@if (_recent != null)
 {
-    @if (Recent.Length > 0)
+    @if (_recent.Length > 0)
     {
         <h3>Senast besökta</h3>
 
 
-        @foreach (Contract contract in Recent)
+        @foreach (Contract contract in _recent)
         {
             <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath Contract=@contract/>
         }
@@ -17,10 +18,12 @@
 
 @code {
 
-    /// <summary>
-    /// All recently viewed contracts.
-    /// </summary>
-    [Parameter, EditorRequired,]
-    public Contract[]? Recent { get; set; }
+    private Contract[]? _recent;
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        _recent = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
+    }
 
 }
