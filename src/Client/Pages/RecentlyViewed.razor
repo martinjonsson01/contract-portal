@@ -29,9 +29,10 @@
     /// <summary>
     /// Tells the component to render itself again.
     /// </summary>
-    public void ReRender()
+    public async void ReRender()
     {
-        InvokeAsync(StateHasChanged);
+        _recent = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
+        await InvokeAsync(StateHasChanged);
     }
 
 }
