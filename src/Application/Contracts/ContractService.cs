@@ -1,5 +1,4 @@
 ﻿using Application.Exceptions;
-
 using Domain.Contracts;
 
 namespace Application.Contracts;
@@ -43,5 +42,11 @@ public class ContractService : IContractService
     public IEnumerable<Contract> FetchFavorites()
     {
         return _repo.Favorites();
+    }
+
+    /// <inheritdoc />
+    public void MarkFavorite(Guid id)
+    {
+        _repo.MarkFavorite(id);
     }
 }

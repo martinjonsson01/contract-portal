@@ -31,4 +31,10 @@ public interface IContractService
     /// </summary>
     /// <returns>All favorite marked contracts.</returns>
     IEnumerable<Contract> FetchFavorites();
+
+    /// <summary>
+    /// Marks the contract as favorite.
+    /// </summary>
+    /// <param name="id">The id of the contract to mark.</param>
+    void MarkFavorite(Guid id);
 }
