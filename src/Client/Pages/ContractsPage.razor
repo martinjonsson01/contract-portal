@@ -1,6 +1,9 @@
 ﻿@page "/"
 @using Domain.Contracts
 @inject HttpClient _http
+
+<RecentlyViewed/>
+
 @if (_contracts == null)
 {
     <p><em>Loading...</em></p>
