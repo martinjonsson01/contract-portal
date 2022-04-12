@@ -10,6 +10,7 @@ namespace Infrastructure.Contracts;
 public class FakeContractRepository : IContractRepository
 {
     private readonly List<Contract> _contracts;
+    private readonly Queue<Contract> _recent;
 
     /// <summary>
     /// Creates a fake contract for SJ.
@@ -17,10 +18,14 @@ public class FakeContractRepository : IContractRepository
     public FakeContractRepository()
     {
         _contracts = new List<Contract> { new Contract() { Name = "SJ", ImagePath = "images/sj.png", }, };
+        _recent = new Queue<Contract>();
     }
 
     /// <inheritdoc />
     public IEnumerable<Contract> All => new List<Contract>(_contracts);
+
+    /// <inheritdoc />
+    public IEnumerable<Contract> Recent => new Queue<Contract>(_recent);
 
     /// <inheritdoc />
     public void Add(Contract contract)
