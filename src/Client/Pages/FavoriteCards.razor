@@ -1,0 +1,30 @@
+﻿@using Domain.Contracts
+@inject HttpClient _http
+
+<div id="favorite-contracts" class=".d-flex" >
+    @if (_contracts == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        @foreach (var contract in _contracts)
+        {
+            <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath/>
+        }
+
+    }
+</div>
+
+
+
+@code {
+    private Contract[]? _contracts;
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        _contracts = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Favorites");
+    }
+
+}
