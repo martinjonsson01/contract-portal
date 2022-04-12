@@ -25,6 +25,12 @@ public interface IContractRepository
     void Add(Contract contract);
 
     /// <summary>
+    /// Stores a contract as recently viewed.
+    /// </summary>
+    /// <param name="contract">The recently viewed contract.</param>
+    void AddRecent(Contract contract);
+
+    /// <summary>
     /// Removes the contract with the given ID.
     /// </summary>
     /// <param name="id">The id of the contract to be removed.</param>

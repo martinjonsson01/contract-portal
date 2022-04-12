@@ -26,6 +26,12 @@ public interface IContractService
     void Add(Contract contract);
 
     /// <summary>
+    /// Adds a contract as recently viewed.
+    /// </summary>
+    /// <param name="contract">The recently viewed contract.</param>
+    void AddRecent(Contract contract);
+
+    /// <summary>
     /// Removes the specified contract.
     /// </summary>
     /// <param name="id">The id of the contract to be removed.</param>

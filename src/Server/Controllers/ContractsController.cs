@@ -52,6 +52,18 @@ public class ContractsController : BaseApiController<ContractsController>
     /// </summary>
     /// <param name="contract">The contract to add.</param>
     /// <returns>The identifier of the stored image.</returns>
+    [HttpPost("AddRecent")]
+    public IActionResult AddRecent(Contract contract)
+    {
+        _contracts.AddRecent(contract);
+        return Ok();
+    }
+
+    /// <summary>
+    /// Creates a new contract.
+    /// </summary>
+    /// <param name="contract">The contract to add.</param>
+    /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The ID of the contract was already taken.</response>
     [HttpPost("new/contract")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
