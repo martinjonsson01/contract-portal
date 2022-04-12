@@ -36,7 +36,12 @@ public class FakeContractRepository : IContractRepository
     /// <inheritdoc />
     public void AddRecent(Contract contract)
     {
-        int recentAmountMax = 3;
+        if (_recent.Any(recentContract => recentContract.Id.Equals(contract.Id)))
+        {
+            return;
+        }
+
+        const int recentAmountMax = 3;
         if (_recent.Count >= recentAmountMax)
         {
             _ = _recent.Dequeue();
