@@ -38,4 +38,10 @@ public class ContractService : IContractService
     {
         return _repo.Remove(id);
     }
+
+    /// <inheritdoc />
+    public IEnumerable<Contract> FetchFavorites()
+    {
+        return _repo.Favorites();
+    }
 }

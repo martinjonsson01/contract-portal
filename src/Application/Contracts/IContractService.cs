@@ -25,4 +25,10 @@ public interface IContractService
     /// <param name="id">The id of the contract to be removed.</param>
     /// <returns>Whether the removal was successful.</returns>
     bool Remove(Guid id);
+
+    /// <summary>
+    /// Gets contracts marked as favorites.
+    /// </summary>
+    /// <returns>All favorite marked contracts.</returns>
+    IEnumerable<Contract> FetchFavorites();
 }
