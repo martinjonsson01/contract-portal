@@ -1,22 +1,44 @@
 ﻿@using Domain.Contracts
 
-<div class="modal" id="@("id_" + Contract?.Id)">
+<!-- modal-dialog-scrollable -->
+<div class="modal w-100" id="@("id_" + Contract?.Id)">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <img id="contract-thumbnail" src="@Contract?.ImagePath" class="img-thumbnail img-fluid"/>
-            <h1>@Contract?.Name</h1>
-            <h2>Beskrivning av erbjudandet</h2>
-            <p>
-                @Contract?.Description
-            </p>
+
+            <div class="modal-header flex-column p-0">
+
+                <div class="position-relative w-100">
+                    <button type="button" class="btn-close m-0 position-absolute top-0 end-0 bg-white" data-bs-dismiss="modal" aria-label="Close" style="border-radius:  0 1rem 0 1rem;"></button>
+
+                    <img id="contract-thumbnail" src="@Contract?.ImagePath" class="p-0 border-0 w-100" style="height: 20rem; object-fit: cover; border-radius:  1rem 1rem 0 0;"/>
+
+                </div>
+
+                <h1 class="modal-title" id="exampleModalToggleLabel">@Contract?.Name</h1>
+            </div>
+            <div class="modal-body">
+                <h2>Beskrivning av erbjudandet</h2>
+                <p>
+                    @Contract?.Description
+                </p>
+                <h2>Hur man nyttjar erbjudandet</h2>
+                <p>
+                    @Contract?.Instructions
+                </p>
+            </div>
+            <div class="modal-footer">
+                Temp contact details
+            </div>
         </div>
-      </div>
+    </div>
 </div>
 
 @code {
+
     /// <summary>
     /// The contract to render details of.
     /// </summary>
     [Parameter, EditorRequired,]
     public Contract? Contract { get; set; }
+
 }
