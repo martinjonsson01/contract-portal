@@ -7,9 +7,9 @@
 }
 else
 {
-    @foreach (var contract in _contracts)
+    @foreach (Contract contract in _contracts)
     {
-        <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath/>
+        <ContractCard Contract="contract"/>
     }
 
 }

@@ -1,22 +1,17 @@
-﻿@inject IJSRuntime _js
+﻿@using Domain.Contracts
+@inject IJSRuntime _js
 
 <button class="card" style="max-width: 30%;" data-bs-toggle="modal" data-bs-target="#contract-details">
-    <img id="contract-thumbnail"src="@ImagePath" class="img-thumbnail img-fluid"/>
-    <h3 id="contract-name">@Name</h3>
+    <img id="contract-thumbnail"src="@Contract?.ImagePath" class="img-thumbnail img-fluid"/>
+    <h3 id="contract-name">@Contract?.Name</h3>
 </button>
 
 <ContractDetails />
 
 @code {
     /// <summary>
-    /// Name of the company.
+    /// The contract to render.
     /// </summary>
     [Parameter, EditorRequired,]
-    public string? Name { get; set; }
-
-    /// <summary>
-    /// Image path to the company logo.
-    /// </summary>
-    [Parameter, EditorRequired,]
-    public string? ImagePath { get; set; }
+    public Contract? Contract { get; set; }
 }
