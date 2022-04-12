@@ -1,4 +1,5 @@
-﻿@_htmlText
+﻿@using Markdig
+@_htmlText
 
 @code {
 
@@ -13,8 +14,10 @@
     /// <inheritdoc />
     protected override void OnParametersSet()
     {
+        // This unlocks more advanced markdown-features, like ~~strikethrough~~.
+        MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         // Cast to MarkupString to be able to render it as HTML instead of plaintext.
-        _htmlText = (MarkupString)Markdig.Markdown.ToHtml(Markdown);
+        _htmlText = (MarkupString)Markdig.Markdown.ToHtml(Markdown, pipeline);
     }
 
 }
