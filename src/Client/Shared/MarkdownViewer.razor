@@ -1,0 +1,20 @@
+﻿@_htmlText
+
+@code {
+
+    /// <summary>
+    ///
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public string Markdown { get; set; } = "Ingen text.";
+
+    private MarkupString _htmlText;
+
+    /// <inheritdoc />
+    protected override void OnParametersSet()
+    {
+        // Cast to MarkupString to be able to render it as HTML instead of plaintext.
+        _htmlText = (MarkupString)Markdig.Markdown.ToHtml(Markdown);
+    }
+
+}
