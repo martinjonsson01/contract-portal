@@ -38,6 +38,16 @@ public class ContractsController : BaseApiController<ContractsController>
     }
 
     /// <summary>
+    /// Gets all favorite marked contracts.
+    /// </summary>
+    /// <returns>Favorite marked contracts.</returns>
+    [HttpGet("Favorites")]
+    public IEnumerable<Contract> Favorites()
+    {
+        return _contracts.FetchFavorites();
+    }
+
+    /// <summary>
     /// Creates a new contract.
     /// </summary>
     /// <param name="contract">The contract to add.</param>
