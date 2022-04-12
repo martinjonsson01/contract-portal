@@ -2,26 +2,28 @@
 @inject HttpClient _http
 @if (_recent != null)
 {
-    <h3>Senast besökta</h3>
-
-
-    @foreach (Contract contract in _recent)
+    @if (_recent.Length > 0)
     {
-        <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath/>
+        <h3>Senast besökta</h3>
+
+
+        @foreach (Contract contract in _recent)
+        {
+            <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath/>
+        }
+        <hr/>
     }
-    <hr/>
 }
 
 
 @code {
 
-    private Contract[]?
-    _recent;
+    private Contract[]? _recent;
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        _recent = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/recent");
+        _recent = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
     }
 
 }
