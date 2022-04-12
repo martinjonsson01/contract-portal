@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Application.Contracts;
+
 using Application.Exceptions;
 
 using Domain.Contracts;
@@ -87,5 +88,20 @@ public class ContractServiceTests
 
         // Assert
         actual.Should().BeFalse();
+    }
+
+    [Fact]
+    public void FetchFavorite_ReturnsTheGivenContractsFromRepo()
+    {
+        // Arrange
+        const int numberOfContracts = 10;
+        List<Contract> mockContracts = new Faker<Contract>().Generate(numberOfContracts);
+        _mockRepo.Setup(repository => repository.Favorites()).Returns(mockContracts);
+
+        // Act
+        IEnumerable<Contract> contracts = _cut.FetchFavorites();
+
+        // Assert
+        contracts.Should().HaveCount(numberOfContracts);
     }
 }
