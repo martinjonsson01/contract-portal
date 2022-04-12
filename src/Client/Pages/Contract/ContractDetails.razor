@@ -1,11 +1,17 @@
-﻿<div class="modal" id="contract-details">
+﻿@using Domain.Contracts
+
+<div class="modal" id="contract-details">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          Detaljer
+            <h1>@Contract?.Name</h1>
         </div>
       </div>
 </div>
 
 @code {
-
+    /// <summary>
+    /// The contract to render details of.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public Contract? Contract { get; set; }
 }
