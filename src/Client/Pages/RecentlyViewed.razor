@@ -1,7 +1,27 @@
-﻿<h3>Senast besökta</h3>
+﻿@using Domain.Contracts
+@inject HttpClient _http
+@if (_recent != null)
+{
+    <h3>Senast besökta</h3>
 
-<hr/>
+
+    @foreach (Contract contract in _recent)
+    {
+        <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath/>
+    }
+    <hr/>
+}
+
 
 @code {
+
+    private Contract[]?
+    _recent;
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        _recent = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/recent");
+    }
 
 }
