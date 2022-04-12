@@ -5,57 +5,53 @@
 <div class="modal w-100" id="@("id_" + Contract?.Id)">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
             <div class="modal-header flex-column p-0">
-
                 <div class="position-relative w-100">
                     <button type="button" class="btn-close m-0 position-absolute top-0 end-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-
                     <img alt="@Contract?.Name" id="contract-thumbnail" src="@Contract?.ImagePath" class="p-0 border-0 w-100"/>
                 </div>
-
                 <h1 class="modal-title" id="exampleModalToggleLabel">@Contract?.Name</h1>
             </div>
             <div class="modal-body">
 
                 <div class="accordion" id="about-contract">
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="about-contract-heading-one">
-                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panels-stay-open-collapse-one" aria-expanded="true" aria-controls="panels-stay-open-collapse-one">
-                          <h2>Om erbjudandet</h2>
-                      </button>
-                    </h2>
-                    <div id="panels-stay-open-collapse-one" class="accordion-collapse collapse show" aria-labelledby="about-contract-heading-one">
-                      <div class="accordion-body">
-                        @Contract?.Description
-                      </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="about-contract-heading-one">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panels-stay-open-collapse-one" aria-expanded="true" aria-controls="panels-stay-open-collapse-one">
+                                <h2>Om erbjudandet</h2>
+                            </button>
+                        </h2>
+                        <div id="panels-stay-open-collapse-one" class="accordion-collapse collapse show" aria-labelledby="about-contract-heading-one">
+                            <div class="accordion-body">
+                                <MarkdownViewer Markdown="@Contract?.Description"/>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="instructions-heading-two">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-collapse-two" aria-expanded="false" aria-controls="accordion-collapse-two">
-                          <h2>Hur man nyttjar erbjudandet</h2>
-                      </button>
-                    </h2>
-                    <div id="accordion-collapse-two" class="accordion-collapse collapse" aria-labelledby="instructions-heading-two">
-                      <div class="accordion-body">
-                        @Contract?.Instructions
-                      </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="instructions-heading-two">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-collapse-two" aria-expanded="false" aria-controls="accordion-collapse-two">
+                                <h2>Hur man nyttjar erbjudandet</h2>
+                            </button>
+                        </h2>
+                        <div id="accordion-collapse-two" class="accordion-collapse collapse" aria-labelledby="instructions-heading-two">
+                            <div class="accordion-body">
+                                <MarkdownViewer Markdown="@Contract?.Instructions"/>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="about-supplier-heading-three">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-collapse-three" aria-expanded="false" aria-controls="accordion-collapse-three">
-                          <!-- TODO: replace with supplier name -->
-                          <h2>Om @Contract?.Name</h2>
-                      </button>
-                    </h2>
-                    <div id="accordion-collapse-three" class="accordion-collapse collapse" aria-labelledby="about-supplier-heading-three">
-                      <div class="accordion-body">
-                        TODO: hämta data här
-                      </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="about-supplier-heading-three">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-collapse-three" aria-expanded="false" aria-controls="accordion-collapse-three">
+                                <!-- TODO: replace with supplier name -->
+                                <h2>Om @Contract?.Name</h2>
+                            </button>
+                        </h2>
+                        <div id="accordion-collapse-three" class="accordion-collapse collapse" aria-labelledby="about-supplier-heading-three">
+                            <div class="accordion-body">
+                                TODO: hämta data här
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
             </div>
             <div class="modal-footer">
