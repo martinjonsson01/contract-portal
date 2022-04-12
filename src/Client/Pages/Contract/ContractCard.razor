@@ -5,13 +5,7 @@
     <h3 id="contract-name">@Name</h3>
 </button>
 
-<div class="modal" id="contract-details" @ref="_modal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          Detaljer
-        </div>
-      </div>
-</div>
+<ContractDetails />
 
 @code {
     /// <summary>
@@ -25,6 +19,4 @@
     /// </summary>
     [Parameter, EditorRequired,]
     public string? ImagePath { get; set; }
-
-    private ElementReference _modal;
 }
