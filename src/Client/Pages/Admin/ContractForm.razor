@@ -106,8 +106,6 @@
 
         try
         {
-            Console.WriteLine(JsonConvert.SerializeObject(_contract, Formatting.Indented));
-
             HttpResponseMessage response = await _http.PostAsync("/api/v1/images", _content);
 
             if (response.IsSuccessStatusCode)
