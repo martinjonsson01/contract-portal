@@ -2,6 +2,7 @@
 @using Newtonsoft.Json
 @using System.Net.Http.Headers
 @using System.Text.Json
+@using Blazorise.Markdown
 @inject ILogger<AdminPage> _logger
 @inject HttpClient _http
 
@@ -14,17 +15,22 @@
     </div>
     <div class="mb-3">
         <label for="description" class="form-label">Beskrivning</label>
-        <InputTextArea id="description" class="form-control" placeholder="T.ex. vad företaget står för" @bind-Value="@_contract.Description"/>
+        <Markdown id="description"
+                  @bind-Value="@_contract.Description"
+                  MinHeight="@MinFormHeight"
+                  Placeholder="T.ex. vad företaget står för"/>
     </div>
     <div class="mb-3">
         <label for="instructions" class="form-label">Hur man nyttjar erbjudandet</label>
-        <InputTextArea id="instructions" class="form-control" placeholder="T.ex. vilken webbsida man ska gå in på" @bind-Value="@_contract.Instructions"/>
+        <Markdown id="instructions"
+                  @bind-Value="@_contract.Instructions"
+                  MinHeight="@MinFormHeight"
+                  Placeholder="T.ex. vilken webbsida man ska gå in på"/>
     </div>
     <div class="mb-3">
         <label for="image" class="form-label">Bild</label>
         <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
     </div>
-
     <button type="submit" class="btn btn-primary">Spara</button>
 </EditForm>
 
@@ -42,6 +48,8 @@
 
     private MultipartFormDataContent? _content;
 
+        private const string MinFormHeight = "5rem";
+
     private static Contract CreateEmptyContract()
     {
         return new Contract
@@ -57,6 +65,12 @@
     protected override bool ShouldRender()
     {
         return _shouldRender;
+    }
+
+    private Task OnMarkdownValueChanged(string markdown)
+    {
+        _contract.Instructions = markdown;
+        return Task.CompletedTask;
     }
 
     private void OnFileChosen(InputFileChangeEventArgs arg)
