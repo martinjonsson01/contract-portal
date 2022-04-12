@@ -33,6 +33,7 @@ public class ContractsPageTests : UITestFixture
         const string name = "SJ";
         var contract = new Contract() { Name = name, ImagePath = "/img/test" };
         MockHttp.When("/api/v1/Contracts/All").RespondJson(new[] { contract, });
+        MockHttp.When("/api/v1/Contracts/Recent").RespondJson(Array.Empty<object>());
 
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
