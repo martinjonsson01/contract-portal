@@ -38,6 +38,16 @@ public class ContractsController : BaseApiController<ContractsController>
     }
 
     /// <summary>
+    /// Gets all recently viewed contracts.
+    /// </summary>
+    /// <returns>All recently viewed contracts.</returns>
+    [HttpGet("Recent")]
+    public IEnumerable<Contract> RecentContracts()
+    {
+        return _contracts.FetchRecentContracts();
+    }
+
+    /// <summary>
     /// Creates a new contract.
     /// </summary>
     /// <param name="contract">The contract to add.</param>
