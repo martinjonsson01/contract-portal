@@ -23,7 +23,11 @@
     </div>
     <div class="mb-3">
         <label for="image" class="form-label">Banderoll till kontrakt</label>
-        <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
+        <InputFile id="image" class="form-control" OnChange="(e=> OnFileChosen(e, _inspirationalContent!))"/>
+    </div>
+    <div class="mb-3">
+        <label for="document" class="form-label">Ytterligare dokument eller bild</label>
+        <InputFile id="document" class="form-control" OnChange="(e=> OnFileChosen(e, _supplierLogoContent!))"/>
     </div>
     <br />
     <hr />
@@ -38,7 +42,7 @@
     </div>
     <div class="mb-3">
         <label for="image" class="form-label">Företagets logotyp</label>
-        <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
+        <InputFile id="image" class="form-control" OnChange="(e=> OnFileChosen(e, _additionalDocumentContent!))"/>
     </div>
 
 
@@ -57,7 +61,11 @@
 
     private Contract _contract = CreateEmptyContract();
 
-    private MultipartFormDataContent? _content;
+    private MultipartFormDataContent? _supplierLogoContent = new MultipartFormDataContent();
+
+    private MultipartFormDataContent? _inspirationalContent = new MultipartFormDataContent();
+
+    private MultipartFormDataContent? _additionalDocumentContent = new MultipartFormDataContent();
 
     private static Contract CreateEmptyContract()
     {
@@ -78,11 +86,10 @@
         return _shouldRender;
     }
 
-    private void OnFileChosen(InputFileChangeEventArgs arg)
+    private void OnFileChosen(InputFileChangeEventArgs arg, MultipartFormDataContent content)
     {
         _shouldRender = false;
 
-        _content = new MultipartFormDataContent();
         StreamContent fileContent;
 
         const long bitsInAKilobyte = 1024;
@@ -104,9 +111,9 @@
         fileContent.Headers.ContentType =
             new MediaTypeHeaderValue(arg.File.ContentType);
 
-        _content.Add(
+        content.Add(
             fileContent,
-            "\"image\"",
+            "\"file\"",
             arg.File.Name);
 
         _shouldRender = true;
@@ -114,33 +121,36 @@
 
     private async Task OnSubmit()
     {
-        if (!await UploadImage()) return;
+        _contract.SupplierLogoImagePath = await UploadImage(_supplierLogoContent!);
+
+        _contract.InspirationalImagePath = await UploadImage(_inspirationalContent!);
+
+        _contract.AdditionalDocument = await UploadImage(_additionalDocumentContent!);
 
         await UploadContract();
     }
 
-    private async Task<bool> UploadImage()
+    private async Task<string> UploadImage(MultipartFormDataContent content)
     {
-        if (_content is null) return false;
+        if (content is null) return string.Empty;
 
         try
         {
             Console.WriteLine(JsonConvert.SerializeObject(_contract, Formatting.Indented));
 
-            HttpResponseMessage response = await _http.PostAsync("/api/v1/images", _content);
+            HttpResponseMessage response = await _http.PostAsync("/api/v1/images", content);
 
             if (response.IsSuccessStatusCode)
             {
                 string imageLocation = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"successfully uploaded {imageLocation}");
-                _contract.SupplierLogoImagePath = imageLocation;
-                return true;
+                return imageLocation;
             }
-            return false;
+            return string.Empty;
         }
         finally
         {
-            _content.Dispose();
+            content.Dispose();
         }
     }
 
