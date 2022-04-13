@@ -7,7 +7,7 @@
         <h3>Senast besökta</h3>
 
         <div class="d-flex flex-row justify-content-around flex-wrap">
-            @foreach (Contract contract in _recent.Reverse())
+            @foreach (Contract contract in _recent.ToArray().Reverse())
             {
                 <ContractCard Contract=@contract/>
             }
@@ -19,13 +19,13 @@
 
 @code {
 
-    private Queue<Contract>? _recent;
+    private List<Contract>? _recent;
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        Contract[] response = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent") ?? Array.Empty<Contract>();
-        _recent = new Queue<Contract>(response);
+        Contract[]? recentArray = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
+        if (recentArray != null) _recent = recentArray.ToList();
     }
 
     /// <summary>
@@ -33,7 +33,6 @@
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
-        // _recent = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
         if (_recent != null && _recent.Any(recentContract => recentContract.Id.Equals(newRecent.Id)))
         {
             return;
@@ -41,9 +40,9 @@
         const int recentAmountMax = 3;
         if (_recent != null && _recent.Count >= recentAmountMax)
         {
-            _ = _recent.Dequeue();
+            _recent.RemoveAt(0);
         }
-        _recent?.Enqueue(newRecent);
+        _recent?.Add(newRecent);
         await InvokeAsync(StateHasChanged);
     }
 
