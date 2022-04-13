@@ -40,10 +40,10 @@ public class FakeContractRepository : IContractRepository
     }
 
     /// <inheritdoc />
-    public void MarkFavorite(Guid id)
+    public void UpdateFavorite(Guid id)
     {
         Contract? contract = _contracts.Find(contract => contract.Id == id);
         if (contract != null)
-            contract.IsFavorite = true;
+            contract.IsFavorite = !contract.IsFavorite;
     }
 }

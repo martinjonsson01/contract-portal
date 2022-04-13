@@ -45,8 +45,8 @@ public class ContractService : IContractService
     }
 
     /// <inheritdoc />
-    public void MarkFavorite(Guid id)
+    public void UpdateFavorite(Guid id)
     {
-        _repo.MarkFavorite(id);
+        _repo.UpdateFavorite(id);
     }
 }

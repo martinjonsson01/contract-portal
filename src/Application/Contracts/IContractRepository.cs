@@ -33,8 +33,8 @@ public interface IContractRepository
     IEnumerable<Contract> Favorites();
 
     /// <summary>
-    /// Marks the contract as favorite.
+    /// Updates the contract's favorite status.
     /// </summary>
-    /// <param name="id">The id of the contract to mark as favorite.</param>
-    void MarkFavorite(Guid id);
+    /// <param name="id">The id of the contract to update.</param>
+    void UpdateFavorite(Guid id);
 }
