@@ -12,8 +12,7 @@ else
 {
     @foreach (var contract in _contracts)
     {
-        <ContractCard Name=@contract.Name ImagePath=@contract.ImagePath Contract=@contract
-                      OnRecentlyViewedChanged="OnRecentContractAdded"/>
+        <ContractCard Contract=@contract OnRecentlyViewedChanged="OnRecentContractAdded"/>
     }
 
 }
