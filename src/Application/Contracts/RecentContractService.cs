@@ -52,10 +52,10 @@ public class RecentContractService : IRecentContractService
     {
         foreach (Contract contract in _recent)
         {
-            if (contract.Id == id)
-            {
-                _ = _recent.Remove(contract);
-            }
+            if (contract.Id != id)
+                continue;
+            _ = _recent.Remove(contract);
+            break;
         }
     }
 }
