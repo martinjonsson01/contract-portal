@@ -1,5 +1,6 @@
 ﻿@using Domain.Contracts
 @using Application.Contracts
+@using System.Collections.ObjectModel
 @inject HttpClient _http
 @if (_recent != null)
 {
@@ -20,7 +21,7 @@
 
 @code {
 
-    private IRecentContractService? _recent;
+    private IRecentContractService? _recent = new RecentContractService(new Collection<Contract>());
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
