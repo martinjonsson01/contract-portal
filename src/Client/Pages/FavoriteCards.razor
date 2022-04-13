@@ -3,7 +3,7 @@
 
 <div id="favorite-contracts">
     <h3>Favorite Contracts</h3>
-    @if (_contracts == null)
+    @if (_favoriteContracts == null)
     {
         <p>
             <em>Loading...</em>
@@ -12,9 +12,9 @@
     else
     {
         <div id="favorite-cards-container" class=".d-flex">
-            @if (_contracts.Length > 0)
+            @if (_favoriteContracts.Length > 0)
             {
-                @foreach (var contract in _contracts)
+                @foreach (var contract in _favoriteContracts)
                 {
                     <ContractCard Contract=@contract />
                 }
@@ -31,12 +31,12 @@
 </div>
 
 @code {
-    private Contract[]? _contracts;
+    private Contract[]? _favoriteContracts;
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        _contracts = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Favorites");
+        _favoriteContracts = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Favorites");
     }
 
 }

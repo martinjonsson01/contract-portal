@@ -39,7 +39,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// Gets all favorite marked contracts.
     /// </summary>
     /// <returns>Favorite marked contracts.</returns>
-    [HttpGet("/favorites")]
+    [HttpGet("Favorites")]
     public IEnumerable<Contract> Favorites()
     {
         return _contracts.FetchFavorites();

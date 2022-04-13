@@ -40,8 +40,10 @@
 
     private async Task ChangeFavorite()
     {
-        Contract.IsFavorite = !Contract.IsFavorite;
-        await OnFavoriteChange.InvokeAsync(Contract);
+        HttpResponseMessage response = await _http.PostAsync($"/favorites/update{Contract.Id}",null);
+        if(response.IsSuccessStatusCode){
+            Contract.IsFavorite = !Contract.IsFavorite;
+        }
     }
 
 }
