@@ -28,9 +28,9 @@ else
         _contracts = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/All");
     }
 
-    private void OnRecentContractAdded()
+    private void OnRecentContractAdded(Contract viewedContract)
     {
-        _recentlyViewed.ReRender();
+        _recentlyViewed.AddViewedContract(viewedContract);
     }
 
 }

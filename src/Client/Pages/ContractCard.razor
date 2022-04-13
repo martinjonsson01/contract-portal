@@ -17,14 +17,14 @@
     /// Called when a contract has been clicked successfully.
     /// </summary>
     [Parameter]
-    public EventCallback OnViewed { get; set; } = EventCallback.Empty;
+    public EventCallback<Contract> OnViewed { get; set; } = EventCallback<Contract>.Empty;
 
     private async Task AddToRecentlyViewed()
     {
         HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/Contracts/AddRecent", Contract);
         if (response.IsSuccessStatusCode)
         {
-            await OnViewed.InvokeAsync();
+            await OnViewed.InvokeAsync(Contract);
         }
     }
 }

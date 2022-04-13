@@ -2,7 +2,7 @@
 @inject HttpClient _http
 @if (_recent != null)
 {
-    @if (_recent.Length > 0)
+    @if (_recent.Count > 0)
     {
         <h3>Senast besökta</h3>
 
@@ -19,20 +19,31 @@
 
 @code {
 
-    private Contract[]? _recent;
+    private Queue<Contract>? _recent;
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        _recent = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
+        Contract[] response = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent") ?? Array.Empty<Contract>();
+        _recent = new Queue<Contract>(response);
     }
 
     /// <summary>
     /// Tells the component to render itself again.
     /// </summary>
-    public async void ReRender()
+    public async void AddViewedContract(Contract newRecent)
     {
-        _recent = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
+        // _recent = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
+        if (_recent != null && _recent.Any(recentContract => recentContract.Id.Equals(newRecent.Id)))
+        {
+            return;
+        }
+        const int recentAmountMax = 3;
+        if (_recent != null && _recent.Count >= recentAmountMax)
+        {
+            _ = _recent.Dequeue();
+        }
+        _recent?.Enqueue(newRecent);
         await InvokeAsync(StateHasChanged);
     }
 
