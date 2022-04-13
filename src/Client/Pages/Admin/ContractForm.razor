@@ -8,22 +8,39 @@
 <h4>Skapa nytt kontrakt</h4>
 
 <EditForm Model="@_contract" OnSubmit="OnSubmit">
+    <br />
     <div class="mb-3">
         <label for="title" class="form-label">Titel</label>
-        <InputText id="title" class="form-control" placeholder="T.ex. företagets namn" @bind-Value="@_contract.Name"/>
+        <InputText id="title" class="form-control" placeholder="Kontraktets namn" @bind-Value="@_contract.Name"/>
     </div>
     <div class="mb-3">
         <label for="description" class="form-label">Beskrivning</label>
-        <InputTextArea id="description" class="form-control" placeholder="T.ex. vad företaget står för" @bind-Value="@_contract.Description"/>
+        <InputTextArea id="description" class="form-control" placeholder="T.ex. vad erbjudandet innebär" @bind-Value="@_contract.Description"/>
     </div>
     <div class="mb-3">
         <label for="instructions" class="form-label">Hur man nyttjar erbjudandet</label>
         <InputTextArea id="instructions" class="form-control" placeholder="T.ex. vilken webbsida man ska gå in på" @bind-Value="@_contract.Instructions"/>
     </div>
     <div class="mb-3">
-        <label for="image" class="form-label">Bild</label>
+        <label for="image" class="form-label">Banderoll till kontrakt</label>
         <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
     </div>
+    <br />
+    <hr />
+    <br />
+    <div class="mb-3">
+        <label for="instructions" class="form-label">Företagets namn</label>
+        <InputTextArea id="instructions" class="form-control" placeholder="T.ex. Prodigo" @bind-Value="@_contract.SupplierName"/>
+    </div>
+    <div class="mb-3">
+        <label for="instructions" class="form-label">Kontaktinformation för företaget</label>
+        <InputTextArea id="instructions" class="form-control" placeholder="T.ex. namn, e-mail eller telefonnummer" @bind-Value="@_contract.SupplierContactInfo"/>
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Företagets logotyp</label>
+        <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
+    </div>
+
 
     <button type="submit" class="btn btn-primary">Spara</button>
 </EditForm>
@@ -50,6 +67,8 @@
             Description = string.Empty,
             Instructions = string.Empty,
             SupplierLogoImagePath = string.Empty,
+            SupplierName = string.Empty,
+            SupplierContactInfo = string.Empty,
         };
     }
 
