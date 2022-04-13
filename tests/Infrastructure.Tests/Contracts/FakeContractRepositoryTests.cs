@@ -104,14 +104,16 @@ public class FakeContractRepositoryTests
     public void RemoveContract_ShouldRemoveFromRecentlyViewed_WhenContractHasBeenViewed()
     {
         // Arrange
-        Contract contract = _cut.All.First();
-        Guid id = contract.Id;
+        Contract contract1 = _cut.All.First();
+        var contract2 = new Contract() { Name = "contract 2", };
+        Guid id = contract2.Id;
 
         // Act
-        _cut.AddRecent(contract);
+        _cut.AddRecent(contract1);
+        _cut.AddRecent(contract2);
         _ = _cut.Remove(id);
 
         // Assert
-        _cut.Recent.Count().Should().Be(0);
+        _cut.Recent.Count().Should().Be(1);
     }
 }
