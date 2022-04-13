@@ -35,5 +35,5 @@ public interface IContractRepository
     /// </summary>
     /// <param name="id">The id of the contract to be removed.</param>
     /// <returns>If the removal was successful.</returns>
-    public bool Remove(Guid id);
+    bool Remove(Guid id);
 }

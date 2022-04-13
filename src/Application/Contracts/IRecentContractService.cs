@@ -11,13 +11,13 @@ public interface IRecentContractService
     /// Gets many recent contracts.
     /// </summary>
     /// <returns>The number of current recent contracts.</returns>
-    public int Size();
+    int Size();
 
     /// <summary>
     /// Gets the most recent contracts that the user has viewed.
     /// </summary>
     /// <returns>Top most recently viewed contracts.</returns>
-    public IEnumerable<Contract> FetchRecentContracts();
+    IEnumerable<Contract> FetchRecentContracts();
 
     /// <summary>
     /// Ensures that a new contract is qualified as recently viewed.
@@ -29,5 +29,5 @@ public interface IRecentContractService
     /// Removes the contract with the specified ID if it exists.
     /// </summary>
     /// <param name="id">The ID of the contract to remove.</param>
-    public void Remove(Guid id);
+    void Remove(Guid id);
 }
