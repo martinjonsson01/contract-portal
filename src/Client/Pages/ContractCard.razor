@@ -6,7 +6,7 @@
     <img id="contract-thumbnail"src="@Contract.ImagePath" class="img-thumbnail img-fluid"/>
     <div class="card-body">
         <h3 id="contract-name">@Contract.Name</h3>
-        <button>
+        <button @onclick="ChangeFavorite">
             @if (Contract.IsFavorite)
             {
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
@@ -27,9 +27,21 @@
 @code {
 
     /// <summary>
+    /// Called when a contract has its favorite status changed.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Contract> OnFavoriteChange { get; set; } = EventCallback<Contract>.Empty;
+
+    /// <summary>
     /// Image path to the company logo.
     /// </summary>
     [Parameter, EditorRequired,]
     public Contract Contract { get; set; } = new();
+
+    private async Task ChangeFavorite()
+    {
+        Contract.IsFavorite = !Contract.IsFavorite;
+        await OnFavoriteChange.InvokeAsync(Contract);
+    }
 
 }
