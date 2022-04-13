@@ -19,8 +19,8 @@ html, body {
 }
 
 p {
-    font-size: 17px;
-    line-height: 29px;
+    font-size: 1.0625rem;
+    line-height: 1.8125rem;
 }
 
 h1, h2 {
@@ -30,7 +30,7 @@ h1, h2 {
 }
 
 h1 {
-    font-size: 100px;
+    font-size: 6.25rem;
 }
 
 h1:focus {
@@ -38,23 +38,23 @@ h1:focus {
 }
 
 h2 {
-    font-size: 55px;
-    line-height: 75px;
+    font-size: 3.4375rem;
+    line-height: 4.6875rem;
 }
 
 h3 {
-    font-size: 41px;
-    line-height: 59px;
+    font-size: 2.5625rem;
+    line-height: 3.6875rem;
 }
 
 h4 {
-    font-size: 26px;
-    line-height: 42px;
+    font-size: 1.625rem;
+    line-height: 2.625rem;
 }
 
 h6 {
-    font-size: 18px;
-    line-height: 35px;
+    font-size: 1.125rem;
+    line-height: 2.1875rem;
     font-weight: 400;
     letter-spacing: 0;
 }
