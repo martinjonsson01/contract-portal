@@ -45,7 +45,7 @@ public class ContractServiceTests
         IEnumerable<Contract> contracts = _cut.FetchRecentContracts();
 
         // Assert
-        contracts.Should().HaveCount(numberOfContracts);
+        _mockRepo.Verify(repo => repo.Recent, Times.AtLeastOnce);
     }
 
     [Fact]
