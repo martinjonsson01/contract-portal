@@ -39,7 +39,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// Gets all favorite marked contracts.
     /// </summary>
     /// <returns>Favorite marked contracts.</returns>
-    [HttpGet("Favorites")]
+    [HttpGet("/favorites")]
     public IEnumerable<Contract> Favorites()
     {
         return _contracts.FetchFavorites();
@@ -49,6 +49,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// Marks the contract as favorite.
     /// </summary>
     /// <param name="id">The id of the contract to mark. </param>
+    [HttpPost("/favorites/mark{id:guid}")]
     public void MarkFavorite(Guid id)
     {
         _contracts.MarkFavorite(id);
