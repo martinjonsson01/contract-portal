@@ -1,11 +1,62 @@
-﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+﻿@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+:root {
+    --prodigo-dark-blue: #3e4b65;
+    --prodigo-blue: #516285;
+    --prodigo-light-blue: #dadee8;
+    --prodigo-white: #f9fafb;
+    --prodigo-beige: #f7f1f1;
+    --prodigo-black: #222939;
+    --prodigo-yellow: #ffeeae;
+    --prodigo-red: #3D0F16;
+}
 
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    color: var(--prodigo-black);
+    background-color: var(--prodigo-white);
+}
+
+p {
+    font-size: 1.0625rem;
+    line-height: 1.8125rem;
+}
+
+h1, h2 {
+    font-family: 'Merriweather', Helvetica, Arial, sans-serif;
+    letter-spacing: 0;
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 6.25rem;
 }
 
 h1:focus {
     outline: none;
+}
+
+h2 {
+    font-size: 3.4375rem;
+    line-height: 4.6875rem;
+}
+
+h3 {
+    font-size: 2.5625rem;
+    line-height: 3.6875rem;
+}
+
+h4 {
+    font-size: 1.625rem;
+    line-height: 2.625rem;
+}
+
+h6 {
+    font-size: 1.125rem;
+    line-height: 2.1875rem;
+    font-weight: 400;
+    letter-spacing: 0;
 }
 
 a, .btn-link {
@@ -13,9 +64,15 @@ a, .btn-link {
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    color: var(--prodigo-red);
+    background-color: var(--prodigo-white);
+    border-color: var(--prodigo-red);
+}
+
+.btn-primary:hover {
+    color: var(--prodigo-white);
+    background-color: var(--prodigo-red);
+    border-color: var(--prodigo-red);
 }
 
 .content {
