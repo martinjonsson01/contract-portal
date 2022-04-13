@@ -1,10 +1,19 @@
-﻿namespace Presentation.Tests.Client;
+﻿using Blazorise;
+using Blazorise.Bootstrap5;
+using Blazorise.Icons.FontAwesome;
+
+namespace Presentation.Tests.Client;
 
 public class UITestFixture : IDisposable
 {
     protected UITestFixture()
     {
         MockHttp = Context.Services.AddMockHttpClient();
+        Context.JSInterop.Mode = JSRuntimeMode.Loose;
+        Context.Services
+               .AddBlazorise(options => { options.Immediate = true; })
+               .AddBootstrap5Providers()
+               .AddFontAwesomeIcons();
     }
 
     protected TestContext Context { get; } = new TestContext();
