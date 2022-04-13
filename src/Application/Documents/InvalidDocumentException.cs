@@ -1,7 +1,7 @@
 ﻿namespace Application.Documents;
 
 /// <summary>
-/// Thrown when an invalid image was input.
+/// Thrown when an invalid document was input.
 /// </summary>
 public class InvalidDocumentException : Exception
 {

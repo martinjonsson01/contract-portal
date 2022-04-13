@@ -9,7 +9,7 @@ using MimeDetective.InMemory;
 namespace Infrastructure.Images;
 
 /// <summary>
-///     Stores and reads images from the local file system.
+///     Stores and reads file from the local file system.
 /// </summary>
 internal class LocalFileRepository : IImageRepository, IDocumentRepository
 {
@@ -19,7 +19,7 @@ internal class LocalFileRepository : IImageRepository, IDocumentRepository
     private readonly IVerifier _verifier;
 
     /// <summary>
-    ///     Constructs a local image file repository with a given environment.
+    ///     Constructs a local file repository with a given environment.
     /// </summary>
     /// <param name="environment">The environment of the local host.</param>
     /// <param name="logger">A logger.</param>
@@ -33,26 +33,26 @@ internal class LocalFileRepository : IImageRepository, IDocumentRepository
     }
 
     /// <summary>
-    ///     Stores the image as a file.
+    ///     Stores the stream as a file.
     /// </summary>
-    /// <param name="imageStream">The stream of the image to store.</param>
+    /// <param name="stream">The stream of the file to store.</param>
     /// <returns>The file identifier.</returns>
-    public async Task<string> StoreAsync(Stream imageStream)
+    public async Task<string> StoreAsync(Stream stream)
     {
-        if (imageStream is null)
-            throw new ArgumentNullException(nameof(imageStream));
+        if (stream is null)
+            throw new ArgumentNullException(nameof(stream));
 
-        if (!_verifier.IsValid(imageStream))
+        if (!_verifier.IsValid(stream))
             throw new InvalidImageException();
 
-        FileType type = imageStream.DetectMimeType();
+        FileType type = stream.DetectMimeType();
         string fileName = $"{Path.GetRandomFileName()}.{type.Extension}";
         string path = Path.Combine(_directoryPath, fileName);
 
 #pragma warning disable CA2007
         await using var fs = new FileStream(path, FileMode.Create);
 #pragma warning restore CA2007
-        await imageStream.CopyToAsync(fs).ConfigureAwait(false);
+        await stream.CopyToAsync(fs).ConfigureAwait(false);
 
         _logger.LogInformation("{FileName} saved at {Path}", fileName, path);
         return fileName;

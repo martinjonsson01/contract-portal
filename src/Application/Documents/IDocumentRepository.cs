@@ -1,14 +1,14 @@
 ﻿namespace Application.Documents;
 
 /// <summary>
-///     A way of storing and loading images.
+///     A way of storing and loading documents.
 /// </summary>
 public interface IDocumentRepository
 {
     /// <summary>
-    ///     Stores an image.
+    ///     Stores a document.
     /// </summary>
-    /// <param name="imageStream">The stream of the image to store.</param>
-    /// <returns>The identifier of the stored image.</returns>
-    Task<string> StoreAsync(Stream imageStream);
+    /// <param name="stream">The stream of the document to store.</param>
+    /// <returns>The identifier of the stored document.</returns>
+    Task<string> StoreAsync(Stream stream);
 }
