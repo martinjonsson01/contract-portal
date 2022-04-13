@@ -8,7 +8,7 @@
             <div class="modal-header flex-column p-0">
                 <div class="position-relative w-100">
                     <button type="button" class="btn-close m-0 position-absolute top-0 end-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <img alt="@Contract?.Name" id="contract-thumbnail" src="@Contract?.SupplierLogoImagePath" class="p-0 border-0 w-100"/>
+                    <img alt="@Contract?.Name" id="contract-thumbnail" src="@ImagePath" class="p-0 border-0 w-100"/>
                 </div>
                 <h1 class="modal-title" id="exampleModalToggleLabel">@Contract?.Name</h1>
             </div>
@@ -33,11 +33,20 @@
                     </AccordionItem>
                     <AccordionItem>
                         <Title>
-                            <!-- TODO: replace with supplier name -->
-                            <h2>Om @Contract?.Name</h2>
+                            <h2>Om @Contract?.SupplierName</h2>
                         </Title>
                         <Body>
-                        TODO: hämta data här
+                        @Contract?.SupplierDescription
+                        </Body>
+                    </AccordionItem>
+                    <AccordionItem>
+                        <Title>
+                            <h2>Övriga filer</h2>
+                        </Title>
+                        <Body>
+                        <a href="@Contract?.AdditionalDocument" download>
+                            Ladda ned fil
+                        </a>
                         </Body>
                     </AccordionItem>
                 </AccordionList>
@@ -57,5 +66,9 @@
     /// </summary>
     [Parameter, EditorRequired,]
     public Contract? Contract { get; set; }
+
+    private string ImagePath => string.IsNullOrEmpty(Contract?.InspirationalImagePath) ?
+        Contract?.SupplierLogoImagePath ?? "no-image.jpg" :
+        Contract.InspirationalImagePath;
 
 }
