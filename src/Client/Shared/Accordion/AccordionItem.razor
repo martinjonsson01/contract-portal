@@ -1,6 +1,6 @@
 ﻿<div class="accordion-item">
     <h2 class="accordion-header" id="@HeaderId">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#@PanelId" aria-expanded="@OpenByDefault" aria-controls="@PanelId">
+        <button class="accordion-button @ButtonClass" type="button" data-bs-toggle="collapse" data-bs-target="#@PanelId" aria-expanded="@OpenByDefault.ToString().ToLowerInvariant()" aria-controls="#@PanelId">
             @Title
         </button>
     </h2>
@@ -38,6 +38,8 @@
     private string PanelId => $"panel-{HeaderId}";
 
     private string ShowClass => OpenByDefault ? "show" : string.Empty;
+
+    private string ButtonClass => OpenByDefault ? string.Empty : "collapsed";
 
     /// <inheritdoc />
     protected override void OnInitialized()
