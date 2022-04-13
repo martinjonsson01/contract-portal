@@ -29,6 +29,5 @@ public interface IRecentContractService
     /// Removes the contract with the specified ID if it exists.
     /// </summary>
     /// <param name="id">The ID of the contract to remove.</param>
-    /// <returns>A bool if successful.</returns>
-    public bool Remove(Guid id);
+    public void Remove(Guid id);
 }

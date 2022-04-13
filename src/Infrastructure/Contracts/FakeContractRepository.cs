@@ -44,6 +44,7 @@ public class FakeContractRepository : IContractRepository
     /// <inheritdoc />
     public bool Remove(Guid id)
     {
-        return _contracts.RemoveAll(o => o.Id == id) > 0 && _recent.Remove(id);
+        _recent.Remove(id); // This line should not exist when there is an actual database (it will remove any relations)
+        return _contracts.RemoveAll(o => o.Id == id) > 0;
     }
 }
