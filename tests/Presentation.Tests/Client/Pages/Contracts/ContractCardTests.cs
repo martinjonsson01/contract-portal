@@ -1,8 +1,8 @@
-﻿using Client.Pages.Contract;
+﻿using Client.Pages.Contracts;
 
 using Domain.Contracts;
 
-namespace Presentation.Tests.Client.Pages;
+namespace Presentation.Tests.Client.Pages.Contracts;
 
 public class ContractCardTests : UITestFixture
 {
