@@ -12,7 +12,7 @@ else
 {
     @foreach (var contract in _contracts)
     {
-        <ContractCard Contract=@contract OnRecentlyViewedChanged="OnRecentContractAdded"/>
+        <ContractCard Contract=@contract OnViewed="OnRecentContractAdded"/>
     }
 
 }
