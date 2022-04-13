@@ -18,7 +18,7 @@
         <Markdown id="description"
                   @bind-Value="@_contract.Description"
                   MinHeight="@MinFormHeight"
-                  Placeholder="T.ex. vad företaget står för"/>
+                  Placeholder="T.ex. vad kontraktet innefattar"/>
     </div>
     <div class="mb-3">
         <label for="instructions" class="form-label">Hur man nyttjar erbjudandet</label>
@@ -26,6 +26,13 @@
                   @bind-Value="@_contract.Instructions"
                   MinHeight="@MinFormHeight"
                   Placeholder="T.ex. vilken webbsida man ska gå in på"/>
+    </div>
+    <div class="mb-3">
+        <label for="supplier-description" class="form-label">Om leverantören</label>
+        <Markdown id="supplier-description"
+                  @bind-Value="@_contract.SupplierDescription"
+                  MinHeight="@MinFormHeight"
+                  Placeholder="T.ex. vad företaget står för"/>
     </div>
     <div class="mb-3">
         <label for="image" class="form-label">Bild</label>
@@ -58,6 +65,7 @@
             Description = string.Empty,
             Instructions = string.Empty,
             SupplierLogoImagePath = string.Empty,
+            SupplierDescription = string.Empty,
         };
     }
 
