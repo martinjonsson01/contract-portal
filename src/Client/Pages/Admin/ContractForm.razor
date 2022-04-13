@@ -10,20 +10,20 @@
 <EditForm Model="@_contract" OnSubmit="OnSubmit">
     <br />
     <div class="mb-3">
-        <label for="title" class="form-label">Titel</label>
-        <InputText id="title" class="form-control" placeholder="Kontraktets namn" @bind-Value="@_contract.Name"/>
+        <label for="contract-title" class="form-label">Titel</label>
+        <InputText id="contract-title" class="form-control" placeholder="Kontraktets namn" @bind-Value="@_contract.Name"/>
     </div>
     <div class="mb-3">
-        <label for="description" class="form-label">Beskrivning</label>
-        <InputTextArea id="description" class="form-control" placeholder="T.ex. vad erbjudandet innebär" @bind-Value="@_contract.Description"/>
+        <label for="contract-description" class="form-label">Beskrivning</label>
+        <InputTextArea id="contract-description" class="form-control" placeholder="T.ex. vad erbjudandet innebär" @bind-Value="@_contract.Description"/>
     </div>
     <div class="mb-3">
-        <label for="instructions" class="form-label">Hur man nyttjar erbjudandet</label>
-        <InputTextArea id="instructions" class="form-control" placeholder="T.ex. vilken webbsida man ska gå in på" @bind-Value="@_contract.Instructions"/>
+        <label for="contract-instructions" class="form-label">Hur man nyttjar erbjudandet</label>
+        <InputTextArea id="contract-instructions" class="form-control" placeholder="T.ex. vilken webbsida man ska gå in på" @bind-Value="@_contract.Instructions"/>
     </div>
     <div class="mb-3">
-        <label for="image" class="form-label">Banderoll till kontrakt</label>
-        <InputFile id="image" class="form-control" OnChange="(e=> OnFileChosen(e, ref _inspirationalContent))"/>
+        <label for="contract-banner" class="form-label">Banderoll till kontrakt</label>
+        <InputFile id="contract-banner" class="form-control" OnChange="(e=> OnFileChosen(e, ref _inspirationalContent))"/>
     </div>
     <div class="mb-3">
         <label for="document" class="form-label">Ytterligare dokument eller bild</label>
@@ -33,16 +33,16 @@
     <hr />
     <br />
     <div class="mb-3">
-        <label for="instructions" class="form-label">Företagets namn</label>
-        <InputTextArea id="instructions" class="form-control" placeholder="T.ex. Prodigo" @bind-Value="@_contract.SupplierName"/>
+        <label for="supplier-name" class="form-label">Företagets namn</label>
+        <InputTextArea id="supplier-name" class="form-control" placeholder="T.ex. Prodigo" @bind-Value="@_contract.SupplierName"/>
     </div>
     <div class="mb-3">
-        <label for="instructions" class="form-label">Kontaktinformation för företaget</label>
-        <InputTextArea id="instructions" class="form-control" placeholder="T.ex. namn, e-mail eller telefonnummer" @bind-Value="@_contract.SupplierContactInfo"/>
+        <label for="supplier-information" class="form-label">Kontaktinformation för företaget</label>
+        <InputTextArea id="supplier-information" class="form-control" placeholder="T.ex. namn, e-mail eller telefonnummer" @bind-Value="@_contract.SupplierContactInfo"/>
     </div>
     <div class="mb-3">
-        <label for="image" class="form-label">Företagets logotyp</label>
-        <InputFile id="image" class="form-control" OnChange="(e=> OnFileChosen(e, ref _additionalDocumentContent))"/>
+        <label for="supplier-logo" class="form-label">Företagets logotyp</label>
+        <InputFile id="supplier-logo" class="form-control" OnChange="(e=> OnFileChosen(e, ref _additionalDocumentContent))"/>
     </div>
 
 
