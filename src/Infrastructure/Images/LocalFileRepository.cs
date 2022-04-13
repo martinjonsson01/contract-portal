@@ -1,4 +1,5 @@
-﻿using Application.Images;
+﻿using Application.Documents;
+using Application.Images;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -10,22 +11,25 @@ namespace Infrastructure.Images;
 /// <summary>
 ///     Stores and reads images from the local file system.
 /// </summary>
-public class LocalImageFileRepository : IImageRepository
+internal class LocalFileRepository : IImageRepository, IDocumentRepository
 {
     private readonly IHostEnvironment _environment;
-    private readonly ILogger<LocalImageFileRepository> _logger;
+    private readonly ILogger<LocalFileRepository> _logger;
     private readonly string _directoryPath;
+    private readonly IVerifier _verifier;
 
     /// <summary>
     ///     Constructs a local image file repository with a given environment.
     /// </summary>
     /// <param name="environment">The environment of the local host.</param>
     /// <param name="logger">A logger.</param>
-    public LocalImageFileRepository(IHostEnvironment environment, ILogger<LocalImageFileRepository> logger)
+    /// <param name="verifier">A verifier for file types.</param>
+    public LocalFileRepository(IHostEnvironment environment, ILogger<LocalFileRepository> logger, IVerifier verifier)
     {
         _environment = environment;
         _logger = logger;
         _directoryPath = CreateImageDirectory();
+        _verifier = verifier;
     }
 
     /// <summary>
@@ -38,7 +42,7 @@ public class LocalImageFileRepository : IImageRepository
         if (imageStream is null)
             throw new ArgumentNullException(nameof(imageStream));
 
-        if (!ImageVerifier.IsValid(imageStream))
+        if (!_verifier.IsValid(imageStream))
             throw new InvalidImageException();
 
         FileType type = imageStream.DetectMimeType();
