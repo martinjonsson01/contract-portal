@@ -1,13 +1,14 @@
 ﻿@using Domain.Contracts
+@using Application.Contracts
 @inject HttpClient _http
 @if (_recent != null)
 {
-    @if (_recent.Count > 0)
+    @if (_recent.Size() > 0)
     {
         <h3>Senast besökta</h3>
 
         <div class="d-flex flex-row justify-content-around flex-wrap">
-            @foreach (Contract contract in _recent.ToArray().Reverse())
+            @foreach (Contract contract in _recent.FetchRecentContracts().Reverse())
             {
                 <ContractCard Contract=@contract/>
             }
@@ -19,13 +20,20 @@
 
 @code {
 
-    private List<Contract>? _recent;
+    private IRecentContractService? _recent;
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
         Contract[]? recentArray = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
-        if (recentArray != null) _recent = recentArray.ToList();
+        if (recentArray != null)
+        {
+            foreach (Contract contract in recentArray)
+            {
+                _recent?.AddRecent(contract);
+            }
+        }
+
     }
 
     /// <summary>
@@ -33,16 +41,7 @@
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
-        if (_recent != null && _recent.Any(recentContract => recentContract.Id.Equals(newRecent.Id)))
-        {
-            return;
-        }
-        const int recentAmountMax = 3;
-        if (_recent != null && _recent.Count >= recentAmountMax)
-        {
-            _recent.RemoveAt(0);
-        }
-        _recent?.Add(newRecent);
+        _recent?.AddRecent(newRecent);
         await InvokeAsync(StateHasChanged);
     }
 

@@ -19,6 +19,12 @@ public class RecentContractService : IRecentContractService
     }
 
     /// <inheritdoc />
+    public int Size()
+    {
+        return _recent.Count;
+    }
+
+    /// <inheritdoc />
     public IEnumerable<Contract> FetchRecentContracts()
     {
         return _recent;

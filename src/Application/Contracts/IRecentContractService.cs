@@ -8,6 +8,12 @@ namespace Application.Contracts;
 public interface IRecentContractService
 {
     /// <summary>
+    /// Gets many recent contracts.
+    /// </summary>
+    /// <returns>The number of current recent contracts.</returns>
+    public int Size();
+
+    /// <summary>
     /// Gets the most recent contracts that the user has viewed.
     /// </summary>
     /// <returns>Top most recently viewed contracts.</returns>
