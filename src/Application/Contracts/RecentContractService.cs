@@ -7,7 +7,7 @@ namespace Application.Contracts;
 /// <inheritdoc />
 public class RecentContractService : IRecentContractService
 {
-    private readonly Collection<Contract>? _recent;
+    private readonly Collection<Contract> _recent;
 
     /// <summary>
     /// Constructs recent contract service.
@@ -19,19 +19,25 @@ public class RecentContractService : IRecentContractService
     }
 
     /// <inheritdoc />
-    public void FilterRecentContracts(Contract contract)
+    public IEnumerable<Contract> FetchRecentContracts()
     {
-        if (_recent != null && _recent.Any(recentContract => recentContract.Id.Equals(contract.Id)))
+        return _recent;
+    }
+
+    /// <inheritdoc />
+    public void AddRecent(Contract contract)
+    {
+        if (_recent.Any(recentContract => recentContract.Id.Equals(contract.Id)))
         {
             return;
         }
 
         const int recentAmountMax = 3;
-        if (_recent != null && _recent.Count >= recentAmountMax)
+        if (_recent.Count >= recentAmountMax)
         {
             _recent.RemoveAt(0);
         }
 
-        _recent?.Add(contract);
+        _recent.Add(contract);
     }
 }

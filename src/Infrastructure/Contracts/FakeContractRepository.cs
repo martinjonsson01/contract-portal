@@ -1,4 +1,6 @@
-﻿using Application.Contracts;
+﻿using System.Collections.ObjectModel;
+
+using Application.Contracts;
 
 using Domain.Contracts;
 
@@ -10,7 +12,7 @@ namespace Infrastructure.Contracts;
 public class FakeContractRepository : IContractRepository
 {
     private readonly List<Contract> _contracts;
-    private readonly List<Contract> _recent;
+    private readonly IRecentContractService _recent;
 
     /// <summary>
     /// Creates a fake contract for SJ.
@@ -18,14 +20,14 @@ public class FakeContractRepository : IContractRepository
     public FakeContractRepository()
     {
         _contracts = new List<Contract> { new Contract() { Name = "SJ", ImagePath = "images/sj.png", }, };
-        _recent = new List<Contract>();
+        _recent = new RecentContractService(new Collection<Contract>());
     }
 
     /// <inheritdoc />
     public IEnumerable<Contract> All => new List<Contract>(_contracts);
 
     /// <inheritdoc />
-    public IEnumerable<Contract> Recent => new Queue<Contract>(_recent);
+    public IEnumerable<Contract> Recent => _recent.FetchRecentContracts();
 
     /// <inheritdoc />
     public void Add(Contract contract)
@@ -36,18 +38,7 @@ public class FakeContractRepository : IContractRepository
     /// <inheritdoc />
     public void AddRecent(Contract contract)
     {
-        if (_recent.Any(recentContract => recentContract.Id.Equals(contract.Id)))
-        {
-            return;
-        }
-
-        const int recentAmountMax = 3;
-        if (_recent.Count >= recentAmountMax)
-        {
-            _recent.RemoveAt(0);
-        }
-
-        _recent.Add(contract);
+        _recent.AddRecent(contract);
     }
 
     /// <inheritdoc />
