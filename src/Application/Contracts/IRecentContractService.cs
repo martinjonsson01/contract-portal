@@ -24,4 +24,11 @@ public interface IRecentContractService
     /// </summary>
     /// <param name="contract">Possible new recent contract.</param>
     public void AddRecent(Contract contract);
+
+    /// <summary>
+    /// Removes the contract with the specified ID if it exists.
+    /// </summary>
+    /// <param name="id">The ID of the contract to remove.</param>
+    /// <returns>A bool if successful.</returns>
+    public bool Remove(Guid id);
 }

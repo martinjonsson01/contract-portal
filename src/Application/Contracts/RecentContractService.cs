@@ -46,4 +46,10 @@ public class RecentContractService : IRecentContractService
 
         _recent.Add(contract);
     }
+
+    /// <inheritdoc />
+    public bool Remove(Guid id)
+    {
+        return (from contract in _recent where contract.Id == id select _recent.Remove(contract)).FirstOrDefault();
+    }
 }
