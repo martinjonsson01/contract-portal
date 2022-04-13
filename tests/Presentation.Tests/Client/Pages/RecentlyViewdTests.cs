@@ -2,7 +2,7 @@
 
 namespace Presentation.Tests.Client.Pages;
 
-public class RecentlyViewdTests : UITestFixture
+public class RecentlyViewedTests : UITestFixture
 {
     [Fact]
     public void RecentlyViewedComponent_ShouldSayNothing_WhenThereAreNoRecentlyViewed()
@@ -18,7 +18,7 @@ public class RecentlyViewdTests : UITestFixture
     }
 
     [Fact]
-    public void RecentlyViewedComponent_ShouldShowContract_WhenThereAreAtleastOneRecent()
+    public void RecentlyViewedComponent_ShouldShowContract_WhenThereAreAtLeastOneRecent()
     {
         // Arrange
         const string name = "SJ";
