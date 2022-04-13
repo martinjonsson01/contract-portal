@@ -48,10 +48,10 @@ public class ContractsController : BaseApiController<ContractsController>
     }
 
     /// <summary>
-    /// Creates a new contract.
+    /// Adds a contract as recently viewed.
     /// </summary>
     /// <param name="contract">The contract to add.</param>
-    /// <returns>The identifier of the stored image.</returns>
+    /// <returns>Returns success after it has added the contract to recently viewed.</returns>
     [HttpPost("AddRecent")]
     public IActionResult AddRecent(Contract contract)
     {
