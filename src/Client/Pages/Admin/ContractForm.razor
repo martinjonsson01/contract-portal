@@ -57,7 +57,7 @@
             Name = string.Empty,
             Description = string.Empty,
             Instructions = string.Empty,
-            ImagePath = string.Empty,
+            SupplierLogoImagePath = string.Empty,
         };
     }
 
@@ -126,7 +126,7 @@
             {
                 string imageLocation = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"successfully uploaded {imageLocation}");
-                _contract.ImagePath = imageLocation;
+                _contract.SupplierLogoImagePath = imageLocation;
                 return true;
             }
             return false;
