@@ -22,7 +22,7 @@ public class ContractCardTests : IDisposable
         // Arrange
         const string name = "SJ";
         const string path = "test";
-        var contract = new Contract() { Name = name, ImagePath = path, };
+        var contract = new Contract() { Name = name, SupplierLogoImagePath = path, };
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractCard> parameters) =>
             parameters.Add(property => property.Contract, contract);

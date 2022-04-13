@@ -2,7 +2,7 @@
 @inject HttpClient _http
 
 <div class="card" style="max-width: 30%;" @onclick="AddToRecentlyViewed">
-    <img id="contract-thumbnail" src="@Contract?.ImagePath" class="img-thumbnail img-fluid"/>
+    <img id="contract-thumbnail" src="@Contract?.SupplierLogoImagePath" class="img-thumbnail img-fluid"/>
     <h3 id="contract-name">@Contract?.Name</h3>
 </div>
 

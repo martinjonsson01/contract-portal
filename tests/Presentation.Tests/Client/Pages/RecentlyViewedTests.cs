@@ -22,7 +22,7 @@ public class RecentlyViewedTests : UITestFixture
     {
         // Arrange
         const string name = "SJ";
-        var contract = new Contract() { Name = name, ImagePath = "/img/test" };
+        var contract = new Contract() { Name = name, SupplierLogoImagePath = "/img/test" };
         MockHttp.When("/api/v1/Contracts/Recent").RespondJson(new[] { contract, });
 
         // Act
