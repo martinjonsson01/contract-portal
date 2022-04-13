@@ -3,6 +3,8 @@ using System.Linq;
 
 using Domain.Contracts;
 
+using FluentAssertions.Execution;
+
 using Infrastructure.Contracts;
 
 namespace Infrastructure.Tests.Contracts;
@@ -58,15 +60,18 @@ public class FakeContractRepositoryTests
         _cut.AddRecent(contract4);
 
         // Assert
-        _cut.Recent.Count().Should().Be(3);
-        bool containsContract1 = _cut.Recent.Contains(contract1);
-        bool containsContract2 = _cut.Recent.Contains(contract2);
-        bool containsContract3 = _cut.Recent.Contains(contract3);
-        bool containsContract4 = _cut.Recent.Contains(contract4);
-        containsContract1.Should().BeFalse();
-        containsContract2.Should().BeTrue();
-        containsContract3.Should().BeTrue();
-        containsContract4.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            _cut.Recent.Count().Should().Be(3);
+            bool containsContract1 = _cut.Recent.Contains(contract1);
+            bool containsContract2 = _cut.Recent.Contains(contract2);
+            bool containsContract3 = _cut.Recent.Contains(contract3);
+            bool containsContract4 = _cut.Recent.Contains(contract4);
+            containsContract1.Should().BeFalse();
+            containsContract2.Should().BeTrue();
+            containsContract3.Should().BeTrue();
+            containsContract4.Should().BeTrue();
+        }
     }
 
     [Fact]
