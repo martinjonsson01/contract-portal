@@ -1,29 +1,15 @@
 ﻿@using Domain.StatusUpdates
 @inject HttpClient _http;
 
-@if (_statusUpdates is null)
-{
-    <p>Laddar...</p>
-}
-else
-{
+<FetchData TData="StatusUpdate[]"
+           Url="api/v1/status-updates"
+           Context="statusUpdates">
+
     <div class="list-group list-group-flush shadow w-50">
-        @foreach (StatusUpdate statusUpdate in _statusUpdates)
+        @foreach (StatusUpdate statusUpdate in statusUpdates.OrderByDescending(status => status.Timestamp))
         {
             <StatusUpdateItem Status="@statusUpdate"/>
         }
     </div>
-}
 
-@code {
-
-    private IEnumerable<StatusUpdate>? _statusUpdates;
-
-    /// <inheritdoc />
-    protected override async Task OnInitializedAsync()
-    {
-        _statusUpdates = await _http.GetFromJsonAsync<StatusUpdate[]>("api/v1/status-updates");
-        _statusUpdates = _statusUpdates?.OrderByDescending(status => status.Timestamp);
-    }
-
-}
+</FetchData>
