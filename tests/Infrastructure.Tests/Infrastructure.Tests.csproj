@@ -48,4 +48,8 @@
     <ProjectReference Include="..\..\src\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contracts" />
+  </ItemGroup>
+
 </Project>
