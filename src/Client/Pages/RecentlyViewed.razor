@@ -2,39 +2,40 @@
 @using Application.Contracts
 @using System.Collections.ObjectModel
 @inject HttpClient _http
-@if (_recent != null)
-{
-    @if (_recent.Size() > 0)
-    {
-        <h3>Senast besökta</h3>
 
-        <div class="d-flex flex-row justify-content-around flex-wrap">
-            @foreach (Contract contract in _recent.FetchRecentContracts().Reverse())
-            {
-                <ContractCard Contract=@contract/>
-            }
-        </div>
-        <hr/>
+<FetchData TData="Contract[]"
+           Url="/api/v1/contracts/recent"
+           Context="recents">
+    @{
+        AddRecents(recents);
+        if (_recent.Size() > 0)
+        {
+            <h3>Senast besökta</h3>
+
+            <div class="d-flex flex-row justify-content-around flex-wrap">
+                @foreach (Contract contract in _recent.FetchRecentContracts().Reverse())
+                {
+                    <ContractCard Contract=@contract/>
+                }
+            </div>
+            <hr/>
+        }
     }
-}
 
+</FetchData>
 
 @code {
 
-    private IRecentContractService? _recent = new RecentContractService(new Collection<Contract>());
+    private IRecentContractService _recent = new RecentContractService(new Collection<Contract>());
 
-    /// <inheritdoc />
-    protected override async Task OnInitializedAsync()
+    private void AddRecents(Contract[]? recents)
     {
-        Contract[]? recentArray = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
-        if (recentArray != null)
-        {
-            foreach (Contract contract in recentArray)
-            {
-                _recent?.AddRecent(contract);
-            }
-        }
+        if (recents is null) return;
 
+        foreach (Contract contract in recents)
+        {
+            _recent.AddRecent(contract);
+        }
     }
 
     /// <summary>
@@ -42,7 +43,7 @@
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
-        _recent?.AddRecent(newRecent);
+        _recent.AddRecent(newRecent);
         await InvokeAsync(StateHasChanged);
     }
 
