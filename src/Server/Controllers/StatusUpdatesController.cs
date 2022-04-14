@@ -39,4 +39,16 @@ public class StatusUpdatesController : BaseApiController<StatusUpdatesController
         _statusUpdates.Add(newUpdate);
         return Ok();
     }
+
+    /// <summary>
+    /// Gets all status updates.
+    /// </summary>
+    /// <response code="200">All status updates were successfully fetched.</response>
+    /// <returns>The status updates.</returns>
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IEnumerable<StatusUpdate> All()
+    {
+        return _statusUpdates.FetchAll();
+    }
 }
