@@ -1,10 +1,27 @@
-﻿<div class="container shadow">
-    <h3>StatusUpdates</h3>
-    <h3>StatusUpdates</h3>
-    <h3>StatusUpdates</h3>
-    <h3>StatusUpdates</h3>
-</div>
+﻿@using Domain.StatusUpdates
+@inject HttpClient _http;
+
+@if (_statusUpdates is null)
+{
+    <p>Laddar...</p>
+}
+else
+{
+    <div class="container shadow">
+        @foreach (StatusUpdate statusUpdate in _statusUpdates)
+        {
+            <StatusUpdate Value="@statusUpdate"/>
+        }
+    </div>
+}
 
 @code {
 
+    private StatusUpdate[]? _statusUpdates;
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        _statusUpdates = await _http.GetFromJsonAsync<StatusUpdate[]>("api/v1/status-updates");
+    }
 }

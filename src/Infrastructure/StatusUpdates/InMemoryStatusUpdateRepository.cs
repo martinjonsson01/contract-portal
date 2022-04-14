@@ -9,7 +9,10 @@ namespace Infrastructure.StatusUpdates;
 /// </summary>
 public class InMemoryStatusUpdateRepository : IStatusUpdateRepository
 {
-    private readonly ICollection<StatusUpdate> _statusUpdates = new List<StatusUpdate>();
+    private readonly ICollection<StatusUpdate> _statusUpdates = new List<StatusUpdate>
+    {
+        new StatusUpdate(), new StatusUpdate(), new StatusUpdate(), new StatusUpdate(),
+    };
 
     /// <inheritdoc />
     public IEnumerable<StatusUpdate> All => new List<StatusUpdate>(_statusUpdates);
