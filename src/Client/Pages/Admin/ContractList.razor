@@ -2,7 +2,7 @@
 @inject HttpClient _http
 
 <FetchData @ref="_dataFetcher"
-            TData="List<Contract>"
+           TData="List<Contract>"
            Url="/api/v1/contracts/all"
            Context="contracts">
 
@@ -35,10 +35,10 @@
     /// <param name="contract">The contract to remove.</param>
     private void OnContractRemoved(Contract contract)
     {
-        // Using null forgiving operator because because _contracts
-        // can not be null when remove button is pressed.
+    // Using null forgiving operator because because _contracts
+    // can not be null when remove button is pressed.
         _dataFetcher.Data!.Remove(contract);
         InvokeAsync(StateHasChanged);
     }
-}
 
+}
