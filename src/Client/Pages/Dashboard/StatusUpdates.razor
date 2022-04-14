@@ -7,21 +7,25 @@
 }
 else
 {
-    <div class="container shadow">
-        @foreach (StatusUpdate statusUpdate in _statusUpdates)
-        {
-            <StatusUpdate Value="@statusUpdate"/>
-        }
+    <div class="d-flex justify-content-center w-100">
+        <div class="list-group list-group-flush shadow w-50">
+            @foreach (StatusUpdate statusUpdate in _statusUpdates)
+            {
+                <StatusUpdateItem Status="@statusUpdate"/>
+            }
+        </div>
     </div>
 }
 
 @code {
 
-    private StatusUpdate[]? _statusUpdates;
+    private IEnumerable<StatusUpdate>? _statusUpdates;
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
         _statusUpdates = await _http.GetFromJsonAsync<StatusUpdate[]>("api/v1/status-updates");
+        _statusUpdates = _statusUpdates?.OrderByDescending(status => status.Timestamp);
     }
+
 }
