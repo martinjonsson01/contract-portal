@@ -19,12 +19,6 @@ public class NotificationService : IStatusUpdateService
     }
 
     /// <inheritdoc />
-    public void Add(StatusUpdate newUpdate)
-    {
-        _repository.Add(newUpdate);
-    }
-
-    /// <inheritdoc />
     public IEnumerable<StatusUpdate> FetchAll()
     {
         return _repository.All;

@@ -27,20 +27,6 @@ public class StatusUpdatesController : BaseApiController<StatusUpdatesController
     }
 
     /// <summary>
-    /// Creates a new status update.
-    /// </summary>
-    /// <param name="newUpdate">The status update to add.</param>
-    /// <response code="200">A new status update was successfully created.</response>
-    /// <returns>The HTTP result.</returns>
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult Create(StatusUpdate newUpdate)
-    {
-        _statusUpdates.Add(newUpdate);
-        return Ok();
-    }
-
-    /// <summary>
     /// Gets all status updates.
     /// </summary>
     /// <response code="200">All status updates were successfully fetched.</response>

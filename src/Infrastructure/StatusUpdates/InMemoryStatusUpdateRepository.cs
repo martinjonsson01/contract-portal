@@ -13,10 +13,4 @@ public class InMemoryStatusUpdateRepository : IStatusUpdateRepository
 
     /// <inheritdoc />
     public IEnumerable<StatusUpdate> All => new List<StatusUpdate>(_statusUpdates);
-
-    /// <inheritdoc />
-    public void Add(StatusUpdate newUpdate)
-    {
-        _statusUpdates.Add(newUpdate);
-    }
 }

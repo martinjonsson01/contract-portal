@@ -4,8 +4,6 @@ using Domain.StatusUpdates;
 
 using Infrastructure.StatusUpdates;
 
-using Microsoft.AspNetCore.Mvc;
-
 namespace Presentation.Tests.Server.Controllers;
 
 public class StatusUpdatesControllerTests
@@ -22,24 +20,12 @@ public class StatusUpdatesControllerTests
     }
 
     [Fact]
-    public void Create_ReturnsOk_WhenValidStatusUpdateIsInput()
-    {
-        // Arrange
-        var newUpdate = new StatusUpdate();
-
-        // Act
-        IActionResult response = _cut.Create(newUpdate);
-
-        // Assert
-        response.Should().BeAssignableTo<OkResult>();
-    }
-
-    [Fact]
     public void Resource_IsReturned_WhenPreviouslyCreated()
     {
         // Arrange
         var expected = new StatusUpdate();
-        _ = _cut.Create(expected);
+
+        // _ = _cut.Create(expected); Does not exist yet.
 
         // Act
         StatusUpdate actual = _cut.All().First();
