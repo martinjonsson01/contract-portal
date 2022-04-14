@@ -127,7 +127,7 @@
 
     private async Task UploadContract()
     {
-        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/contracts/new/contract", _contract);
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/contracts", _contract);
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("successfully uploaded!");

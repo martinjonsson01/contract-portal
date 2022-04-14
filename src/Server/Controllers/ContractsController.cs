@@ -31,7 +31,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// Gets all contracts.
     /// </summary>
     /// <returns>All contracts.</returns>
-    [HttpGet("All")]
+    [HttpGet("all")]
     public IEnumerable<Contract> AllContracts()
     {
         return _contracts.FetchAllContracts();
@@ -43,7 +43,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="contract">The contract to add.</param>
     /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The ID of the contract was already taken.</response>
-    [HttpPost("new/contract")]
+    [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult CreateContract(Contract contract)
     {
