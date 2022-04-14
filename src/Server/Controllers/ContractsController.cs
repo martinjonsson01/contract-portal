@@ -32,7 +32,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// </summary>
     /// <returns>All contracts.</returns>
     [HttpGet]
-    public IEnumerable<Contract> AllContracts()
+    public IEnumerable<Contract> All()
     {
         return _contracts.FetchAllContracts();
     }
@@ -65,7 +65,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// </summary>
     /// <param name="id">Id of the contract to be removed.</param>
     /// <returns>If the contract was successfully removed.</returns>
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{id:Guid}")]
     public IActionResult Remove(Guid id)
     {
         return _contracts.Remove(id) ?

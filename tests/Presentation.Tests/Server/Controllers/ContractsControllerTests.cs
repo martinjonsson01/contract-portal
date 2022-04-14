@@ -24,7 +24,7 @@ public class ContractsControllerTests
         _mockContracts.Setup(service => service.FetchAllContracts()).Returns(fakeContracts);
 
         // Act
-        IEnumerable<Contract> actualWeather = _cut.AllContracts();
+        IEnumerable<Contract> actualWeather = _cut.All();
 
         // Assert
         actualWeather.Should().BeEquivalentTo(fakeContracts);
