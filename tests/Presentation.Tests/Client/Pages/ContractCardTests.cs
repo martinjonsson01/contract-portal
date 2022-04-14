@@ -1,4 +1,6 @@
-﻿namespace Presentation.Tests.Client.Pages;
+﻿using Domain.Contracts;
+
+namespace Presentation.Tests.Client.Pages;
 
 public class ContractCardTests : IDisposable
 {
@@ -20,10 +22,10 @@ public class ContractCardTests : IDisposable
         // Arrange
         const string name = "SJ";
         const string path = "test";
+        var contract = new Contract() { Name = name, SupplierLogoImagePath = path, };
 
-        static void ParameterBuilder(ComponentParameterCollectionBuilder<ContractCard> parameters) =>
-            parameters.Add(property => property.Name, name)
-                      .Add(property => property.ImagePath, path);
+        void ParameterBuilder(ComponentParameterCollectionBuilder<ContractCard> parameters) =>
+            parameters.Add(property => property.Contract, contract);
 
         // Act
         IRenderedComponent<ContractCard> cut =

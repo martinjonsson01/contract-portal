@@ -1,18 +1,31 @@
-﻿<div class="card" style="max-width: 30%;">
-    <img id="contract-thumbnail"src="@ImagePath" class="img-thumbnail img-fluid"/>
-    <h3 id="contract-name">@Name</h3>
+﻿@using Domain.Contracts
+@inject HttpClient _http
+
+<div class="card" style="max-width: 30%;" @onclick="AddToRecentlyViewed">
+    <img id="contract-thumbnail" src="@Contract.SupplierLogoImagePath" class="img-thumbnail img-fluid"/>
+    <h3 id="contract-name">@Contract.Name</h3>
 </div>
 
 @code {
-    /// <summary>
-    /// Name of the company.
-    /// </summary>
-    [Parameter, EditorRequired,]
-    public string? Name { get; set; }
 
     /// <summary>
-    /// Image path to the company logo.
+    /// The contract object.
     /// </summary>
     [Parameter, EditorRequired,]
-    public string? ImagePath { get; set; }
+    public Contract Contract { get; set; } = null!;
+
+    /// <summary>
+    /// Called when a contract has been clicked successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Contract> OnViewed { get; set; } = EventCallback<Contract>.Empty;
+
+    private async Task AddToRecentlyViewed()
+    {
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/Contracts/AddRecent", Contract);
+        if (response.IsSuccessStatusCode)
+        {
+            await OnViewed.InvokeAsync(Contract);
+        }
+    }
 }

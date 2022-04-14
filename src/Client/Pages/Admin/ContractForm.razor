@@ -8,24 +8,45 @@
 <h4>Skapa nytt kontrakt</h4>
 
 <EditForm Model="@_contract" OnSubmit="OnSubmit">
+
     <div class="mb-3">
-        <label for="title" class="form-label">Titel</label>
-        <InputText id="title" class="form-control" placeholder="T.ex. företagets namn" @bind-Value="@_contract.Name"/>
+        <label for="contract-title" class="form-label">Titel</label>
+        <InputText id="contract-title" class="form-control" placeholder="Kontraktets namn" @bind-Value="@_contract.Name"/>
     </div>
     <div class="mb-3">
-        <label for="description" class="form-label">Beskrivning</label>
-        <InputTextArea id="description" class="form-control" placeholder="T.ex. vad företaget står för" @bind-Value="@_contract.Description"/>
+        <label for="contract-description" class="form-label">Beskrivning</label>
+        <InputTextArea id="contract-description" class="form-control" placeholder="T.ex. vad erbjudandet innebär" @bind-Value="@_contract.Description"/>
     </div>
     <div class="mb-3">
-        <label for="instructions" class="form-label">Hur man nyttjar erbjudandet</label>
-        <InputTextArea id="instructions" class="form-control" placeholder="T.ex. vilken webbsida man ska gå in på" @bind-Value="@_contract.Instructions"/>
+        <label for="contract-instructions" class="form-label">Hur man nyttjar erbjudandet</label>
+        <InputTextArea id="contract-instructions" class="form-control" placeholder="T.ex. vilken webbsida man ska gå in på" @bind-Value="@_contract.Instructions"/>
     </div>
     <div class="mb-3">
-        <label for="image" class="form-label">Bild</label>
-        <InputFile id="image" class="form-control" OnChange="OnFileChosen"/>
+        <label for="contract-banner" class="form-label">Banderoll till kontrakt</label>
+        <InputFile id="contract-banner" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e=> OnFileChosen(e, ref _inspirationalContent))"/>
+    </div>
+    <div class="mb-4">
+        <label for="document" class="form-label">Ytterligare dokument eller bild</label>
+        <InputFile id="document" class="form-control" accept=".pdf, .docx, .xlsx, .png, .jpg, .jpeg, .gif" OnChange="(e=> OnFileChosen(e, ref _additionalDocumentContent))"/>
     </div>
 
-    <button type="submit" class="btn btn-primary">Spara</button>
+    <hr class="mb-4"/>
+
+    <div class="mb-3">
+        <label for="supplier-name" class="form-label">Företagets namn</label>
+        <InputTextArea id="supplier-name" class="form-control" placeholder="T.ex. Prodigo" @bind-Value="@_contract.SupplierName"/>
+    </div>
+    <div class="mb-3">
+        <label for="supplier-information" class="form-label">Kontaktinformation för företaget</label>
+        <InputTextArea id="supplier-information" class="form-control" placeholder="T.ex. namn, e-mail eller telefonnummer" @bind-Value="@_contract.SupplierContactInfo"/>
+    </div>
+    <div class="mb-4">
+        <label for="supplier-logo" class="form-label">Företagets logotyp</label>
+        <InputFile id="supplier-logo" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e=> OnFileChosen(e, ref _supplierLogoContent))"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-3">Spara</button>
+
 </EditForm>
 
 @code {
@@ -40,7 +61,11 @@
 
     private Contract _contract = CreateEmptyContract();
 
-    private MultipartFormDataContent? _content;
+    private MultipartFormDataContent _supplierLogoContent = new MultipartFormDataContent();
+
+    private MultipartFormDataContent _inspirationalContent = new MultipartFormDataContent();
+
+    private MultipartFormDataContent _additionalDocumentContent = new MultipartFormDataContent();
 
     private static Contract CreateEmptyContract()
     {
@@ -50,6 +75,8 @@
             Description = string.Empty,
             Instructions = string.Empty,
             SupplierLogoImagePath = string.Empty,
+            SupplierName = string.Empty,
+            SupplierContactInfo = string.Empty,
         };
     }
 
@@ -59,11 +86,10 @@
         return _shouldRender;
     }
 
-    private void OnFileChosen(InputFileChangeEventArgs arg)
+    private void OnFileChosen(InputFileChangeEventArgs arg, ref MultipartFormDataContent content)
     {
         _shouldRender = false;
-
-        _content = new MultipartFormDataContent();
+        content = new MultipartFormDataContent();
         StreamContent fileContent;
 
         const long bitsInAKilobyte = 1024;
@@ -85,9 +111,9 @@
         fileContent.Headers.ContentType =
             new MediaTypeHeaderValue(arg.File.ContentType);
 
-        _content.Add(
+        content.Add(
             fileContent,
-            "\"image\"",
+            "\"file\"",
             arg.File.Name);
 
         _shouldRender = true;
@@ -95,33 +121,33 @@
 
     private async Task OnSubmit()
     {
-        if (!await UploadImage()) return;
+        _contract.SupplierLogoImagePath = await UploadFile(_supplierLogoContent, "images");
+
+        _contract.InspirationalImagePath = await UploadFile(_inspirationalContent, "images");
+
+        _contract.AdditionalDocument = await UploadFile(_additionalDocumentContent, "documents");
 
         await UploadContract();
     }
 
-    private async Task<bool> UploadImage()
+    private async Task<string> UploadFile(MultipartFormDataContent content, string endPoint)
     {
-        if (_content is null) return false;
+        if (content is null) return string.Empty;
 
         try
         {
-            Console.WriteLine(JsonConvert.SerializeObject(_contract, Formatting.Indented));
-
-            HttpResponseMessage response = await _http.PostAsync("/api/v1/images", _content);
+            HttpResponseMessage response = await _http.PostAsync($"/api/v1/{endPoint}", content);
 
             if (response.IsSuccessStatusCode)
             {
                 string imageLocation = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"successfully uploaded {imageLocation}");
-                _contract.SupplierLogoImagePath = imageLocation;
-                return true;
+                return imageLocation;
             }
-            return false;
+            throw new ArgumentException(nameof(content));
         }
         finally
         {
-            _content.Dispose();
+            content.Dispose(); 
         }
     }
 
