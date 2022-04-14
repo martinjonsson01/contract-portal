@@ -20,17 +20,12 @@ public class StatusUpdatesControllerTests
     }
 
     [Fact]
-    public void Resource_IsReturned_WhenPreviouslyCreated()
+    public void Resources_AreReturned()
     {
-        // Arrange
-        var expected = new StatusUpdate();
-
-        // _ = _cut.Create(expected); Does not exist yet.
-
         // Act
-        StatusUpdate actual = _cut.All().First();
+        IEnumerable<StatusUpdate> actual = _cut.All();
 
         // Assert
-        actual.Should().BeEquivalentTo(expected);
+        actual.Should().NotBeEmpty();
     }
 }
