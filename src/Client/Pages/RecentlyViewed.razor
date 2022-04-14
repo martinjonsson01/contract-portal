@@ -31,7 +31,7 @@
         {
             foreach (Contract contract in recentArray)
             {
-                _recent?.AddRecent(contract);
+                _recent?.Add(contract);
             }
         }
 
@@ -42,7 +42,7 @@
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
-        _recent?.AddRecent(newRecent);
+        _recent?.Add(newRecent);
         await InvokeAsync(StateHasChanged);
     }
 
