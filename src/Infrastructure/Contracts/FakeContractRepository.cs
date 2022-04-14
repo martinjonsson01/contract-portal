@@ -40,10 +40,16 @@ public class FakeContractRepository : IContractRepository
     }
 
     /// <inheritdoc />
-    public void UpdateFavorite(Guid id)
+    public Contract FetchContract(Guid id)
     {
-        Contract? contract = _contracts.Find(contract => contract.Id == id);
-        if (contract != null)
-            contract.IsFavorite = !contract.IsFavorite;
+        return _contracts.Find(contract => contract.Id == id) ?? throw new InvalidOperationException();
+    }
+
+    /// <inheritdoc />
+    public void UpdateContract(Contract updatedContract)
+    {
+        int index = _contracts.FindIndex(contract => contract.Id == updatedContract.Id);
+        if (index != -1)
+            _contracts[index] = updatedContract;
     }
 }

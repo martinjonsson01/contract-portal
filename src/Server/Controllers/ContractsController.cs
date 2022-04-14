@@ -49,10 +49,11 @@ public class ContractsController : BaseApiController<ContractsController>
     /// Updates the contract favorite status.
     /// </summary>
     /// <param name="id">The id of the contract to update. </param>
-    [HttpPost("/favorites/update{id:guid}")]
-    public void UpdateFavorite(Guid id)
+    /// <returns>The updated contract.</returns>
+    [HttpPatch("/favorites/update{id:guid}")]
+    public Contract UpdateFavorite(Guid id)
     {
-        _contracts.UpdateFavorite(id);
+        return _contracts.UpdateFavorite(id);
     }
 
     /// <summary>

@@ -36,5 +36,6 @@ public interface IContractService
     /// Updates the contracts favorite status.
     /// </summary>
     /// <param name="id">The id of the contract to update.</param>
-    void UpdateFavorite(Guid id);
+    /// <returns>The updated contract.</returns>
+    Contract UpdateFavorite(Guid id);
 }
