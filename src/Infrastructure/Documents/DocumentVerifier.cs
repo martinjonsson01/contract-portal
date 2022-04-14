@@ -17,7 +17,7 @@ internal class DocumentVerifier : IVerifier
     {
         // Allow the following MIME-types:
         // word, pdf, excel, png, jpg, gif, jpeg
-        string pattern = @"( (application) +\/ (msword | pdf | vnd.openxmlformats-officedocument.spreadsheetml.sheet | vnd.ms - excel )  | (image) +\/ (png | jpg | gif | jpeg))";
+        string pattern = @"( (application) +\/ (msword | pdf | vnd.openxmlformats-officedocument.spreadsheetml.sheet | vnd.ms-excel )  | (image) +\/ (png | jpg | gif | jpeg))";
 
         FileType fileType = stream.DetectMimeType();
         var rgDoc = new Regex(pattern, RegexOptions.IgnorePatternWhitespace);

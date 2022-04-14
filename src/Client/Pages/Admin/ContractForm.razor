@@ -24,11 +24,11 @@
         </div>
         <div class="mb-3">
             <label for="contract-banner" class="form-label">Banderoll till kontrakt</label>
-            <InputFile id="contract-banner" class="form-control" OnChange="(e=> OnFileChosen(e, ref _inspirationalContent))"/>
+            <InputFile id="contract-banner" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e=> OnFileChosen(e, ref _inspirationalContent))"/>
         </div>
         <div class="mb-3">
             <label for="document" class="form-label">Ytterligare dokument eller bild</label>
-            <InputFile id="document" class="form-control" OnChange="(e=> OnFileChosen(e, ref _supplierLogoContent))"/>
+            <InputFile id="document" class="form-control" accept=".pdf, .docx, .xlsx, .png, .jpg, .jpeg, .gif" OnChange="(e=> OnFileChosen(e, ref _additionalDocumentContent))"/>
         </div>
     </div>
 
@@ -45,7 +45,7 @@
         </div>
         <div class="mb-3">
             <label for="supplier-logo" class="form-label">Företagets logotyp</label>
-            <InputFile id="supplier-logo" class="form-control" OnChange="(e=> OnFileChosen(e, ref _additionalDocumentContent))"/>
+            <InputFile id="supplier-logo" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e=> OnFileChosen(e, ref _supplierLogoContent))"/>
         </div>
     </div>
 
