@@ -1,0 +1,15 @@
+﻿<div class="accordion" id="about-contract">
+    @ChildContent
+</div>
+
+@code {
+
+    /// <summary>
+    /// The content to display inside of this component.
+    ///
+    /// Should consist of <see cref="AccordionItem"/>s.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public RenderFragment? ChildContent { get; set; }
+
+}

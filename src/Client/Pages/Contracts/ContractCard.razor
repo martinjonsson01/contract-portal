@@ -1,0 +1,35 @@
+﻿@using Domain.Contracts
+@inject IJSRuntime _js
+@inject HttpClient _http
+
+<button class="card" style="max-width: 30%;" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed">
+    <img id="contract-thumbnail" src="@Contract.SupplierLogoImagePath" class="img-thumbnail img-fluid"/>
+    <h3 id="contract-name">@Contract.Name</h3>
+</button>
+
+<ContractDetails Contract="@Contract"/>
+
+@code {
+
+    /// <summary>
+    /// The contract to render.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public Contract Contract { get; set; } = null!;
+
+    /// <summary>
+    /// Called when a contract has been clicked successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Contract> OnViewed { get; set; } = EventCallback<Contract>.Empty;
+
+    private async Task AddToRecentlyViewed()
+    {
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/Contracts/AddRecent", Contract);
+        if (response.IsSuccessStatusCode)
+        {
+            await OnViewed.InvokeAsync(Contract);
+        }
+    }
+
+}

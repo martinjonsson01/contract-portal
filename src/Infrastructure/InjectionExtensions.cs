@@ -1,12 +1,16 @@
 ﻿using Application.Contracts;
+using Application.Documents;
 using Application.Images;
 using Application.StatusUpdates;
 
 using Infrastructure.Contracts;
+using Infrastructure.Documents;
 using Infrastructure.Images;
 using Infrastructure.StatusUpdates;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure;
 
@@ -24,6 +28,17 @@ public static class InjectionExtensions
     {
         return services.AddSingleton<IContractRepository, FakeContractRepository>()
                        .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
-                       .AddSingleton<IImageRepository, LocalImageFileRepository>();
+                       .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
+                       {
+                           IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();
+                           ILogger<LocalFileRepository> logger = provider.GetRequiredService<ILogger<LocalFileRepository>>();
+                           return new LocalFileRepository(host, logger, new ImageVerifier());
+                       })
+                       .AddSingleton<IDocumentRepository, LocalFileRepository>(provider =>
+                       {
+                           IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();
+                           ILogger<LocalFileRepository> logger = provider.GetRequiredService<ILogger<LocalFileRepository>>();
+                           return new LocalFileRepository(host, logger, new DocumentVerifier());
+                       });
     }
 }

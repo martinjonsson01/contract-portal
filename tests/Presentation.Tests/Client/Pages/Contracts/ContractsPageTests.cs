@@ -2,9 +2,11 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using Client.Pages.Contracts;
+
 using Domain.Contracts;
 
-namespace Presentation.Tests.Client.Pages;
+namespace Presentation.Tests.Client.Pages.Contracts;
 
 public class ContractsPageTests : UITestFixture
 {
@@ -23,7 +25,7 @@ public class ContractsPageTests : UITestFixture
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
 
         // Assert
-        cut.Find("p em").TextContent.Should().BeEquivalentTo("Loading...");
+        cut.Find("p em").TextContent.Should().BeEquivalentTo("Laddar...");
     }
 
     [Fact]
@@ -33,6 +35,7 @@ public class ContractsPageTests : UITestFixture
         const string name = "SJ";
         var contract = new Contract() { Name = name, SupplierLogoImagePath = "/img/test" };
         MockHttp.When("/api/v1/Contracts/All").RespondJson(new[] { contract, });
+        MockHttp.When("/api/v1/Contracts/Recent").RespondJson(Array.Empty<object>());
 
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
