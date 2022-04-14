@@ -7,13 +7,11 @@
 }
 else
 {
-    <div class="d-flex justify-content-center w-100">
-        <div class="list-group list-group-flush shadow w-50">
-            @foreach (StatusUpdate statusUpdate in _statusUpdates)
-            {
-                <StatusUpdateItem Status="@statusUpdate"/>
-            }
-        </div>
+    <div class="list-group list-group-flush shadow w-50">
+        @foreach (StatusUpdate statusUpdate in _statusUpdates)
+        {
+            <StatusUpdateItem Status="@statusUpdate"/>
+        }
     </div>
 }
 

@@ -1,9 +1,13 @@
 ﻿@using Domain.StatusUpdates
 <div class="list-group-item list-group-item-action list-group-item-@GetAlertClass()">
     <div class="d-flex w-100 justify-content-between">
-        @GetIcon()
+        <div class="d-flex flex-row align-content-center">
+            @GetIcon()
+            <h4>Text som tar upp för mycket plats</h4>
+        </div>
         <small>@Status.Timestamp.ToRelativeDate()</small>
     </div>
+    <p>Text här</p>
 </div>
 
 @code {
@@ -31,7 +35,7 @@
             AlertLevel.Urgent => _urgentIcon,
             AlertLevel.Critical => _criticalIcon,
             _ => throw new ArgumentOutOfRangeException(),
-            };
+        };
     }
 
     private string GetAlertClass()
@@ -43,7 +47,7 @@
             AlertLevel.Urgent => "danger",
             AlertLevel.Critical => "dark",
             _ => throw new ArgumentOutOfRangeException(),
-            };
+        };
     }
 
 }
