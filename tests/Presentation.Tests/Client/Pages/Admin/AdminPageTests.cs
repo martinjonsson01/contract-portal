@@ -25,7 +25,7 @@ public class AdminPageTests : UITestFixture
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
 
         // Assert
-        cut.Find("p em").TextContent.Should().BeEquivalentTo("Loading...");
+        cut.Find("p em").TextContent.Should().BeEquivalentTo("Laddar...");
     }
 
     [Fact]
