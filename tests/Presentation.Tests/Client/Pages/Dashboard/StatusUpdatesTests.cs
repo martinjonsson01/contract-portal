@@ -7,11 +7,16 @@ namespace Presentation.Tests.Client.Pages.Dashboard;
 public class StatusUpdatesTests : UITestFixture
 {
     [Fact]
-    public void StatusUpdates_DisplaysNNotification_WhenServerReturnsNStatusUpdates()
+    public void StatusUpdates_DisplaysFourNotifications_WhenServerReturnsFourStatusUpdates()
     {
         // Arrange
-        const int n = 3;
-        List<StatusUpdate> statusUpdates = new Faker<StatusUpdate>().Generate(n);
+        var statusUpdates = new List<StatusUpdate>
+        {
+            new() { Alert = AlertLevel.Information, },
+            new() { Alert = AlertLevel.Warning, },
+            new() { Alert = AlertLevel.Urgent, },
+            new() { Alert = AlertLevel.Critical, },
+        };
         MockHttp.When("/api/v1/status-updates").RespondJson(statusUpdates);
 
         const string notification = ".list-group-item";
@@ -21,6 +26,26 @@ public class StatusUpdatesTests : UITestFixture
         cut.WaitForElement(notification);
 
         // Assert
-        cut.FindAll(notification).Should().HaveCount(n);
+        cut.FindAll(notification).Should().HaveCount(statusUpdates.Count);
+    }
+
+    [Fact]
+    public void StatusUpdates_ThrowsArgumentOutOfRange_WhenAlertLevelIsNotDefined()
+    {
+        // Arrange
+        var statusUpdates = new List<StatusUpdate>
+        {
+            new() { Alert = (AlertLevel)42, },
+        };
+        MockHttp.When("/api/v1/status-updates").RespondJson(statusUpdates);
+
+        const string notification = ".list-group-item";
+
+        // Act
+        IRenderedComponent<StatusUpdates> cut = Context.RenderComponent<StatusUpdates>();
+        Action waitForRender = () => cut.WaitForElement(notification);
+
+        // Assert
+        waitForRender.Should().Throw<ArgumentOutOfRangeException>();
     }
 }
