@@ -33,9 +33,15 @@ public interface IContractService
     IEnumerable<Contract> FetchFavorites();
 
     /// <summary>
-    /// Updates the contracts favorite status.
+    /// Updates the contract in the repository.
     /// </summary>
-    /// <param name="id">The id of the contract to update.</param>
-    /// <returns>The updated contract.</returns>
-    Contract UpdateFavorite(Guid id);
+    /// <param name="contract">The updated contract to store.</param>
+    void UpdateContract(Contract contract);
+
+    /// <summary>
+    /// Gets the contract.
+    /// </summary>
+    /// <param name="id">The id of the contract to fetch.</param>
+    /// <returns>The fetched contract.</returns>
+    Contract FetchContract(Guid id);
 }

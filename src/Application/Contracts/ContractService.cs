@@ -45,11 +45,14 @@ public class ContractService : IContractService
     }
 
     /// <inheritdoc />
-    public Contract UpdateFavorite(Guid id)
+    public void UpdateContract(Contract contract)
     {
-        Contract contract = _repo.FetchContract(id);
-        contract.IsFavorite = !contract.IsFavorite;
         _repo.UpdateContract(contract);
-        return contract;
+    }
+
+    /// <inheritdoc />
+    public Contract FetchContract(Guid id)
+    {
+        return _repo.FetchContract(id);
     }
 }

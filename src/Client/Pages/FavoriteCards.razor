@@ -1,4 +1,6 @@
 ﻿@using Domain.Contracts
+@using System.Collections.ObjectModel
+@using Newtonsoft.Json
 @inject HttpClient _http
 
 <div id="favorite-contracts">
@@ -12,11 +14,11 @@
     else
     {
         <div id="favorite-cards-container" class=".d-flex">
-            @if (_favoriteContracts.Length > 0)
+            @if (_favoriteContracts.Count > 0)
             {
                 @foreach (var contract in _favoriteContracts)
                 {
-                        <ContractCard Contract=@contract></ContractCard>
+                    <ContractCard Contract=@contract OnFavoriteChange="OnFavoriteChange"></ContractCard>
                 }
             }
             else
@@ -31,13 +33,31 @@
 </div>
 
 @code {
-    private Contract[]? _favoriteContracts;
+    private List<Contract>? _favoriteContracts;
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        _favoriteContracts = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Favorites");
+        _favoriteContracts = await _http.GetFromJsonAsync<List<Contract>>("/api/v1/Contracts/Favorites");
     }
 
+    private async Task OnFavoriteChange(Contract contract)
+    {
+        Console.WriteLine("Before"  + JsonConvert.SerializeObject(contract, Formatting.Indented));
+        Console.WriteLine("Favorite Update!");
+        if (contract.IsFavorite) return;
+
+        Console.WriteLine("Before"  + JsonConvert.SerializeObject(_favoriteContracts, Formatting.Indented));
+        _favoriteContracts?.RemoveAll(other => other.Id == contract.Id);
+        Console.WriteLine("After" + JsonConvert.SerializeObject(_favoriteContracts, Formatting.Indented));
+        await InvokeAsync(StateHasChanged);
+    }
+
+    /// <inheritdoc />
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        //Console.WriteLine(JsonConvert.SerializeObject(_favoriteContracts, Formatting.Indented));
+    }
 
 }

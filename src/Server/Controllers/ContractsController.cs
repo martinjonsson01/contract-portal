@@ -1,6 +1,7 @@
 ﻿using Application.Contracts;
 using Application.Exceptions;
 using Domain.Contracts;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -48,12 +49,16 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <summary>
     /// Updates the contract favorite status.
     /// </summary>
-    /// <param name="id">The id of the contract to update. </param>
+    /// <param name="patchDocument">The patch to use.</param>
+    /// <param name="id">The id of the contract to update.</param>
     /// <returns>The updated contract.</returns>
-    [HttpPatch("/favorites/update{id:guid}")]
-    public Contract UpdateFavorite(Guid id)
+    [HttpPatch("/favorites/{id:guid}")]
+    public IActionResult UpdateFavorite([FromBody] JsonPatchDocument<Contract> patchDocument, Guid id)
     {
-        return _contracts.UpdateFavorite(id);
+        Contract contract = _contracts.FetchContract(id);
+        patchDocument.ApplyTo(contract, ModelState);
+        _contracts.UpdateContract(contract);
+        return !ModelState.IsValid ? BadRequest(ModelState) : new ObjectResult(contract);
     }
 
     /// <summary>

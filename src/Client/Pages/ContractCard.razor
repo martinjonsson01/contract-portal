@@ -1,5 +1,8 @@
 ﻿@using Domain.Contracts
 @using System.Net
+@using System.Text
+@using Microsoft.AspNetCore.JsonPatch
+@using Newtonsoft.Json
 @inject HttpClient _http
 
 <div class="card" style="max-width: 30%;">
@@ -30,7 +33,7 @@
     /// Called when a contract has its favorite status changed.
     /// </summary>
     [Parameter]
-    public EventCallback<ContractCard> OnFavoriteChange { get; set; } = EventCallback<ContractCard>.Empty;
+    public EventCallback<Contract> OnFavoriteChange { get; set; } = EventCallback<Contract>.Empty;
 
     /// <summary>
     /// The contract.
@@ -40,12 +43,19 @@
 
     private async Task ChangeFavorite()
     {
-        var response = await _http.PatchAsync($"/favorites/update{Contract.Id}", null);
-        if(response.IsSuccessStatusCode)
+        var patchDocument = new JsonPatchDocument<Contract>();
+        patchDocument.Replace(contract => contract.IsFavorite, !Contract.IsFavorite);
+        var serializedDocument = JsonConvert.SerializeObject(patchDocument);
+        var content = new StringContent(serializedDocument, Encoding.UTF8, "application/json-patch+json");
+
+        var response = await _http.PatchAsync($"/favorites/{Contract.Id}", content);
+        if (response.IsSuccessStatusCode)
         {
             var contract = await response.Content.ReadFromJsonAsync<Contract>();
             if (contract != null) Contract = contract;
-            await OnFavoriteChange.InvokeAsync(this);
+            Console.WriteLine("Contract Updated");
+            await InvokeAsync(StateHasChanged);
+            await OnFavoriteChange.InvokeAsync(contract);
         }
     }
 
