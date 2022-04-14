@@ -20,7 +20,7 @@ public class AdminPageTests : UITestFixture
             await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
             return new HttpResponseMessage(HttpStatusCode.OK);
         });
-        MockHttp.When("api/v1/contracts/recent").RespondJson(new List<Contract>());
+        MockHttp.When("/api/v1/contracts/recent").RespondJson(new List<Contract>());
 
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
