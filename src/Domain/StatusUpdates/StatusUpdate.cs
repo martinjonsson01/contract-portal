@@ -14,4 +14,9 @@ public class StatusUpdate
     /// Gets or sets when this status update was generated.
     /// </summary>
     public DateTime Timestamp { get; set; } = DateTime.Now;
+
+    /// <summary>
+    /// Gets or sets the text describing the event.
+    /// </summary>
+    public string Text { get; set; } = "Ingen text angiven.";
 }

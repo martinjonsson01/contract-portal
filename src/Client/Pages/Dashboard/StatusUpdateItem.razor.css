@@ -1,12 +1,9 @@
 ﻿.oi {
-    margin-top: 1rem;
     width: 2rem;
-}
-
-h4 {
-    margin: 0 1rem;
+    align-self: baseline;
 }
 
 p {
-    margin-left: 2.5rem;
+    margin: 0 1rem;
+    align-self: baseline;
 }

@@ -3,11 +3,10 @@
     <div class="d-flex w-100 justify-content-between">
         <div class="d-flex flex-row align-content-center">
             @GetIcon()
-            <h4>Text som tar upp för mycket plats</h4>
+            <p>@Status.Text</p>
         </div>
         <small>@Status.Timestamp.ToRelativeDate()</small>
     </div>
-    <p>Text här</p>
 </div>
 
 @code {
