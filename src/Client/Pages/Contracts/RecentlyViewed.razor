@@ -4,24 +4,29 @@
 @inject HttpClient _http
 
 <FetchData TData="Contract[]"
-           Url="/api/v1/contracts/recent"
+           Url="/api/v1/Contracts/Recent"
            Context="recents">
-    @{
-        AddRecents(recents);
-        if (_recent.Size() > 0)
-        {
-            <h3>Senast besökta</h3>
 
-            <div class="d-flex flex-row justify-content-around flex-wrap">
-                @foreach (Contract contract in _recent.FetchRecentContracts().Reverse())
-                {
-                    <ContractCard Contract=@contract/>
-                }
-            </div>
-            <hr/>
+    <!-- No loading indicator. -->
+    <LoadingIndicator></LoadingIndicator>
+
+    <ChildContent>
+        @{
+            AddRecents(recents);
+            if (_recent.Size() > 0)
+            {
+                <h3>Senast besökta</h3>
+
+                <div class="d-flex flex-row justify-content-around flex-wrap">
+                    @foreach (Contract contract in _recent.FetchRecentContracts().Reverse())
+                    {
+                        <ContractCard Contract=@contract/>
+                    }
+                </div>
+                <hr/>
+            }
         }
-    }
-
+    </ChildContent>
 </FetchData>
 
 @code {
