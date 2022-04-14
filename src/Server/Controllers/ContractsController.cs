@@ -52,7 +52,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// </summary>
     /// <param name="contract">The contract to add.</param>
     /// <returns>Returns success after it has added the contract to recently viewed.</returns>
-    [HttpPost("AddRecent")]
+    [HttpPost("recent")]
     public IActionResult AddRecent(Contract contract)
     {
         _contracts.AddRecent(contract);
