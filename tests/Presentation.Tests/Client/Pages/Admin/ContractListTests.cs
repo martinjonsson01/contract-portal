@@ -67,7 +67,7 @@ public class ContractListTests : UITestFixture
         var firstContract = new Contract() { Name = "first", };
         Contract[] contracts = { firstContract, new Contract() { Name = "Second", }, };
         MockHttp.When("/api/v1/contracts").RespondJson(contracts);
-        MockHttp.When(HttpMethod.Delete, $"/api/v1/Contracts/{firstContract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
+        MockHttp.When(HttpMethod.Delete, $"/api/v1/contracts/{firstContract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
 
         IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
         const string removeButton = ".btn.btn-danger";
