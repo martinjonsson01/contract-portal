@@ -1,14 +1,14 @@
 ﻿@typeparam TData
 @inject HttpClient _http;
 
-@if (_data is null)
+@if (Data is null)
 {
     @LoadingIndicator
 }
 else
 {
     <!-- Render child content using the fetched data. -->
-    @ChildContent(_data)
+    @ChildContent(Data)
 }
 
 @code {
@@ -31,11 +31,14 @@ else
     [Parameter,]
     public RenderFragment LoadingIndicator { get; set; } = @<LoadingIndicator />;
 
-    private TData? _data;
+    /// <summary>
+    /// The data that has been fetched.
+    /// </summary>
+    public TData? Data { get; set; }
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        _data = await _http.GetFromJsonAsync<TData>(Url);
+        Data = await _http.GetFromJsonAsync<TData>(Url);
     }
 }
