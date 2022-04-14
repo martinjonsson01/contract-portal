@@ -1,15 +1,18 @@
 ﻿@using Domain.Contracts
+@inject IJSRuntime _js
 @inject HttpClient _http
 
-<div class="card" style="max-width: 30%;" @onclick="AddToRecentlyViewed">
+<button class="card" style="max-width: 30%;" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed">
     <img id="contract-thumbnail" src="@Contract.SupplierLogoImagePath" class="img-thumbnail img-fluid"/>
     <h3 id="contract-name">@Contract.Name</h3>
-</div>
+</button>
+
+<ContractDetails Contract="@Contract"/>
 
 @code {
 
     /// <summary>
-    /// The contract object.
+    /// The contract to render.
     /// </summary>
     [Parameter, EditorRequired,]
     public Contract Contract { get; set; } = null!;
@@ -28,4 +31,5 @@
             await OnViewed.InvokeAsync(Contract);
         }
     }
+
 }
