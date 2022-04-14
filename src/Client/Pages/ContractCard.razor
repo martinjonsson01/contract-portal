@@ -22,7 +22,7 @@
 
     private async Task AddToRecentlyViewed()
     {
-        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/Contracts/AddRecent", Contract);
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/contracts/AddRecent", Contract);
         if (response.IsSuccessStatusCode)
         {
             await OnViewed.InvokeAsync(Contract);

@@ -26,7 +26,7 @@
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        Contract[]? recentArray = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Recent");
+        Contract[]? recentArray = await _http.GetFromJsonAsync<Contract[]>("/api/v1/contracts/recent");
         if (recentArray != null)
         {
             foreach (Contract contract in recentArray)

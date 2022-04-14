@@ -41,7 +41,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// Gets all recently viewed contracts.
     /// </summary>
     /// <returns>All recently viewed contracts.</returns>
-    [HttpGet("Recent")]
+    [HttpGet("recent")]
     public IEnumerable<Contract> RecentContracts()
     {
         return _contracts.FetchRecentContracts();
