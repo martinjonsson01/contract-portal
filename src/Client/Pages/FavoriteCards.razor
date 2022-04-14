@@ -16,7 +16,7 @@
             {
                 @foreach (var contract in _favoriteContracts)
                 {
-                    <ContractCard Contract=@contract />
+                        <ContractCard Contract=@contract></ContractCard>
                 }
             }
             else
@@ -38,5 +38,6 @@
     {
         _favoriteContracts = await _http.GetFromJsonAsync<Contract[]>("/api/v1/Contracts/Favorites");
     }
+
 
 }
