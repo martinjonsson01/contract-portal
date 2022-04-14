@@ -31,7 +31,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// Gets all contracts.
     /// </summary>
     /// <returns>All contracts.</returns>
-    [HttpGet("all")]
+    [HttpGet]
     public IEnumerable<Contract> AllContracts()
     {
         return _contracts.FetchAllContracts();

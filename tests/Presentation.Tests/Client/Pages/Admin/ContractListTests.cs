@@ -19,7 +19,7 @@ public class ContractListTests : UITestFixture
     {
         // Arrange
         Contract[] contracts = { new Contract() { Name = "First", }, new Contract() { Name = "Second", }, };
-        MockHttp.When("/api/v1/Contracts/All").RespondJson(contracts);
+        MockHttp.When("/api/v1/contracts").RespondJson(contracts);
 
         IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
         const string itemSelector = ".list-group-item";
@@ -42,7 +42,7 @@ public class ContractListTests : UITestFixture
     public void AddingContract_DoesNotThrow_BeforeContractsAreFetched()
     {
         // Arrange
-        MockHttp.When("/api/v1/Contracts/All").Respond(async () =>
+        MockHttp.When("/api/v1/contracts").Respond(async () =>
         {
             // Simulate slow network.
             await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
@@ -66,7 +66,7 @@ public class ContractListTests : UITestFixture
         // Arrange
         var firstContract = new Contract() { Name = "first", };
         Contract[] contracts = { firstContract, new Contract() { Name = "Second", }, };
-        MockHttp.When("/api/v1/Contracts/All").RespondJson(contracts);
+        MockHttp.When("/api/v1/contracts").RespondJson(contracts);
         MockHttp.When(HttpMethod.Delete, $"/api/v1/Contracts/{firstContract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
 
         IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
