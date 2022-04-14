@@ -32,7 +32,7 @@ public class ContractsPageTests : UITestFixture
         // Arrange
         const string name = "SJ";
         var contract = new Contract() { Name = name, SupplierLogoImagePath = "/img/test", };
-        MockHttp.When("/api/v1/contracts/all").RespondJson(new[] { contract, });
+        MockHttp.When("/api/v1/contracts").RespondJson(new[] { contract, });
         MockHttp.When("/api/v1/contracts/recent").RespondJson(Array.Empty<object>());
 
         // Act
