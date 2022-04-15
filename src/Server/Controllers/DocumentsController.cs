@@ -38,7 +38,6 @@ public class DocumentsController : BaseApiController<DocumentsController>
             throw new ArgumentNullException(nameof(file));
 
         Logger.LogInformation("Trying to upload a document file: {Name}", file.Name);
-        Logger.LogInformation("Trying to upload a document file: {Name}", file.Name);
         try
         {
             string documentName = await _documents.StoreAsync(file.OpenReadStream()).ConfigureAwait(false);

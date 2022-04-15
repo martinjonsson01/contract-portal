@@ -15,12 +15,13 @@ public class AdminPageTests : UITestFixture
     public void AdminPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
     {
         // Arrange
-        MockHttp.When("/api/v1/Contracts/All").Respond(async () =>
+        MockHttp.When("/api/v1/contracts").Respond(async () =>
         {
             // Simulate slow network.
             await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
             return new HttpResponseMessage(HttpStatusCode.OK);
         });
+        MockHttp.When("/api/v1/contracts/recent").RespondJson(new List<Contract>());
 
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
@@ -35,7 +36,7 @@ public class AdminPageTests : UITestFixture
         // Arrange
         Context.JSInterop.SetupVoid("Blazor._internal.InputFile.init", _ => true);
         IEnumerable<Contract> fakeContracts = new Faker<Contract>().Generate(10);
-        MockHttp.When("/api/v1/Contracts/All").RespondJson(fakeContracts);
+        MockHttp.When("/api/v1/contracts").RespondJson(fakeContracts);
 
         // Act
         IRenderedComponent<AdminPage> cut = Context.RenderComponent<AdminPage>();

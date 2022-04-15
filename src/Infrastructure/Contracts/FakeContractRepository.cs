@@ -38,7 +38,7 @@ public class FakeContractRepository : IContractRepository
     /// <inheritdoc />
     public void AddRecent(Contract contract)
     {
-        _recent.AddRecent(contract);
+        _recent.Add(contract);
     }
 
     /// <inheritdoc />
