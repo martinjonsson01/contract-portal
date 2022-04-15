@@ -1,0 +1,74 @@
+﻿@using Domain.Contracts
+@using System.Runtime.Serialization
+
+<!-- modal-dialog-scrollable -->
+<div class="modal w-100" id="@("id_" + Contract.Id)">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header flex-column p-0">
+                <div class="position-relative w-100">
+                    <button type="button" class="btn-close m-0 position-absolute top-0 end-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <img alt="@Contract.Name" id="contract-thumbnail" src="@ImagePath" class="p-0 border-0 w-100"/>
+                </div>
+                <h1 class="modal-title" id="exampleModalToggleLabel">@Contract.Name</h1>
+            </div>
+            <div class="modal-body">
+
+                <AccordionList>
+                    <AccordionItem OpenByDefault="true">
+                        <Title>
+                            <h2>Om erbjudandet</h2>
+                        </Title>
+                        <Body>
+                        <MarkdownViewer Markdown="@Contract.Description"/>
+                        </Body>
+                    </AccordionItem>
+                    <AccordionItem>
+                        <Title>
+                            <h2>Hur man nyttjar erbjudandet</h2>
+                        </Title>
+                        <Body>
+                        <MarkdownViewer Markdown="@Contract.Instructions"/>
+                        </Body>
+                    </AccordionItem>
+                    <AccordionItem>
+                        <Title>
+                            <h2>Om @Contract.SupplierName</h2>
+                        </Title>
+                        <Body>
+                        <MarkdownViewer Markdown="@Contract.SupplierDescription"/>
+                        </Body>
+                    </AccordionItem>
+                    <AccordionItem>
+                        <Title>
+                            <h2>Övriga filer</h2>
+                        </Title>
+                        <Body>
+                        <a href="@Contract.AdditionalDocument" download>
+                            Ladda ned fil
+                        </a>
+                        </Body>
+                    </AccordionItem>
+                </AccordionList>
+
+            </div>
+            <div class="modal-footer">
+                <MarkdownViewer Markdown="@Contract.SupplierContactInfo"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    /// <summary>
+    /// The contract to render details of.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public Contract Contract { get; set; } = null!;
+
+    private string ImagePath => string.IsNullOrEmpty(Contract.InspirationalImagePath) ?
+        Contract.SupplierLogoImagePath :
+        Contract.InspirationalImagePath;
+
+}

@@ -2,6 +2,7 @@
 @using Newtonsoft.Json
 @using System.Net.Http.Headers
 @using System.Text.Json
+@using Blazorise.Markdown
 @inject ILogger<AdminPage> _logger
 @inject HttpClient _http
 
@@ -15,34 +16,47 @@
     </div>
     <div class="mb-3">
         <label for="contract-description" class="form-label">Beskrivning</label>
-        <InputTextArea id="contract-description" class="form-control" placeholder="T.ex. vad erbjudandet innebär" @bind-Value="@_contract.Description"/>
+        <Markdown id="contract-description"
+                  @bind-Value="@_contract.Description"
+                  MinHeight="@MinFormHeight"
+                  Placeholder="T.ex. vad erbjudandet innebär"/>
     </div>
     <div class="mb-3">
         <label for="contract-instructions" class="form-label">Hur man nyttjar erbjudandet</label>
-        <InputTextArea id="contract-instructions" class="form-control" placeholder="T.ex. vilken webbsida man ska gå in på" @bind-Value="@_contract.Instructions"/>
+        <Markdown id="contract-instructions"
+                  @bind-Value="@_contract.Instructions"
+                  MinHeight="@MinFormHeight"
+                  Placeholder="T.ex. vilken webbsida man ska gå in på"/>
     </div>
     <div class="mb-3">
         <label for="contract-banner" class="form-label">Banderoll till kontrakt</label>
-        <InputFile id="contract-banner" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e=> OnFileChosen(e, ref _inspirationalContent))"/>
+        <InputFile id="contract-banner" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e => OnFileChosen(e, ref _inspirationalContent))"/>
     </div>
     <div class="mb-4">
         <label for="document" class="form-label">Ytterligare dokument eller bild</label>
-        <InputFile id="document" class="form-control" accept=".pdf, .docx, .xlsx, .png, .jpg, .jpeg, .gif" OnChange="(e=> OnFileChosen(e, ref _additionalDocumentContent))"/>
+        <InputFile id="document" class="form-control" accept=".pdf, .docx, .xlsx, .png, .jpg, .jpeg, .gif" OnChange="(e => OnFileChosen(e, ref _additionalDocumentContent))"/>
     </div>
 
     <hr class="mb-4"/>
 
     <div class="mb-3">
-        <label for="supplier-name" class="form-label">Företagets namn</label>
+        <label for="supplier-name" class="form-label">Leverantörens namn</label>
         <InputTextArea id="supplier-name" class="form-control" placeholder="T.ex. Prodigo" @bind-Value="@_contract.SupplierName"/>
     </div>
     <div class="mb-3">
-        <label for="supplier-information" class="form-label">Kontaktinformation för företaget</label>
-        <InputTextArea id="supplier-information" class="form-control" placeholder="T.ex. namn, e-mail eller telefonnummer" @bind-Value="@_contract.SupplierContactInfo"/>
+        <label for="supplier-contact-info" class="form-label">Kontaktinformation för leverantören</label>
+        <InputTextArea id="supplier-contact-info" class="form-control" placeholder="T.ex. namn, e-mail eller telefonnummer" @bind-Value="@_contract.SupplierContactInfo"/>
+    </div>
+    <div class="mb-3">
+        <label for="supplier-description" class="form-label">Om leverantören</label>
+        <Markdown id="supplier-description"
+                  @bind-Value="@_contract.SupplierDescription"
+                  MinHeight="@MinFormHeight"
+                  Placeholder="T.ex. vad leverantören står för"/>
     </div>
     <div class="mb-4">
-        <label for="supplier-logo" class="form-label">Företagets logotyp</label>
-        <InputFile id="supplier-logo" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e=> OnFileChosen(e, ref _supplierLogoContent))"/>
+        <label for="supplier-logo" class="form-label">Leverantörens logotyp</label>
+        <InputFile id="supplier-logo" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e => OnFileChosen(e, ref _supplierLogoContent))"/>
     </div>
 
     <button type="submit" class="btn btn-primary mb-3">Spara</button>
@@ -67,6 +81,8 @@
 
     private MultipartFormDataContent _additionalDocumentContent = new MultipartFormDataContent();
 
+        private const string MinFormHeight = "5rem";
+
     private static Contract CreateEmptyContract()
     {
         return new Contract
@@ -77,6 +93,7 @@
             SupplierLogoImagePath = string.Empty,
             SupplierName = string.Empty,
             SupplierContactInfo = string.Empty,
+            SupplierDescription = string.Empty,
         };
     }
 
@@ -89,6 +106,7 @@
     private void OnFileChosen(InputFileChangeEventArgs arg, ref MultipartFormDataContent content)
     {
         _shouldRender = false;
+
         content = new MultipartFormDataContent();
         StreamContent fileContent;
 
@@ -147,7 +165,7 @@
         }
         finally
         {
-            content.Dispose(); 
+            content.Dispose();
         }
     }
 

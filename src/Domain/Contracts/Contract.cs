@@ -11,7 +11,7 @@ public class Contract
     public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
-    ///     Gets or sets the name of the contract supplier.
+    ///     Gets or sets the name of the contract.
     /// </summary>
     public string Name { get; set; } = "Inget namn";
 
@@ -36,7 +36,7 @@ public class Contract
     public string InspirationalImagePath { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Gets or sets an additonal document from the supplier.
+    ///     Gets or sets an additional document from the supplier.
     /// </summary>
     public string AdditionalDocument { get; set; } = string.Empty;
 
@@ -44,6 +44,11 @@ public class Contract
     ///     Gets or sets the supplier name.
     /// </summary>
     public string SupplierName { get; set; } = "Ingen leverantör angiven.";
+
+    /// <summary>
+    ///     Gets or sets the description of the supplier.
+    /// </summary>
+    public string SupplierDescription { get; set; } = "Ingen leverantörbeskrivning angiven.";
 
     /// <summary>
     ///     Gets or sets the contact information for the supplier.

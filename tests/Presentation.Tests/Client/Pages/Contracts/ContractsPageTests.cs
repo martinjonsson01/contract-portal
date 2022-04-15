@@ -2,9 +2,11 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using Client.Pages.Contracts;
+
 using Domain.Contracts;
 
-namespace Presentation.Tests.Client.Pages;
+namespace Presentation.Tests.Client.Pages.Contracts;
 
 public class ContractsPageTests : UITestFixture
 {
