@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using Domain.Contracts;
 
 namespace Presentation.Tests.Client.Pages;
@@ -11,7 +12,7 @@ public class FavoriteCardsTests : UITestFixture
     public void ContainsLoading_WhileWaitingForResponseFromServer()
     {
         // Arrange
-        MockHttp.When("/api/v1/Contracts/Favorites").Respond(async () =>
+        MockHttp.When("/api/v1/Contracts/favorites").Respond(async () =>
         {
             // Simulate slow network.
             await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
@@ -30,8 +31,8 @@ public class FavoriteCardsTests : UITestFixture
     {
         // Arrange
         const string name = "SJ";
-        var contract = new Contract() { Name = name };
-        MockHttp.When("/api/v1/Contracts/Favorites").RespondJson(new[] { contract, });
+        var contract = new Contract() { Name = name, };
+        MockHttp.When("/api/v1/Contracts/favorites").RespondJson(new[] { contract, });
 
         // Act
         IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();
@@ -44,7 +45,7 @@ public class FavoriteCardsTests : UITestFixture
     [Fact]
     public void ShowNoFavoriteMessage_WhenThereAreNoFavorites()
     {
-        MockHttp.When("/api/v1/Contracts/Favorites").RespondJson(Array.Empty<Contract>());
+        MockHttp.When("/api/v1/Contracts/favorites").RespondJson(Array.Empty<Contract>());
 
         // Act
         IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();
