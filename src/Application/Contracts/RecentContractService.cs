@@ -31,7 +31,7 @@ public class RecentContractService : IRecentContractService
     }
 
     /// <inheritdoc />
-    public void AddRecent(Contract contract)
+    public void Add(Contract contract)
     {
         if (_recent.Any(recentContract => recentContract.Id.Equals(contract.Id)))
         {

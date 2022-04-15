@@ -14,7 +14,7 @@ public class ContractsPageTests : UITestFixture
     public void ContractPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
     {
         // Arrange
-        MockHttp.When("/api/v1/Contracts/All").Respond(async () =>
+        MockHttp.When("/api/v1/contracts").Respond(async () =>
         {
             // Simulate slow network.
             await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
@@ -33,9 +33,9 @@ public class ContractsPageTests : UITestFixture
     {
         // Arrange
         const string name = "SJ";
-        var contract = new Contract() { Name = name, SupplierLogoImagePath = "/img/test" };
-        MockHttp.When("/api/v1/Contracts/All").RespondJson(new[] { contract, });
-        MockHttp.When("/api/v1/Contracts/Recent").RespondJson(Array.Empty<object>());
+        var contract = new Contract() { Name = name, SupplierLogoImagePath = "/img/test", };
+        MockHttp.When("/api/v1/contracts").RespondJson(new[] { contract, });
+        MockHttp.When("/api/v1/contracts/recent").RespondJson(Array.Empty<object>());
 
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();

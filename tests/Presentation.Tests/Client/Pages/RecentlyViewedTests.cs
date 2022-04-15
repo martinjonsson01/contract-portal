@@ -10,7 +10,7 @@ public class RecentlyViewedTests : UITestFixture
     public void RecentlyViewedComponent_ShouldSayNothing_WhenThereAreNoRecentlyViewed()
     {
         // Arrange
-        MockHttp.When("/api/v1/Contracts/Recent").RespondJson(Array.Empty<object>());
+        MockHttp.When("/api/v1/contracts/recent").RespondJson(Array.Empty<object>());
 
         // Act
         IRenderedComponent<RecentlyViewed> cut = Context.RenderComponent<RecentlyViewed>();
@@ -25,7 +25,7 @@ public class RecentlyViewedTests : UITestFixture
         // Arrange
         const string name = "SJ";
         var contract = new Contract() { Name = name, SupplierLogoImagePath = "/img/test" };
-        MockHttp.When("/api/v1/Contracts/Recent").RespondJson(new[] { contract, });
+        MockHttp.When("/api/v1/contracts/recent").RespondJson(new[] { contract, });
 
         // Act
         IRenderedComponent<RecentlyViewed> cut = Context.RenderComponent<RecentlyViewed>();

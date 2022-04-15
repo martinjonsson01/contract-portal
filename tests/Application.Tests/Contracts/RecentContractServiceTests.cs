@@ -26,7 +26,7 @@ public class RecentContractServiceTests
         var contract = new Contract();
 
         // Act
-        _cut.AddRecent(contract);
+        _cut.Add(contract);
 
         // Assert
         _cut.Size().Should().Be(1);
@@ -39,8 +39,8 @@ public class RecentContractServiceTests
         var contract = new Contract();
 
         // Act
-        _cut.AddRecent(contract);
-        _cut.AddRecent(contract);
+        _cut.Add(contract);
+        _cut.Add(contract);
 
         // Assert
         _cut.Size().Should().Be(1);
@@ -56,10 +56,10 @@ public class RecentContractServiceTests
         var contract4 = new Contract();
 
         // Act
-        _cut.AddRecent(contract1);
-        _cut.AddRecent(contract2);
-        _cut.AddRecent(contract3);
-        _cut.AddRecent(contract4);
+        _cut.Add(contract1);
+        _cut.Add(contract2);
+        _cut.Add(contract3);
+        _cut.Add(contract4);
 
         // Assert
         using (new AssertionScope())
@@ -79,13 +79,13 @@ public class RecentContractServiceTests
         // Arrange
         var contract1 = new Contract();
         var contract2 = new Contract() { Name = "contract 2", };
-        _cut.AddRecent(contract1);
-        _cut.AddRecent(contract2);
+        _cut.Add(contract1);
+        _cut.Add(contract2);
         Guid id = contract2.Id;
 
         // Act
-        _cut.AddRecent(contract1);
-        _cut.AddRecent(contract2);
+        _cut.Add(contract1);
+        _cut.Add(contract2);
         _cut.Remove(id);
 
         // Assert

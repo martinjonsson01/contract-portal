@@ -4,7 +4,7 @@
 @inject HttpClient _http
 
 <FetchData TData="Contract[]"
-           Url="/api/v1/Contracts/Recent"
+           Url="/api/v1/contracts/recent"
            Context="recents">
 
     <!-- No loading indicator. -->
@@ -39,7 +39,7 @@
 
         foreach (Contract contract in recents)
         {
-            _recent.AddRecent(contract);
+            _recent.Add(contract);
         }
     }
 
@@ -48,7 +48,7 @@
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
-        _recent.AddRecent(newRecent);
+        _recent.Add(newRecent);
         await InvokeAsync(StateHasChanged);
     }
 

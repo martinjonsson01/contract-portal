@@ -26,7 +26,7 @@
 
     private async Task RemoveContract()
     {
-        HttpResponseMessage response = await _http.DeleteAsync($"api/v1/Contracts/{Contract.Id}");
+        HttpResponseMessage response = await _http.DeleteAsync($"api/v1/contracts/{Contract.Id}");
         if (response.IsSuccessStatusCode)
         {
             await OnContractRemoved.InvokeAsync(Contract);
