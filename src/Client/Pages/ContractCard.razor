@@ -53,7 +53,6 @@
         {
             var contract = await response.Content.ReadFromJsonAsync<Contract>();
             if (contract != null) Contract = contract;
-            Console.WriteLine("Contract Updated");
             await InvokeAsync(StateHasChanged);
             await OnFavoriteChange.InvokeAsync(contract);
         }
