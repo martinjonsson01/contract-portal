@@ -23,7 +23,7 @@ public class FavoriteCardsTests : UITestFixture
         IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();
 
         // Assert
-        cut.Find("p em").TextContent.Should().BeEquivalentTo("Loading...");
+        cut.Find("p em").TextContent.Should().BeEquivalentTo("Laddar...");
     }
 
     [Fact]
@@ -52,6 +52,6 @@ public class FavoriteCardsTests : UITestFixture
         cut.WaitForElement("#favorite-cards-container");
 
         // Assert
-        cut.Find("p em").TextContent.Should().Contain("There are no favorite marked contracts");
+        cut.Find("p em").TextContent.Should().Contain("Du har inga favorit markerade kontrakt.");
     }
 }

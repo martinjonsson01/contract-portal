@@ -1,5 +1,8 @@
 ﻿using Application.Contracts;
+
 using Domain.Contracts;
+
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Tests.Server.Controllers;
@@ -83,5 +86,21 @@ public class ContractsControllerTests
 
         // Assert
         favorites.Should().BeEquivalentTo(fakeContracts);
+    }
+
+    [Fact]
+    public void UpdatesContract_changeContractFavoriteStatusCorrectly()
+    {
+        // Arrange
+        var patchDocument = new JsonPatchDocument<Contract>();
+        var contract = new Contract() { IsFavorite = true, };
+        patchDocument.Replace(c => c.IsFavorite, !contract.IsFavorite);
+        _mockContracts.Setup(service => service.FetchContract(It.IsAny<Guid>())).Returns(contract);
+
+        // Act
+        _cut.UpdateContract(patchDocument, contract.Id);
+
+        // Assert
+        contract.IsFavorite.Should().Be(false);
     }
 }
