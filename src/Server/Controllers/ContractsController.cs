@@ -47,13 +47,13 @@ public class ContractsController : BaseApiController<ContractsController>
     }
 
     /// <summary>
-    /// Updates the contract favorite status.
+    /// Updates the contract.
     /// </summary>
-    /// <param name="patchDocument">The patch to use.</param>
+    /// <param name="patchDocument">The patch to use to update the contract.</param>
     /// <param name="id">The id of the contract to update.</param>
     /// <returns>The updated contract.</returns>
-    [HttpPatch("/favorites/{id:guid}")]
-    public IActionResult UpdateFavorite([FromBody] JsonPatchDocument<Contract> patchDocument, Guid id)
+    [HttpPatch("{id:guid}")]
+    public IActionResult UpdateContract([FromBody] JsonPatchDocument<Contract> patchDocument, Guid id)
     {
         Contract contract = _contracts.FetchContract(id);
         patchDocument.ApplyTo(contract, ModelState);

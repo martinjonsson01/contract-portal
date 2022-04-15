@@ -48,7 +48,7 @@
         var serializedDocument = JsonConvert.SerializeObject(patchDocument);
         var content = new StringContent(serializedDocument, Encoding.UTF8, "application/json-patch+json");
 
-        var response = await _http.PatchAsync($"/favorites/{Contract.Id}", content);
+        var response = await _http.PatchAsync($"/api/v1/Contracts/{Contract.Id}", content);
         if (response.IsSuccessStatusCode)
         {
             var contract = await response.Content.ReadFromJsonAsync<Contract>();
