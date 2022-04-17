@@ -104,4 +104,30 @@ public class ContractServiceTests
         // Assert
         contracts.Should().HaveCount(numberOfContracts);
     }
+
+    [Fact]
+    public void FetchingContract_ReturnsContractFromRepo_WhenContractExists()
+    {
+        // Arrange
+        var expected = new Contract();
+        _mockRepo.Setup(repository => repository.FetchContract(expected.Id)).Returns(expected);
+
+        // Act
+        Contract actual = _cut.FetchContract(expected.Id);
+
+        // Assert
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public void FetchingContract_ThrowsException_WhenContractDoesNotExist()
+    {
+        // Arrange
+
+        // Act
+        Action fetch = () => _cut.FetchContract(Guid.NewGuid());
+
+        // Assert
+        fetch.Should().Throw<ContractDoesNotExistException>();
+    }
 }
