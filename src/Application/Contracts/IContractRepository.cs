@@ -39,9 +39,9 @@ public interface IContractRepository
     void UpdateContract(Contract updatedContract);
 
     /// <summary>
-    /// Gets a contract with the given id.
+    /// Gets a contract with the given id, if it exists.
     /// </summary>
     /// <param name="id">The id of the contract.</param>
-    /// <returns>The contract.</returns>
-    Contract FetchContract(Guid id);
+    /// <returns>The contract, if it exists.</returns>
+    Contract? FetchContract(Guid id);
 }

@@ -53,6 +53,6 @@ public class ContractService : IContractService
     /// <inheritdoc />
     public Contract FetchContract(Guid id)
     {
-        return _repo.FetchContract(id);
+        return _repo.FetchContract(id) ?? throw new ContractDoesNotExistException();
     }
 }

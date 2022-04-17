@@ -40,9 +40,9 @@ public class FakeContractRepository : IContractRepository
     }
 
     /// <inheritdoc />
-    public Contract FetchContract(Guid id)
+    public Contract? FetchContract(Guid id)
     {
-        return _contracts.Find(contract => contract.Id == id) ?? throw new InvalidOperationException();
+        return _contracts.Find(contract => contract.Id == id);
     }
 
     /// <inheritdoc />
