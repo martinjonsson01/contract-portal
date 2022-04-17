@@ -14,10 +14,22 @@ public interface IContractService
     IEnumerable<Contract> FetchAllContracts();
 
     /// <summary>
+    /// Gets the most recent contracts that the user has viewed.
+    /// </summary>
+    /// <returns>Top most recently viewed contracts.</returns>
+    IEnumerable<Contract> FetchRecentContracts();
+
+    /// <summary>
     /// Adds a new contract.
     /// </summary>
     /// <param name="contract">The new contract.</param>
     void Add(Contract contract);
+
+    /// <summary>
+    /// Adds a contract as recently viewed.
+    /// </summary>
+    /// <param name="contract">The recently viewed contract.</param>
+    void AddRecent(Contract contract);
 
     /// <summary>
     /// Removes the specified contract.

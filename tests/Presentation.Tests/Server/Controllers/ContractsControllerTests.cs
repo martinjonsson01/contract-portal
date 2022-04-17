@@ -26,7 +26,7 @@ public class ContractsControllerTests
         _mockContracts.Setup(service => service.FetchAllContracts()).Returns(fakeContracts);
 
         // Act
-        IEnumerable<Contract> allContracts = _cut.AllContracts();
+        IEnumerable<Contract> allContracts = _cut.All();
 
         // Assert
         allContracts.Should().BeEquivalentTo(fakeContracts);

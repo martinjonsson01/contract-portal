@@ -3,10 +3,11 @@
 @using System.Text
 @using Microsoft.AspNetCore.JsonPatch
 @using Newtonsoft.Json
+@inject IJSRuntime _js
 @inject HttpClient _http
 
 <div class="card" style="max-width: 30%;">
-    <img id="contract-thumbnail"src="@Contract.ImagePath" class="img-thumbnail img-fluid"/>
+    <img id="contract-thumbnail" src="@Contract.SupplierLogoImagePath" class="img-thumbnail img-fluid" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"/>
     <div class="card-body">
         <h3 id="contract-name">@Contract.Name</h3>
         <button @onclick="ChangeFavorite">
@@ -27,7 +28,21 @@
 
 </div>
 
+<ContractDetails Contract="@Contract"/>
+
 @code {
+
+    /// <summary>
+    /// The contract to render.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public Contract Contract { get; set; } = null!;
+
+    /// <summary>
+    /// Called when a contract has been clicked successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Contract> OnViewed { get; set; } = EventCallback<Contract>.Empty;
 
     /// <summary>
     /// Called when a contract has its favorite status changed.
@@ -35,11 +50,14 @@
     [Parameter]
     public EventCallback<Contract> OnFavoriteChange { get; set; } = EventCallback<Contract>.Empty;
 
-    /// <summary>
-    /// The contract.
-    /// </summary>
-    [Parameter, EditorRequired,]
-    public Contract Contract { get; set; } = new();
+    private async Task AddToRecentlyViewed()
+    {
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/contracts/recent", Contract);
+        if (response.IsSuccessStatusCode)
+        {
+            await OnViewed.InvokeAsync(Contract);
+        }
+    }
 
     private async Task ChangeFavorite()
     {

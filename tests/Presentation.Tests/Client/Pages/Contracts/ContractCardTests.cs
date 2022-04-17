@@ -1,35 +1,25 @@
-﻿using Domain.Contracts;
+﻿using Client.Pages.Contracts;
 
-namespace Presentation.Tests.Client.Pages;
+using Domain.Contracts;
 
-public class ContractCardTests : IDisposable
+namespace Presentation.Tests.Client.Pages.Contracts;
+
+public class ContractCardTests : UITestFixture
 {
-    private readonly TestContext _context;
-
-    public ContractCardTests()
-    {
-        _context = new TestContext();
-    }
-
-    public void Dispose()
-    {
-        _context.Dispose();
-    }
-
     [Fact]
     public void ContractCard_ContainsGivenInformation()
     {
         // Arrange
         const string name = "SJ";
         const string path = "test";
-        var contract = new Contract() { Name = name, ImagePath = path };
+        var contract = new Contract { Name = name, SupplierLogoImagePath = path, };
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractCard> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
         // Act
         IRenderedComponent<ContractCard> cut =
-            _context.RenderComponent<ContractCard>(ParameterBuilder);
+            Context.RenderComponent<ContractCard>(ParameterBuilder);
 
         // Assert
         cut.Find("#contract-name").TextContent.Should().Contain(name);
@@ -48,10 +38,11 @@ public class ContractCardTests : IDisposable
 
         // Act
         IRenderedComponent<ContractCard> cut =
-            _context.RenderComponent<ContractCard>(ParameterBuilder);
+            Context.RenderComponent<ContractCard>(ParameterBuilder);
 
         // Assert
-        cut.Find(".bi-heart-fill").InnerHtml.Should().Contain("M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z");
+        cut.Find(".bi-heart-fill").InnerHtml.Should()
+           .Contain("M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z");
     }
 
     [Fact]
@@ -66,7 +57,7 @@ public class ContractCardTests : IDisposable
 
         // Act
         IRenderedComponent<ContractCard> cut =
-            _context.RenderComponent<ContractCard>(ParameterBuilder);
+            Context.RenderComponent<ContractCard>(ParameterBuilder);
 
         // Assert
         cut.Find(".bi-heart").InnerHtml.Should().Contain("m8 2.748-.717-.737C5.6.281 2.514.878 1.4");

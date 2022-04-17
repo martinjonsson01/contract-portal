@@ -16,7 +16,7 @@ public class Contract
     public bool IsFavorite { get; set; }
 
     /// <summary>
-    ///     Gets or sets the name of the contract supplier.
+    ///     Gets or sets the name of the contract.
     /// </summary>
     public string Name { get; set; } = "Inget namn";
 
@@ -33,5 +33,30 @@ public class Contract
     /// <summary>
     ///     Gets or sets image to the supplier logo.
     /// </summary>
-    public string ImagePath { get; set; } = "images/sj.png";
+    public string SupplierLogoImagePath { get; set; } = "images/sj.png";
+
+    /// <summary>
+    ///     Gets or sets an inspirational image.
+    /// </summary>
+    public string InspirationalImagePath { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Gets or sets an additional document from the supplier.
+    /// </summary>
+    public string AdditionalDocument { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Gets or sets the supplier name.
+    /// </summary>
+    public string SupplierName { get; set; } = "Ingen leverantör angiven.";
+
+    /// <summary>
+    ///     Gets or sets the description of the supplier.
+    /// </summary>
+    public string SupplierDescription { get; set; } = "Ingen leverantörbeskrivning angiven.";
+
+    /// <summary>
+    ///     Gets or sets the contact information for the supplier.
+    /// </summary>
+    public string SupplierContactInfo { get; set; } = "Kontaktinformation till leverantör saknas.";
 }

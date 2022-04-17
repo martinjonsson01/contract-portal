@@ -30,8 +30,8 @@ public class ContractsController : BaseApiController<ContractsController>
     /// Gets all contracts.
     /// </summary>
     /// <returns>All contracts.</returns>
-    [HttpGet("All")]
-    public IEnumerable<Contract> AllContracts()
+    [HttpGet]
+    public IEnumerable<Contract> All()
     {
         return _contracts.FetchAllContracts();
     }
@@ -65,12 +65,34 @@ public class ContractsController : BaseApiController<ContractsController>
     }
 
     /// <summary>
+    /// Gets all recently viewed contracts.
+    /// </summary>
+    /// <returns>All recently viewed contracts.</returns>
+    [HttpGet("recent")]
+    public IEnumerable<Contract> RecentContracts()
+    {
+        return _contracts.FetchRecentContracts();
+    }
+
+    /// <summary>
+    /// Adds a contract as recently viewed.
+    /// </summary>
+    /// <param name="contract">The contract to add.</param>
+    /// <returns>Returns success after it has added the contract to recently viewed.</returns>
+    [HttpPost("recent")]
+    public IActionResult AddRecent(Contract contract)
+    {
+        _contracts.AddRecent(contract);
+        return Ok();
+    }
+
+    /// <summary>
     /// Creates a new contract.
     /// </summary>
     /// <param name="contract">The contract to add.</param>
     /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The ID of the contract was already taken.</response>
-    [HttpPost("new/contract")]
+    [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult CreateContract(Contract contract)
     {

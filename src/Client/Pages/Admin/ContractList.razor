@@ -25,7 +25,7 @@ else
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        _contracts = await _http.GetFromJsonAsync<List<Contract>>("/api/v1/Contracts/All");
+        _contracts = await _http.GetFromJsonAsync<List<Contract>>("/api/v1/contracts");
     }
 
 

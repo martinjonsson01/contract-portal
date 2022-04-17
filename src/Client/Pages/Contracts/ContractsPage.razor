@@ -1,0 +1,36 @@
+﻿@page "/"
+@using Domain.Contracts
+@inject HttpClient _http
+
+<RecentlyViewed @ref="_recentlyViewed"/>
+
+@if (_contracts == null)
+{
+    <p><em>Laddar...</em></p>
+}
+else
+{
+    @foreach (Contract contract in _contracts)
+    {
+        <ContractCard Contract=@contract OnViewed="OnRecentContractAdded"/>
+    }
+
+}
+
+
+@code {
+    private Contract[]? _contracts;
+    private RecentlyViewed _recentlyViewed = null!;
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        _contracts = await _http.GetFromJsonAsync<Contract[]>("/api/v1/contracts");
+    }
+
+    private void OnRecentContractAdded(Contract viewedContract)
+    {
+        _recentlyViewed.AddViewedContract(viewedContract);
+    }
+
+}
