@@ -5,6 +5,8 @@ using Application.Contracts;
 
 using Domain.Contracts;
 
+using FluentAssertions.Execution;
+
 using Infrastructure.Contracts;
 
 namespace Infrastructure.Tests.Contracts;
@@ -57,5 +59,27 @@ public class ContractRepositoryTests
 
         // Assert
         actual.Should().Be(expected);
+    }
+
+    [Fact]
+    public void UpdatingContract_ReplacesContractInRepository_WhenContractAlreadyExists()
+    {
+        // Arrange
+        var oldContract = new Contract { Name = "Old", };
+        var newContract = new Contract { Id = oldContract.Id, Name = "New", };
+        _cut.Add(oldContract);
+
+        // Act
+        _cut.UpdateContract(newContract);
+        Contract? fetchedContract = _cut.FetchContract(oldContract.Id);
+
+        // Assert
+        using (new AssertionScope())
+        {
+            fetchedContract.Should().NotBeNull();
+            fetchedContract?.Id.Should().Be(oldContract.Id);
+            fetchedContract?.Id.Should().Be(newContract.Id);
+            fetchedContract?.Name.Should().BeEquivalentTo(newContract.Name);
+        }
     }
 }
