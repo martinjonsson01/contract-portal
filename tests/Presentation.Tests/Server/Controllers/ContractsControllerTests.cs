@@ -89,13 +89,13 @@ public class ContractsControllerTests
     }
 
     [Fact]
-    public void UpdatesContract_changeContractFavoriteStatusCorrectly()
+    public void UpdatesContract_ChangesContractFavoriteStatusCorrectly()
     {
         // Arrange
         var patchDocument = new JsonPatchDocument<Contract>();
         var contract = new Contract() { IsFavorite = true, };
         patchDocument.Replace(c => c.IsFavorite, !contract.IsFavorite);
-        _mockContracts.Setup(service => service.FetchContract(It.IsAny<Guid>())).Returns(contract);
+        _mockContracts.Setup(service => service.FetchContract(contract.Id)).Returns(contract);
 
         // Act
         _cut.UpdateContract(patchDocument, contract.Id);

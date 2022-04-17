@@ -58,7 +58,10 @@ public class ContractsController : BaseApiController<ContractsController>
         Contract contract = _contracts.FetchContract(id);
         patchDocument.ApplyTo(contract, ModelState);
         _contracts.UpdateContract(contract);
-        return !ModelState.IsValid ? BadRequest(ModelState) : new ObjectResult(contract);
+
+        // Can't place model in an invalid state at the moment, as all states are considered valid.
+        // In the future we might want to add model validation here.
+        return new ObjectResult(contract);
     }
 
     /// <summary>
