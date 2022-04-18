@@ -29,13 +29,6 @@
                   Placeholder="T.ex. vilken webbsida man ska gå in på"/>
     </div>
     <div class="mb-3">
-        <label for="contract-FAQ" class="form-label">Vanliga frågor</label>
-        <Markdown id="contract-FAQ"
-                  @bind-Value="@_contract.FAQ"
-                  MinHeight="@MinFormHeight"
-                  Placeholder="Vanliga frågor om kontraktet"/>
-    </div>
-    <div class="mb-3">
         <label for="contract-banner" class="form-label">Banderoll till kontrakt</label>
         <InputFile id="contract-banner" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e => OnFileChosen(e, ref _inspirationalContent))"/>
     </div>
