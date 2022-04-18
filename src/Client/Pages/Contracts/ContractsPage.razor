@@ -2,6 +2,8 @@
 @using Domain.Contracts
 @inject HttpClient _http
 
+<SearchBar OnQueryChange="OnQueryChanged"/>
+
 <RecentlyViewed @ref="_recentlyViewed"/>
 
 <FetchData TData="Contract[]"
@@ -22,4 +24,10 @@
     {
         _recentlyViewed.AddViewedContract(viewedContract);
     }
+
+    private void OnQueryChanged(string query)
+    {
+        Console.WriteLine(query);
+    }
+
 }
