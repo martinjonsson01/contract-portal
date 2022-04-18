@@ -1,0 +1,44 @@
+﻿@typeparam TData
+@inject HttpClient _http;
+
+@if (Data is null)
+{
+    @LoadingIndicator
+}
+else
+{
+    <!-- Render child content using the fetched data. -->
+    @ChildContent(Data)
+}
+
+@code {
+
+    /// <summary>
+    /// Where to send a GET-request and fetch data from.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public string Url { get; set; } = null!;
+
+    /// <summary>
+    /// The content to render using the fetched data.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public RenderFragment<TData> ChildContent { get; set; } = null!;
+
+    /// <summary>
+    /// An indicator that is shown while the data is being fetched.
+    /// </summary>
+    [Parameter,]
+    public RenderFragment LoadingIndicator { get; set; } = @<LoadingIndicator />;
+
+    /// <summary>
+    /// The data that has been fetched.
+    /// </summary>
+    public TData? Data { get; set; }
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        Data = await _http.GetFromJsonAsync<TData>(Url);
+    }
+}

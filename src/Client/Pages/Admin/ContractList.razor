@@ -1,33 +1,23 @@
 ﻿@using Domain.Contracts
 @inject HttpClient _http
 
-@if (_contracts == null)
-{
-    <p>
-        <em>Loading...</em>
-    </p>
-}
-else
-{
+<FetchData @ref="_dataFetcher"
+           TData="List<Contract>"
+           Url="/api/v1/contracts"
+           Context="contracts">
+
     <div class="list-group">
-        @foreach (var contract in _contracts)
+        @foreach (Contract contract in contracts)
         {
             <ContractListItem Contract=@contract OnContractRemoved=@OnContractRemoved/>
         }
     </div>
-}
 
+</FetchData>
 
 @code {
 
-    private List<Contract>? _contracts;
-
-    /// <inheritdoc />
-    protected override async Task OnInitializedAsync()
-    {
-        _contracts = await _http.GetFromJsonAsync<List<Contract>>("/api/v1/contracts");
-    }
-
+    private FetchData<List<Contract>> _dataFetcher = null!;
 
     /// <summary>
     /// Adds a contract to the list.
@@ -35,7 +25,7 @@ else
     /// <param name="contract">The contract to add.</param>
     public void Add(Contract contract)
     {
-        _contracts?.Add(contract);
+        _dataFetcher.Data?.Add(contract);
         InvokeAsync(StateHasChanged);
     }
 
@@ -45,10 +35,10 @@ else
     /// <param name="contract">The contract to remove.</param>
     private void OnContractRemoved(Contract contract)
     {
-        // Using null forgiving operator because because _contracts
-        // can not be null when remove button is pressed.
-        _contracts!.Remove(contract);
+    // Using null forgiving operator because because _contracts
+    // can not be null when remove button is pressed.
+        _dataFetcher.Data!.Remove(contract);
         InvokeAsync(StateHasChanged);
     }
-}
 
+}

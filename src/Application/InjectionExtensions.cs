@@ -1,4 +1,5 @@
 ﻿using Application.Contracts;
+using Application.StatusUpdates;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,7 @@ public static class InjectionExtensions
     /// <returns>The same service container.</returns>
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        return services.AddTransient<IContractService, ContractService>();
+        return services.AddTransient<IContractService, ContractService>()
+                       .AddTransient<IStatusUpdateService, NotificationService>();
     }
 }

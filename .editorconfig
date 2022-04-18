@@ -24,6 +24,7 @@ indent_size = 2
 # Disabled rules
 dotnet_diagnostic.CA2000.severity = none
 dotnet_diagnostic.IDE0011.severity = none
+dotnet_diagnostic.SA1000.severity = none
 
 # New line preferences
 csharp_new_line_before_open_brace = all

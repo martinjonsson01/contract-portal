@@ -1,4 +1,6 @@
-﻿using Domain.Contracts;
+﻿using Client.Pages.Contracts;
+
+using Domain.Contracts;
 
 namespace Presentation.Tests.Client.Pages;
 

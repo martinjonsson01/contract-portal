@@ -1,0 +1,52 @@
+﻿@using Domain.StatusUpdates
+<div class="list-group-item list-group-item-action list-group-item-@GetAlertClass()">
+    <div class="d-flex w-100 justify-content-between">
+        <div class="d-flex flex-row align-content-center">
+            @GetIcon()
+            <p>@Status.Text</p>
+        </div>
+        <small>@Status.Timestamp.ToRelativeDate()</small>
+    </div>
+</div>
+
+@code {
+
+    /// <summary>
+    /// The status update to render.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public StatusUpdate Status { get; set; } = null!;
+
+    private RenderFragment _infoIcon = @<span class="oi oi-info"></span>;
+
+    private RenderFragment _warningIcon = @<span class="oi oi-warning"></span>;
+
+    private RenderFragment _urgentIcon = @<span class="oi oi-circle-x"></span>;
+
+    private RenderFragment _criticalIcon = @<span class="oi oi-fire"></span>;
+
+    private RenderFragment GetIcon()
+    {
+        return Status.Alert switch
+        {
+            AlertLevel.Information => _infoIcon,
+            AlertLevel.Warning => _warningIcon,
+            AlertLevel.Urgent => _urgentIcon,
+            AlertLevel.Critical => _criticalIcon,
+            _ => throw new ArgumentOutOfRangeException(),
+        };
+    }
+
+    private string GetAlertClass()
+    {
+        return Status.Alert switch {
+
+            AlertLevel.Information => "info",
+            AlertLevel.Warning => "warning",
+            AlertLevel.Urgent => "danger",
+            AlertLevel.Critical => "dark",
+            _ => throw new ArgumentOutOfRangeException(),
+        };
+    }
+
+}
