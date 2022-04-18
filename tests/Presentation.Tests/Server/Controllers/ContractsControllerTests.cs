@@ -21,10 +21,10 @@ public class ContractsControllerTests
     {
         // Arrange
         List<Contract> fakeContracts = new Faker<Contract>().Generate(10);
-        _mockContracts.Setup(service => service.FetchAllContracts()).Returns(fakeContracts);
+        _mockContracts.Setup(service => service.Search(string.Empty)).Returns(fakeContracts);
 
         // Act
-        IEnumerable<Contract> actualWeather = _cut.All();
+        IEnumerable<Contract> actualWeather = _cut.Search(string.Empty);
 
         // Assert
         actualWeather.Should().BeEquivalentTo(fakeContracts);
