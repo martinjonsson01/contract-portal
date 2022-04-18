@@ -103,7 +103,7 @@ public class ContractDetailsTests : UITestFixture
 
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
-        IElement? titleElement = cut.FindAll(".accordion-item").ToList().Find(p => p.InnerHtml.Contains("Vanliga frågor", StringComparison.CurrentCulture));
+        IElement? titleElement = cut.FindAll(".accordion-item").ToList().Find(p => p.InnerHtml.Contains("faq-title", StringComparison.CurrentCulture));
 
         // Assert
         titleElement.Should().NotBeNull();
@@ -122,7 +122,7 @@ public class ContractDetailsTests : UITestFixture
 
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
-        IElement? titleElement = cut.FindAll(".accordion-item").ToList().Find(p => p.InnerHtml.Contains("Vanliga frågor", StringComparison.CurrentCulture));
+        IElement? titleElement = cut.FindAll(".accordion-item").ToList().Find(p => p.InnerHtml.Contains("faq-title", StringComparison.CurrentCulture));
 
         // Assert
         titleElement.Should().BeNull();
