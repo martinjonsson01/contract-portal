@@ -39,6 +39,15 @@ else
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        Data = await _http.GetFromJsonAsync<TData>(Url);
+        await Fetch(Url);
     }
+
+    /// <summary>
+    /// Fetches data from the URL and renders it using the previously set fragments.
+    /// </summary>
+    public async Task Fetch(string url)
+    {
+        Data = await _http.GetFromJsonAsync<TData>(url);
+    }
+
 }

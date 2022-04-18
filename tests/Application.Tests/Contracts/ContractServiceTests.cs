@@ -103,4 +103,32 @@ public class ContractServiceTests
         // Assert
         actual.Should().BeFalse();
     }
+
+    [Fact]
+    public void Searching_ReturnsAllContracts_WhenQueryIsEmpty()
+    {
+        // Arrange
+        List<Contract> expected = new Faker<Contract>().Generate(10);
+        _mockRepo.Setup(repository => repository.All).Returns(expected);
+
+        // Act
+        IEnumerable<Contract> actual = _cut.Search(string.Empty);
+
+        // Assert
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public void Searching_ReturnsNothing_WhenQueryIsGibberish()
+    {
+        // Arrange
+        List<Contract> expected = new Faker<Contract>().Generate(10);
+        _mockRepo.Setup(repository => repository.All).Returns(expected);
+
+        // Act
+        IEnumerable<Contract> actual = _cut.Search("blablablablablabla12987123981723xzxzcz");
+
+        // Assert
+        actual.Should().BeEmpty();
+    }
 }

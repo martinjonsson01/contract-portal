@@ -6,8 +6,9 @@
 
 <RecentlyViewed @ref="_recentlyViewed"/>
 
-<FetchData TData="Contract[]"
-           Url="/api/v1/contracts"
+<FetchData @ref="_dataFetcher"
+            TData="IEnumerable<Contract>"
+           Url="api/v1/contracts"
            Context="contracts">
 
     @foreach (Contract contract in contracts)
@@ -20,14 +21,17 @@
 @code {
     private RecentlyViewed _recentlyViewed = null!;
 
+    private FetchData<IEnumerable<Contract>> _dataFetcher = null!;
+
     private void OnRecentContractAdded(Contract viewedContract)
     {
         _recentlyViewed.AddViewedContract(viewedContract);
     }
 
-    private void OnQueryChanged(string query)
+    private async Task OnQueryChanged(string query)
     {
-        Console.WriteLine(query);
+        string urlSafeQuery = Uri.EscapeDataString(query);
+        var fetchUrl = $"api/v1/contracts?query={urlSafeQuery}";
+        await _dataFetcher.Fetch(fetchUrl);
     }
-
 }

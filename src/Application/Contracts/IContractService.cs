@@ -37,4 +37,11 @@ public interface IContractService
     /// <param name="id">The id of the contract to be removed.</param>
     /// <returns>Whether the removal was successful.</returns>
     bool Remove(Guid id);
+
+    /// <summary>
+    /// Searches for and returns contracts that match the given query.
+    /// </summary>
+    /// <param name="query">The query to search for.</param>
+    /// <returns>The found contracts.</returns>
+    IEnumerable<Contract> Search(string query);
 }
