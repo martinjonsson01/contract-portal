@@ -6,41 +6,30 @@
 
 <RecentlyViewed @ref="_recentlyViewed"/>
 
-@if (_searchResults is null)
-{
-    <FetchData TData="Contract[]"
-               Url="/api/v1/contracts"
-               Context="contracts">
+<FetchData TData="IEnumerable<Contract>"
+           Url="@_fetchContractsUrl"
+           Context="contracts">
 
-        @foreach (Contract contract in contracts)
-        {
-            <ContractCard Contract=@contract OnViewed="OnRecentContractAdded"/>
-        }
-
-    </FetchData>
-}
-else
-{
-    @foreach (Contract contract in _searchResults)
+    @foreach (Contract contract in contracts)
     {
         <ContractCard Contract=@contract OnViewed="OnRecentContractAdded"/>
     }
-}
+
+</FetchData>
 
 @code {
     private RecentlyViewed _recentlyViewed = null!;
 
-    private IEnumerable<Contract>? _searchResults;
+    private string _fetchContractsUrl = "api/v1/contracts";
 
     private void OnRecentContractAdded(Contract viewedContract)
     {
         _recentlyViewed.AddViewedContract(viewedContract);
     }
 
-    private async Task OnQueryChanged(string query)
+    private void OnQueryChanged(string query)
     {
         string urlSafeQuery = Uri.EscapeDataString(query);
-        _searchResults = await _http.GetFromJsonAsync<IEnumerable<Contract>>($"api/v1/contracts?query={urlSafeQuery}");
+        _fetchContractsUrl = $"api/v1/contracts?query={urlSafeQuery}";
     }
-
 }
