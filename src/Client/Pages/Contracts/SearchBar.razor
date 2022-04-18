@@ -1,0 +1,29 @@
+﻿<div class="form-outline mb-3">
+    <input type="search"
+           class="form-control"
+           placeholder="Sök efter kontrakt..."
+           aria-label="Sök"
+           @bind="Query"
+           @bind:event="oninput"/>
+</div>
+
+@code {
+
+    /// <summary>
+    /// Called when the query in the search bar is changed.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string> OnQueryChange { get; set; } = EventCallback<string>.Empty;
+
+    private string _query = string.Empty;
+    private string Query
+    {
+        get => _query;
+        set
+        {
+            _query = value;
+            OnQueryChange.InvokeAsync(value);
+        }
+    }
+
+}
