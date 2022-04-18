@@ -28,16 +28,6 @@ public class ContractsController : BaseApiController<ContractsController>
     }
 
     /// <summary>
-    /// Gets all contracts.
-    /// </summary>
-    /// <returns>All contracts.</returns>
-    [HttpGet]
-    public IEnumerable<Contract> All()
-    {
-        return _contracts.FetchAllContracts();
-    }
-
-    /// <summary>
     /// Gets all recently viewed contracts.
     /// </summary>
     /// <returns>All recently viewed contracts.</returns>
@@ -100,9 +90,9 @@ public class ContractsController : BaseApiController<ContractsController>
     /// </summary>
     /// <param name="query">The query to filter contracts by.</param>
     /// <returns>The contracts that match the search query.</returns>
-    [HttpGet("{query}")]
-    public IEnumerable<Contract> Search(string query)
+    [HttpGet]
+    public IEnumerable<Contract> Search(string? query)
     {
-        return _contracts.Search(query);
+        return _contracts.Search(query ?? string.Empty);
     }
 }
