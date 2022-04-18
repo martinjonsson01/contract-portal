@@ -50,4 +50,10 @@ public class ContractService : IContractService
     {
         return _repo.Remove(id);
     }
+
+    /// <inheritdoc />
+    public IEnumerable<Contract> Search(string query)
+    {
+        return string.IsNullOrEmpty(query) ? FetchAllContracts() : new List<Contract>();
+    }
 }

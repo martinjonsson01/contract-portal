@@ -94,4 +94,15 @@ public class ContractsController : BaseApiController<ContractsController>
             Ok() :
             NotFound();
     }
+
+    /// <summary>
+    /// Searches for contracts that match the given query and returns the resulting contracts.
+    /// </summary>
+    /// <param name="query">The query to filter contracts by.</param>
+    /// <returns>The contracts that match the search query.</returns>
+    [HttpGet("{query}")]
+    public IEnumerable<Contract> Search(string query)
+    {
+        return _contracts.Search(query);
+    }
 }
