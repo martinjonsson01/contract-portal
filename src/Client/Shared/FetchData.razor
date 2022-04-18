@@ -37,7 +37,7 @@ else
     public TData? Data { get; set; }
 
     /// <inheritdoc />
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         Data = await _http.GetFromJsonAsync<TData>(Url);
     }
