@@ -26,6 +26,11 @@ public class Contract
     public string Instructions { get; set; } = "Det finns inga instruktioner.";
 
     /// <summary>
+    ///     Gets or sets the FAQ.
+    /// </summary>
+    public string FAQ { get; set; } = string.Empty;
+
+    /// <summary>
     ///     Gets or sets image to the supplier logo.
     /// </summary>
     public string SupplierLogoImagePath { get; set; } = "images/sj.png";
