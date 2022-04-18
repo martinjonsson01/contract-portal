@@ -49,6 +49,17 @@
                         </a>
                         </Body>
                     </AccordionItem>
+                    @if (!String.IsNullOrEmpty(Contract.FAQ))
+                    {
+                    <AccordionItem>
+                        <Title>
+                            <h2>FAQ</h2>
+                        </Title>
+                        <Body>
+                        <MarkdownViewer Markdown="@Contract.FAQ"/>
+                        </Body>
+                    </AccordionItem>
+                    }
                 </AccordionList>
 
             </div>
