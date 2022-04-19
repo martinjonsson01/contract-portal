@@ -16,7 +16,7 @@
             <div id="favorite-cards-container" class="d-flex flex-row justify-content-around flex-wrap">
                 @foreach (var contract in contractsList)
                 {
-                    <ContractCard Contract=@contract OnFavoriteChange="OnFavoriteChange"></ContractCard>
+                    <ContractCard Contract=@contract OnFavoriteChange="OnFavoriteChange"/>
                 }
             </div>
         }
