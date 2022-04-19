@@ -60,7 +60,7 @@ public class ContractService : IContractService
     /// <inheritdoc />
     public IEnumerable<Contract> FetchFavorites()
     {
-        return _repo.Favorites();
+        return _repo.Favorites;
     }
 
     /// <inheritdoc />

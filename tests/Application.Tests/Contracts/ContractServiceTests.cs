@@ -138,7 +138,7 @@ public class ContractServiceTests
         // Arrange
         const int numberOfContracts = 10;
         List<Contract> mockContracts = new Faker<Contract>().Generate(numberOfContracts);
-        _mockRepo.Setup(repository => repository.Favorites()).Returns(mockContracts);
+        _mockRepo.Setup(repository => repository.Favorites).Returns(mockContracts);
 
         // Act
         IEnumerable<Contract> contracts = _cut.FetchFavorites();

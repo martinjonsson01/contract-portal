@@ -29,6 +29,9 @@ public class FakeContractRepository : IContractRepository
     public IEnumerable<Contract> Recent => _recent.FetchRecentContracts();
 
     /// <inheritdoc />
+    public IEnumerable<Contract> Favorites => _contracts.FindAll(contract => contract.IsFavorite);
+
+    /// <inheritdoc />
     public void Add(Contract contract)
     {
         _contracts.Add(contract);
@@ -45,12 +48,6 @@ public class FakeContractRepository : IContractRepository
     {
         _recent.Remove(id); // This line should not exist when there is an actual database (it will remove any relations)
         return _contracts.RemoveAll(o => o.Id == id) > 0;
-    }
-
-    /// <inheritdoc />
-    public IEnumerable<Contract> Favorites()
-    {
-        return _contracts.FindAll(contract => contract.IsFavorite);
     }
 
     /// <inheritdoc />
