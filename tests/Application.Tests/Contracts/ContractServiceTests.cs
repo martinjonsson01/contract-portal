@@ -133,18 +133,13 @@ public class ContractServiceTests
     }
 
     [Fact]
-    public void FetchFavorite_ReturnsTheGivenContractsFromRepo()
+    public void FetchFavorite_CallsFavoriteFromRepoExactlyOnce()
     {
-        // Arrange
-        const int numberOfContracts = 10;
-        List<Contract> mockContracts = new Faker<Contract>().Generate(numberOfContracts);
-        _mockRepo.Setup(repository => repository.Favorites).Returns(mockContracts);
-
         // Act
-        IEnumerable<Contract> contracts = _cut.FetchFavorites();
+        _cut.FetchFavorites();
 
         // Assert
-        contracts.Should().HaveCount(numberOfContracts);
+        _mockRepo.Verify(repo => repo.Favorites, Times.Exactly(1));
     }
 
     [Fact]
