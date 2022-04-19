@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-
+using Client.Pages.Dashboard;
 using Domain.Contracts;
 
-namespace Presentation.Tests.Client.Pages;
+namespace Presentation.Tests.Client.Pages.Dashboard;
 
 public class FavoriteCardsTests : UITestFixture
 {
