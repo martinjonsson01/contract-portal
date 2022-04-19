@@ -4,46 +4,38 @@
 
 <div id="favorite-contracts" style="padding-top: 30px;">
     <h3>Favoriter</h3>
-    @if (_favoriteContracts == null)
-    {
-        <p>
-            <em>Laddar...</em>
-        </p>
-    }
-    else
-    {
-        <div id="favorite-cards-container" class="d-flex flex-row justify-content-around flex-wrap">
-            @if (_favoriteContracts.Count > 0)
-            {
-                @foreach (var contract in _favoriteContracts)
+    <FetchData @ref="_dataFetcher"
+               TData="List<Contract>"
+               Url="/api/v1/Contracts/favorites"
+               Context="contracts">
+        @{
+            var contractsList = contracts.ToList();
+        }
+        @if (contractsList.Any())
+        {
+            <div id="favorite-cards-container" class="d-flex flex-row justify-content-around flex-wrap">
+                @foreach (var contract in contractsList)
                 {
                     <ContractCard Contract=@contract OnFavoriteChange="OnFavoriteChange"></ContractCard>
                 }
-            }
-            else
-            {
-                <p>
-                    <em>Du har inga favorit markerade kontrakt.</em>
-                </p>
-            }
-
-        </div>
-    }
+            </div>
+        }
+        else
+        {
+            <p>
+                <em>Du har inga favorit markerade kontrakt.</em>
+            </p>
+        }
+    </FetchData>
 </div>
 
 @code {
-    private List<Contract>? _favoriteContracts;
-
-    /// <inheritdoc />
-    protected override async Task OnInitializedAsync()
-    {
-        _favoriteContracts = await _http.GetFromJsonAsync<List<Contract>>("/api/v1/Contracts/favorites");
-    }
+    private FetchData<List<Contract>> _dataFetcher = null!;
 
     private async Task OnFavoriteChange(Contract contract)
     {
         if (contract.IsFavorite) return;
-        _favoriteContracts?.RemoveAll(other => other.Id == contract.Id);
+        _dataFetcher.Data?.RemoveAll(other => other.Id == contract.Id);
         await InvokeAsync(StateHasChanged);
     }
 
