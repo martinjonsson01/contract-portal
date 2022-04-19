@@ -48,10 +48,10 @@
         }
     }
 
-    private async Task FavoriteChange()
+    private async Task FavoriteChange(Contract contract)
     {
-        Contract = _favoriteButton.Contract;
-        await OnFavoriteChange.InvokeAsync(Contract);
+        Contract = contract;
+        await OnFavoriteChange.InvokeAsync(contract);
     }
 
 }
