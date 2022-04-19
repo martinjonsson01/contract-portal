@@ -4,27 +4,30 @@
 
 <EditForm Model="@_user">
     <div class="mb-3">
-        <label for="user-name" class="form-label">
-            Användarnamn
-            <InputText id="user-name" class="form-control" placeholder="Användarens namn" @bind-Value="@_user.Name"/>
-        </label>
+        <label for="user-name" class="form-label">Användarnamn</label>
+        <InputText id="user-name" class="form-control" placeholder="Användarens namn" @bind-Value="@_user.Name"/>
     </div>
     <div class="mb-3">
-        <label for="user-company" class="form-label">
-            Företag
-            <InputText id="user-company" class="form-control" placeholder="Företagets namn" @bind-Value="@_user.Company"/>
-        </label>
+        <label for="user-company" class="form-label">Företag</label>
+        <InputText id="user-company" class="form-control" placeholder="Företagets namn" @bind-Value="@_user.Company"/>
     </div>
     <div class="mb-3">
-        <label for="" class="form-label">
-            Senaste betaldatum
-            <InputDate id="user-latest-payment-date" class="form-control" @bind-Value="_user.LatestPaymentDate"/>
-        </label>
+        <label for="" class="form-label">Senaste betaldatum</label>
+        <InputDate id="user-latest-payment-date" class="form-control" @bind-Value="_user.LatestPaymentDate"/>
     </div>
 
     <button type="submit" class="btn btn-primary mb-3">Spara</button>
 </EditForm>
 
 @code {
-    private User _user = new User();
+    private User _user = CreateUnspecifiedUser();
+
+    private static User CreateUnspecifiedUser()
+    {
+        return new User
+        {
+            Name = string.Empty,
+            Company = string.Empty,
+        };
+    }
 }
