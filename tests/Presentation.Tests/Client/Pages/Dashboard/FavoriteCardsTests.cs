@@ -1,31 +1,10 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Client.Pages.Dashboard;
+﻿using Client.Pages.Dashboard;
 using Domain.Contracts;
 
 namespace Presentation.Tests.Client.Pages.Dashboard;
 
 public class FavoriteCardsTests : UITestFixture
 {
-    [Fact]
-    public void ContainsLoading_WhileWaitingForResponseFromServer()
-    {
-        // Arrange
-        MockHttp.When("/api/v1/Contracts/favorites").Respond(async () =>
-        {
-            // Simulate slow network.
-            await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
-            return new HttpResponseMessage(HttpStatusCode.OK);
-        });
-
-        // Act
-        IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();
-
-        // Assert
-        cut.Find("p em").TextContent.Should().BeEquivalentTo("Laddar...");
-    }
-
     [Fact]
     public void ContainsCards_WhenThereAreFavoritesToShow()
     {
@@ -39,7 +18,7 @@ public class FavoriteCardsTests : UITestFixture
         cut.WaitForElement("#favorite-cards-container");
 
         // Assert
-        _ = cut.Find(".card").TextContent.Should().Contain(name);
+        cut.Find(".card").TextContent.Should().Contain(name);
     }
 
     [Fact]
@@ -49,7 +28,7 @@ public class FavoriteCardsTests : UITestFixture
 
         // Act
         IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();
-        cut.WaitForElement("#favorite-cards-container");
+        cut.WaitForElement("p em");
 
         // Assert
         cut.Find("p em").TextContent.Should().Contain("Du har inga favorit markerade kontrakt.");
