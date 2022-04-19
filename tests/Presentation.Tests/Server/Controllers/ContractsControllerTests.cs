@@ -19,17 +19,32 @@ public class ContractsControllerTests
     }
 
     [Fact]
-    public void Get_AllContracts()
+    public void Get_ReturnsAll_WhenQueryIsNull()
     {
         // Arrange
         List<Contract> fakeContracts = new Faker<Contract>().Generate(10);
-        _mockContracts.Setup(service => service.FetchAllContracts()).Returns(fakeContracts);
+        _mockContracts.Setup(service => service.Search(string.Empty)).Returns(fakeContracts);
 
         // Act
-        IEnumerable<Contract> allContracts = _cut.All();
+        IEnumerable<Contract> contracts = _cut.Search(null);
 
         // Assert
-        allContracts.Should().BeEquivalentTo(fakeContracts);
+        contracts.Should().BeEquivalentTo(fakeContracts);
+    }
+
+    [Fact]
+    public void Get_ReturnsSearchResults_WhenQueryIsSet()
+    {
+        // Arrange
+        List<Contract> searchResults = new Faker<Contract>().Generate(10);
+        const string searchQuery = "keyword1 keyword2";
+        _mockContracts.Setup(service => service.Search(searchQuery)).Returns(searchResults);
+
+        // Act
+        IEnumerable<Contract> actualWeather = _cut.Search(searchQuery);
+
+        // Assert
+        actualWeather.Should().BeEquivalentTo(searchResults);
     }
 
     [Fact]

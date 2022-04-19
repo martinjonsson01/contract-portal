@@ -1,5 +1,6 @@
 ﻿using Application.Contracts;
 using Application.Exceptions;
+
 using Domain.Contracts;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -24,16 +25,6 @@ public class ContractsController : BaseApiController<ContractsController>
         : base(logger)
     {
         _contracts = contracts;
-    }
-
-    /// <summary>
-    /// Gets all contracts.
-    /// </summary>
-    /// <returns>All contracts.</returns>
-    [HttpGet]
-    public IEnumerable<Contract> All()
-    {
-        return _contracts.FetchAllContracts();
     }
 
     /// <summary>
@@ -117,6 +108,19 @@ public class ContractsController : BaseApiController<ContractsController>
     [HttpDelete("{id:guid}")]
     public IActionResult Remove(Guid id)
     {
-        return _contracts.Remove(id) ? Ok() : NotFound();
+        return _contracts.Remove(id) ?
+            Ok() :
+            NotFound();
+    }
+
+    /// <summary>
+    /// Searches for contracts that match the given query and returns the resulting contracts.
+    /// </summary>
+    /// <param name="query">The query to filter contracts by.</param>
+    /// <returns>The contracts that match the search query.</returns>
+    [HttpGet]
+    public IEnumerable<Contract> Search(string? query)
+    {
+        return _contracts.Search(query ?? string.Empty);
     }
 }

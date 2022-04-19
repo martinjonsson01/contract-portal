@@ -56,4 +56,11 @@ public interface IContractService
     /// <param name="id">The id of the contract to fetch.</param>
     /// <returns>The fetched contract.</returns>
     Contract FetchContract(Guid id);
+
+    /// <summary>
+    /// Searches for and returns contracts that match the given query.
+    /// </summary>
+    /// <param name="query">The query to search for.</param>
+    /// <returns>The found contracts.</returns>
+    IEnumerable<Contract> Search(string query);
 }

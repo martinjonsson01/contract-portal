@@ -1,4 +1,5 @@
 ﻿using Application.Exceptions;
+
 using Domain.Contracts;
 
 namespace Application.Contracts;
@@ -48,6 +49,12 @@ public class ContractService : IContractService
     public bool Remove(Guid id)
     {
         return _repo.Remove(id);
+    }
+
+    /// <inheritdoc />
+    public IEnumerable<Contract> Search(string query)
+    {
+        return string.IsNullOrEmpty(query) ? FetchAllContracts() : new List<Contract>();
     }
 
     /// <inheritdoc />
