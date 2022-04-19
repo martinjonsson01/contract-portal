@@ -19,7 +19,7 @@ public class UsersController : BaseApiController<UsersController>
     /// </summary>
     /// <param name="logger">The logging provider.</param>
     /// <param name="users">The user logic.</param>
-    public UserController(ILogger<ContractsController> logger, IUserService users)
+    public UsersController(ILogger<UsersController> logger, IUserService users)
         : base(logger)
     {
         _users = users;
