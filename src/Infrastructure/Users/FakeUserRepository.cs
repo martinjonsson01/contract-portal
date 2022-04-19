@@ -13,10 +13,13 @@ public class FakeUserRepository : IUserRepository
     /// <summary>
     /// Constructor.
     /// </summary>
-    public FakeContractRepository()
+    public FakeUserRepository()
     {
         _users = new List<User>();
     }
+
+    /// <inheritdoc />
+    public IEnumerable<User> All => new List<User>(_users);
 
     /// <inheritdoc />
     public void Add(User user)

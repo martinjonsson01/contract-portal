@@ -8,6 +8,12 @@ namespace Application.Users;
 public interface IUserRepository
 {
     /// <summary>
+    /// Gets all users.
+    /// </summary>
+    /// <returns>All currently existing users.</returns>
+    IEnumerable<User> All { get; }
+
+    /// <summary>
     /// Adds a new user to store.
     /// </summary>
     /// <param name="user">The new user instance.</param>
