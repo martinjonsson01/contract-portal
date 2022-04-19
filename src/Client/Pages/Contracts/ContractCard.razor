@@ -6,7 +6,7 @@
 @inject IJSRuntime _js
 @inject HttpClient _http
 
-<div class="card" style="max-width: 30%;">
+<div class="card" style="width: 30%; margin-top: 1em;" >
     <img id="contract-thumbnail" src="@Contract.SupplierLogoImagePath" class="img-thumbnail img-fluid" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"/>
     <div class="card-body d-flex bd-highlight mb-3 d-flex align-items-center">
         <h3 class="p-2 bd-highlight flex-grow-1" id="contract-name">@Contract.Name</h3>
