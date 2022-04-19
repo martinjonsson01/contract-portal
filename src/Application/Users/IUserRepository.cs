@@ -1,0 +1,15 @@
+using Domain.Users;
+
+namespace Application.Users;
+
+/// <summary>
+/// Logic for fetching and storing users.
+/// </summary>
+public interface IUserRepository
+{
+    /// <summary>
+    /// Adds a new user to store.
+    /// </summary>
+    /// <param name="user">The new user instance.</param>
+    void Add(User user);
+}
