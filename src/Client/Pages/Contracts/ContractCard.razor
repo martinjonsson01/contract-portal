@@ -8,9 +8,9 @@
 
 <div class="card" style="max-width: 30%;">
     <img id="contract-thumbnail" src="@Contract.SupplierLogoImagePath" class="img-thumbnail img-fluid" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"/>
-    <div class="card-body">
-        <h3 id="contract-name">@Contract.Name</h3>
-        <button @onclick="ChangeFavorite">
+    <div class="card-body d-flex bd-highlight mb-3 d-flex align-items-center">
+        <h3 class="p-2 bd-highlight flex-grow-1" id="contract-name">@Contract.Name</h3>
+        <button class="btn ms-auto p-2 flex-shrink-0" @onclick="ChangeFavorite">
             @if (Contract.IsFavorite)
             {
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
