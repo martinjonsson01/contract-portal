@@ -1,8 +1,9 @@
 @using Domain.Users
+@inject HttpClient _http
 
-<h4>Lägg till användare</h4>
+<h4>Skapa användare</h4>
 
-<EditForm Model="@_user">
+<EditForm Model="@_user" OnSubmit="HandleSubmit">
     <div class="mb-3">
         <label for="user-name" class="form-label">Användarnamn</label>
         <InputText id="user-name" class="form-control" placeholder="Användarens namn" @bind-Value="@_user.Name"/>
@@ -16,7 +17,7 @@
         <InputDate id="user-latest-payment-date" class="form-control" @bind-Value="_user.LatestPaymentDate"/>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-3">Spara</button>
+    <button type="submit" class="btn btn-primary mb-3">Skapa användare</button>
 </EditForm>
 
 @code {
@@ -29,5 +30,27 @@
             Name = string.Empty,
             Company = string.Empty,
         };
+    }
+
+    private async Task HandleSubmit()
+    {
+        await AddUser();
+    }
+
+    /// <summary>
+    /// Called when a user has been added successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<User> OnUserAdded { get; set; } = EventCallback<User>.Empty;
+
+    private async Task AddUser()
+    {
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users", _user);
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("User successfully created!");
+            await OnUserAdded.InvokeAsync(_user);
+            _user = CreateUnspecifiedUser();
+        }
     }
 }
