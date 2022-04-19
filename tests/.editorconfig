@@ -5,3 +5,4 @@ dotnet_diagnostic.IDE0058.severity = none
 dotnet_diagnostic.CA1063.severity = none
 dotnet_diagnostic.CA1816.severity = none
 dotnet_diagnostic.CA1716.severity = none
+dotnet_diagnostic.IDE0046.severity = none
