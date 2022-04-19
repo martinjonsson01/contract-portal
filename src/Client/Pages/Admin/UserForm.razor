@@ -1,0 +1,30 @@
+@using Domain.Users
+
+<h4>Lägg till användare</h4>
+
+<EditForm Model="@_user">
+    <div class="mb-3">
+        <label for="user-name" class="form-label">
+            Användarnamn
+            <InputText id="user-name" class="form-control" placeholder="Användarens namn" @bind-Value="@_user.Name"/>
+        </label>
+    </div>
+    <div class="mb-3">
+        <label for="user-company" class="form-label">
+            Företag
+            <InputText id="user-company" class="form-control" placeholder="Företagets namn" @bind-Value="@_user.Company"/>
+        </label>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">
+            Senaste betaldatum
+            <InputDate id="user-latest-payment-date" class="form-control" @bind-Value="_user.LatestPaymentDate"/>
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-3">Spara</button>
+</EditForm>
+
+@code {
+    private User _user = new User();
+}
