@@ -28,9 +28,9 @@ public class FavoriteCardsTests : UITestFixture
 
         // Act
         IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();
-        cut.WaitForElement("p em");
+        cut.WaitForElement("#no-favorites");
 
         // Assert
-        cut.Find("p em").TextContent.Should().Contain("Du har inga favorit markerade kontrakt.");
+        cut.Find("#no-favorites").TextContent.Should().NotBeEmpty();
     }
 }
