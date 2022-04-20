@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Server.Controllers;
 
 /// <summary>
-/// WebAPI for contracts.
+/// WebAPI for users.
 /// </summary>
 [ApiController]
 [Route("api/v1/[controller]")]
