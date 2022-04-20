@@ -11,7 +11,7 @@ public class FakeUserRepository : IUserRepository
     private readonly List<User> _users;
 
     /// <summary>
-    /// Constructor.
+    /// Constructs a FakeUserRepository.
     /// </summary>
     public FakeUserRepository()
     {

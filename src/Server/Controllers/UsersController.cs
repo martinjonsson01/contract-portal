@@ -29,7 +29,7 @@ public class UsersController : BaseApiController<UsersController>
     /// Creates a new user.
     /// </summary>
     /// <param name="user">The user to add.</param>
-    /// <returns>If the user was successfully removed.</returns>
+    /// <returns>If the user was successfully added.</returns>
     /// <response code="400">The ID of the user was already taken.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
