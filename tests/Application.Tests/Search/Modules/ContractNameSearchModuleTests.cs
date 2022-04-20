@@ -94,4 +94,32 @@ public class ContractNameSearchModuleTests
         // Assert
         matches.Should().BeFalse();
     }
+
+    [Fact]
+    public void Match_ReturnsTrue_WhenQueryContainsNameAndMore()
+    {
+        // Arrange
+        const string name = "Contract name";
+        var contract = new Contract { Name = name, };
+
+        // Act
+        bool matches = _cut.Match(contract, name + " more");
+
+        // Assert
+        matches.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Match_ReturnsTrue_WhenQueryContainsNameAndMoreInUpperCase()
+    {
+        // Arrange
+        const string name = "Contract name";
+        var contract = new Contract { Name = name, };
+
+        // Act
+        bool matches = _cut.Match(contract, (name + "more").ToUpperInvariant());
+
+        // Assert
+        matches.Should().BeTrue();
+    }
 }

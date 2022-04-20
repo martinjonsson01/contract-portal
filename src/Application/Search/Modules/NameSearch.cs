@@ -15,6 +15,7 @@ public class NameSearch : ISearchModule<Contract>
     /// <returns>Whether the contract matches the name in the query or not.</returns>
     public bool Match(Contract entity, string query)
     {
-        return entity.Name.Contains(query, StringComparison.OrdinalIgnoreCase);
+        return entity.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+               query.Contains(entity.Name, StringComparison.OrdinalIgnoreCase);
     }
 }
