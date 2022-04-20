@@ -41,7 +41,7 @@ public class SearchEngineTests
     }
 
     [Fact]
-    public void SearchWithModule_ReturnsOne_WhenQueryIsOne()
+    public void SearchWithModule_ReturnsResultsDependingOnTheModule()
     {
         // Arrange
         ISearchModule<int> module = new TextMatcher();
@@ -56,7 +56,7 @@ public class SearchEngineTests
     }
 
     [Fact]
-    public void SearchWithModule_ReturnsAllOnes_WhenQueryIsOne()
+    public void SearchWithModule_ReturnsMultipleMatches_WhenThereAreMultipleElementsThatMatch()
     {
         // Arrange
         ISearchModule<int> module = new TextMatcher();
@@ -86,7 +86,7 @@ public class SearchEngineTests
     }
 
     [Fact]
-    public void Search_ReturnsOneAndTwo_WhenMatchingOnTextAndDivisibilityWithTwo()
+    public void SearchWithModules_ReturnsMultipleEntities_WhenMultipleEntitiesMatchWithDifferentModules()
     {
         // Arrange
         _cut.AddModule(new DivisibleMatcher());
