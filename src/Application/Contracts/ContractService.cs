@@ -56,4 +56,22 @@ public class ContractService : IContractService
     {
         return string.IsNullOrEmpty(query) ? FetchAllContracts() : new List<Contract>();
     }
+
+    /// <inheritdoc />
+    public IEnumerable<Contract> FetchFavorites()
+    {
+        return _repo.Favorites;
+    }
+
+    /// <inheritdoc />
+    public void UpdateContract(Contract contract)
+    {
+        _repo.UpdateContract(contract);
+    }
+
+    /// <inheritdoc />
+    public Contract FetchContract(Guid id)
+    {
+        return _repo.FetchContract(id) ?? throw new ContractDoesNotExistException();
+    }
 }

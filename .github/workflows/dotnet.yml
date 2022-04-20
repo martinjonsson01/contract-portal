@@ -4,11 +4,11 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: 
+    branches:
       - master
       - '*'
   workflow_dispatch:
-    
+
 
 jobs:
   build:
@@ -26,10 +26,10 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Application.Tests
-      run: dotnet test --no-build tests/Application.Tests -p:CollectCoverage=true    -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/                                                                                        -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\"
+      run: dotnet test --no-build tests/Application.Tests -p:CollectCoverage=true    -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/                                                                                        -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\" -p:Include=\"[Application]*,[Domain]*\"
     - name: Domain.Tests
-      run: dotnet test --no-build tests/Domain.Tests -p:CollectCoverage=true         -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json"                                     -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\"
+      run: dotnet test --no-build tests/Domain.Tests -p:CollectCoverage=true         -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json"                                     -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\" -p:Include=\"[Domain]*\"
     - name: Infrastructure.Tests
-      run: dotnet test --no-build tests/Infrastructure.Tests -p:CollectCoverage=true -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json"                                     -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\"
+      run: dotnet test --no-build tests/Infrastructure.Tests -p:CollectCoverage=true -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json"                                     -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\" -p:Include=\"[Infrastructure]*,[Domain]*\"
     - name: Presentation.Tests
-      run: dotnet test --no-build tests/Presentation.Tests -p:CollectCoverage=true   -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json" -p:CoverletOutputFormat="opencover" -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\"
+      run: dotnet test --no-build tests/Presentation.Tests -p:CollectCoverage=true   -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json" -p:CoverletOutputFormat="opencover" -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\" -p:Include=\"[Client]*,[Server]*,[Domain]*\"
