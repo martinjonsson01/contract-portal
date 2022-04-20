@@ -1,6 +1,8 @@
 ﻿using Application.Contracts;
 
 using Domain.Contracts;
+
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Tests.Server.Controllers;
@@ -24,10 +26,10 @@ public class ContractsControllerTests
         _mockContracts.Setup(service => service.Search(string.Empty)).Returns(fakeContracts);
 
         // Act
-        IEnumerable<Contract> actualWeather = _cut.Search(null);
+        IEnumerable<Contract> contracts = _cut.Search(null);
 
         // Assert
-        actualWeather.Should().BeEquivalentTo(fakeContracts);
+        contracts.Should().BeEquivalentTo(fakeContracts);
     }
 
     [Fact]
@@ -85,5 +87,35 @@ public class ContractsControllerTests
 
         // Assert
         actual.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public void Gets_Favorites()
+    {
+        // Arrange
+        List<Contract> fakeContracts = new Faker<Contract>().Generate(10);
+        _mockContracts.Setup(service => service.FetchFavorites()).Returns(fakeContracts);
+
+        // Act
+        IEnumerable<Contract> favorites = _cut.Favorites();
+
+        // Assert
+        favorites.Should().BeEquivalentTo(fakeContracts);
+    }
+
+    [Fact]
+    public void UpdatesContract_ChangesContractFavoriteStatusCorrectly()
+    {
+        // Arrange
+        var patchDocument = new JsonPatchDocument<Contract>();
+        var contract = new Contract() { IsFavorite = true, };
+        patchDocument.Replace(c => c.IsFavorite, !contract.IsFavorite);
+        _mockContracts.Setup(service => service.FetchContract(contract.Id)).Returns(contract);
+
+        // Act
+        _cut.UpdateContract(patchDocument, contract.Id);
+
+        // Assert
+        contract.IsFavorite.Should().Be(false);
     }
 }
