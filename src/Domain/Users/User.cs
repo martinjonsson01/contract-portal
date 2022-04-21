@@ -11,12 +11,12 @@ public class User
     public Guid Id { get; } = Guid.NewGuid();
 
     /// <summary>
-    /// Gets or sets the name of the user.
+    /// Gets or sets the name.
     /// </summary>
     public string Name { get; set; } = "Inget namn";
 
     /// <summary>
-    /// Gets or sets the company of the user.
+    /// Gets or sets the name of the company.
     /// </summary>
     public string Company { get; set; } = "Inget företagsnamn";
 
