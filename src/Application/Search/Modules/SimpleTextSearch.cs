@@ -3,12 +3,12 @@
 namespace Application.Search.Modules;
 
 /// <summary>
-/// Searches names of contracts.
+/// Searches text in a given field of a contract.
 /// </summary>
-public class NameSearch : ISearchModule<Contract>
+public class SimpleTextSearch : ISearchModule<Contract>
 {
     /// <summary>
-    /// Matches a <see cref="Contract"/> name to the given query.
+    /// Matches a <see cref="Contract"/> property to the given query.
     /// </summary>
     /// <param name="entity">The contract.</param>
     /// <param name="query">The text to match with.</param>

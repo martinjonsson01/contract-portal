@@ -5,13 +5,13 @@ using Domain.Contracts;
 
 namespace Application.Tests.Search.Modules;
 
-public class ContractNameSearchModuleTests
+public class SimpleTextSearchModuleTests
 {
     private readonly ISearchModule<Contract> _cut;
 
-    public ContractNameSearchModuleTests()
+    public SimpleTextSearchModuleTests()
     {
-        _cut = new NameSearch();
+        _cut = new SimpleTextSearch();
     }
 
     [Fact]
