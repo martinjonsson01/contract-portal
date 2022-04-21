@@ -24,7 +24,7 @@ public class UsersControllerTests
         _mockUsers.Setup(service => service.Add(user)).Throws<IdentifierAlreadyTakenException>();
 
         // Act
-        IActionResult actual = _cut.CreateUser(user);
+        IActionResult actual = _cut.Create(user);
 
         // Assert
         actual.Should().BeOfType<BadRequestResult>();
@@ -36,7 +36,7 @@ public class UsersControllerTests
         // Arrange
 
         // Act
-        IActionResult actual = _cut.CreateUser(new User());
+        IActionResult actual = _cut.Create(new User());
 
         // Assert
         actual.Should().BeOfType<OkResult>();

@@ -8,15 +8,7 @@ namespace Infrastructure.Users;
 /// </summary>
 public class FakeUserRepository : IUserRepository
 {
-    private readonly List<User> _users;
-
-    /// <summary>
-    /// Constructs a FakeUserRepository.
-    /// </summary>
-    public FakeUserRepository()
-    {
-        _users = new List<User>();
-    }
+    private readonly List<User> _users = new();
 
     /// <inheritdoc />
     public IEnumerable<User> All => new List<User>(_users);

@@ -48,7 +48,6 @@
         HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users", _user);
         if (response.IsSuccessStatusCode)
         {
-            Console.WriteLine("User successfully created!");
             await OnUserAdded.InvokeAsync(_user);
             _user = CreateUnspecifiedUser();
         }
