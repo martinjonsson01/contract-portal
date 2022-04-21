@@ -3,7 +3,7 @@
 
 <h4>Skapa användare</h4>
 
-<EditForm Model="@_user" OnSubmit="HandleSubmit">
+<EditForm Model="@_user" OnSubmit="AddUser">
     <div class="mb-3">
         <label for="user-name" class="form-label">Användarnamn</label>
         <InputText id="user-name" class="form-control" placeholder="Användarens namn" @bind-Value="@_user.Name"/>
@@ -30,11 +30,6 @@
             Name = string.Empty,
             Company = string.Empty,
         };
-    }
-
-    private async Task HandleSubmit()
-    {
-        await AddUser();
     }
 
     /// <summary>
