@@ -1,5 +1,4 @@
 ﻿using Application.StatusUpdates;
-
 using Domain.StatusUpdates;
 
 namespace Infrastructure.StatusUpdates;
