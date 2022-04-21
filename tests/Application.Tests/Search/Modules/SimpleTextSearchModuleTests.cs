@@ -11,7 +11,7 @@ public class SimpleTextSearchModuleTests
 
     public SimpleTextSearchModuleTests()
     {
-        _cut = new SimpleTextSearch();
+        _cut = new SimpleTextSearch(contract => contract.Name);
     }
 
     [Fact]

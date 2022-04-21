@@ -8,6 +8,14 @@ namespace Application.Search.Modules;
 public class SimpleTextSearch : ISearchModule<Contract>
 {
     /// <summary>
+    /// Constructs a <see cref="SimpleTextSearch"/> module for a given property of a <see cref="Contract"/>.
+    /// </summary>
+    /// <param name="selector">A delegate that returns the contents of one of the properties of a <see cref="Contract"/>.</param>
+    public SimpleTextSearch(Func<Contract, string> selector)
+    {
+    }
+
+    /// <summary>
     /// Matches a <see cref="Contract"/> property to the given query.
     /// </summary>
     /// <param name="entity">The contract.</param>
