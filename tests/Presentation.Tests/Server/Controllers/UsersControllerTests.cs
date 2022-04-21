@@ -17,7 +17,7 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public void CreateUser_ReturnsBadRequest_IfIDAlreadyTaken()
+    public void Create_ReturnsBadRequest_IfIDAlreadyTaken()
     {
         // Arrange
         var user = new User();
@@ -31,7 +31,7 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public void CreateUser_ReturnsOk_IfIDIsUnique()
+    public void Create_ReturnsOk_IfIDIsUnique()
     {
         // Arrange
 
