@@ -1,4 +1,6 @@
 ﻿using Application.Exceptions;
+using Application.Search;
+using Application.Search.Modules;
 
 using Domain.Contracts;
 
@@ -8,14 +10,18 @@ namespace Application.Contracts;
 public class ContractService : IContractService
 {
     private readonly IContractRepository _repo;
+    private readonly SearchEngine<Contract> _search;
 
     /// <summary>
     /// Constructs contract service.
     /// </summary>
     /// <param name="repo">Where to store and fetch contracts from.</param>
-    public ContractService(IContractRepository repo)
+    /// <param name="search">The search engine to use when searching through contracts.</param>
+    public ContractService(IContractRepository repo, SearchEngine<Contract> search)
     {
         _repo = repo;
+        _search = search;
+        _search.AddModule(new NameSearch());
     }
 
     /// <inheritdoc />
@@ -54,7 +60,7 @@ public class ContractService : IContractService
     /// <inheritdoc />
     public IEnumerable<Contract> Search(string query)
     {
-        return string.IsNullOrEmpty(query) ? FetchAllContracts() : new List<Contract>();
+        return _search.Search(query, FetchAllContracts());
     }
 
     /// <inheritdoc />

@@ -2,6 +2,7 @@
 
 using Application.Contracts;
 using Application.Exceptions;
+using Application.Search;
 
 using Domain.Contracts;
 
@@ -15,7 +16,7 @@ public class ContractServiceTests
     public ContractServiceTests()
     {
         _mockRepo = new Mock<IContractRepository>();
-        _cut = new ContractService(_mockRepo.Object);
+        _cut = new ContractService(_mockRepo.Object, new SearchEngine<Contract>());
     }
 
     [Fact]
