@@ -7,7 +7,7 @@ namespace Application.Tests.Search.Modules;
 
 public class SimpleTextSearchModuleTests
 {
-    private readonly ISearchModule<Contract> _cut;
+    private ISearchModule<Contract> _cut;
 
     public SimpleTextSearchModuleTests()
     {
@@ -121,5 +121,21 @@ public class SimpleTextSearchModuleTests
 
         // Assert
         matches.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Match_MatchesTextInGivenProperty_WhenSelectorIsCorrectlyGiven()
+    {
+        // Arrange
+        static string SelectInstructions(Contract contract) => contract.Instructions;
+        _cut = new SimpleTextSearch(SelectInstructions);
+
+        var contract = new Contract { Name = "Name", Instructions = "Instructions", };
+
+        // Act
+        bool match = _cut.Match(contract, "Instructions");
+
+        // Assert
+        match.Should().BeTrue();
     }
 }

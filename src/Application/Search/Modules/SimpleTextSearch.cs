@@ -7,12 +7,15 @@ namespace Application.Search.Modules;
 /// </summary>
 public class SimpleTextSearch : ISearchModule<Contract>
 {
+    private readonly Func<Contract, string> _selector;
+
     /// <summary>
     /// Constructs a <see cref="SimpleTextSearch"/> module for a given property of a <see cref="Contract"/>.
     /// </summary>
     /// <param name="selector">A delegate that returns the contents of one of the properties of a <see cref="Contract"/>.</param>
     public SimpleTextSearch(Func<Contract, string> selector)
     {
+        _selector = selector;
     }
 
     /// <summary>
@@ -23,7 +26,8 @@ public class SimpleTextSearch : ISearchModule<Contract>
     /// <returns>Whether the contract matches the name in the query or not.</returns>
     public bool Match(Contract entity, string query)
     {
-        return entity.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-               query.Contains(entity.Name, StringComparison.OrdinalIgnoreCase);
+        string text = _selector(entity);
+        return text.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+               query.Contains(text, StringComparison.OrdinalIgnoreCase);
     }
 }
