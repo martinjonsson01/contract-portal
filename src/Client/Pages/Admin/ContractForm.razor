@@ -36,12 +36,16 @@
         <label for="document" class="form-label">Ytterligare dokument eller bild</label>
         <InputFile id="document" class="form-control" accept=".pdf, .docx, .xlsx, .png, .jpg, .jpeg, .gif" OnChange="(e => OnFileChosen(e, ref _additionalDocumentContent))"/>
     </div>
-    <div class="mb-4">
+    <div class="mb-3">
         <label for="contract-faq" class="form-label">Vanliga frågor</label>
         <Markdown id="contract-faq"
                   @bind-Value="@_contract.FAQ"
                   MinHeight="@MinFormHeight"
                   Placeholder="T.ex. frågor följt av svar"/>
+    </div>
+    <div class="mb-4">
+        <label class="form-label">Nyckelord för sökning</label>
+        <ListInput />
     </div>
 
     <hr class="mb-4"/>
@@ -66,6 +70,9 @@
         <InputFile id="supplier-logo" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e => OnFileChosen(e, ref _supplierLogoContent))"/>
     </div>
 
+    <!-- Prevent implicit submission of the form -->
+    <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+    <!-- Actually visible submit button -->
     <button type="submit" class="btn btn-primary mb-3">Spara</button>
 
 </EditForm>

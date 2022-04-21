@@ -1,0 +1,30 @@
+﻿<InputText class="form-control" placeholder="@Placeholder" @bind-Value="@Item" @onkeydown="OnKeyDown"/>
+
+@code {
+
+    /// <summary>
+    /// The item this input element represents. If left unspecified, a new instance will be created by default.
+    /// </summary>
+    [Parameter]
+    public string Item { get; set; } = string.Empty;
+
+    /// <summary>
+    /// A text placeholder that will be placed inside of the input field.
+    /// </summary>
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Called when the enter key is pressed while the text field is in focus.
+    /// </summary>
+    [Parameter]
+    public EventCallback EnterPressed { get; set; } = EventCallback.Empty;
+
+    private async Task OnKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Code != "Enter") return;
+
+        await EnterPressed.InvokeAsync();
+    }
+
+}
