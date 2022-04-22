@@ -2,7 +2,8 @@
 @inject HttpClient _http
 
 <div id="@User.Name" class="list-group-item d-flex justify-content-between" style="max-width: 50%">
-    @User.Name
+    @User.Name <br>
+    Senaste betaldatum: @User.LatestPaymentDate.ToShortDateString()
 </div>
 
 @code {
