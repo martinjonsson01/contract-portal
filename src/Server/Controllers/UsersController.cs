@@ -47,4 +47,15 @@ public class UsersController : BaseApiController<UsersController>
 
         return Ok();
     }
+
+    /// <summary>
+    /// Searches for users that match the given query and returns the resulting users.
+    /// </summary>
+    /// <param name="query">The query to filter users by.</param>
+    /// <returns>The users that match the search query.</returns>
+    [HttpGet]
+    public IEnumerable<User> Search(string? query)
+    {
+        return _users.Search(query ?? string.Empty);
+    }
 }
