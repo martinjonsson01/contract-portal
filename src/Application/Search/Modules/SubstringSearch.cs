@@ -27,7 +27,11 @@ public class SubstringSearch : ISearchModule<Contract>
     public bool Match(Contract entity, string query)
     {
         string text = _selector(entity);
-        string[] substrings = query.Split();
+
+        if (string.IsNullOrEmpty(query))
+            return false;
+
+        string[] substrings = query.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
         return substrings.Any(predicate: s => text.Contains(s, StringComparison.OrdinalIgnoreCase));
     }
