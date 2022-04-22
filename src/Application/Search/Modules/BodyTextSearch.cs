@@ -5,15 +5,15 @@ namespace Application.Search.Modules;
 /// <summary>
 ///     Searches for substrings of the given query in contract properties.
 /// </summary>
-public class SubstringSearch : ISearchModule<Contract>
+public class BodyTextSearch : ISearchModule<Contract>
 {
     private readonly Func<Contract, string> _selector;
 
     /// <summary>
-    /// Constructs a <see cref="SubstringSearch"/> module for a given property of a <see cref="Contract"/>.
+    /// Constructs a <see cref="BodyTextSearch"/> module for a given property of a <see cref="Contract"/>.
     /// </summary>
     /// <param name="selector">A delegate that returns the contents of one of the properties of a <see cref="Contract"/>.</param>
-    public SubstringSearch(Func<Contract, string> selector)
+    public BodyTextSearch(Func<Contract, string> selector)
     {
         _selector = selector;
     }
