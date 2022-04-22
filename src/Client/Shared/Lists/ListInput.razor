@@ -1,11 +1,14 @@
 ﻿@using System.Collections.ObjectModel
 
 <div class="d-flex flex-column">
-    @foreach (string item in Items)
+    @for (var i = 0; i < Items.Count; i++)
     {
-        <ListItemInput Item="@item"
+        string item = Items[i];
+        <ListItemInput Id="@i"
+                       Item="@item"
                        Placeholder="@Placeholder"
-                       EnterPressed="@CreateItem"/>
+                       EnterPressed="@CreateItem"
+                       ValueChanged="@OnValueChanged"/>
     }
     <button type="button" class="btn-secondary" @onclick="CreateItem">Lägg till <span class="oi oi-plus"></span></button>
 </div>
@@ -16,7 +19,7 @@
     /// The items that have been input into the list.
     /// </summary>
     [Parameter]
-    public ObservableCollection<string> Items { get; set; } = new();
+    public IList<string> Items { get; set; } = new List<string>();
 
     /// <summary>
     /// A text placeholder that will be placed inside of the input fields.
@@ -26,6 +29,12 @@
     private void CreateItem()
     {
         Items.Add(string.Empty);
+    }
+
+    private void OnValueChanged((string value, int id) tuple)
+    {
+        (string value, int id) = tuple;
+        Items[id] = value;
     }
 
 }

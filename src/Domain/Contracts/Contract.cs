@@ -38,7 +38,7 @@ public class Contract
     /// <summary>
     ///     Gets the search keywords that have been tagged.
     /// </summary>
-    public IEnumerable<string> Tags { get; init; } = new List<string>();
+    public IList<string> Tags { get; init; } = new List<string>();
 
     /// <summary>
     ///     Gets or sets image to the supplier logo.

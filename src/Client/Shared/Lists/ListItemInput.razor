@@ -1,12 +1,33 @@
-﻿<InputText class="form-control" placeholder="@Placeholder" @bind-Value="@Item" @onkeydown="OnKeyDown"/>
+﻿<InputText class="form-control"
+           placeholder="@Placeholder"
+           @bind-Value="@Item"
+           @onkeydown="OnKeyDown"/>
 
 @code {
 
+
     /// <summary>
-    /// The item this input element represents. If left unspecified, a new instance will be created by default.
+    /// Identifier that can be used to distinguish between different list items containing the same text.
     /// </summary>
     [Parameter]
-    public string Item { get; set; } = string.Empty;
+    public int Id { get; set; } = -1;
+
+    /// <summary>
+    /// The item this input element represents.
+    /// </summary>
+    [Parameter]
+    public string Item
+    {
+        get => _item;
+        set
+        {
+            string oldItem = _item;
+            _item = value;
+
+            if (!_item.Equals(oldItem))
+                ValueChanged.InvokeAsync((_item, Id));
+        }
+    }
 
     /// <summary>
     /// A text placeholder that will be placed inside of the input field.
@@ -20,6 +41,12 @@
     [Parameter]
     public EventCallback EnterPressed { get; set; } = EventCallback.Empty;
 
+    /// <summary>
+    /// Called when the value of this item has been changed.
+    /// </summary>
+    [Parameter]
+    public EventCallback<(string, int)> ValueChanged { get; set; } = EventCallback<(string, int)>.Empty;
+
     private async Task OnKeyDown(KeyboardEventArgs args)
     {
         if (args.Code != "Enter") return;
@@ -27,4 +54,5 @@
         await EnterPressed.InvokeAsync();
     }
 
+    private string _item = string.Empty;
 }
