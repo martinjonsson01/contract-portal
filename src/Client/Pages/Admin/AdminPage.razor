@@ -8,6 +8,8 @@
 <ContractList @ref="@_contractList"/>
 <hr/>
 <UserForm/>
+<hr/>
+<UserList @ref="@_userList"/>
 
 @code {
 
@@ -17,4 +19,6 @@
     {
         _contractList.Add(contract);
     }
+
+    private UserList _userList = null!;
 }
