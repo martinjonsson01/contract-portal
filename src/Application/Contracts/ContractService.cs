@@ -22,7 +22,8 @@ public class ContractService : IContractService
         _repo = repo;
         _search = search;
         _search.AddModule(new NameSearch());
-        _search.AddModule(new DescriptionSearch());
+        _search.AddModule(new SubstringSearch(contract => contract.Description));
+        _search.AddModule(new SubstringSearch(contract => contract.SupplierDescription));
     }
 
     /// <inheritdoc />
