@@ -20,7 +20,7 @@ public static class InjectionExtensions
     {
         return services.AddTransient<IContractService, ContractService>()
                        .AddTransient<IStatusUpdateService, NotificationService>()
-                       .AddTransient<IUserService, UserService>();
+                       .AddTransient<IUserService, UserService>()
                        .AddScoped(typeof(SearchEngine<>))
                        .AddTransient<IStatusUpdateService, NotificationService>();
     }
