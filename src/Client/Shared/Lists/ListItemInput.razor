@@ -47,6 +47,8 @@
     [Parameter]
     public EventCallback<(string, int)> ValueChanged { get; set; } = EventCallback<(string, int)>.Empty;
 
+    private string _item = string.Empty;
+
     private async Task OnKeyDown(KeyboardEventArgs args)
     {
         if (args.Code != "Enter") return;
@@ -54,5 +56,4 @@
         await EnterPressed.InvokeAsync();
     }
 
-    private string _item = string.Empty;
 }
