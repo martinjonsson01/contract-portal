@@ -24,6 +24,8 @@ public class ContractService : IContractService
         _search.AddModule(new NameSearch());
         _search.AddModule(new BodyTextSearch(contract => contract.Description));
         _search.AddModule(new BodyTextSearch(contract => contract.SupplierDescription));
+        _search.AddModule(new SimpleTextSearch(contract => contract.Name));
+        _search.AddModule(new SimpleTextSearch(contract => contract.SupplierName));
     }
 
     /// <inheritdoc />
