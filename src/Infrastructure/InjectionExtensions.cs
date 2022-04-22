@@ -2,12 +2,12 @@
 using Application.Documents;
 using Application.Images;
 using Application.StatusUpdates;
-
+using Application.Users;
 using Infrastructure.Contracts;
 using Infrastructure.Documents;
 using Infrastructure.Images;
 using Infrastructure.StatusUpdates;
-
+using Infrastructure.Users;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -28,6 +28,7 @@ public static class InjectionExtensions
     {
         return services.AddSingleton<IContractRepository, FakeContractRepository>()
                        .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
+                       .AddSingleton<IUserRepository, FakeUserRepository>()
                        .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
                        {
                            IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();
