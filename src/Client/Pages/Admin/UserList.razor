@@ -1,5 +1,19 @@
 @using Domain.Users
 
+<FetchData @ref="_dataFetcher"
+           TData="List<User>"
+           Url="/api/v1/users"
+           Context="users">
+
+    <div class="list-group">
+        @foreach (User user in users)
+        {
+            <UserListItem User=@user/>
+        }
+    </div>
+
+</FetchData>
+
 @code {
 
     private FetchData<List<User>> _dataFetcher = null!;
