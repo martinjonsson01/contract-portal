@@ -1,0 +1,16 @@
+@using Domain.Users
+
+@code {
+
+    private FetchData<List<User>> _dataFetcher = null!;
+
+    /// <summary>
+    /// Adds a user to the list.
+    /// </summary>
+    /// <param name="user">The user to add.</param>
+    public void Add(User user)
+    {
+        _dataFetcher.Data?.Add(user);
+        InvokeAsync(StateHasChanged);
+    }
+}
