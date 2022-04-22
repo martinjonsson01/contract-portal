@@ -7,7 +7,7 @@ namespace Application.Tests.Search.Modules;
 
 public class BodyTextSearchModuleTests
 {
-    private readonly ISearchModule<Contract> _cut;
+    private ISearchModule<Contract> _cut;
 
     public BodyTextSearchModuleTests()
     {
@@ -106,18 +106,19 @@ public class BodyTextSearchModuleTests
         // Assert
         matches.Should().BeFalse();
     }
+
     [Fact]
     public void Match_ReturnsTrue_WhenMatchingSelectedProperty()
     {
         // Arrange
         _cut = new BodyTextSearch(contract => contract.SupplierDescription);
-        
+
         const string supplierDescription = "Describes supplier";
         var contract = new Contract { Description = "Describes contract", SupplierDescription = supplierDescription, };
-        
+
         // Act
         bool matches = _cut.Match(contract, supplierDescription);
-        
+
         // Assert
         matches.Should().BeTrue();
     }
