@@ -1,7 +1,7 @@
 ﻿using Application.Contracts;
 using Application.Search;
 using Application.StatusUpdates;
-
+using Application.Users;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
@@ -19,6 +19,8 @@ public static class InjectionExtensions
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         return services.AddTransient<IContractService, ContractService>()
+                       .AddTransient<IStatusUpdateService, NotificationService>()
+                       .AddTransient<IUserService, UserService>()
                        .AddScoped(typeof(SearchEngine<>))
                        .AddTransient<IStatusUpdateService, NotificationService>();
     }
