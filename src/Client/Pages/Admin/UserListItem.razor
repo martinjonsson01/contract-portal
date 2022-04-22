@@ -1,0 +1,14 @@
+@using Domain.Users
+@inject HttpClient _http
+
+<div id="@User.Name" class="list-group-item d-flex justify-content-between" style="max-width: 50%">
+    @User.Name
+</div>
+
+@code {
+    /// <summary>
+    /// The user.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public User User { get; set; } = new();
+}
