@@ -58,7 +58,7 @@ public class SubstringSearchModuleTests
     }
 
     [Fact]
-    public void Match_ReturnsFalse_WhenQueryContainsMultipleWordsAbsentFromTheDescription()
+    public void Match_ReturnsFalse_WhenQueryIsEntirelyDifferentFromDescription()
     {
         // Arrange
         var contract = new Contract { Description = "A longer description to match against", };
