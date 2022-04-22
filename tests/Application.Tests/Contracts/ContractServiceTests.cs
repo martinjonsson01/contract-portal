@@ -2,6 +2,7 @@
 
 using Application.Contracts;
 using Application.Exceptions;
+using Application.Search;
 
 using Domain.Contracts;
 
@@ -15,7 +16,7 @@ public class ContractServiceTests
     public ContractServiceTests()
     {
         _mockRepo = new Mock<IContractRepository>();
-        _cut = new ContractService(_mockRepo.Object);
+        _cut = new ContractService(_mockRepo.Object, new SearchEngine<Contract>());
     }
 
     [Fact]
@@ -130,5 +131,41 @@ public class ContractServiceTests
 
         // Assert
         actual.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void FetchFavorite_CallsFavoriteFromRepoExactlyOnce()
+    {
+        // Act
+        _cut.FetchFavorites();
+
+        // Assert
+        _mockRepo.Verify(repo => repo.Favorites, Times.Exactly(1));
+    }
+
+    [Fact]
+    public void FetchingContract_ReturnsContractFromRepo_WhenContractExists()
+    {
+        // Arrange
+        var expected = new Contract();
+        _mockRepo.Setup(repository => repository.FetchContract(expected.Id)).Returns(expected);
+
+        // Act
+        Contract actual = _cut.FetchContract(expected.Id);
+
+        // Assert
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public void FetchingContract_ThrowsException_WhenContractDoesNotExist()
+    {
+        // Arrange
+
+        // Act
+        Action fetch = () => _cut.FetchContract(Guid.NewGuid());
+
+        // Assert
+        fetch.Should().Throw<ContractDoesNotExistException>();
     }
 }

@@ -12,6 +12,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson();
 
 WebApplication app = builder.Build();
 

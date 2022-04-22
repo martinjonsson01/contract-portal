@@ -2,7 +2,7 @@
 using Application.Exceptions;
 
 using Domain.Contracts;
-
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -25,6 +25,34 @@ public class ContractsController : BaseApiController<ContractsController>
         : base(logger)
     {
         _contracts = contracts;
+    }
+
+    /// <summary>
+    /// Gets all favorite marked contracts.
+    /// </summary>
+    /// <returns>Favorite marked contracts.</returns>
+    [HttpGet("favorites")]
+    public IEnumerable<Contract> Favorites()
+    {
+        return _contracts.FetchFavorites();
+    }
+
+    /// <summary>
+    /// Updates the contract.
+    /// </summary>
+    /// <param name="patchDocument">The patch to use to update the contract.</param>
+    /// <param name="id">The id of the contract to update.</param>
+    /// <returns>The updated contract.</returns>
+    [HttpPatch("{id:guid}")]
+    public IActionResult UpdateContract([FromBody] JsonPatchDocument<Contract> patchDocument, Guid id)
+    {
+        Contract contract = _contracts.FetchContract(id);
+        patchDocument.ApplyTo(contract, ModelState);
+        _contracts.UpdateContract(contract);
+
+        // Can't place model in an invalid state at the moment, as all states are considered valid.
+        // In the future we might want to add model validation here.
+        return new ObjectResult(contract);
     }
 
     /// <summary>
