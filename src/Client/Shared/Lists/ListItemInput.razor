@@ -1,0 +1,59 @@
+﻿<InputText class="form-control list-item-input"
+           placeholder="@Placeholder"
+           @bind-Value="@Item"
+           @onkeydown="OnKeyDown"/>
+
+@code {
+
+
+    /// <summary>
+    /// Identifier that can be used to distinguish between different list items containing the same text.
+    /// </summary>
+    [Parameter]
+    public int Id { get; set; } = -1;
+
+    /// <summary>
+    /// The item this input element represents.
+    /// </summary>
+    [Parameter]
+    public string Item
+    {
+        get => _item;
+        set
+        {
+            string oldItem = _item;
+            _item = value;
+
+            if (!_item.Equals(oldItem))
+                ValueChanged.InvokeAsync((_item, Id));
+        }
+    }
+
+    /// <summary>
+    /// A text placeholder that will be placed inside of the input field.
+    /// </summary>
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Called when the enter key is pressed while the text field is in focus.
+    /// </summary>
+    [Parameter]
+    public EventCallback EnterPressed { get; set; } = EventCallback.Empty;
+
+    /// <summary>
+    /// Called when the value of this item has been changed.
+    /// </summary>
+    [Parameter]
+    public EventCallback<(string, int)> ValueChanged { get; set; } = EventCallback<(string, int)>.Empty;
+
+    private string _item = string.Empty;
+
+    private async Task OnKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Code != "Enter") return;
+
+        await EnterPressed.InvokeAsync();
+    }
+
+}
