@@ -34,6 +34,6 @@ public class EditDistanceScorer : IScorer<Contract>
     /// </returns>
     public double Score(Contract entity, string query)
     {
-        return 1d;
+        return string.IsNullOrEmpty(query) ? 0d : 1d;
     }
 }
