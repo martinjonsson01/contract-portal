@@ -28,19 +28,6 @@ public class SearchEngineTests
     }
 
     [Fact]
-    public void Search_ReturnsAllEntities_WhenThereAreNoModules()
-    {
-        // Arrange
-        int[] entities = { 1, 2, 3, 4, };
-
-        // Act
-        IEnumerable<int> results = _cut.Search("59", entities);
-
-        // Assert
-        results.Should().BeEquivalentTo(entities);
-    }
-
-    [Fact]
     public void SearchWithModule_ReturnsResultsDependingOnTheModule()
     {
         // Arrange
