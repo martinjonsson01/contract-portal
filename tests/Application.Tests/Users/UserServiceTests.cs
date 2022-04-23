@@ -42,4 +42,19 @@ public class UserServiceTests
         // Assert
         add.Should().NotThrow();
     }
+
+    [Fact]
+    public void FetchAllUsers_ReturnsAllUsersInTheDatabase()
+    {
+        // Arrange
+        const int numberOfUsers = 10;
+        List<User> mockUsers = new Faker<User>().Generate(numberOfUsers);
+        _mockRepo.Setup(repository => repository.All).Returns(mockUsers);
+
+        // Act
+        IEnumerable<User> users = _cut.FetchAllUsers();
+
+        // Assert
+        users.Should().HaveCount(numberOfUsers);
+    }
 }

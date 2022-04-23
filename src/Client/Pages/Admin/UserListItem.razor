@@ -1,0 +1,15 @@
+@using Domain.Users
+@inject HttpClient _http
+
+<div id=@($"user_id_{User.Id}") class="list-group-item" style="max-width: 50%">
+    <p>@User.Name</p>
+    <p>Senaste betaldatum: @User.LatestPaymentDate.ToShortDateString()</p>
+</div>
+
+@code {
+    /// <summary>
+    /// The user.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public User User { get; set; } = new();
+}
