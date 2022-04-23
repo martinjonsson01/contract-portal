@@ -86,4 +86,18 @@ public class TagSearchModuleTests
         // Assert
         matches.Should().BeTrue();
     }
+
+    [Fact]
+    public void Match_ReturnsFalse_WhenQueryIsEmpty()
+    {
+        // Arrange
+        string[] tags = { "Tag1", "Tag2", "Tag3", };
+        var contract = new Contract { Tags = tags, };
+
+        // Act
+        bool matches = _cut.Match(contract, string.Empty);
+
+        // Assert
+        matches.Should().BeFalse();
+    }
 }
