@@ -1,6 +1,5 @@
 using System;
 using Application.Exceptions;
-using Application.Search;
 using Application.Users;
 using Domain.Users;
 
@@ -14,7 +13,7 @@ public class UserServiceTests
     public UserServiceTests()
     {
         _mockRepo = new Mock<IUserRepository>();
-        _cut = new UserService(_mockRepo.Object, new SearchEngine<User>());
+        _cut = new UserService(_mockRepo.Object);
     }
 
     [Fact]
@@ -57,19 +56,5 @@ public class UserServiceTests
 
         // Assert
         users.Should().HaveCount(numberOfUsers);
-    }
-
-    [Fact]
-    public void Searching_ReturnsAllUsers_WhenQueryIsEmpty()
-    {
-        // Arrange
-        List<User> expected = new Faker<User>().Generate(10);
-        _mockRepo.Setup(repository => repository.All).Returns(expected);
-
-        // Act
-        IEnumerable<User> actual = _cut.Search(string.Empty);
-
-        // Assert
-        actual.Should().BeEquivalentTo(expected);
     }
 }
