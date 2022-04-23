@@ -28,9 +28,6 @@ public class BodyTextSearch : ISearchModule<Contract>
     {
         string text = _selector(entity);
 
-        if (string.IsNullOrEmpty(query))
-            return false;
-
         string[] substrings = query.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
         return substrings.Any(predicate: s => text.Contains(s, StringComparison.OrdinalIgnoreCase));
