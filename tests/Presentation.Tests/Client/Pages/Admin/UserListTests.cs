@@ -8,7 +8,7 @@ namespace Presentation.Tests.Client.Pages.Admin;
 public class UserListTests : UITestFixture
 {
     [Fact]
-    public void AddingContract_RendersTheNewContract()
+    public void AddingUser_RendersTheNewUser()
     {
         // Arrange
         User[] users = { new User() { Name = "First", }, new User() { Name = "Second", } };
