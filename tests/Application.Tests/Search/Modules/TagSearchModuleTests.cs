@@ -8,10 +8,14 @@ namespace Application.Tests.Search.Modules;
 public class TagSearchModuleTests
 {
     private readonly ISearchModule<Contract> _cut;
+    private readonly Contract _contract;
 
     public TagSearchModuleTests()
     {
         _cut = new TagSearch();
+
+        string[] tags = { "Tag1", "Tag2", "Tag3", };
+        _contract = new Contract { Tags = tags, };
     }
 
     [Theory]
@@ -21,11 +25,9 @@ public class TagSearchModuleTests
     public void Match_ReturnsTrue_WhenQueryIsOneOfTheTags(int tagIndex)
     {
         // Arrange
-        string[] tags = { "Tag1", "Tag2", "Tag3", };
-        var contract = new Contract { Tags = tags, };
 
         // Act
-        bool matches = _cut.Match(contract, tags[tagIndex]);
+        bool matches = _cut.Match(_contract, _contract.Tags[tagIndex]);
 
         // Assert
         matches.Should().BeTrue();
@@ -35,11 +37,9 @@ public class TagSearchModuleTests
     public void Match_ReturnsFalse_WhenQueryIsNoneOfTheTags()
     {
         // Arrange
-        string[] tags = { "Tag1", "Tag2", "Tag3", };
-        var contract = new Contract { Tags = tags, };
 
         // Act
-        bool matches = _cut.Match(contract, "other-tag");
+        bool matches = _cut.Match(_contract, "other-tag");
 
         // Assert
         matches.Should().BeFalse();
@@ -49,11 +49,9 @@ public class TagSearchModuleTests
     public void Match_ReturnsFalse_WhenQueryIsPartialTag()
     {
         // Arrange
-        string[] tags = { "Tag1", "Tag2", "Tag3", };
-        var contract = new Contract { Tags = tags, };
 
         // Act
-        bool matches = _cut.Match(contract, tags[0].Substring(2));
+        bool matches = _cut.Match(_contract, _contract.Tags[0].Substring(2));
 
         // Assert
         matches.Should().BeFalse();
@@ -63,11 +61,9 @@ public class TagSearchModuleTests
     public void Match_ReturnsTrue_WhenQueryContainsAllTags()
     {
         // Arrange
-        string[] tags = { "Tag1", "Tag2", "Tag3", };
-        var contract = new Contract { Tags = tags, };
 
         // Act
-        bool matches = _cut.Match(contract, string.Join(' ', tags));
+        bool matches = _cut.Match(_contract, string.Join(' ', _contract.Tags));
 
         // Assert
         matches.Should().BeTrue();
@@ -77,11 +73,9 @@ public class TagSearchModuleTests
     public void Match_ReturnsTrue_WhenQueryIsInOtherCaseThanTag()
     {
         // Arrange
-        string[] tags = { "Tag1", "Tag2", "Tag3", };
-        var contract = new Contract { Tags = tags, };
 
         // Act
-        bool matches = _cut.Match(contract, tags[0].ToUpperInvariant());
+        bool matches = _cut.Match(_contract, _contract.Tags[0].ToUpperInvariant());
 
         // Assert
         matches.Should().BeTrue();
@@ -91,11 +85,9 @@ public class TagSearchModuleTests
     public void Match_ReturnsFalse_WhenQueryIsEmpty()
     {
         // Arrange
-        string[] tags = { "Tag1", "Tag2", "Tag3", };
-        var contract = new Contract { Tags = tags, };
 
         // Act
-        bool matches = _cut.Match(contract, string.Empty);
+        bool matches = _cut.Match(_contract, string.Empty);
 
         // Assert
         matches.Should().BeFalse();
