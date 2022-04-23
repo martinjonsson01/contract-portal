@@ -29,7 +29,7 @@ public class SimpleTextSearchModuleTests
     }
 
     [Fact]
-    public void Match_ReturnsTrue_WhenQueryIsEmpty()
+    public void Match_ReturnsFalse_WhenQueryIsEmpty()
     {
         // Arrange
         var contract = new Contract { Name = "Contract name", };
@@ -38,7 +38,7 @@ public class SimpleTextSearchModuleTests
         bool matches = _cut.Match(contract, string.Empty);
 
         // Assert
-        matches.Should().BeTrue();
+        matches.Should().BeFalse();
     }
 
     [Fact]
