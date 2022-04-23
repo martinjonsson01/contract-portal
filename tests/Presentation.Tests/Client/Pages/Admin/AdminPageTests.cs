@@ -6,6 +6,7 @@ using Client.Pages.Admin;
 using Client.Pages.Contracts;
 
 using Domain.Contracts;
+using Domain.Users;
 
 namespace Presentation.Tests.Client.Pages.Admin;
 
@@ -37,6 +38,7 @@ public class AdminPageTests : UITestFixture
         Context.JSInterop.SetupVoid("Blazor._internal.InputFile.init", _ => true);
         IEnumerable<Contract> fakeContracts = new Faker<Contract>().Generate(10);
         MockHttp.When("/api/v1/contracts").RespondJson(fakeContracts);
+        MockHttp.When("/api/v1/users").RespondJson(Enumerable.Empty<User>());
 
         // Act
         IRenderedComponent<AdminPage> cut = Context.RenderComponent<AdminPage>();

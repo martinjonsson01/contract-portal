@@ -1,5 +1,6 @@
 @page "/admin"
 @using Domain.Contracts
+@using Domain.Users
 
 <h2>Adminsida</h2>
 
@@ -7,14 +8,22 @@
 <hr/>
 <ContractList @ref="@_contractList"/>
 <hr/>
-<UserForm/>
+<UserForm OnUserAdded="AddUserToList"/>
+<hr/>
+<UserList @ref="@_userList"/>
 
 @code {
 
     private ContractList _contractList = null!;
+    private UserList _userList = null!;
 
     private void OnNewContractAdded(Contract contract)
     {
         _contractList.Add(contract);
+    }
+
+    private void AddUserToList(User user)
+    {
+        _userList.Add(user);
     }
 }

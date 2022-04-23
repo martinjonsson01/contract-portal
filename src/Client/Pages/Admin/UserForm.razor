@@ -36,14 +36,14 @@
     /// Called when a user has been added successfully.
     /// </summary>
     [Parameter]
-    public EventCallback<User> UserAdded { get; set; } = EventCallback<User>.Empty;
+    public EventCallback<User> OnUserAdded { get; set; } = EventCallback<User>.Empty;
 
     private async Task AddUser()
     {
         HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users", _user);
         if (response.IsSuccessStatusCode)
         {
-            await UserAdded.InvokeAsync(_user);
+            await OnUserAdded.InvokeAsync(_user);
             _user = CreateUnspecifiedUser();
         }
     }
