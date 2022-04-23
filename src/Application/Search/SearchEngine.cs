@@ -20,7 +20,7 @@ public class SearchEngine<TEntity>
         if (string.IsNullOrEmpty(query) || !_modules.Any())
             return entities;
 
-        ICollection<(TEntity entity, ISearchModule<TEntity> module)> entitiesMatchedByModule =
+        ICollection<(TEntity entity, double moduleWeight)> entitiesMatchedByModule =
             FindMatches(query, entities);
 
         IEnumerable<(TEntity entity, double maxWeight)> entitiesWithWeights = FindWeights(entitiesMatchedByModule);
@@ -38,11 +38,11 @@ public class SearchEngine<TEntity>
     }
 
     private static IEnumerable<(TEntity entity, double maxWeight)> FindWeights(
-        ICollection<(TEntity entity, ISearchModule<TEntity> module)> entitiesMatchedByModule)
+        ICollection<(TEntity entity, double moduleWeight)> entitiesMatchedByModule)
     {
         return from entity in entitiesMatchedByModule.Select(tuple => tuple.entity).Distinct()
                let weights = entitiesMatchedByModule.Where(pair => pair.entity.Equals(entity))
-                                                    .Select(pair => pair.module.Weight)
+                                                    .Select(pair => pair.moduleWeight)
                let maxWeight = weights.Sum()
                select (entity, maxWeight);
     }
@@ -54,13 +54,13 @@ public class SearchEngine<TEntity>
                                   .Select(tuple => tuple.entity);
     }
 
-    private ICollection<(TEntity entity, ISearchModule<TEntity> module)> FindMatches(
+    private ICollection<(TEntity entity, double moduleWeight)> FindMatches(
         string query,
         IEnumerable<TEntity> entities)
     {
         return (from entity in entities
                 from module in _modules
                 where module.Match(entity, query)
-                select (entity, module)).ToList();
+                select (entity, module.Weight)).ToList();
     }
 }
