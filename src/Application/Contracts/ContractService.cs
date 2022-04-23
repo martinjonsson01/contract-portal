@@ -23,6 +23,7 @@ public class ContractService : IContractService
         _search = search;
         _search.AddModule(new SimpleTextSearch(contract => contract.Name, 5d));
         _search.AddModule(new SimpleTextSearch(contract => contract.SupplierName, 1d));
+        _search.AddModule(new TagSearch { Weight = 5d, });
     }
 
     /// <inheritdoc />

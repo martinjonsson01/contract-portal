@@ -47,4 +47,14 @@ public class UsersController : BaseApiController<UsersController>
 
         return Ok();
     }
+
+    /// <summary>
+    /// Gets all users.
+    /// </summary>
+    /// <returns>All the stored users.</returns>
+    [HttpGet]
+    public IEnumerable<User> GetAll()
+    {
+        return _users.FetchAllUsers();
+    }
 }

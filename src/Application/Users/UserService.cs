@@ -25,4 +25,10 @@ public class UserService : IUserService
 
         _repo.Add(user);
     }
+
+    /// <inheritdoc />
+    public IEnumerable<User> FetchAllUsers()
+    {
+        return _repo.All;
+    }
 }
