@@ -7,16 +7,21 @@ namespace Application.Search.Modules;
 /// </summary>
 public class SimpleTextSearch : ISearchModule<Contract>
 {
-    private readonly Func<Contract, string> _selector;
-
     /// <summary>
     /// Constructs a <see cref="SimpleTextSearch"/> module for a given property of a <see cref="Contract"/>.
     /// </summary>
     /// <param name="selector">A delegate that returns the contents of one of the properties of a <see cref="Contract"/>.</param>
-    public SimpleTextSearch(Func<Contract, string> selector)
+    /// <param name="weight">How the matches of this search module should be weighted relative to other modules.</param>
+    public SimpleTextSearch(Func<Contract, string> selector, double weight = 1d)
     {
-        _selector = selector;
+        Weight = weight;
+        Selector = selector;
     }
+
+    /// <inheritdoc />
+    public double Weight { get; }
+
+    private Func<Contract, string> Selector { get; }
 
     /// <summary>
     /// Matches a <see cref="Contract"/> property to the given query.
@@ -26,7 +31,7 @@ public class SimpleTextSearch : ISearchModule<Contract>
     /// <returns>Whether the contract matches the name in the query or not.</returns>
     public bool Match(Contract entity, string query)
     {
-        string text = _selector(entity);
+        string text = Selector(entity);
         return text.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                query.Contains(text, StringComparison.OrdinalIgnoreCase);
     }

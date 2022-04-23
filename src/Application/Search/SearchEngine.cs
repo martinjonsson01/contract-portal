@@ -1,12 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Application.Search;
+﻿namespace Application.Search;
 
 /// <summary>
 /// A general search engine that can be used for querying a collection of entities.
 /// </summary>
 /// <typeparam name="TEntity">The type of the entities to perform queries on.</typeparam>
 public class SearchEngine<TEntity>
+    where TEntity : notnull
 {
     private readonly ICollection<ISearchModule<TEntity>> _modules = new List<ISearchModule<TEntity>>();
 
@@ -16,14 +15,23 @@ public class SearchEngine<TEntity>
     /// <param name="query">The input search criteria.</param>
     /// <param name="entities">The entities to search through.</param>
     /// <returns>The entities that match the query.</returns>
-    [SuppressMessage("Style", "IDE0046:Convert to conditional expression", Justification = "Readability.")]
     public IEnumerable<TEntity> Search(string query, IEnumerable<TEntity> entities)
     {
         if (string.IsNullOrEmpty(query) || !_modules.Any())
             return entities;
 
-        return entities.Where(entity => _modules.Any(module => module.Match(entity, query)))
-                       .ToList();
+        var entitiesMatchedByModule = (from entity in entities
+                                       from module in _modules
+                                       where module.Match(entity, query)
+                                       select (entity, module)).ToList();
+
+        var entitiesWithWeights = (from entity in entitiesMatchedByModule.Select(tuple => tuple.entity).Distinct()
+                                   let weights = entitiesMatchedByModule.Where(pair => pair.entity.Equals(entity))
+                                                                        .Select(pair => pair.module.Weight)
+                                   let maxWeight = weights.Max()
+                                   select (entity, maxWeight)).ToList();
+
+        return entitiesWithWeights.OrderByDescending(tuple => tuple.maxWeight).Select(tuple => tuple.entity).ToList();
     }
 
     /// <summary>

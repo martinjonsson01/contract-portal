@@ -59,15 +59,15 @@ public class SearchEngineTests
     public void SearchWithModule_ReturnsMultipleMatches_WhenThereAreMultipleElementsThatMatch()
     {
         // Arrange
-        ISearchModule<int> module = new TextMatcher();
+        ISearchModule<int> module = new DivisibleMatcher();
         _cut.AddModule(module);
-        int[] numbers = { 1, 1, 1, 2, 3, };
+        int[] numbers = { 2, 4, 6, 1, 3, };
 
         // Act
-        IEnumerable<int> actual = _cut.Search("1", numbers);
+        IEnumerable<int> actual = _cut.Search("2", numbers);
 
         // Assert
-        actual.Should().BeEquivalentTo(new[] { 1, 1, 1, });
+        actual.Should().BeEquivalentTo(new[] { 2, 4, 6, });
     }
 
     [Fact]
@@ -102,6 +102,8 @@ public class SearchEngineTests
 
     private class TextMatcher : ISearchModule<int>
     {
+        public virtual double Weight => 1d;
+
         public virtual bool Match(int entity, string query)
         {
             return entity.ToString(CultureInfo.InvariantCulture).Equals(query, StringComparison.Ordinal);
@@ -110,6 +112,8 @@ public class SearchEngineTests
 
     private class DivisibleMatcher : ISearchModule<int>
     {
+        public virtual double Weight => 1d;
+
         public virtual bool Match(int entity, string query)
         {
             if (int.TryParse(query, out int divisor))

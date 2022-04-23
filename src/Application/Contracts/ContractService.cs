@@ -21,8 +21,8 @@ public class ContractService : IContractService
     {
         _repo = repo;
         _search = search;
-        _search.AddModule(new SimpleTextSearch(contract => contract.Name));
-        _search.AddModule(new SimpleTextSearch(contract => contract.SupplierName));
+        _search.AddModule(new SimpleTextSearch(contract => contract.Name, 5d));
+        _search.AddModule(new SimpleTextSearch(contract => contract.SupplierName, 1d));
     }
 
     /// <inheritdoc />
