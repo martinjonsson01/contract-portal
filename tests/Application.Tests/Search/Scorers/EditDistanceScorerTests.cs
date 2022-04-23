@@ -38,4 +38,20 @@ public class EditDistanceScorerTests
         // Assert
         score.Should().BeApproximately(0.0d, Precision);
     }
+
+    [Fact]
+    public void Score_IsHalf_WhenQueryIsHalfOfProperty()
+    {
+        // Arrange
+        var cut = new EditDistanceScorer(contract => contract.Name);
+
+        const string name = "Name of contract";
+        var contract = new Contract { Name = name, };
+
+        // Act
+        double score = cut.Score(contract, name.Substring(name.Length / 2));
+
+        // Assert
+        score.Should().BeApproximately(0.5d, Precision);
+    }
 }

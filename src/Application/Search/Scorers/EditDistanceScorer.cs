@@ -15,12 +15,15 @@ namespace Application.Search.Scorers;
 /// </summary>
 public class EditDistanceScorer : IScorer<Contract>
 {
+    private readonly Func<Contract, string> _selector;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="EditDistanceScorer"/> class with a given selector delegate.
     /// </summary>
     /// <param name="selector">A delegate that converts a contract into a string by selecting one of its properties.</param>
     public EditDistanceScorer(Func<Contract, string> selector)
     {
+        _selector = selector;
     }
 
     /// <summary>
@@ -34,6 +37,13 @@ public class EditDistanceScorer : IScorer<Contract>
     /// </returns>
     public double Score(Contract entity, string query)
     {
-        return string.IsNullOrEmpty(query) ? 0d : 1d;
+        string property = _selector(entity);
+        double fraction = (double)query.Length / property.Length;
+        return Lerp(0d, 1d, fraction);
+    }
+
+    private static double Lerp(double firstFloat, double secondFloat, double by)
+    {
+        return (firstFloat * (1 - by)) + (secondFloat * by);
     }
 }
