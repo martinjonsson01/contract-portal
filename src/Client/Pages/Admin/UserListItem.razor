@@ -1,9 +1,9 @@
 @using Domain.Users
 @inject HttpClient _http
 
-<div id=@($"user_id_{User.Id}") class="list-group-item d-flex justify-content-between" style="max-width: 50%">
-    @User.Name <br>
-    Senaste betaldatum: @User.LatestPaymentDate.ToShortDateString()
+<div id=@($"user_id_{User.Id}") class="list-group-item" style="max-width: 50%">
+    <p>@User.Name</p>
+    <p>Senaste betaldatum: @User.LatestPaymentDate.ToShortDateString()</p>
 </div>
 
 @code {
