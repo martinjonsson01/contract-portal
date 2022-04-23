@@ -34,4 +34,22 @@ public class UserListItemTests : IDisposable
         // Assert
         cut.Find($"#user_id_{user.Id}").TextContent.Should().Contain(name);
     }
+
+    [Fact]
+    public void UserListItem_ContainsLatestPaymentDate()
+    {
+        // Arrange
+        DateTime latestPaymentDate = DateTime.Now;
+        var user = new User() { LatestPaymentDate = latestPaymentDate };
+
+        void ParameterBuilder(ComponentParameterCollectionBuilder<UserListItem> parameters) =>
+            parameters.Add(property => property.User, user);
+
+        // Act
+        IRenderedComponent<UserListItem> cut =
+            _context.RenderComponent<UserListItem>(ParameterBuilder);
+
+        // Assert
+        cut.Find($"#user_id_{user.Id}").TextContent.Should().Contain(latestPaymentDate.ToShortDateString());
+    }
 }
