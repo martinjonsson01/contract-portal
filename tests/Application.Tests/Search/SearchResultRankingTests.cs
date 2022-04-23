@@ -14,14 +14,15 @@ public class SearchResultRankingTests
     public SearchResultRankingTests()
     {
         _cut = new SearchEngine<Contract>();
-        _cut.AddModule(new SimpleTextSearch(contract => contract.Name, 5d));
-        _cut.AddModule(new SimpleTextSearch(contract => contract.Description, 1d));
     }
 
     [Fact]
     public void Searching_SortsContractWithMatchingNameFirst_WhenThereIsAnotherOneWithMatchingDescription()
     {
         // Arrange
+        _cut.AddModule(new SimpleTextSearch(contract => contract.Name, 5d));
+        _cut.AddModule(new SimpleTextSearch(contract => contract.Description, 1d));
+
         const string content = "Contract content here";
         var nameContract = new Contract { Name = content, };
         var contracts = new Contract[] { new() { Description = content, }, nameContract, };
@@ -33,12 +34,29 @@ public class SearchResultRankingTests
         results.First().Should().BeEquivalentTo(nameContract);
     }
 
-    // TODO: matches from a single module should be ordered internally, and the module itself should have an order in
-    // TODO: the greater scheme of things (against other modules)
+    [Fact]
+    public void Searching_SortsContractWithMultipleLowerMatchesFirst_WhenThereIsAnotherWithASingleHighWeightMatch()
+    {
+        // Arrange
+        _cut.AddModule(new SimpleTextSearch(contract => contract.Name, 5d));
+        _cut.AddModule(new SimpleTextSearch(contract => contract.Description, 2d));
+        _cut.AddModule(new SimpleTextSearch(contract => contract.Instructions, 2d));
+        _cut.AddModule(new SimpleTextSearch(contract => contract.SupplierName, 2d));
 
-    // TODO: sort in descending order of close-to-query
+        const string content = "Contract content here";
+        var contractWithSingleHighValueMatch = new Contract { Name = content, };
+        var contractWithMultipleLowValueMatches = new Contract
+        {
+            Description = content,
+            Instructions = content,
+            SupplierName = content,
+        };
+        var contracts = new Contract[] { contractWithSingleHighValueMatch, contractWithMultipleLowValueMatches, };
 
-    // TODO: use a scoring system that accumulates from different search modules for a single contract
+        // Act
+        IEnumerable<Contract> results = _cut.Search(content, contracts).ToList();
 
-    // TODO: use comparers with a constructor taking in the query
+        // Assert
+        results.First().Should().BeEquivalentTo(contractWithMultipleLowValueMatches);
+    }
 }

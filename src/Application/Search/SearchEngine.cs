@@ -43,7 +43,7 @@ public class SearchEngine<TEntity>
         return from entity in entitiesMatchedByModule.Select(tuple => tuple.entity).Distinct()
                let weights = entitiesMatchedByModule.Where(pair => pair.entity.Equals(entity))
                                                     .Select(pair => pair.module.Weight)
-               let maxWeight = weights.Max()
+               let maxWeight = weights.Sum()
                select (entity, maxWeight);
     }
 
