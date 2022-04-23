@@ -18,7 +18,7 @@ public class UserListItemTests : IDisposable
     }
 
     [Fact]
-    public void UserListItem_ContainsTitle()
+    public void UserListItem_ContainsName()
     {
         // Arrange
         const string name = "Foo";
@@ -32,6 +32,6 @@ public class UserListItemTests : IDisposable
             _context.RenderComponent<UserListItem>(ParameterBuilder);
 
         // Assert
-        cut.Find($"#{user.Name}").TextContent.Should().Contain(name);
+        cut.Find($"#user_id_{user.Id}").TextContent.Should().Contain(name);
     }
 }
