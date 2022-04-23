@@ -440,6 +440,9 @@ obj/
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
+# Misc file
+.idea/**/misc.xml
+
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
