@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 
 using Application.Contracts;
+
 using Domain.Contracts;
 
 namespace Infrastructure.Contracts;
@@ -18,7 +19,16 @@ public class FakeContractRepository : IContractRepository
     /// </summary>
     public FakeContractRepository()
     {
-        _contracts = new List<Contract> { new Contract() { Name = "SJ", SupplierLogoImagePath = "images/sj.png", IsFavorite = true, }, };
+        _contracts = new List<Contract>
+        {
+            new()
+            {
+                Name = "SJ",
+                SupplierLogoImagePath = "images/sj.png",
+                IsFavorite = true,
+                Tags = new List<string> { "tåg", "räls", "järnväg", },
+            },
+        };
         _recent = new RecentContractService(new Collection<Contract>());
     }
 
