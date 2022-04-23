@@ -49,13 +49,12 @@ public class UsersController : BaseApiController<UsersController>
     }
 
     /// <summary>
-    /// Searches for users that match the given query and returns the resulting users.
+    /// Gets all users.
     /// </summary>
-    /// <param name="query">The query to filter users by.</param>
-    /// <returns>The users that match the search query.</returns>
+    /// <returns>All the stored users.</returns>
     [HttpGet]
-    public IEnumerable<User> Search(string? query)
+    public IEnumerable<User> GetAll()
     {
-        return _users.Search(query ?? string.Empty);
+        return _users.FetchAllUsers();
     }
 }

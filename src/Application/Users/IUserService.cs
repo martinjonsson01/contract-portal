@@ -18,11 +18,4 @@ public interface IUserService
     /// </summary>
     /// <param name="user">The new user.</param>
     void Add(User user);
-
-    /// <summary>
-    /// Searches for and returns users that match the given query.
-    /// </summary>
-    /// <param name="query">The query to search for.</param>
-    /// <returns>The users found.</returns>
-    IEnumerable<User> Search(string query);
 }
