@@ -23,7 +23,7 @@ public class SearchEngine<TEntity>
         ICollection<(TEntity entity, double moduleWeight)> entitiesMatchedByModule =
             FindMatches(query, entities);
 
-        IEnumerable<(TEntity entity, double maxWeight)> entitiesWithWeights = FindWeights(entitiesMatchedByModule);
+        IEnumerable<(TEntity entity, double maxWeight)> entitiesWithWeights = CalculateTotalWeights(entitiesMatchedByModule);
 
         return SortByWeights(entitiesWithWeights);
     }
@@ -37,7 +37,7 @@ public class SearchEngine<TEntity>
         _modules.Add(module);
     }
 
-    private static IEnumerable<(TEntity entity, double maxWeight)> FindWeights(
+    private static IEnumerable<(TEntity entity, double maxWeight)> CalculateTotalWeights(
         ICollection<(TEntity entity, double moduleWeight)> entitiesMatchedByModule)
     {
         return from entity in entitiesMatchedByModule.Select(tuple => tuple.entity).Distinct()
