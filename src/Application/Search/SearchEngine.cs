@@ -20,18 +20,12 @@ public class SearchEngine<TEntity>
         if (string.IsNullOrEmpty(query) || !_modules.Any())
             return entities;
 
-        var entitiesMatchedByModule = (from entity in entities
-                                       from module in _modules
-                                       where module.Match(entity, query)
-                                       select (entity, module)).ToList();
+        ICollection<(TEntity entity, ISearchModule<TEntity> module)> entitiesMatchedByModule =
+            FindMatches(query, entities);
 
-        var entitiesWithWeights = (from entity in entitiesMatchedByModule.Select(tuple => tuple.entity).Distinct()
-                                   let weights = entitiesMatchedByModule.Where(pair => pair.entity.Equals(entity))
-                                                                        .Select(pair => pair.module.Weight)
-                                   let maxWeight = weights.Max()
-                                   select (entity, maxWeight)).ToList();
+        IEnumerable<(TEntity entity, double maxWeight)> entitiesWithWeights = FindWeights(entitiesMatchedByModule);
 
-        return entitiesWithWeights.OrderByDescending(tuple => tuple.maxWeight).Select(tuple => tuple.entity).ToList();
+        return SortByWeights(entitiesWithWeights);
     }
 
     /// <summary>
@@ -41,5 +35,32 @@ public class SearchEngine<TEntity>
     public void AddModule(ISearchModule<TEntity> module)
     {
         _modules.Add(module);
+    }
+
+    private static IEnumerable<(TEntity entity, double maxWeight)> FindWeights(
+        ICollection<(TEntity entity, ISearchModule<TEntity> module)> entitiesMatchedByModule)
+    {
+        return from entity in entitiesMatchedByModule.Select(tuple => tuple.entity).Distinct()
+               let weights = entitiesMatchedByModule.Where(pair => pair.entity.Equals(entity))
+                                                    .Select(pair => pair.module.Weight)
+               let maxWeight = weights.Max()
+               select (entity, maxWeight);
+    }
+
+    private static IEnumerable<TEntity> SortByWeights(
+        IEnumerable<(TEntity entity, double maxWeight)> entitiesWithWeights)
+    {
+        return entitiesWithWeights.OrderByDescending(tuple => tuple.maxWeight)
+                                  .Select(tuple => tuple.entity);
+    }
+
+    private ICollection<(TEntity entity, ISearchModule<TEntity> module)> FindMatches(
+        string query,
+        IEnumerable<TEntity> entities)
+    {
+        return (from entity in entities
+                from module in _modules
+                where module.Match(entity, query)
+                select (entity, module)).ToList();
     }
 }
