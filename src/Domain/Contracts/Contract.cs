@@ -36,6 +36,11 @@ public class Contract
     public string FAQ { get; set; } = string.Empty;
 
     /// <summary>
+    ///     Gets the search keywords that have been tagged.
+    /// </summary>
+    public IList<string> Tags { get; init; } = new List<string>();
+
+    /// <summary>
     ///     Gets or sets image to the supplier logo.
     /// </summary>
     public string SupplierLogoImagePath { get; set; } = "images/sj.png";
