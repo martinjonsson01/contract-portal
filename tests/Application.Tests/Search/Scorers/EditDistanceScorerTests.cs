@@ -40,6 +40,36 @@ public class EditDistanceScorerTests
     }
 
     [Fact]
+    public void Score_IsZero_WhenPropertyIsEmpty()
+    {
+        // Arrange
+        var cut = new EditDistanceScorer(contract => contract.Name);
+
+        var contract = new Contract { Name = string.Empty, };
+
+        // Act
+        double score = cut.Score(contract, "Name of contract");
+
+        // Assert
+        score.Should().BeApproximately(0.0d, Precision);
+    }
+
+    [Fact]
+    public void Score_IsZero_WhenPropertyAndQueryAreEmpty()
+    {
+        // Arrange
+        var cut = new EditDistanceScorer(contract => contract.Name);
+
+        var contract = new Contract { Name = string.Empty, };
+
+        // Act
+        double score = cut.Score(contract, string.Empty);
+
+        // Assert
+        score.Should().BeApproximately(0.0d, Precision);
+    }
+
+    [Fact]
     public void Score_IsHalf_WhenQueryIsHalfOfProperty()
     {
         // Arrange

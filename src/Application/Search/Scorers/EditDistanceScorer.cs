@@ -38,12 +38,7 @@ public class EditDistanceScorer : IScorer<Contract>
     public double Score(Contract entity, string query)
     {
         string property = _selector(entity);
-        double fraction = (double)query.Length / property.Length;
-        return Lerp(0d, 1d, fraction);
-    }
 
-    private static double Lerp(double firstFloat, double secondFloat, double by)
-    {
-        return (firstFloat * (1 - by)) + (secondFloat * by);
+        return property.Length == 0 ? 0d : (double)query.Length / property.Length;
     }
 }
