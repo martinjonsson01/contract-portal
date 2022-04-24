@@ -44,7 +44,7 @@ public class SearchEngine<TEntity>
                let weights = entitiesMatchedByModule.Where(pair => pair.entity.Equals(entity))
                                                     .Select(pair => pair.moduleWeight)
                let totalWeight = weights.Sum()
-               select (entity, maxWeight);
+               select (entity, totalWeight);
     }
 
     private static IEnumerable<TEntity> SortByWeights(
