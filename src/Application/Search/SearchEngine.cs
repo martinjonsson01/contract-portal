@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using Application.Search.Modules;
+
 namespace Application.Search;
 
 /// <summary>
@@ -8,7 +10,10 @@ namespace Application.Search;
 /// <typeparam name="TEntity">The type of the entities to perform queries on.</typeparam>
 public class SearchEngine<TEntity>
 {
-    private readonly ICollection<ISearchModule<TEntity>> _modules = new List<ISearchModule<TEntity>>();
+    private readonly ICollection<ISearchModule<TEntity>> _modules = new List<ISearchModule<TEntity>>
+    {
+        new EmptySearch<TEntity>(), // By default the only module is the one that matches on empty queries.
+    };
 
     /// <summary>
     /// Performs a search on the entities, returning the ones that match the query.
@@ -19,9 +24,6 @@ public class SearchEngine<TEntity>
     [SuppressMessage("Style", "IDE0046:Convert to conditional expression", Justification = "Readability.")]
     public IEnumerable<TEntity> Search(string query, IEnumerable<TEntity> entities)
     {
-        if (string.IsNullOrEmpty(query) || !_modules.Any())
-            return entities;
-
         return entities.Where(entity => _modules.Any(module => module.Match(entity, query)))
                        .ToList();
     }
