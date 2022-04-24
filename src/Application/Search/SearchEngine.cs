@@ -20,12 +20,11 @@ public class SearchEngine<TEntity>
         if (string.IsNullOrEmpty(query) || !_modules.Any())
             return entities;
 
-        ICollection<(TEntity entity, double moduleWeight)> entitiesMatchedByModule =
-            FindMatches(query, entities);
+        ICollection<(TEntity entity, double moduleWeight)> entitiesWithModuleWeights = FindMatches(query, entities);
 
-        IEnumerable<(TEntity entity, double maxWeight)> entitiesWithWeights = CalculateTotalWeights(entitiesMatchedByModule);
+        IEnumerable<(TEntity entity, double weight)> weightedEntities = CalculateTotalWeights(entitiesWithModuleWeights);
 
-        return SortByWeights(entitiesWithWeights);
+        return SortByWeights(weightedEntities);
     }
 
     /// <summary>
@@ -37,20 +36,26 @@ public class SearchEngine<TEntity>
         _modules.Add(module);
     }
 
-    private static IEnumerable<(TEntity entity, double maxWeight)> CalculateTotalWeights(
-        ICollection<(TEntity entity, double moduleWeight)> entitiesMatchedByModule)
+    private static IEnumerable<(TEntity entity, double weight)> CalculateTotalWeights(
+        ICollection<(TEntity entity, double moduleWeight)> entitiesWithModuleWeights)
     {
-        return from entity in entitiesMatchedByModule.Select(tuple => tuple.entity).Distinct()
-               let weights = entitiesMatchedByModule.Where(pair => pair.entity.Equals(entity))
-                                                    .Select(pair => pair.moduleWeight)
-               let totalWeight = weights.Sum()
+        return from entity in entitiesWithModuleWeights.Select(tuple => tuple.entity).Distinct()
+               let totalWeight = CalculateTotalWeight(entity, entitiesWithModuleWeights)
                select (entity, totalWeight);
     }
 
-    private static IEnumerable<TEntity> SortByWeights(
-        IEnumerable<(TEntity entity, double maxWeight)> entitiesWithWeights)
+    private static double CalculateTotalWeight(
+        TEntity entity,
+        IEnumerable<(TEntity entity, double moduleWeight)> entitiesWithModuleWeights)
     {
-        return entitiesWithWeights.OrderByDescending(tuple => tuple.maxWeight)
+        return entitiesWithModuleWeights.Where(pair => pair.entity.Equals(entity)).Select(pair => pair.moduleWeight)
+                                      .Sum();
+    }
+
+    private static IEnumerable<TEntity> SortByWeights(
+        IEnumerable<(TEntity entity, double weight)> weightedEntities)
+    {
+        return weightedEntities.OrderByDescending(tuple => tuple.weight)
                                   .Select(tuple => tuple.entity);
     }
 
