@@ -31,6 +31,9 @@ public class SimpleTextSearch : ISearchModule<Contract>
     /// <returns>Whether the contract matches the name in the query or not.</returns>
     public bool Match(Contract entity, string query)
     {
+        if (string.IsNullOrEmpty(query))
+            return false;
+
         string text = Selector(entity);
         return text.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                query.Contains(text, StringComparison.OrdinalIgnoreCase);

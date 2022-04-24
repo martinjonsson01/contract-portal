@@ -1,4 +1,6 @@
-﻿namespace Application.Search;
+using Application.Search.Modules;
+
+namespace Application.Search;
 
 /// <summary>
 /// A general search engine that can be used for querying a collection of entities.
@@ -7,7 +9,10 @@
 public class SearchEngine<TEntity>
     where TEntity : notnull
 {
-    private readonly ICollection<ISearchModule<TEntity>> _modules = new List<ISearchModule<TEntity>>();
+    private readonly ICollection<ISearchModule<TEntity>> _modules = new List<ISearchModule<TEntity>>
+    {
+        new EmptySearch<TEntity>(), // By default the only module is the one that matches on empty queries.
+    };
 
     /// <summary>
     /// Performs a search on the entities, returning the ones that match the query.
@@ -17,9 +22,6 @@ public class SearchEngine<TEntity>
     /// <returns>The entities that match the query.</returns>
     public IEnumerable<TEntity> Search(string query, IEnumerable<TEntity> entities)
     {
-        if (string.IsNullOrEmpty(query) || !_modules.Any())
-            return entities;
-
         ICollection<(TEntity entity, double moduleWeight)> entitiesWithModuleWeights = FindMatches(query, entities);
 
         IEnumerable<(TEntity entity, double weight)> weightedEntities = CalculateTotalWeights(entitiesWithModuleWeights);
