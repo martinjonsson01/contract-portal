@@ -21,11 +21,11 @@ public class ContractService : IContractService
     {
         _repo = repo;
         _search = search;
-        _search.AddModule(new BodyTextSearch(contract => contract.Description));
-        _search.AddModule(new BodyTextSearch(contract => contract.SupplierDescription));
-        _search.AddModule(new SimpleTextSearch(contract => contract.Name));
-        _search.AddModule(new SimpleTextSearch(contract => contract.SupplierName));
-        _search.AddModule(new TagSearch());
+        _search.AddModule(new SimpleTextSearch(contract => contract.Name, weight: 5d));
+        _search.AddModule(new SimpleTextSearch(contract => contract.SupplierName, weight: 1d));
+        _search.AddModule(new BodyTextSearch(contract => contract.Description, weight: 1d));
+        _search.AddModule(new BodyTextSearch(contract => contract.SupplierDescription, weight: 1d));
+        _search.AddModule(new TagSearch { Weight = 5d, });
     }
 
     /// <inheritdoc />

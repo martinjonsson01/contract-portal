@@ -10,6 +10,11 @@
 public interface ISearchModule<in TEntity>
 {
     /// <summary>
+    /// Gets how heavily the matches of this search module should be weighted relative to other modules.
+    /// </summary>
+    double Weight { get; }
+
+    /// <summary>
     /// Matches an entity to a query and returns whether it is a successful match or not.
     /// </summary>
     /// <param name="entity">The entity to analyse.</param>

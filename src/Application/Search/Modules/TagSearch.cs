@@ -7,6 +7,9 @@ namespace Application.Search.Modules;
 /// </summary>
 public class TagSearch : ISearchModule<Contract>
 {
+    /// <inheritdoc />
+    public double Weight { get; init; }
+
     /// <summary>
     /// Matches the given query against the tags in a contract.
     /// </summary>

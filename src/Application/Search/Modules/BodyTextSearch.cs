@@ -13,10 +13,15 @@ public class BodyTextSearch : ISearchModule<Contract>
     /// Constructs a <see cref="BodyTextSearch"/> module for a given property of a <see cref="Contract"/>.
     /// </summary>
     /// <param name="selector">A delegate that returns the contents of one of the properties of a <see cref="Contract"/>.</param>
-    public BodyTextSearch(Func<Contract, string> selector)
+    /// <param name="weight">How heavily the matches of this search module should be weighted relative to other modules.</param>
+    public BodyTextSearch(Func<Contract, string> selector, double weight = 1d)
     {
         _selector = selector;
+        Weight = weight;
     }
+
+    /// <inheritdoc />
+    public double Weight { get; }
 
     /// <summary>
     /// Matches a <see cref="Contract"/> property to the given query.

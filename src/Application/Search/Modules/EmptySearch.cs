@@ -6,6 +6,9 @@
 /// <typeparam name="TEntity">The type of the entity to always match empty queries against.</typeparam>
 public class EmptySearch<TEntity> : ISearchModule<TEntity>
 {
+    /// <inheritdoc />
+    public double Weight { get; } = 1d;
+
     /// <summary>
     /// Matches an entity against a query only if it is empty.
     /// </summary>
