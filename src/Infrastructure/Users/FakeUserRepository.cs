@@ -20,6 +20,7 @@ public class FakeUserRepository : DbContext, IUserRepository
     public void Add(User user)
     {
         _ = Users.Add(user);
+        _ = SaveChanges();
     }
 
     /// <inheritdoc />
