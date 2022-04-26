@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Infrastructure.Migrations
 {
-    [DbContext(typeof(FakeUserRepository))]
-    [Migration("20220426143810_InitialCreate")]
+    [DbContext(typeof(PostgresUserRepository))]
+    [Migration("20220426154702_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

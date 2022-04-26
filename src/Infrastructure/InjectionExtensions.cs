@@ -28,7 +28,7 @@ public static class InjectionExtensions
     {
         return services.AddSingleton<IContractRepository, FakeContractRepository>()
                        .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
-                       .AddSingleton<IUserRepository, FakeUserRepository>()
+                       .AddSingleton<IUserRepository, PostgresUserRepository>()
                        .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
                        {
                            IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();

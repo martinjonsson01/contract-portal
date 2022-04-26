@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Infrastructure.Migrations
 {
-    [DbContext(typeof(FakeUserRepository))]
-    partial class FakeUserRepositoryModelSnapshot : ModelSnapshot
+    [DbContext(typeof(PostgresUserRepository))]
+    partial class PostgresUserRepositoryModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

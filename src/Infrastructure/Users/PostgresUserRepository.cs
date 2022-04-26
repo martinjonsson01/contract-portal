@@ -9,7 +9,7 @@ namespace Infrastructure.Users;
 /// <summary>
 /// Mocks fake users.
 /// </summary>
-public class FakeUserRepository : DbContext, IUserRepository
+public class PostgresUserRepository : DbContext, IUserRepository
 {
     /// <inheritdoc />
     public IEnumerable<User> All => new List<User>(Users);
