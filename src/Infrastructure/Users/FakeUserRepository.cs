@@ -1,21 +1,38 @@
 using Application.Users;
+
 using Domain.Users;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Users;
 
 /// <summary>
 /// Mocks fake users.
 /// </summary>
-public class FakeUserRepository : IUserRepository
+public class FakeUserRepository : DbContext, IUserRepository
 {
-    private readonly List<User> _users = new();
-
     /// <inheritdoc />
-    public IEnumerable<User> All => new List<User>(_users);
+    public IEnumerable<User> All => new List<User>(Users);
+
+    private DbSet<User> Users { get; set; } = null!;
 
     /// <inheritdoc />
     public void Add(User user)
     {
-        _users.Add(user);
+        _ = Users.Add(user);
+    }
+
+    /// <inheritdoc />
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        _ = optionsBuilder.UseNpgsql(
+            "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
+    }
+
+    /// <inheritdoc />
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        _ = modelBuilder.Entity<User>()
+                        .HasKey(user => user.Id);
     }
 }
