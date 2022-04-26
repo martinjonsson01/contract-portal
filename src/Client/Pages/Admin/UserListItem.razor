@@ -5,11 +5,27 @@
     <p>@User.Name</p>
     <p>Senaste betaldatum: @User.LatestPaymentDate.ToShortDateString()</p>
 </div>
+<div id="@User.Name" class="list-group-item d-flex justify-content-between" style="max-width: 50%">
+     @User.Name
+     <!-- Button trigger modal -->
+     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+     <span class="oi oi-trash"></span>
+         </button>
+      <UserRemoveModal User="@User" OnUserRemoved="@OnUserRemoved"/>
+</div>
 
 @code {
+
+    /// <summary>
+    /// Called when a user has been removed successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<User> OnUserRemoved { get; set; } = EventCallback<User>.Empty;
+
     /// <summary>
     /// The user.
     /// </summary>
-    [Parameter, EditorRequired]
+    [Parameter, EditorRequired,]
     public User User { get; set; } = new();
+
 }

@@ -18,4 +18,11 @@ public interface IUserRepository
     /// </summary>
     /// <param name="user">The new user instance.</param>
     void Add(User user);
+
+    /// <summary>
+    /// Removes the user with the given ID.
+    /// </summary>
+    /// <param name="id">The id of the user to be removed.</param>
+    /// <returns>If the removal was successful.</returns>
+    bool Remove(Guid id);
 }

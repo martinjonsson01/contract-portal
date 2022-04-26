@@ -9,7 +9,7 @@
     <div class="list-group">
         @foreach (User user in users)
         {
-            <UserListItem User=@user/>
+            <UserListItem User=@user OnUserRemoved="@OnUserRemoved"/>
         }
     </div>
 
@@ -26,6 +26,18 @@
     public void Add(User user)
     {
         _dataFetcher.Data?.Add(user);
+        InvokeAsync(StateHasChanged);
+    }
+
+    /// <summary>
+    /// Removes a user from the list.
+    /// </summary>
+    /// <param name="user">The user to remove.</param>
+    private void OnUserRemoved(User user)
+    {
+    // Using null forgiving operator because because _contracts
+    // can not be null when remove button is pressed.
+        _dataFetcher.Data!.Remove(user);
         InvokeAsync(StateHasChanged);
     }
 }

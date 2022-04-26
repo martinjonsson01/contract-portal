@@ -44,6 +44,35 @@ public class UserServiceTests
     }
 
     [Fact]
+    public void RemovingUser_DoesReturnTrue_WhenAUserExists()
+    {
+        // Arrange
+        var user = new User();
+        _mockRepo.Setup(repository => repository.Remove(user.Id)).Returns(true);
+
+        // Act
+        bool actual = _cut.Remove(user.Id);
+
+        // // Assert
+        actual.Should().BeTrue();
+    }
+
+    [Fact]
+    public void RemovingUser_DoesReturnFalse_WhenNoUsersExists()
+    {
+        // Arrange
+        _mockRepo.Setup(repository => repository.All).Returns(new List<User>());
+
+        var id = Guid.NewGuid();
+
+        // Act
+        bool actual = _cut.Remove(id);
+
+        // Assert
+        actual.Should().BeFalse();
+    }
+
+    [Fact]
     public void FetchAllUsers_ReturnsAllUsersInTheDatabase()
     {
         // Arrange
