@@ -7,9 +7,9 @@
 </div>
 <div id="@User.Name" class="list-group-item d-flex justify-content-between" style="max-width: 50%">
      @User.Name
-     <!-- Button trigger modal -->
-     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-     <span class="oi oi-trash"></span>
+         <!-- Button trigger modal -->
+         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <span class="oi oi-trash"></span>
          </button>
       <UserRemoveModal User="@User" OnUserRemoved="@OnUserRemoved"/>
 </div>
