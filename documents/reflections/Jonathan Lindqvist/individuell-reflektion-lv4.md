@@ -1,4 +1,4 @@
-# Week 14
+# Week 15
 
 ## What do I want to learn or understand better?
 Kodvis vill jag förbättra hur jag använder bootstrap för att styla. Detta är för att ge en snyggare produkt när mina user stories är klara, samt för att minska arbetet i framtiden när vi går tillbaka och behöver fixa styling. Detta tänker jag göra genom att helt enkelt spendera mer tid när det kommer till att styla, vilket då innefattar att kolla igenom dokumentationen till bootstrap som jag kan använda. 
