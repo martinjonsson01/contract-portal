@@ -21,7 +21,7 @@ public class UserListTests : UITestFixture
         User[] users = { user, new User() { Name = "Second", } };
         MockHttp.When("/api/v1/users").RespondJson(users);
 
-        IRenderedComponent<UserList> cut = Context.RenderComponent<UserList>();
+        IRenderedComponent<UserTable> cut = Context.RenderComponent<UserTable>();
 
         string itemSelector = ".user-list-item";
 
@@ -40,16 +40,16 @@ public class UserListTests : UITestFixture
     }
 
     [Fact]
-    public async Task RemovingUsers_RendersWithoutTheUsersAsync()
+    public async Task RemovingUser_RendersWithoutTheUserAsync()
     {
         // Arrange
         var firstUser = new User() { Name = "first", };
-        User[] users = { firstUser, new User() { Name = "second", }, };
+        User[] users = { firstUser, new User() { Name = "Second", }, };
         MockHttp.When("/api/v1/users").RespondJson(users);
-        MockHttp.When(HttpMethod.Delete, $"/api/v1/Users/{firstUser.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
+        MockHttp.When(HttpMethod.Delete, $"/api/v1/users/{firstUser.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
 
-        IRenderedComponent<UserList> cut = Context.RenderComponent<UserList>();
-        const string removeButton = "#confirm-remove-user";
+        IRenderedComponent<UserTable> cut = Context.RenderComponent<UserTable>();
+        const string removeButton = "#confirm-remove";
         cut.WaitForElement(removeButton);
 
         // Act
@@ -58,7 +58,7 @@ public class UserListTests : UITestFixture
 
         // Assert
         Expression<Func<IElement, bool>>
-            elementWithNewName = user => user.TextContent.Contains(firstUser.Name);
-        cut.FindAll($"#user_id_").Should().NotContain(elementWithNewName);
+            elementWithNewName = contract => contract.TextContent.Contains(firstUser.Name);
+        cut.FindAll(".user-list-item").Should().NotContain(elementWithNewName);
     }
 }

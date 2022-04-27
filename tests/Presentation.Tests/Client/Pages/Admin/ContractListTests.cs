@@ -21,7 +21,7 @@ public class ContractListTests : UITestFixture
         Contract[] contracts = { new Contract() { Name = "First", }, new Contract() { Name = "Second", }, };
         MockHttp.When("/api/v1/contracts").RespondJson(contracts);
 
-        IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
+        IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
         const string itemSelector = ".contract-list-item";
         cut.WaitForElement(itemSelector);
 
@@ -48,7 +48,7 @@ public class ContractListTests : UITestFixture
             await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
             return new HttpResponseMessage(HttpStatusCode.OK);
         });
-        IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
+        IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
 
         const string newContractName = "New Contract";
         var newContract = new Contract { Name = newContractName, };
@@ -69,8 +69,8 @@ public class ContractListTests : UITestFixture
         MockHttp.When("/api/v1/contracts").RespondJson(contracts);
         MockHttp.When(HttpMethod.Delete, $"/api/v1/contracts/{firstContract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
 
-        IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
-        const string removeButton = "#confirm-remove-contract";
+        IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
+        const string removeButton = "#confirm-remove";
         cut.WaitForElement(removeButton);
 
         // Act
