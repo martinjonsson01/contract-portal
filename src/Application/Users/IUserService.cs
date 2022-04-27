@@ -22,7 +22,7 @@ public interface IUserService
     /// <summary>
     /// Removes a user.
     /// </summary>
-    /// <param name="id">user to be removed.</param>
-    /// <returns>whether the removal was successful.</returns>
+    /// <param name="id">User to be removed.</param>
+    /// <returns>Whether the removal was successful.</returns>
     bool Remove(Guid id);
 }
