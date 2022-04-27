@@ -26,7 +26,7 @@ public static class InjectionExtensions
     /// <returns>The same service container.</returns>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        return services.AddSingleton<IContractRepository, PostgresContractRepository>()
+        return services.AddDbContext<IContractRepository, PostgresContractRepository>(ServiceLifetime.Transient)
                        .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
                        .AddDbContext<IUserRepository, PostgresUserRepository>(ServiceLifetime.Transient)
                        .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
