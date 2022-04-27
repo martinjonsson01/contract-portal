@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Users;
 
 /// <summary>
-/// Mocks fake users.
+/// Stores and fetches users from a PostgreSQL database.
 /// </summary>
 public class PostgresUserRepository : DbContext, IUserRepository
 {
