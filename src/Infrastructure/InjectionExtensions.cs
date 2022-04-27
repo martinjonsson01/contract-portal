@@ -33,7 +33,7 @@ public static class InjectionExtensions
                            ConfigureDatabase,
                            ServiceLifetime.Transient)
                        .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
-                       .AddDbContext<IUserRepository, PostgresUserRepository>(
+                       .AddDbContext<IUserRepository, EFUserRepository>(
                            ConfigureDatabase,
                            ServiceLifetime.Transient)
                        .AddSingleton<IImageRepository, LocalFileRepository>(provider =>

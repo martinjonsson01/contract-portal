@@ -10,18 +10,18 @@ namespace Infrastructure.Users;
 /// <summary>
 /// Stores and fetches users from an Entity Framework Core database.
 /// </summary>
-public class PostgresUserRepository : DbContext, IUserRepository
+public class EFUserRepository : DbContext, IUserRepository
 {
-    private readonly ILogger<PostgresUserRepository> _logger;
+    private readonly ILogger<EFUserRepository> _logger;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PostgresUserRepository"/> class.
+    /// Initializes a new instance of the <see cref="EFUserRepository"/> class.
     /// </summary>
     /// <param name="options">The database configuration options.</param>
     /// <param name="logger">The logging service to use.</param>
-    public PostgresUserRepository(
-        DbContextOptions<PostgresUserRepository> options,
-        ILogger<PostgresUserRepository> logger)
+    public EFUserRepository(
+        DbContextOptions<EFUserRepository> options,
+        ILogger<EFUserRepository> logger)
         : base(options)
     {
         _logger = logger;

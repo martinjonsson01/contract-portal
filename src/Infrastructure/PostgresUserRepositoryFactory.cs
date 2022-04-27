@@ -9,16 +9,16 @@ namespace Infrastructure;
 /// <summary>
 /// Used at design-time by Entity Framework Core to generate the database migrations.
 /// </summary>
-public class PostgresUserRepositoryFactory : IDesignTimeDbContextFactory<PostgresUserRepository>
+public class PostgresUserRepositoryFactory : IDesignTimeDbContextFactory<EFUserRepository>
 {
     /// <inheritdoc />
-    public PostgresUserRepository CreateDbContext(string[] args)
+    public EFUserRepository CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<PostgresUserRepository>();
+        var optionsBuilder = new DbContextOptionsBuilder<EFUserRepository>();
         _ = optionsBuilder.UseNpgsql(
             "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
-        return new PostgresUserRepository(
+        return new EFUserRepository(
             optionsBuilder.Options,
-            new LoggerFactory().CreateLogger<PostgresUserRepository>());
+            new LoggerFactory().CreateLogger<EFUserRepository>());
     }
 }
