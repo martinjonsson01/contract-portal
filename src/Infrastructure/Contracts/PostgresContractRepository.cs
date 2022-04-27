@@ -89,7 +89,11 @@ public class PostgresContractRepository : DbContext, IContractRepository
     /// <inheritdoc />
     public void UpdateContract(Contract updatedContract)
     {
-        _ = Contracts.Update(updatedContract);
+        Contract? oldContract = FetchContract(updatedContract.Id);
+        if (oldContract is null)
+            _ = Contracts.Update(updatedContract);
+        else
+            Entry(oldContract).CurrentValues.SetValues(updatedContract);
 
         try
         {
