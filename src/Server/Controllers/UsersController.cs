@@ -57,4 +57,15 @@ public class UsersController : BaseApiController<UsersController>
     {
         return _users.FetchAllUsers();
     }
+
+    /// <summary>
+    /// Checks if a user with a certain username exists.
+    /// </summary>
+    /// <param name="username">The username.</param>
+    /// <returns>Whether a user with the specified username exists.</returns>
+    [HttpGet("validate")]
+    public bool Validate(string username)
+    {
+        return _users.UserExists(username);
+    }
 }
