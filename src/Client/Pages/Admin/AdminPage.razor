@@ -6,24 +6,24 @@
 
 <ContractForm OnContractUploaded="OnNewContractAdded"/>
 <hr/>
-<ContractList @ref="@_contractList"/>
+<ContractTable @ref="@_contractTable"/>
 <hr/>
 <UserForm OnUserAdded="AddUserToList"/>
 <hr/>
-<UserList @ref="@_userList"/>
+<UserTable @ref="@_userTable"/>
 
 @code {
 
-    private ContractList _contractList = null!;
-    private UserList _userList = null!;
+    private ContractTable _contractTable = null!;
+    private UserTable _userTable = null!;
 
     private void OnNewContractAdded(Contract contract)
     {
-        _contractList.Add(contract);
+        _contractTable.Add(contract);
     }
 
     private void AddUserToList(User user)
     {
-        _userList.Add(user);
+        _userTable.Add(user);
     }
 }

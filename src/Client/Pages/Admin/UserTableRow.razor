@@ -17,8 +17,8 @@
     </td>
     <RemoveModal
         Id=@User.Id
-        Title="Ta bort användare"
-        Message="Vill du ta bort användaren {User.Name}?"
+        Title="Ta bort användaren"
+        Message="@($"Vill du ta bort användaren {User.Name}?")"
         RemovalConfirmed="@(async () => await OnUserRemoved.InvokeAsync(User))"
     />
 </tr>

@@ -19,7 +19,7 @@
         <tbody>
         @foreach (Contract contract in contracts)
         {
-            <ContractListItem Contract=@contract OnContractRemoved=@OnContractRemoved/>
+            <ContractTableRow Contract=@contract OnContractRemoved=@Remove/>
         }
         </tbody>
     </table>
@@ -44,12 +44,15 @@
     /// Removes a contract from the list.
     /// </summary>
     /// <param name="contract">The contract to remove.</param>
-    private void OnContractRemoved(Contract contract)
+    private async void Remove(Contract contract)
     {
-    // Using null forgiving operator because because _contracts
-    // can not be null when remove button is pressed.
-        _dataFetcher.Data!.Remove(contract);
-        InvokeAsync(StateHasChanged);
+        HttpResponseMessage response = await _http.DeleteAsync($"api/v1/contracts/{contract.Id}");
+        if (response.IsSuccessStatusCode)
+        {
+            _dataFetcher.Data!.Remove(contract);
+            await InvokeAsync(StateHasChanged);
+        }
+
     }
 
 }

@@ -14,7 +14,12 @@
         </button>
     </td>
 
-    <ContractRemoveModal Contract=@Contract OnContractRemoved="@OnContractRemoved"/>
+        <RemoveModal
+        Id=@Contract.Id
+        Title="Ta bort kontrakt"
+        Message="@($"Vill du ta bort kontraktet {Contract.Name}?")"
+        RemovalConfirmed="@(async () => await OnContractRemoved.InvokeAsync(Contract))"
+    />
 </tr>
 
 
