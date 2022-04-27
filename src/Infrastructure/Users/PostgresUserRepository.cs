@@ -3,6 +3,7 @@ using Application.Users;
 using Domain.Users;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Users;
 
@@ -11,6 +12,17 @@ namespace Infrastructure.Users;
 /// </summary>
 public class PostgresUserRepository : DbContext, IUserRepository
 {
+    private readonly ILogger<PostgresUserRepository> _logger;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PostgresUserRepository"/> class.
+    /// </summary>
+    /// <param name="logger">The logging service to use.</param>
+    public PostgresUserRepository(ILogger<PostgresUserRepository> logger)
+    {
+        _logger = logger;
+    }
+
     /// <inheritdoc />
     public IEnumerable<User> All => new List<User>(Users);
 
@@ -21,6 +33,7 @@ public class PostgresUserRepository : DbContext, IUserRepository
     {
         _ = Users.Add(user);
         _ = SaveChanges();
+        _logger.LogInformation("Added a new user with name {Name} and id {Id} to the database", user.Name, user.Id);
     }
 
     /// <inheritdoc />
@@ -31,6 +44,7 @@ public class PostgresUserRepository : DbContext, IUserRepository
         // just replace the string here in the source code, use an environment variable instead.
         _ = optionsBuilder.UseNpgsql(
             "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
+        _logger.LogInformation("Established a new connection to the postgres database");
     }
 
     /// <inheritdoc />
