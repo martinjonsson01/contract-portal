@@ -1,18 +1,22 @@
 @using Domain.Users
 @inject HttpClient _http
 
-<div id=@($"user_id_{User.Id}") class="list-group-item" style="max-width: 50%">
-    <p>@User.Name</p>
-    <p>Senaste betaldatum: @User.LatestPaymentDate.ToShortDateString()</p>
-</div>
-<div id="@User.Name" class="list-group-item d-flex justify-content-between" style="max-width: 50%">
-     @User.Name
-         <!-- Button trigger modal -->
-         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<tr id=@($"user_id_{User.Id}")>
+
+    <td class="align-middle">@User.Name</td>
+
+    <td class="align-middle">@User.Company</td>
+
+    <td class="align-middle">@User.LatestPaymentDate.ToShortDateString()</td>
+
+    <!-- Button trigger modal -->
+    <td class="align-middle">
+        <button type="button" class="btn btn-danger m-0" data-bs-toggle="modal" data-bs-target="#exampleModal">
             <span class="oi oi-trash"></span>
-         </button>
-      <UserRemoveModal User="@User" OnUserRemoved="@OnUserRemoved"/>
-</div>
+        </button>
+    </td>
+    <UserRemoveModal User="@User" OnUserRemoved="@OnUserRemoved"/>
+</tr>
 
 @code {
 

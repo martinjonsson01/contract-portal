@@ -37,6 +37,7 @@ public class UserListTests : UITestFixture
         cut.FindAll(itemSelector).Should().Contain(elementWithNewName);
     }
 
+    [Fact]
     public async Task RemovingUsers_RendersWithoutTheUsersAsync()
     {
         // Arrange
