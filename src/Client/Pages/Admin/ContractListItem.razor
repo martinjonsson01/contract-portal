@@ -1,13 +1,21 @@
 ﻿@using Domain.Contracts
 @inject HttpClient _http
 
-<div id="@Contract.Name" class="list-group-item d-flex justify-content-between" style="max-width: 50%">
-     @Contract.Name
+<tr class="contract-list-item" id=@($"contract_id_{Contract.Id}")>
 
-     <button type="button" class="btn btn-danger" @onclick="RemoveContract">
-        <span class="oi oi-trash"></span>
-     </button>
-</div>
+    <td>@Contract.Name</td>
+
+    <td>@Contract.SupplierName</td>
+
+    <!-- Button trigger modal -->
+    <td>
+        <button type="button" class="btn btn-danger m-0" data-bs-toggle="modal" data-bs-target="#@($"modal_{Contract.Id}")">
+            <span class="oi oi-trash"></span>
+        </button>
+    </td>
+
+    <ContractRemoveModal Contract=@Contract OnContractRemoved="@OnContractRemoved"/>
+</tr>
 
 
 @code {
@@ -24,12 +32,5 @@
     [Parameter, EditorRequired,]
     public Contract Contract { get; set; } = new();
 
-    private async Task RemoveContract()
-    {
-        HttpResponseMessage response = await _http.DeleteAsync($"api/v1/contracts/{Contract.Id}");
-        if (response.IsSuccessStatusCode)
-        {
-            await OnContractRemoved.InvokeAsync(Contract);
-        }
-    }
+
 }

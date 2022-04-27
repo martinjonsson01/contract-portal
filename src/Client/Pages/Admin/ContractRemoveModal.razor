@@ -1,0 +1,44 @@
+@using Domain.Contracts
+@inject HttpClient _http
+
+<!-- Modal -->
+<div class="modal fade" id="@($"modal_{Contract.Id}")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ta bort kontrakt</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Är du säker på att du vill ta bort kontraktet @Contract.Name?
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" id="confirm-remove-contract" class="btn btn-danger" @onclick="RemoveContract" data-bs-dismiss="modal">Ta bort </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+      </div>
+    </div>
+  </div>
+</div>
+@code
+{
+    /// <summary>
+    /// Called when a contract has been removed successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Contract> OnContractRemoved { get; set; } = EventCallback<Contract>.Empty;
+
+    /// <summary>
+    /// The contract.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public Contract Contract { get; set; } = new();
+
+    private async Task RemoveContract()
+    {
+        HttpResponseMessage response = await _http.DeleteAsync($"api/v1/contracts/{Contract.Id}");
+        if (response.IsSuccessStatusCode)
+        {
+            await OnContractRemoved.InvokeAsync(Contract);
+        }
+    }
+}

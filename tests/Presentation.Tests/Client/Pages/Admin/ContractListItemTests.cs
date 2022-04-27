@@ -32,6 +32,6 @@ public class ContractListItemTests : IDisposable
             _context.RenderComponent<ContractListItem>(ParameterBuilder);
 
         // Assert
-        cut.Find($"#{contract.Name}").TextContent.Should().Contain(name);
+        cut.Find($"#contract_id_{contract.Id}").TextContent.Should().Contain(name);
     }
 }

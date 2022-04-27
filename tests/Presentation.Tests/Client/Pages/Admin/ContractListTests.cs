@@ -22,7 +22,7 @@ public class ContractListTests : UITestFixture
         MockHttp.When("/api/v1/contracts").RespondJson(contracts);
 
         IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
-        const string itemSelector = ".list-group-item";
+        const string itemSelector = ".contract-list-item";
         cut.WaitForElement(itemSelector);
 
         const string newContractName = "New Contract";
@@ -70,7 +70,7 @@ public class ContractListTests : UITestFixture
         MockHttp.When(HttpMethod.Delete, $"/api/v1/contracts/{firstContract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
 
         IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
-        const string removeButton = ".btn.btn-danger";
+        const string removeButton = "#confirm-remove-contract";
         cut.WaitForElement(removeButton);
 
         // Act
@@ -80,6 +80,6 @@ public class ContractListTests : UITestFixture
         // Assert
         Expression<Func<IElement, bool>>
             elementWithNewName = contract => contract.TextContent.Contains(firstContract.Name);
-        cut.FindAll(".list-group-item").Should().NotContain(elementWithNewName);
+        cut.FindAll(".contract-list-item").Should().NotContain(elementWithNewName);
     }
 }

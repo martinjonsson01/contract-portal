@@ -6,12 +6,23 @@
            Url="/api/v1/contracts"
            Context="contracts">
 
-    <div class="list-group">
+    <h4>Dina kontrakt</h4>
+    <table class="table table-striped table-responsive-md btn-table">
+        <thead>
+            <tr>
+                <th scope="col">Kontraktnamn</th>
+                <th scope="col">Företag</th>
+                <th scope="col">Ta bort</th>
+            </tr>
+        </thead>
+
+        <tbody>
         @foreach (Contract contract in contracts)
         {
             <ContractListItem Contract=@contract OnContractRemoved=@OnContractRemoved/>
         }
-    </div>
+        </tbody>
+    </table>
 
 </FetchData>
 
