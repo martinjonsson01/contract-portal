@@ -29,6 +29,7 @@
         {
             Name = string.Empty,
             Company = string.Empty,
+            LatestPaymentDate = DateTime.UtcNow,
         };
     }
 
@@ -40,6 +41,9 @@
 
     private async Task AddUser()
     {
+        // Make sure date is in UTC.
+        _user.LatestPaymentDate = _user.LatestPaymentDate.ToUniversalTime();
+
         HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users", _user);
         if (response.IsSuccessStatusCode)
         {
