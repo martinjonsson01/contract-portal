@@ -9,6 +9,7 @@ using FluentAssertions.Execution;
 
 using Infrastructure.Contracts;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Tests.Contracts;
@@ -19,7 +20,10 @@ public class ContractRepositoryTests
 
     public ContractRepositoryTests()
     {
-        _cut = new PostgresContractRepository(Mock.Of<ILogger<PostgresContractRepository>>());
+        var optionsBuilder = new DbContextOptionsBuilder<PostgresContractRepository>();
+        _ = optionsBuilder.UseNpgsql(
+            "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
+        _cut = new PostgresContractRepository(optionsBuilder.Options, Mock.Of<ILogger<PostgresContractRepository>>());
     }
 
     [Fact]

@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Contracts;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;
 
@@ -13,6 +14,11 @@ public class PostgresContractRepositoryFactory : IDesignTimeDbContextFactory<Pos
     /// <inheritdoc />
     public PostgresContractRepository CreateDbContext(string[] args)
     {
-        return new PostgresContractRepository(new LoggerFactory().CreateLogger<PostgresContractRepository>());
+        var optionsBuilder = new DbContextOptionsBuilder<PostgresContractRepository>();
+        _ = optionsBuilder.UseNpgsql(
+            "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
+        return new PostgresContractRepository(
+            optionsBuilder.Options,
+            new LoggerFactory().CreateLogger<PostgresContractRepository>());
     }
 }
