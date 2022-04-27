@@ -120,8 +120,15 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
+table {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
 td {
     vertical-align: middle;
 }
 
-
+thead {
+    background-color: #222939;
+    color: #ffffff;
+}
