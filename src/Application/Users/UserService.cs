@@ -27,6 +27,12 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
+    public bool UserExists(string username)
+    {
+        return _repo.UserExists(username);
+    }
+
+    /// <inheritdoc />
     public IEnumerable<User> FetchAllUsers()
     {
         return _repo.All;
