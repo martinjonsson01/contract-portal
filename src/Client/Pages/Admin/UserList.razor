@@ -21,7 +21,7 @@
         <tbody>
             @foreach (User user in users)
             {
-                <UserListItem User=@user OnUserRemoved="@OnUserRemoved"/>
+                <UserRowItem User=@user OnUserRemoved="@Remove"/>
             }
         </tbody>
     </table>
@@ -46,11 +46,16 @@
     /// Removes a user from the list.
     /// </summary>
     /// <param name="user">The user to remove.</param>
-    private void OnUserRemoved(User user)
+    private async void Remove(User user)
     {
-    // Using null forgiving operator because because _users
-    // can not be null when remove button is pressed.
-        _dataFetcher.Data!.Remove(user);
-        InvokeAsync(StateHasChanged);
+        // Using null forgiving operator because because _users
+        // can not be null when remove button is pressed.
+
+        HttpResponseMessage response = await _http.DeleteAsync($"api/v1/Users/{user.Id}");
+        if (response.IsSuccessStatusCode)
+        {
+            _dataFetcher.Data!.Remove(user);
+            await InvokeAsync(StateHasChanged);
+        }
     }
 }

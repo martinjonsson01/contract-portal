@@ -15,7 +15,12 @@
             <span class="oi oi-trash"></span>
         </button>
     </td>
-    <UserRemoveModal User="@User" OnUserRemoved="@OnUserRemoved"/>
+    <RemoveModal
+        Id=@User.Id
+        Title="Ta bort användare"
+        Message="Vill du ta bort användaren {User.Name}?"
+        RemovalConfirmed="@(async () => await OnUserRemoved.InvokeAsync(User))"
+    />
 </tr>
 
 @code {
