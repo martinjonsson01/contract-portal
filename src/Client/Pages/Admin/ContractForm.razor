@@ -1,6 +1,7 @@
 ﻿@using Domain.Contracts
 @using Newtonsoft.Json
 @using System.Net.Http.Headers
+@using System.Text
 @using System.Text.Json
 @using Blazorise.Markdown
 @inject ILogger<AdminPage> _logger
@@ -47,6 +48,7 @@
         <label class="form-label">Nyckelord för sökning</label>
         <ListInput Items="@_contract.Tags"
                    ItemFactory="@(() => new Tag())"
+                   StringConverter="@(new TagTypeConverter())"
                    Placeholder="T.ex. miljövänlig"/>
     </div>
 
@@ -188,10 +190,11 @@
 
     private async Task UploadContract()
     {
-        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/contracts", _contract);
+        string json = JsonConvert.SerializeObject(_contract);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await _http.PostAsync("/api/v1/contracts", content);
         if (response.IsSuccessStatusCode)
         {
-            Console.WriteLine("successfully uploaded!");
             await OnContractUploaded.InvokeAsync(_contract);
             _contract = CreateEmptyContract();
         }
