@@ -12,7 +12,7 @@
         <thead>
             <tr>
                 <th scope="col">Namn</th>
-                <th scope="col">Företag</th>
+                <th scope="col">FÃ¶retag</th>
                 <th scope="col">Senaste betalning</th>
                 <th scope="col">Ta bort</th>
             </tr>
@@ -48,8 +48,8 @@
     /// <param name="user">The user to remove.</param>
     private void OnUserRemoved(User user)
     {
-    // Using null forgiving operator because because _users
-    // can not be null when remove button is pressed.
+        // Using null forgiving operator because because _users
+        // can not be null when remove button is pressed.
         _dataFetcher.Data!.Remove(user);
         InvokeAsync(StateHasChanged);
     }
