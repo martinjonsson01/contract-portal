@@ -29,27 +29,24 @@ public static class InjectionExtensions
     /// <returns>The same service container.</returns>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        return services.AddDbContext<IContractRepository, EFContractRepository>(
-                           ConfigureDatabase,
-                           ServiceLifetime.Transient)
-                       .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
-                       .AddDbContext<IUserRepository, EFUserRepository>(
-                           ConfigureDatabase,
-                           ServiceLifetime.Transient)
-                       .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
-                       {
-                           IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();
-                           ILogger<LocalFileRepository> logger =
-                               provider.GetRequiredService<ILogger<LocalFileRepository>>();
-                           return new LocalFileRepository(host, logger, new ImageVerifier());
-                       })
-                       .AddSingleton<IDocumentRepository, LocalFileRepository>(provider =>
-                       {
-                           IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();
-                           ILogger<LocalFileRepository> logger =
-                               provider.GetRequiredService<ILogger<LocalFileRepository>>();
-                           return new LocalFileRepository(host, logger, new DocumentVerifier());
-                       });
+        return services
+               .AddDbContext<IContractRepository, EFContractRepository>(ConfigureDatabase, ServiceLifetime.Transient)
+               .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
+               .AddDbContext<IUserRepository, EFUserRepository>(ConfigureDatabase, ServiceLifetime.Transient)
+               .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
+               {
+                   IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();
+                   ILogger<LocalFileRepository> logger =
+                       provider.GetRequiredService<ILogger<LocalFileRepository>>();
+                   return new LocalFileRepository(host, logger, new ImageVerifier());
+               })
+               .AddSingleton<IDocumentRepository, LocalFileRepository>(provider =>
+               {
+                   IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();
+                   ILogger<LocalFileRepository> logger =
+                       provider.GetRequiredService<ILogger<LocalFileRepository>>();
+                   return new LocalFileRepository(host, logger, new DocumentVerifier());
+               });
     }
 
     private static void ConfigureDatabase(DbContextOptionsBuilder options)
