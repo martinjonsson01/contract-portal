@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Users;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;
 
@@ -13,6 +14,11 @@ public class PostgresUserRepositoryFactory : IDesignTimeDbContextFactory<Postgre
     /// <inheritdoc />
     public PostgresUserRepository CreateDbContext(string[] args)
     {
-        return new PostgresUserRepository(new LoggerFactory().CreateLogger<PostgresUserRepository>());
+        var optionsBuilder = new DbContextOptionsBuilder<PostgresUserRepository>();
+        _ = optionsBuilder.UseNpgsql(
+            "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
+        return new PostgresUserRepository(
+            optionsBuilder.Options,
+            new LoggerFactory().CreateLogger<PostgresUserRepository>());
     }
 }
