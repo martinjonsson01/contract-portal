@@ -21,22 +21,4 @@ public class TagTypeConverter : TypeConverter
             ? base.ConvertFrom(context, culture, value)
             : new Tag { Text = textValue, };
     }
-
-    /// <inheritdoc />
-    public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
-    {
-        return destinationType == typeof(Tag) || base.CanConvertTo(context, destinationType);
-    }
-
-    /// <inheritdoc />
-    public override object? ConvertTo(
-        ITypeDescriptorContext? context,
-        CultureInfo? culture,
-        object? value,
-        Type destinationType)
-    {
-        return value is not string text
-            ? base.ConvertTo(context, culture, value, destinationType)
-            : new Tag { Text = text, };
-    }
 }

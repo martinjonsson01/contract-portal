@@ -35,7 +35,7 @@
         set
         {
             TItem? oldItem = Item;
-            Item = (TItem?)StringConverter.ConvertTo(value, typeof(TItem));
+            Item = (TItem?)StringConverter.ConvertFrom(value);
 
             if (Item is null) return;
 
