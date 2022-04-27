@@ -1,8 +1,8 @@
 # Individuella reflektioner för Martin
-## Påsk
+## Läsvecka 4 (Påsk)
 
 ## Vad vill jag lära mig eller förstå bättre?
-Jag fick lära mig lite om hur en teknisk stakeholder ser på projektet, fast tyvärr inte i särskilt mycket detalj. Det jag fick veta lite mer om är hur man kan strukturera mer komplexa relationer inom databaser, men det visade sig inte vara applicerbart i detta projekt.
+Jag fick lära mig lite om hur en teknisk stakeholder ser på projektet, fast tyvärr inte i särskilt mycket detalj. Det jag fick veta lite mer om är hur man kan strukturera mer komplexa relationer inom databaser, men det visade sig inte vara applicerbart i detta projekt. 
 
 Just nu vill jag lära mig mer om hur vi kan få våra tester så bra som möjligt. Vi har i tidigare projekt haft problem med att våra tester är för starkt kopplade till implementationen de testar, vilket har lett till att man behöver ändra i en stor mängd tester efter varje refactoring eller liten ändring av koden. För att undvika detta har jag läst på mer om behavior driven development och jag har försökt ha det i åtanke när jag skriver egna tester och reviews av andras.
 
