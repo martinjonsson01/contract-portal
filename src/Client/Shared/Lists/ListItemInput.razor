@@ -35,16 +35,7 @@
         set
         {
             TItem? oldItem = Item;
-            try
-            {
-                Item = (TItem?)StringConverter.ConvertTo(value, typeof(TItem));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            Console.WriteLine($"converted {value} to {Item}");
+            Item = (TItem?)StringConverter.ConvertTo(value, typeof(TItem));
 
             if (!Item?.Equals(oldItem) ?? false)
             {
