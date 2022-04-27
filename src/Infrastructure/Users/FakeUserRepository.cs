@@ -18,4 +18,10 @@ public class FakeUserRepository : IUserRepository
     {
         _users.Add(user);
     }
+
+    /// <inheritdoc />
+    public bool UserExists(string username)
+    {
+        return _users.Find(user => user.Name == username) != null;
+    }
 }

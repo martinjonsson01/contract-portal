@@ -18,4 +18,11 @@ public interface IUserRepository
     /// </summary>
     /// <param name="user">The new user instance.</param>
     void Add(User user);
+
+    /// <summary>
+    /// Checks whether a user exists or not.
+    /// </summary>
+    /// <param name="username">The username to look for.</param>
+    /// <returns>Whether the user exits or not.</returns>
+    bool UserExists(string username);
 }
