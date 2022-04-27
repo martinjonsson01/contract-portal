@@ -9,6 +9,8 @@ using FluentAssertions.Execution;
 
 using Infrastructure.Contracts;
 
+using Microsoft.Extensions.Logging;
+
 namespace Infrastructure.Tests.Contracts;
 
 public class ContractRepositoryTests
@@ -17,7 +19,7 @@ public class ContractRepositoryTests
 
     public ContractRepositoryTests()
     {
-        _cut = new FakeContractRepository();
+        _cut = new PostgresContractRepository(Mock.Of<ILogger<PostgresContractRepository>>());
     }
 
     [Fact]

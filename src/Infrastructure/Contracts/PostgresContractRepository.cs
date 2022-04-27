@@ -11,18 +11,18 @@ using Microsoft.Extensions.Logging;
 namespace Infrastructure.Contracts;
 
 /// <summary>
-/// Mocks fake contracts.
+/// Stores and fetches users from a PostgreSQL database.
 /// </summary>
-public class FakeContractRepository : DbContext, IContractRepository
+public class PostgresContractRepository : DbContext, IContractRepository
 {
-    private readonly ILogger<FakeContractRepository> _logger;
+    private readonly ILogger<PostgresContractRepository> _logger;
     private readonly IRecentContractService _recent;
 
     /// <summary>
-    /// Creates a fake contract for SJ.
+    /// Initializes a new instance of the <see cref="PostgresContractRepository"/> class.
     /// </summary>
     /// <param name="logger">The logging service to use.</param>
-    public FakeContractRepository(ILogger<FakeContractRepository> logger)
+    public PostgresContractRepository(ILogger<PostgresContractRepository> logger)
     {
         _logger = logger;
         _recent = new RecentContractService(new Collection<Contract>());
