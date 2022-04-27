@@ -37,13 +37,13 @@
             TItem? oldItem = Item;
             Item = (TItem?)StringConverter.ConvertTo(value, typeof(TItem));
 
-            if (!Item?.Equals(oldItem) ?? false)
-            {
-                if (Item is not null)
-                {
-                    ValueChanged.InvokeAsync((Item, Id));
-                }
-            }
+            if (Item is null) return;
+
+            if (Item.Equals(oldItem)) return;
+
+            if (Item is null) return;
+
+            ValueChanged.InvokeAsync((Item, Id));
         }
     }
 
