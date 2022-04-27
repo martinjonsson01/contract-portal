@@ -1,11 +1,16 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using Domain.Users
+@inject HttpClient _http
+@inject NavigationManager _navigationManager
+@inject IJSRuntime _js
 
 <div class="modal" id="log-in">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <EditForm Model="@_user">
+                <EditForm Model="@_user" OnSubmit="@HandleSubmission">
                     <div class="mb-3">
+
                         <div class="d-flex justify-content-between">
                             <label for="username" class="form-label">
                                 <h3>Användarnamn</h3>
@@ -16,7 +21,7 @@
                         <InputText id="username" class="form-control" placeholder="Användarnamn" @bind-Value="@_user.UserName"/>
                     </div>
                     <div class="login-footer">
-                        <button type="submit" class="btn btn-primary mb-3 ">Logga in</button>
+                        <button type="submit" class="btn btn-primary mb-3">Logga in</button>
                     </div>
                 </EditForm>
             </div>
@@ -26,13 +31,25 @@
 
 @code {
 
-    UserInputFields _user = new UserInputFields();
+    UserInputFields _user = new();
 
+    [CascadingParameter]
+    private string? LoggedInUsername { get; set; }
 
     private class UserInputFields
     {
         [Required]
         public string? UserName { get; set; }
+    }
+
+    private async Task HandleSubmission()
+    {
+        var response = await _http.GetAsync($"/api/v1/users/validate/{_user.UserName}");
+        var isLoggedIn = await response.Content.ReadFromJsonAsync<bool>();
+        if (isLoggedIn)
+        {
+            LoggedInUsername = _user.UserName;
+        }
     }
 
 }
