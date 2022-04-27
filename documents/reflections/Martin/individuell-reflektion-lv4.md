@@ -1,18 +1,15 @@
 # Individuella reflektioner för Martin
-## Läsvecka 4 (Påsk)
+## Läsvecka 4
 
 ## Vad vill jag lära mig eller förstå bättre?
-Jag fick lära mig lite om hur en teknisk stakeholder ser på projektet, fast tyvärr inte i särskilt mycket detalj. Det jag fick veta lite mer om är hur man kan strukturera mer komplexa relationer inom databaser, men det visade sig inte vara applicerbart i detta projekt. 
-
-Just nu vill jag lära mig mer om hur vi kan få våra tester så bra som möjligt. Vi har i tidigare projekt haft problem med att våra tester är för starkt kopplade till implementationen de testar, vilket har lett till att man behöver ändra i en stor mängd tester efter varje refactoring eller liten ändring av koden. För att undvika detta har jag läst på mer om behavior driven development och jag har försökt ha det i åtanke när jag skriver egna tester och reviews av andras.
+Under denna vecka har jag funderat mer kring hållbar testning och kommit till slutsatsen att sättet vi naturligt väljer att testa våran kod är alldeles för bunden till implementationen. Detta har visat sig genom att varje gång vi vill ändra i t.ex. ett av formulären på webbsidan så måste man gå in i och ändra testerna. För att undvika detta i framtiden har jag börjat införa mer generella CSS-klasser och id:s, som går att behålla även när implementationen byts ut. På så sätt borde testerna vara lite mer robusta. Jag vet inte om detta är en perfekt lösning, så jag får se om det faktiskt hjälper eller inte.
 
 ## Hur kan jag hjälpa någon annan eller hela laget att lära sig något nytt?
-Jag har varit tillgänglig för hjälp när andra i laget kör fast, och det har fungerat väl. Jag har även parprogrammerat med många i laget, vilket har gett mig en chans att ge tips angående best-practice i den miljö vi arbetar inom. Utöver det har jag varit noggrann vid code reviews och försökt ge så värdefulla kommentarer på koden som möjligt. Jag är nöjd med min insats och planerar att fortsätta så här.
-
+Jag parprogrammerade inget denna veckan, och var därför lite mer effektiv än vanligt. Fast det känns inte som om detta är hållbart i längden, då alla i laget ska kunna förstå kodbasen, så jag kommer försöka fortsätta med mer parprogrammering i fortsättningen.
 
 ## Vad har jag bidragit med till vårt användande av Scrum?
-Denna sprinten krävdes inget omplaneringsmöte, utan vi klarade oss med de stories som vi planerat att arbeta på. Det blev dock problem under denna sprinten eftersom slutet av sprinten täcktes av påskledighet och vi kunde därför inte få klart reviews av de sista PRs innan sprinten var över. Jag ser dock inte detta som något stort misslyckande då vi var medvetna från början att det skulle vara brist på tid de sista dagarna, och vi förväntar oss inte att detta upprepas under kommande sprints. Om det dyker upp som ett återkommande problem får vi utvärdera om det ens är ett problem och i så fall om det bör sättas upp riktlinjer kring när och hur PRs/reviews bör läggas upp.
+Jag har tagit upp funderingar kring om det är okej med relativt "horisontella" user stories som t.ex. bara berör gränssnittspolering *så länge det ger värde till våra stakeholders*. Vi har haft lite diskussioner kring detta och kommit till slutsatsen att vi borde nog fråga TA om detta, så vi vet hur vi kan fortsätta med våran UI-polering.
 
 
 ## Vad har jag bidragit med till lagets leveranser?
-Jag har slutfört ett antal stories och hjälp andra i laget med sina stories. På mötet med stakeholdern försökte jag få ut lite fler detaljer om vad han tyckte saknades i våran nuvarande version av portalen, vilket gav oss marginellt mer information.
+Jag har slutfört ett stort antal user stories och lagt upp reviews av andras PR:s. Denna veckan bidrog jag inte särskilt mycket till leveranser som andra i laget arbetade på, så jag ska försöka hjälpa till lite mer nästa vecka.
