@@ -1,5 +1,6 @@
 ﻿@using System.Linq.Expressions
 @using System.ComponentModel
+@using Domain.Contracts
 @typeparam TItem
 
 <InputText class="form-control list-item-input"
@@ -22,14 +23,28 @@
     [Parameter, EditorRequired,]
     public TItem? Item { get; set; }
 
+    /// <summary>
+    /// A converter that can translate between strings and the item type.
+    /// </summary>
+    [Parameter]
+    public TypeConverter StringConverter { get; set; } = TypeDescriptor.GetConverter(typeof(TItem));
+
     private string ItemString
     {
         get => Item?.ToString() ?? string.Empty;
         set
         {
             TItem? oldItem = Item;
-            TypeConverter converter = TypeDescriptor.GetConverter(typeof(TItem));
-            Item = (TItem?) converter.ConvertTo(value, typeof(TItem));
+            try
+            {
+                Item = (TItem?)StringConverter.ConvertTo(value, typeof(TItem));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            Console.WriteLine($"converted {value} to {Item}");
 
             if (!Item?.Equals(oldItem) ?? false)
             {

@@ -1,4 +1,5 @@
 ﻿@using System.Collections.ObjectModel
+@using System.ComponentModel
 @typeparam TItem
 
 <div class="d-flex flex-column">
@@ -8,6 +9,7 @@
         <ListItemInput TItem="TItem"
                        Id="@i"
                        Item="@item"
+                       StringConverter="@StringConverter"
                        Placeholder="@Placeholder"
                        EnterPressed="@CreateItem"
                        ValueChanged="@OnValueChanged"/>
@@ -28,6 +30,12 @@
     /// </summary>
     [Parameter, EditorRequired,]
     public Func<TItem> ItemFactory { get; set; } = null!;
+
+    /// <summary>
+    /// A converter that can translate between strings and the item type.
+    /// </summary>
+    [Parameter]
+    public TypeConverter StringConverter { get; set; } = TypeDescriptor.GetConverter(typeof(TItem));
 
     /// <summary>
     /// A text placeholder that will be placed inside of the input fields.
