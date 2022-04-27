@@ -12,7 +12,7 @@
         <thead>
             <tr>
                 <th scope="col">Namn</th>
-                <th scope="col">Företag</th>
+                <th scope="col">FÃ¶retag</th>
                 <th scope="col">Senaste betalning</th>
                 <th scope="col">Ta bort</th>
             </tr>
@@ -46,16 +46,11 @@
     /// Removes a user from the list.
     /// </summary>
     /// <param name="user">The user to remove.</param>
-    private async void Remove(User user)
+    private void Remove(User user)
     {
-
-        HttpResponseMessage response = await _http.DeleteAsync($"api/v1/Users/{user.Id}");
-        if (response.IsSuccessStatusCode)
-        {
-            // Using null forgiving operator because because _users
-            // can not be null when remove button is pressed.
-            _dataFetcher.Data!.Remove(user);
-            await InvokeAsync(StateHasChanged);
-        }
+    // Using null forgiving operator because because _users
+    // can not be null when remove button is pressed.
+        _dataFetcher.Data!.Remove(user);
+        InvokeAsync(StateHasChanged);
     }
 }
