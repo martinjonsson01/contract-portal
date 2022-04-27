@@ -29,7 +29,7 @@ public class PostgresContractRepository : DbContext, IContractRepository
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> All => new List<Contract>(Contracts);
+    public IEnumerable<Contract> All => Contracts.Include(contract => contract.Tags).ToList();
 
     /// <inheritdoc />
     public IEnumerable<Contract> Recent => _recent.FetchRecentContracts();
