@@ -1,16 +1,16 @@
 @using Domain.Users
 @inject HttpClient _http
 
-<tr id=@($"user_id_{User.Id}")>
+<tr class="user-list-item" id=@($"user_id_{User.Id}")>
 
-    <td class="align-middle">@User.Name</td>
+    <td>@User.Name</td>
 
-    <td class="align-middle">@User.Company</td>
+    <td>@User.Company</td>
 
-    <td class="align-middle">@User.LatestPaymentDate.ToShortDateString()</td>
+    <td>@User.LatestPaymentDate.ToShortDateString()</td>
 
     <!-- Button trigger modal -->
-    <td class="align-middle">
+    <td>
         <button type="button" class="btn btn-danger m-0" data-bs-toggle="modal" data-bs-target="#exampleModal">
             <span class="oi oi-trash"></span>
         </button>

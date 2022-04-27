@@ -48,7 +48,7 @@
     /// <param name="user">The user to remove.</param>
     private void OnUserRemoved(User user)
     {
-    // Using null forgiving operator because because _contracts
+    // Using null forgiving operator because because _users
     // can not be null when remove button is pressed.
         _dataFetcher.Data!.Remove(user);
         InvokeAsync(StateHasChanged);

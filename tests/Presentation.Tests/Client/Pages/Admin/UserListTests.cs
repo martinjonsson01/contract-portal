@@ -17,14 +17,16 @@ public class UserListTests : UITestFixture
     public void AddingUser_RendersTheNewUser()
     {
         // Arrange
-        User[] users = { new User() { Name = "First", }, new User() { Name = "Second", } };
+        var user = new User() { Name = "First", };
+        User[] users = { user, new User() { Name = "Second", } };
         MockHttp.When("/api/v1/users").RespondJson(users);
 
         IRenderedComponent<UserList> cut = Context.RenderComponent<UserList>();
-        const string itemSelector = ".list-group-item";
-        cut.WaitForElement(itemSelector);
+
+        string itemSelector = ".user-list-item";
 
         const string newUserName = "New User";
+        cut.WaitForElement(itemSelector);
         var newUser = new User { Name = newUserName };
 
         // Act
@@ -57,6 +59,6 @@ public class UserListTests : UITestFixture
         // Assert
         Expression<Func<IElement, bool>>
             elementWithNewName = user => user.TextContent.Contains(firstUser.Name);
-        cut.FindAll(".list-group-item").Should().NotContain(elementWithNewName);
+        cut.FindAll($"#user_id_").Should().NotContain(elementWithNewName);
     }
 }
