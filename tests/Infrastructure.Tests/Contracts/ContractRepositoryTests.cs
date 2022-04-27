@@ -7,23 +7,15 @@ using Domain.Contracts;
 
 using FluentAssertions.Execution;
 
-using Infrastructure.Contracts;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-
 namespace Infrastructure.Tests.Contracts;
 
-public class ContractRepositoryTests
+public class ContractRepositoryTests : IClassFixture<TestContractDatabaseFixture>
 {
     private readonly IContractRepository _cut;
 
-    public ContractRepositoryTests()
+    public ContractRepositoryTests(TestContractDatabaseFixture fixture)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<EFContractRepository>();
-        _ = optionsBuilder.UseNpgsql(
-            "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
-        _cut = new EFContractRepository(optionsBuilder.Options, Mock.Of<ILogger<EFContractRepository>>());
+        _cut = fixture.CreateContext();
     }
 
     [Fact]
