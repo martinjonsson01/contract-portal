@@ -1,8 +1,13 @@
-﻿namespace Domain.Contracts;
+﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
+
+namespace Domain.Contracts;
 
 /// <summary>
 /// A tag that can be used to add metadata to an object.
 /// </summary>
+[TypeConverter(typeof(TagTypeConverter))]
+[JsonConverter(typeof(TagJsonConverter))]
 public class Tag
 {
     /// <summary>

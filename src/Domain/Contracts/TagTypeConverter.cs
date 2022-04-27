@@ -6,7 +6,7 @@ namespace Domain.Contracts;
 /// <summary>
 /// Converts <see cref="Tag"/> instances to and from <see cref="string"/>s.
 /// </summary>
-public class TagConverter : TypeConverter
+public class TagTypeConverter : TypeConverter
 {
     /// <inheritdoc />
     public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
@@ -35,8 +35,8 @@ public class TagConverter : TypeConverter
         object? value,
         Type destinationType)
     {
-        return value is not Tag tag
+        return value is not string text
             ? base.ConvertTo(context, culture, value, destinationType)
-            : tag.ToString();
+            : new Tag { Text = text, };
     }
 }
