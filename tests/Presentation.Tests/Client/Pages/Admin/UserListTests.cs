@@ -23,7 +23,7 @@ public class UserListTests : UITestFixture
 
         IRenderedComponent<UserTable> cut = Context.RenderComponent<UserTable>();
 
-        string itemSelector = ".user-list-item";
+        string itemSelector = ".user-table-row";
 
         const string newUserName = "New User";
         cut.WaitForElement(itemSelector);
@@ -59,6 +59,6 @@ public class UserListTests : UITestFixture
         // Assert
         Expression<Func<IElement, bool>>
             elementWithNewName = contract => contract.TextContent.Contains(firstUser.Name);
-        cut.FindAll(".user-list-item").Should().NotContain(elementWithNewName);
+        cut.FindAll(".user-table-row").Should().NotContain(elementWithNewName);
     }
 }

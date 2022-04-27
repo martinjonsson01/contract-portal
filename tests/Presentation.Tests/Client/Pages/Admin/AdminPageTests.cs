@@ -45,6 +45,6 @@ public class AdminPageTests : UITestFixture
         cut.WaitForElement(".table");
 
         // Assert
-        cut.FindAll(".contract-list-item").Count.Should().Be(10);
+        cut.FindAll(".contract-table-row").Count.Should().Be(10);
     }
 }

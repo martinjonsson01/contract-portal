@@ -22,7 +22,7 @@ public class ContractListTests : UITestFixture
         MockHttp.When("/api/v1/contracts").RespondJson(contracts);
 
         IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
-        const string itemSelector = ".contract-list-item";
+        const string itemSelector = ".contract-table-row";
         cut.WaitForElement(itemSelector);
 
         const string newContractName = "New Contract";
@@ -80,6 +80,6 @@ public class ContractListTests : UITestFixture
         // Assert
         Expression<Func<IElement, bool>>
             elementWithNewName = contract => contract.TextContent.Contains(firstContract.Name);
-        cut.FindAll(".contract-list-item").Should().NotContain(elementWithNewName);
+        cut.FindAll(".contract-table-row").Should().NotContain(elementWithNewName);
     }
 }
