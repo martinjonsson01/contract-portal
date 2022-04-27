@@ -45,11 +45,11 @@ public class UserListTests : UITestFixture
         // Arrange
         var firstUser = new User() { Name = "first", };
         User[] users = { firstUser, new User() { Name = "second", }, };
-        MockHttp.When("/api/v1/users/All").RespondJson(users);
+        MockHttp.When("/api/v1/users").RespondJson(users);
         MockHttp.When(HttpMethod.Delete, $"/api/v1/Users/{firstUser.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
 
         IRenderedComponent<UserList> cut = Context.RenderComponent<UserList>();
-        const string removeButton = ".btn.btn-danger";
+        const string removeButton = "#confirm-remove-user";
         cut.WaitForElement(removeButton);
 
         // Act
