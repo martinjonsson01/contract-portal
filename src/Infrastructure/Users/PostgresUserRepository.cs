@@ -26,6 +26,9 @@ public class PostgresUserRepository : DbContext, IUserRepository
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        // Note: this connection string should be stored in an environment variable away from the source code.
+        // If you are replacing this connection string with actual credentials to a real database, don't
+        // just replace the string here in the source code, use an environment variable instead.
         _ = optionsBuilder.UseNpgsql(
             "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
     }
