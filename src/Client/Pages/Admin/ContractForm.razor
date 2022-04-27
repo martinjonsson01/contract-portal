@@ -46,6 +46,7 @@
     <div class="mb-4">
         <label class="form-label">Nyckelord för sökning</label>
         <ListInput Items="@_contract.Tags"
+                   ItemFactory="@(() => new Tag())"
                    Placeholder="T.ex. miljövänlig"/>
     </div>
 

@@ -19,6 +19,9 @@ public class TagSearch : ISearchModule<Contract>
     public bool Match(Contract entity, string query)
     {
         string[] queryTags = query.Split(' ');
-        return queryTags.Any(queryTag => entity.Tags.Contains(queryTag, StringComparer.OrdinalIgnoreCase));
+        return queryTags.Any(queryTag =>
+            entity.Tags
+                  .Select(tag => tag.ToString())
+                  .Contains(queryTag, StringComparer.OrdinalIgnoreCase));
     }
 }
