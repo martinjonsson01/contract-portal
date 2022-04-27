@@ -57,3 +57,24 @@ No complex logic is allowed in here, and any logic at all should be delegated to
 This project is also a kind of presentation, because it presents the web API to the outside world, which is a kind of view of our data. It is implemented as an [ASP.NET Core web API](https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-6.0).
 
 Even though this is on the server, no complex logic belongs here either. This project is also similar to a controller in MVC, since its only job is to delegate "input" (read: API requests) to the model (read: application). So any logic is therefore delegated to a service implemented in the application layer through an interface.
+
+## Deploy manually to Azure
+
+These steps require [Visual Studio Code](https://code.visualstudio.com/), with the following extensions:
+* [Azure Account](https://marketplace.visualstudio.com/items?itemName=ms-vscode.azure-account)
+* [Azure App Service](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azureappservice)
+
+After the installation follow these steps:
+
+1. Login to Azure through the Azure Account extension, using **CTRL + SHIFT + P** to open the VS Code Command Palette
+1. Type: `Azure: Sign In` into the command palette
+1. Hit enter and login in the browser window
+1. In the root of the project run the following command: `dotnet publish ContractPortal.sln -c Release -o \manual-release`
+1. Now right-click on the **manual-release** directory and select **Deploy to Web App**
+1. In the command palette select the subscription to publish the app to
+1. Select the app service web app to use
+1. If prompted to confirm, click **deploy**
+
+The process should now start and when it is done you will get a notifcation to open the app in the browser.
+
+These steps are based a [Microsoft guide](https://docs.microsoft.com/en-us/azure/app-service/tutorial-dotnetcore-sqldb-app?tabs=azure-portal%2Cvisual-studio-code-deploy%2Cdeploy-instructions-azure-portal%2Cazure-portal-logs%2Cazure-portal-resources#4---deploy-to-the-app-service) but with minor tweaks. The offical guide provides more ways to deploy the app than just through Visual Studio Code if needed.
