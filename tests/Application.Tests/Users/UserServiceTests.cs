@@ -53,7 +53,7 @@ public class UserServiceTests
         // Act
         bool actual = _cut.Remove(user.Id);
 
-        // // Assert
+        // Assert
         actual.Should().BeTrue();
     }
 
