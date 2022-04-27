@@ -1,6 +1,10 @@
-﻿<InputText class="form-control list-item-input"
+﻿@using System.Linq.Expressions
+@using System.ComponentModel
+@typeparam TItem
+
+<InputText class="form-control list-item-input"
            placeholder="@Placeholder"
-           @bind-Value="@Item"
+           @bind-Value="@ItemString"
            @onkeydown="OnKeyDown"/>
 
 @code {
@@ -15,17 +19,25 @@
     /// <summary>
     /// The item this input element represents.
     /// </summary>
-    [Parameter]
-    public string Item
+    [Parameter, EditorRequired,]
+    public TItem? Item { get; set; }
+
+    private string ItemString
     {
-        get => _item;
+        get => Item?.ToString() ?? string.Empty;
         set
         {
-            string oldItem = _item;
-            _item = value;
+            TItem? oldItem = Item;
+            TypeConverter converter = TypeDescriptor.GetConverter(typeof(TItem));
+            Item = (TItem?) converter.ConvertTo(value, typeof(TItem));
 
-            if (!_item.Equals(oldItem))
-                ValueChanged.InvokeAsync((_item, Id));
+            if (!Item?.Equals(oldItem) ?? false)
+            {
+                if (Item is not null)
+                {
+                    ValueChanged.InvokeAsync((Item, Id));
+                }
+            }
         }
     }
 
@@ -45,9 +57,7 @@
     /// Called when the value of this item has been changed.
     /// </summary>
     [Parameter]
-    public EventCallback<(string, int)> ValueChanged { get; set; } = EventCallback<(string, int)>.Empty;
-
-    private string _item = string.Empty;
+    public EventCallback<(TItem, int)> ValueChanged { get; set; } = EventCallback<(TItem, int)>.Empty;
 
     private async Task OnKeyDown(KeyboardEventArgs args)
     {

@@ -13,11 +13,11 @@ public class ListInputTests : UITestFixture
         // Arrange
         string[] items = { "one", "two", "three", };
 
-        void ParameterBuilder(ComponentParameterCollectionBuilder<ListInput> parameters) =>
+        void ParameterBuilder(ComponentParameterCollectionBuilder<ListInput<string>> parameters) =>
             parameters.Add(property => property.Items, items)
                       .AddCascadingValue(new EditContext(string.Empty));
 
-        IRenderedComponent<ListInput> cut = Context.RenderComponent<ListInput>(ParameterBuilder);
+        IRenderedComponent<ListInput<string>> cut = Context.RenderComponent<ListInput<string>>(ParameterBuilder);
 
         const string newValue = "new value";
 

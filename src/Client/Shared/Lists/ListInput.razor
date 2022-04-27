@@ -1,10 +1,12 @@
 ﻿@using System.Collections.ObjectModel
+@typeparam TItem
 
 <div class="d-flex flex-column">
     @for (var i = 0; i < Items.Count; i++)
     {
-        string item = Items[i];
-        <ListItemInput Id="@i"
+        TItem item = Items[i];
+        <ListItemInput TItem="TItem"
+                       Id="@i"
                        Item="@item"
                        Placeholder="@Placeholder"
                        EnterPressed="@CreateItem"
@@ -18,8 +20,14 @@
     /// <summary>
     /// The items that have been input into the list.
     /// </summary>
-    [Parameter]
-    public IList<string> Items { get; set; } = new List<string>();
+    [Parameter, EditorRequired,]
+    public IList<TItem> Items { get; set; } = new List<TItem>();
+
+    /// <summary>
+    /// Creates a new item.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public Func<TItem> ItemFactory { get; set; } = null!;
 
     /// <summary>
     /// A text placeholder that will be placed inside of the input fields.
@@ -29,12 +37,12 @@
 
     private void CreateItem()
     {
-        Items.Add(string.Empty);
+        Items.Add(ItemFactory());
     }
 
-    private void OnValueChanged((string value, int id) tuple)
+    private void OnValueChanged((TItem value, int id) tuple)
     {
-        (string value, int id) = tuple;
+        (TItem value, int id) = tuple;
         Items[id] = value;
     }
 
