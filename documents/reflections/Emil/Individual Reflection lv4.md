@@ -1,4 +1,4 @@
-# Emil - Individual Reflection Week 3
+# Emil - Individual Reflection lv4
 * **What do I want to learn or understand better?**  
 Jag har sakta men säkert börjat sätta mig in i de tekniska detaljerna av projektet. Då kunskapsnivån i vårt lag är väldigt varierad när det kommer till just blazor, C#, html och css har vissa kunnat dra väldigt mycket i början vilket har underlättat för projektets uppstart. Jag har inte jättestora förkunskaper, men med hjälp från mina lagkamrater har jag börjat förstå mig på hela projektets struktur, och diverse funktionalitet. Detta har jag uppskattat mycket, och ser gärna att det fortsätter då jag tror jag kan lära mig mycket på det sättet.
 
