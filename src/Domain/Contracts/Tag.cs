@@ -1,11 +1,8 @@
-﻿using System.ComponentModel;
-
-namespace Domain.Contracts;
+﻿namespace Domain.Contracts;
 
 /// <summary>
 /// A tag that can be used to add metadata to an object.
 /// </summary>
-[TypeConverter(typeof(TagConverter))]
 public class Tag
 {
     /// <summary>
