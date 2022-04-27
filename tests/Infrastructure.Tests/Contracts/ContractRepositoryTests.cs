@@ -84,4 +84,23 @@ public class ContractRepositoryTests
             fetchedContract?.Name.Should().BeEquivalentTo(newContract.Name);
         }
     }
+
+    [Fact]
+    public void UpdatingContract_AddsContractToRepository_WhenContractDoesNotExist()
+    {
+        // Arrange
+        var newContract = new Contract { Name = "New", };
+
+        // Act
+        _cut.UpdateContract(newContract);
+        Contract? fetchedContract = _cut.FetchContract(newContract.Id);
+
+        // Assert
+        using (new AssertionScope())
+        {
+            fetchedContract.Should().NotBeNull();
+            fetchedContract?.Id.Should().Be(newContract.Id);
+            fetchedContract?.Name.Should().BeEquivalentTo(newContract.Name);
+        }
+    }
 }
