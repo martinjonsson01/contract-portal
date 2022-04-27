@@ -82,7 +82,7 @@ namespace Infrastructure.Migrations.PostgresContractRepositoryMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ContractId")
+                    b.Property<Guid>("ContractId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Text")
@@ -100,7 +100,9 @@ namespace Infrastructure.Migrations.PostgresContractRepositoryMigrations
                 {
                     b.HasOne("Domain.Contracts.Contract", null)
                         .WithMany("Tags")
-                        .HasForeignKey("ContractId");
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>

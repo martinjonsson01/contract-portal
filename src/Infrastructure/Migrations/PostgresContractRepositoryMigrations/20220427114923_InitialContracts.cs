@@ -37,8 +37,8 @@ namespace Infrastructure.Migrations.PostgresContractRepositoryMigrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Text = table.Column<string>(type: "text", nullable: false),
-                    ContractId = table.Column<Guid>(type: "uuid", nullable: true)
+                    ContractId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,7 +47,8 @@ namespace Infrastructure.Migrations.PostgresContractRepositoryMigrations
                         name: "FK_Tag_Contracts_ContractId",
                         column: x => x.ContractId,
                         principalTable: "Contracts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

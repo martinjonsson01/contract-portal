@@ -1,7 +1,7 @@
 ﻿namespace Domain.Contracts;
 
 /// <summary>
-/// A tag that can be used to add metadata to an object.
+/// A tag that can be used to add metadata to a <see cref="Contract"/>.
 /// </summary>
 public class Tag
 {
@@ -9,6 +9,11 @@ public class Tag
     /// Gets or sets the identifier.
     /// </summary>
     public Guid Id { get; set; } = Guid.NewGuid();
+
+    /// <summary>
+    /// Gets or sets the identifier of the <see cref="Contract"/> which this tag belongs to.
+    /// </summary>
+    public Guid ContractId { get; set; } = Guid.NewGuid();
 
     /// <summary>
     /// Gets or sets the text content.

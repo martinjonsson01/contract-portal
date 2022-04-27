@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations.PostgresContractRepositoryMigrations
 {
     [DbContext(typeof(PostgresContractRepository))]
-    [Migration("20220427095744_InitialContracts")]
+    [Migration("20220427114923_InitialContracts")]
     partial class InitialContracts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,7 +84,7 @@ namespace Infrastructure.Migrations.PostgresContractRepositoryMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ContractId")
+                    b.Property<Guid>("ContractId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Text")
@@ -102,7 +102,9 @@ namespace Infrastructure.Migrations.PostgresContractRepositoryMigrations
                 {
                     b.HasOne("Domain.Contracts.Contract", null)
                         .WithMany("Tags")
-                        .HasForeignKey("ContractId");
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
