@@ -1,4 +1,4 @@
-# Emil - Individual Reflection lv3
+# Emil - Individual Reflection lv2
 * **What do I want to learn or understand better?**  
 Under andra veckan har jag förstått mig mer på Scrum-metodiken, samt börjat testa på arbetet med git/github. Jag har även fått en bättre bild av det projekt vi ska genomföra. Dessa förmågor vill jag utveckla vidare. Jag ser även fram emot att börja arbeta praktiskt med projektet, för att testa vad jag har lärt mig hittills inom Scrum, git och programmeringstekniska aspekter. 
 
