@@ -20,10 +20,10 @@ public class ContractRepositoryTests
 
     public ContractRepositoryTests()
     {
-        var optionsBuilder = new DbContextOptionsBuilder<PostgresContractRepository>();
+        var optionsBuilder = new DbContextOptionsBuilder<EFContractRepository>();
         _ = optionsBuilder.UseNpgsql(
             "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
-        _cut = new PostgresContractRepository(optionsBuilder.Options, Mock.Of<ILogger<PostgresContractRepository>>());
+        _cut = new EFContractRepository(optionsBuilder.Options, Mock.Of<ILogger<EFContractRepository>>());
     }
 
     [Fact]

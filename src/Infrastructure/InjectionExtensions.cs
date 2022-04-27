@@ -29,7 +29,7 @@ public static class InjectionExtensions
     /// <returns>The same service container.</returns>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        return services.AddDbContext<IContractRepository, PostgresContractRepository>(
+        return services.AddDbContext<IContractRepository, EFContractRepository>(
                            ConfigureDatabase,
                            ServiceLifetime.Transient)
                        .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()

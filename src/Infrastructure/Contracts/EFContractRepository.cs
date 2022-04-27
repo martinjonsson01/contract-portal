@@ -11,21 +11,21 @@ using Microsoft.Extensions.Logging;
 namespace Infrastructure.Contracts;
 
 /// <summary>
-/// Stores and fetches users from a database.
+/// Stores and fetches users from an Entity Framework Core database.
 /// </summary>
-public class PostgresContractRepository : DbContext, IContractRepository
+public class EFContractRepository : DbContext, IContractRepository
 {
-    private readonly ILogger<PostgresContractRepository> _logger;
+    private readonly ILogger<EFContractRepository> _logger;
     private readonly IRecentContractService _recent;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PostgresContractRepository"/> class.
+    /// Initializes a new instance of the <see cref="EFContractRepository"/> class.
     /// </summary>
     /// <param name="options">The database configuration options.</param>
     /// <param name="logger">The logging service to use.</param>
-    public PostgresContractRepository(
-        DbContextOptions<PostgresContractRepository> options,
-        ILogger<PostgresContractRepository> logger)
+    public EFContractRepository(
+        DbContextOptions<EFContractRepository> options,
+        ILogger<EFContractRepository> logger)
         : base(options)
     {
         _logger = logger;

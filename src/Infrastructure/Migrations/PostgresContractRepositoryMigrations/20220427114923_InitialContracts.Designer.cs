@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Infrastructure.Migrations.PostgresContractRepositoryMigrations
 {
-    [DbContext(typeof(PostgresContractRepository))]
+    [DbContext(typeof(EFContractRepository))]
     [Migration("20220427114923_InitialContracts")]
     partial class InitialContracts
     {

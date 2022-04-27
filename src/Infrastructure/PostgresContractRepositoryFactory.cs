@@ -9,16 +9,16 @@ namespace Infrastructure;
 /// <summary>
 /// Used at design-time by Entity Framework Core to generate the database migrations.
 /// </summary>
-public class PostgresContractRepositoryFactory : IDesignTimeDbContextFactory<PostgresContractRepository>
+public class PostgresContractRepositoryFactory : IDesignTimeDbContextFactory<EFContractRepository>
 {
     /// <inheritdoc />
-    public PostgresContractRepository CreateDbContext(string[] args)
+    public EFContractRepository CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<PostgresContractRepository>();
+        var optionsBuilder = new DbContextOptionsBuilder<EFContractRepository>();
         _ = optionsBuilder.UseNpgsql(
             "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
-        return new PostgresContractRepository(
+        return new EFContractRepository(
             optionsBuilder.Options,
-            new LoggerFactory().CreateLogger<PostgresContractRepository>());
+            new LoggerFactory().CreateLogger<EFContractRepository>());
     }
 }
