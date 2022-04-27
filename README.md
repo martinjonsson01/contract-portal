@@ -22,7 +22,7 @@ For local development, a Postgres daemon needs to be running, and a database ins
    it's `C:\Program Files\PostgreSQL\{YOUR_VERSION}\bin`, and for
    MacOS `/Applications/Postgres.app/Contents/Versions/{YOUR_VERSION}/bin`
 3. Open a terminal and enter into the postgres command-line by typing `psql -U postgres`
-4. If prompted for a password, try `postgres`, `password` or the password you set during installation
+4. If prompted for a password, try `postgres`, `password` or the password you set during installation (typing will not show anything until you submit using enter)
 5. Change the password: `ALTER USER postgres WITH PASSWORD 'password';`
 6. Create a new instance of the `contract_portal` database with the following command: `CREATE DATABASE contract_portal
    WITH ENCODING 'UTF8' LC_COLLATE='se-SE' LC_CTYPE='se-SE' TEMPLATE template0;`. If you're on MacOS, replace `se-SE`
