@@ -4,11 +4,11 @@
 
 <h2>Adminsida</h2>
 
-<ContractForm OnContractUploaded="OnNewContractAdded"/>
+<ContractForm OnContractUploaded="AddContractToTable"/>
 <hr/>
 <ContractTable @ref="@_contractTable"/>
 <hr/>
-<UserForm OnUserAdded="AddUserToList"/>
+<UserForm OnUserAdded="AddUserToTable"/>
 <hr/>
 <UserTable @ref="@_userTable"/>
 
@@ -17,12 +17,12 @@
     private ContractTable _contractTable = null!;
     private UserTable _userTable = null!;
 
-    private void OnNewContractAdded(Contract contract)
+    private void AddContractToTable(Contract contract)
     {
         _contractTable.Add(contract);
     }
 
-    private void AddUserToList(User user)
+    private void AddUserToTable(User user)
     {
         _userTable.Add(user);
     }

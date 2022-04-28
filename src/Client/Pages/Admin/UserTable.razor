@@ -46,7 +46,7 @@
     /// Removes a user from the list.
     /// </summary>
     /// <param name="user">The user to remove.</param>
-    private async void Remove(User user)
+    private async Task Remove(User user)
     {
         HttpResponseMessage response = await _http.DeleteAsync($"api/v1/users/{user.Id}");
         if (response.IsSuccessStatusCode)
