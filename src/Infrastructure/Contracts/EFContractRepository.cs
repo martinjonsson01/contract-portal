@@ -11,21 +11,26 @@ using Microsoft.Extensions.Logging;
 namespace Infrastructure.Contracts;
 
 /// <summary>
-/// Stores and fetches users from a PostgreSQL database.
+/// Stores and fetches users from an Entity Framework Core database.
 /// </summary>
-public class PostgresContractRepository : DbContext, IContractRepository
+public class EFContractRepository : DbContext, IContractRepository
 {
-    private readonly ILogger<PostgresContractRepository> _logger;
+    private readonly ILogger<EFContractRepository> _logger;
     private readonly IRecentContractService _recent;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PostgresContractRepository"/> class.
+    /// Initializes a new instance of the <see cref="EFContractRepository"/> class.
     /// </summary>
+    /// <param name="options">The database configuration options.</param>
     /// <param name="logger">The logging service to use.</param>
-    public PostgresContractRepository(ILogger<PostgresContractRepository> logger)
+    public EFContractRepository(
+        DbContextOptions<EFContractRepository> options,
+        ILogger<EFContractRepository> logger)
+        : base(options)
     {
         _logger = logger;
         _recent = new RecentContractService(new Collection<Contract>());
+        _logger.LogInformation("Established a new connection to the database");
     }
 
     /// <inheritdoc />
@@ -103,16 +108,5 @@ public class PostgresContractRepository : DbContext, IContractRepository
         {
             _logger.LogError("Could not update contract in database: {Message}", e.Message);
         }
-    }
-
-    /// <inheritdoc />
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        // Note: this connection string should be stored in an environment variable away from the source code.
-        // If you are replacing this connection string with actual credentials to a real database, don't
-        // just replace the string here in the source code, use an environment variable instead.
-        _ = optionsBuilder.UseNpgsql(
-            "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
-        _logger.LogInformation("Established a new connection to the postgres database");
     }
 }

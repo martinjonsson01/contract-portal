@@ -7,19 +7,15 @@ using Domain.Contracts;
 
 using FluentAssertions.Execution;
 
-using Infrastructure.Contracts;
-
-using Microsoft.Extensions.Logging;
-
 namespace Infrastructure.Tests.Contracts;
 
-public class ContractRepositoryTests
+public class ContractRepositoryTests : IClassFixture<TestContractDatabaseFixture>
 {
     private readonly IContractRepository _cut;
 
-    public ContractRepositoryTests()
+    public ContractRepositoryTests(TestContractDatabaseFixture fixture)
     {
-        _cut = new PostgresContractRepository(Mock.Of<ILogger<PostgresContractRepository>>());
+        _cut = fixture.CreateContext();
     }
 
     [Fact]
