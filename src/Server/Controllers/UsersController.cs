@@ -63,9 +63,9 @@ public class UsersController : BaseApiController<UsersController>
     /// </summary>
     /// <param name="username">The username.</param>
     /// <returns>Whether a user with the specified username exists.</returns>
-    [HttpGet("validate/{username}")]
-    public bool Validate(string username)
+    [HttpPost("validate")]
+    public IActionResult Validate([FromBody] string username)
     {
-        return _users.UserExists(username);
+        return _users.UserExists(username) ? Ok() : BadRequest();
     }
 }

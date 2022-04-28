@@ -44,11 +44,15 @@
 
     private async Task HandleSubmission()
     {
-        var response = await _http.GetAsync($"/api/v1/users/validate/{_user.UserName}");
-        var isLoggedIn = await response.Content.ReadFromJsonAsync<bool>();
-        if (isLoggedIn)
+        if (_user.UserName != null)
         {
-            LoggedInUsername = _user.UserName;
+            var response = await _http.PostAsJsonAsync<string>("/api/v1/users/validate", _user.UserName);
+            if (response.IsSuccessStatusCode)
+            {
+                LoggedInUsername = _user.UserName;
+                _navigationManager.NavigateTo("", true);
+
+            }
         }
     }
 
