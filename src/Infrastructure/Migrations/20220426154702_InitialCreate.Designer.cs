@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Infrastructure.Migrations
 {
-    [DbContext(typeof(PostgresUserRepository))]
+    [DbContext(typeof(EFUserRepository))]
     [Migration("20220426154702_InitialCreate")]
     partial class InitialCreate
     {
