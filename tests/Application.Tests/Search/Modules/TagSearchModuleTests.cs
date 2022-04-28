@@ -14,7 +14,7 @@ public class TagSearchModuleTests
     {
         _cut = new TagSearch();
 
-        string[] tags = { "Tag1", "Tag2", "Tag3", };
+        Tag[] tags = { new() { Text = "Tag1", }, new() { Text = "Tag2", }, new() { Text = "Tag3", }, };
         _contract = new Contract { Tags = tags, };
     }
 
@@ -27,7 +27,7 @@ public class TagSearchModuleTests
         // Arrange
 
         // Act
-        bool matches = _cut.Match(_contract, _contract.Tags[tagIndex]);
+        bool matches = _cut.Match(_contract, _contract.Tags[tagIndex].ToString());
 
         // Assert
         matches.Should().BeTrue();
@@ -51,7 +51,7 @@ public class TagSearchModuleTests
         // Arrange
 
         // Act
-        bool matches = _cut.Match(_contract, _contract.Tags[0].Substring(2));
+        bool matches = _cut.Match(_contract, _contract.Tags[0].ToString().Substring(2));
 
         // Assert
         matches.Should().BeFalse();
@@ -75,7 +75,7 @@ public class TagSearchModuleTests
         // Arrange
 
         // Act
-        bool matches = _cut.Match(_contract, _contract.Tags[0].ToUpperInvariant());
+        bool matches = _cut.Match(_contract, _contract.Tags[0].ToString().ToUpperInvariant());
 
         // Assert
         matches.Should().BeTrue();

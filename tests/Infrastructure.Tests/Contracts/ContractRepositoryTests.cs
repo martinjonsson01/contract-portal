@@ -7,17 +7,15 @@ using Domain.Contracts;
 
 using FluentAssertions.Execution;
 
-using Infrastructure.Contracts;
-
 namespace Infrastructure.Tests.Contracts;
 
-public class ContractRepositoryTests
+public class ContractRepositoryTests : IClassFixture<TestContractDatabaseFixture>
 {
     private readonly IContractRepository _cut;
 
-    public ContractRepositoryTests()
+    public ContractRepositoryTests(TestContractDatabaseFixture fixture)
     {
-        _cut = new FakeContractRepository();
+        _cut = fixture.CreateContext();
     }
 
     [Fact]
@@ -78,6 +76,25 @@ public class ContractRepositoryTests
         {
             fetchedContract.Should().NotBeNull();
             fetchedContract?.Id.Should().Be(oldContract.Id);
+            fetchedContract?.Id.Should().Be(newContract.Id);
+            fetchedContract?.Name.Should().BeEquivalentTo(newContract.Name);
+        }
+    }
+
+    [Fact]
+    public void UpdatingContract_AddsContractToRepository_WhenContractDoesNotExist()
+    {
+        // Arrange
+        var newContract = new Contract { Name = "New", };
+
+        // Act
+        _cut.UpdateContract(newContract);
+        Contract? fetchedContract = _cut.FetchContract(newContract.Id);
+
+        // Assert
+        using (new AssertionScope())
+        {
+            fetchedContract.Should().NotBeNull();
             fetchedContract?.Id.Should().Be(newContract.Id);
             fetchedContract?.Name.Should().BeEquivalentTo(newContract.Name);
         }

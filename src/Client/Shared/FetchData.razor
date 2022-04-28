@@ -1,4 +1,5 @@
-﻿@typeparam TData
+﻿@using Newtonsoft.Json
+@typeparam TData
 @inject HttpClient _http;
 
 @if (Data is null)
@@ -47,7 +48,8 @@ else
     /// </summary>
     public async Task Fetch(string url)
     {
-        Data = await _http.GetFromJsonAsync<TData>(url);
+        string json = await _http.GetStringAsync(url);
+        Data = JsonConvert.DeserializeObject<TData>(json);
     }
 
 }

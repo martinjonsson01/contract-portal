@@ -9,19 +9,24 @@ using Microsoft.Extensions.Logging;
 namespace Infrastructure.Users;
 
 /// <summary>
-/// Stores and fetches users from a PostgreSQL database.
+/// Stores and fetches users from an Entity Framework Core database.
 /// </summary>
-public class PostgresUserRepository : DbContext, IUserRepository
+public class EFUserRepository : DbContext, IUserRepository
 {
-    private readonly ILogger<PostgresUserRepository> _logger;
+    private readonly ILogger<EFUserRepository> _logger;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PostgresUserRepository"/> class.
+    /// Initializes a new instance of the <see cref="EFUserRepository"/> class.
     /// </summary>
+    /// <param name="options">The database configuration options.</param>
     /// <param name="logger">The logging service to use.</param>
-    public PostgresUserRepository(ILogger<PostgresUserRepository> logger)
+    public EFUserRepository(
+        DbContextOptions<EFUserRepository> options,
+        ILogger<EFUserRepository> logger)
+        : base(options)
     {
         _logger = logger;
+        _logger.LogInformation("Established a new connection to the database");
     }
 
     /// <inheritdoc />
@@ -58,17 +63,6 @@ public class PostgresUserRepository : DbContext, IUserRepository
 
         // If any changes were made, then the remove operation succeeded.
         return changes > 0;
-    }
-
-    /// <inheritdoc />
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        // Note: this connection string should be stored in an environment variable away from the source code.
-        // If you are replacing this connection string with actual credentials to a real database, don't
-        // just replace the string here in the source code, use an environment variable instead.
-        _ = optionsBuilder.UseNpgsql(
-            "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
-        _logger.LogInformation("Established a new connection to the postgres database");
     }
 
     /// <inheritdoc />
