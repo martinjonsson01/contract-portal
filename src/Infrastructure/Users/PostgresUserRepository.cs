@@ -1,3 +1,4 @@
+using System.Data;
 using Application.Users;
 
 using Domain.Users;
@@ -39,20 +40,24 @@ public class PostgresUserRepository : DbContext, IUserRepository
     /// <inheritdoc />
     public bool Remove(Guid id)
     {
-        User user = (from u in Users where u.Id == id select u).First();
-        _ = Users.Remove(user);
+        User? toRemove = Users.Find(id);
+        if (toRemove is null)
+            return false;
 
+        _ = Users.Remove(toRemove);
+
+        int changes = 0;
         try
         {
-            _ = SaveChanges();
-            _logger.LogInformation("Removed a user with name {Name} and id {Id} from the database", user.Name, user.Id);
-            return true;
+            changes = SaveChanges();
         }
-        catch (DbUpdateException)
+        catch (DataException e)
         {
-            _logger.LogInformation("User with name {Name} and id {Id} was not removed from the database", user.Name, user.Id);
-            return false;
+            _logger.LogError("Could not remove contract from database: {Message}", e.Message);
         }
+
+        // If any changes were made, then the remove operation succeeded.
+        return changes > 0;
     }
 
     /// <inheritdoc />
