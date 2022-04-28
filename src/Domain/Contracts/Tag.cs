@@ -6,7 +6,7 @@
 public class Tag
 {
     /// <summary>
-    /// Gets or sets the identifier.
+    /// Gets the identifier.
     /// </summary>
     public Guid Id { get; init; } = Guid.NewGuid();
 
