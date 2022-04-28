@@ -64,7 +64,7 @@ public class EFContractRepository : DbContext, IContractRepository
     /// <inheritdoc />
     public bool Remove(Guid id)
     {
-        _recent.Remove(id); // This line should not exist when there is an actual database (it will remove any relations)
+        _recent.Remove(id); // This line should not exist when recents are included in the database
         Contract? toRemove = Contracts.Find(id);
         if (toRemove is null)
             return false;

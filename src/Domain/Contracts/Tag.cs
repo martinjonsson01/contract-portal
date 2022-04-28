@@ -6,9 +6,9 @@
 public class Tag
 {
     /// <summary>
-    /// Gets or sets the identifier.
+    /// Gets the identifier.
     /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
     /// Gets or sets the identifier of the <see cref="Contract"/> which this tag belongs to.
