@@ -41,4 +41,46 @@ public class UsersControllerTests
         // Assert
         actual.Should().BeOfType<OkResult>();
     }
+
+    [Fact]
+    public void Remove_ReturnsOk_WhenIDExists()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        _mockUsers.Setup(service => service.Remove(id)).Returns(true);
+
+        // Act
+        IActionResult actual = _cut.Remove(id);
+
+        // Assert
+        actual.Should().BeOfType<OkResult>();
+    }
+
+    [Fact]
+    public void Remove_CallsUserService_WhenIDExists()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        _mockUsers.Setup(service => service.Remove(id)).Returns(true);
+
+        // Act
+        IActionResult actual = _cut.Remove(id);
+
+        // Assert
+        _mockUsers.Verify(o => o.Remove(id), Times.Once);
+    }
+
+    [Fact]
+    public void Remove_ReturnsNotFound_WhenIDDoesNotExist()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        _mockUsers.Setup(service => service.Remove(id)).Returns(false);
+
+        // Act
+        IActionResult actual = _cut.Remove(id);
+
+        // Assert
+        actual.Should().BeOfType<NotFoundResult>();
+    }
 }

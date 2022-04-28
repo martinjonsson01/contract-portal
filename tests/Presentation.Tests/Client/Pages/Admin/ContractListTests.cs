@@ -21,8 +21,8 @@ public class ContractListTests : UITestFixture
         Contract[] contracts = { new Contract() { Name = "First", }, new Contract() { Name = "Second", }, };
         MockHttp.When("/api/v1/contracts").RespondJson(contracts);
 
-        IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
-        const string itemSelector = ".list-group-item";
+        IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
+        const string itemSelector = ".contract-table-row";
         cut.WaitForElement(itemSelector);
 
         const string newContractName = "New Contract";
@@ -48,7 +48,7 @@ public class ContractListTests : UITestFixture
             await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
             return new HttpResponseMessage(HttpStatusCode.OK);
         });
-        IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
+        IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
 
         const string newContractName = "New Contract";
         var newContract = new Contract { Name = newContractName, };
@@ -69,8 +69,8 @@ public class ContractListTests : UITestFixture
         MockHttp.When("/api/v1/contracts").RespondJson(contracts);
         MockHttp.When(HttpMethod.Delete, $"/api/v1/contracts/{firstContract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
 
-        IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
-        const string removeButton = ".btn.btn-danger";
+        IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
+        const string removeButton = "#confirm-remove";
         cut.WaitForElement(removeButton);
 
         // Act
@@ -80,6 +80,6 @@ public class ContractListTests : UITestFixture
         // Assert
         Expression<Func<IElement, bool>>
             elementWithNewName = contract => contract.TextContent.Contains(firstContract.Name);
-        cut.FindAll(".list-group-item").Should().NotContain(elementWithNewName);
+        cut.FindAll(".contract-table-row").Should().NotContain(elementWithNewName);
     }
 }

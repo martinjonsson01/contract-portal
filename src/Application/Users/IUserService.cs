@@ -18,4 +18,11 @@ public interface IUserService
     /// </summary>
     /// <param name="user">The new user.</param>
     void Add(User user);
+
+    /// <summary>
+    /// Removes a user.
+    /// </summary>
+    /// <param name="id">User to be removed.</param>
+    /// <returns>Whether the removal was successful.</returns>
+    bool Remove(Guid id);
 }

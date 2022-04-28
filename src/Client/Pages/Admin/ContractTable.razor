@@ -6,12 +6,23 @@
            Url="/api/v1/contracts"
            Context="contracts">
 
-    <div class="list-group">
+    <h4>Dina kontrakt</h4>
+    <table class="table table-striped table-responsive-md btn-table">
+        <thead>
+            <tr>
+                <th scope="col">Kontraktnamn</th>
+                <th scope="col">Företag</th>
+                <th scope="col">Ta bort</th>
+            </tr>
+        </thead>
+
+        <tbody>
         @foreach (Contract contract in contracts)
         {
-            <ContractListItem Contract=@contract OnContractRemoved=@OnContractRemoved/>
+            <ContractTableRow Contract=@contract OnContractRemoved=@Remove/>
         }
-    </div>
+        </tbody>
+    </table>
 
 </FetchData>
 
@@ -33,12 +44,15 @@
     /// Removes a contract from the list.
     /// </summary>
     /// <param name="contract">The contract to remove.</param>
-    private void OnContractRemoved(Contract contract)
+    private async Task Remove(Contract contract)
     {
-    // Using null forgiving operator because because _contracts
-    // can not be null when remove button is pressed.
-        _dataFetcher.Data!.Remove(contract);
-        InvokeAsync(StateHasChanged);
+        HttpResponseMessage response = await _http.DeleteAsync($"api/v1/contracts/{contract.Id}");
+        if (response.IsSuccessStatusCode)
+        {
+            _dataFetcher.Data!.Remove(contract);
+            await InvokeAsync(StateHasChanged);
+        }
+
     }
 
 }
