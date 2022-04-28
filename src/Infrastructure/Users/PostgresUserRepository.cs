@@ -3,7 +3,6 @@ using Application.Users;
 using Domain.Users;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Users;
@@ -40,11 +39,20 @@ public class PostgresUserRepository : DbContext, IUserRepository
     /// <inheritdoc />
     public bool Remove(Guid id)
     {
-        User user = All.First(o => o.Id.Equals(id));
+        User user = (from u in Users where u.Id == id select u).First();
         _ = Users.Remove(user);
-        _ = SaveChanges();
-        _logger.LogInformation("Removed a user with name {Name} and id {Id} from the database", user.Name, user.Id);
-        return true;
+
+        try
+        {
+            _ = SaveChanges();
+            _logger.LogInformation("Removed a user with name {Name} and id {Id} from the database", user.Name, user.Id);
+            return true;
+        }
+        catch (DbUpdateException)
+        {
+            _logger.LogInformation("User with name {Name} and id {Id} was not removed from the database", user.Name, user.Id);
+            return false;
+        }
     }
 
     /// <inheritdoc />
