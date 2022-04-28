@@ -72,7 +72,7 @@ After the installation follow these steps:
 1. In the root of the project run the following command: `dotnet publish ContractPortal.sln -c Release -o \manual-release`
 1. Now right-click on the **manual-release** directory and select **Deploy to Web App**
 1. In the command palette select the subscription to publish the app to
-1. Select the app service web app to use
+1. Select the App Service web app to use
 1. If prompted to confirm, click **deploy**
 
 The process should now start and when it is done you will get a notifcation to open the app in the browser.
