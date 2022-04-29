@@ -17,10 +17,7 @@ jobs:
 
     steps:
     - name: Install SQL Server
-      uses: Particular/install-sql-server-action@main
-      with:
-          connection-string-env-var: SQL_SERVER_CONNECTION_STRING
-          catalog: master_test
+      run: docker run -e "ACCEPT_EULA=Y" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
