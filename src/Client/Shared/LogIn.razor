@@ -1,7 +1,9 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using Blazorise.Extensions
+@using Domain.Users
 @inject HttpClient _http
 @inject IJSRuntime _js
+@inject NavigationManager _navigationManager
 
 <div class="modal" id="log-in">
     <div class="modal-dialog">
@@ -18,7 +20,14 @@
 
                         <InputText id="username" class="form-control" placeholder="Användarnamn" @bind-Value="@_user.UserName"/>
 
-                        @if (_logInFailed) { <p>Inloggningen misslyckades </p> }
+                        @if (_logInFailed)
+                        {
+                            <p>Inloggningen misslyckades </p>
+                        }
+                        @if (!_logInFailed && !LoggedInUser.IsNullOrEmpty())
+                        {
+                            <p>Inloggad som @LoggedInUser</p>
+                        }
                     </div>
                     <div class="login-footer">
                         <button type="submit" class="btn btn-primary mb-3 ">Logga in</button>
@@ -31,25 +40,27 @@
 
 @code {
 
-    UserInputFields _user = new UserInputFields();
+    UserInputFields _user = new();
     bool _logInFailed = false;
 
     private class UserInputFields
     {
         [Required]
-        public string? UserName { get; set; }
+        public string UserName { get; set; } = string.Empty;
     }
 
-    [CascadingParameter]
+    [CascadingParameter(Name = "LoggedInUser")]
     private string? LoggedInUser { get; set; }
 
     private async Task ValidateUser()
     {
         HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users/validate", _user.UserName);
-        if (response.IsSuccessStatusCode) {
+        if (response.IsSuccessStatusCode)
+        {
             LoggedInUser = _user.UserName;
             _logInFailed = false;
             await _js.InvokeVoidAsync("closeModal", "#log-in");
+            _navigationManager.NavigateTo("");
         }
         else
         {

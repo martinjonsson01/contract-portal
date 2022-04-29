@@ -1,10 +1,10 @@
-﻿@inherits LayoutComponentBase
-<div class="page">
-    <CascadingValue Value="@_loggedInUser">
+﻿@using Domain.Users
+@inherits LayoutComponentBase
+<CascadingValue Value="@LoggedInUser" Name="LoggedInUser">
+    <div class="page">
         <div class="sidebar">
             <NavMenu/>
         </div>
-
         <main>
             <div class="top-row px-4">
                 <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
@@ -15,10 +15,10 @@
                 <LogIn></LogIn>
             </article>
         </main>
-    </CascadingValue>
-</div>
+    </div>
+</CascadingValue>
 
 @code
 {
-    private string? _loggedInUser = null;
+    private string? LoggedInUser { get; set; } = string.Empty;
 }
