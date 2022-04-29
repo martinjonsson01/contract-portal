@@ -24,10 +24,6 @@
                         {
                             <p>Inloggningen misslyckades </p>
                         }
-                        @if (!_logInFailed && !LoggedInUser.IsNullOrEmpty())
-                        {
-                            <p>Inloggad som @LoggedInUser</p>
-                        }
                     </div>
                     <div class="login-footer">
                         <button type="submit" class="btn btn-primary mb-3 ">Logga in</button>
@@ -48,6 +44,11 @@
         [Required]
         public string UserName { get; set; } = string.Empty;
     }
+    /// <summary>
+    /// Called when the username is changed.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string> OnUserLogInChange { get; set; } = EventCallback<string>.Empty;
 
     [CascadingParameter(Name = "LoggedInUser")]
     private string? LoggedInUser { get; set; }
@@ -59,6 +60,7 @@
         {
             LoggedInUser = _user.UserName;
             _logInFailed = false;
+            await OnUserLogInChange.InvokeAsync(_user.UserName);
             await _js.InvokeVoidAsync("closeModal", "#log-in");
             _navigationManager.NavigateTo("");
         }

@@ -31,9 +31,19 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#log-in">
-                Logga in
-            </button>
+            @{ Console.WriteLine(LoggedInUser); }
+            @if (LoggedInUser.IsNullOrEmpty())
+            {
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#log-in">
+                    Logga in
+                </button>
+            }
+            else
+            {
+                <NavLink class="nav-link">
+                      Inloggad som: @LoggedInUser
+                </NavLink>
+            }
         </div>
     </nav>
 </div>
@@ -51,5 +61,15 @@
     private void ToggleNavMenu()
     {
         _collapseNavMenu = !_collapseNavMenu;
+    }
+
+    /// <summary>
+    /// Updates the username for the current user.
+    /// </summary>
+    /// <param name="username">The updated username.</param>
+    public void UpdateLoggedInUser(string username)
+    {
+        LoggedInUser = username;
+        StateHasChanged();
     }
 }

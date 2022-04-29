@@ -1,24 +1,35 @@
 ﻿@using Domain.Users
 @inherits LayoutComponentBase
 <CascadingValue Value="@LoggedInUser" Name="@nameof(LoggedInUser)">
-    <div class="page">
-        <div class="sidebar">
-            <NavMenu/>
-        </div>
-        <main>
-            <div class="top-row px-4">
-                <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        <div class="page">
+            <div class="sidebar">
+                <NavMenu @ref="_navMenu"/>
             </div>
+            <main>
+                <div class="top-row px-4">
+                    <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                </div>
 
-            <article class="content px-4">
-                @Body
-                <LogIn></LogIn>
-            </article>
-        </main>
-    </div>
+                <article class="content px-4">
+                    @Body
+                    <LogIn OnUserLogInChange="@OnUserLogIn"></LogIn>
+                </article>
+            </main>
+        </div>
 </CascadingValue>
 
 @code
 {
+    NavMenu _navMenu = null!;
+
+    private void OnUserLogIn(string username)
+    {
+        Console.WriteLine(username);
+        LoggedInUser = username;
+        _navMenu.UpdateLoggedInUser(username);
+        InvokeAsync(StateHasChanged);
+    }
+
+
     private string? LoggedInUser { get; set; } = string.Empty;
 }
