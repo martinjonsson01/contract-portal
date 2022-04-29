@@ -14,10 +14,13 @@ jobs:
   build-and-test:
 
     runs-on: ubuntu-latest
+    services:
+        sql.data:
+            image: mcr.microsoft.com/mssql/server:2019-latest
+            env:
+                ACCEPT_EULA: Y
 
     steps:
-    - name: Install SQL Server
-      run: docker run -e "ACCEPT_EULA=Y" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
