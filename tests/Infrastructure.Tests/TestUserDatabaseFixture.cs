@@ -10,7 +10,7 @@ namespace Infrastructure.Tests;
 public class TestUserDatabaseFixture
 {
     private const string ConnectionString =
-        @"User ID=postgres;Password=password;Host=localhost;Port=5432;Database=user_portal_test;";
+        @"Server=localhost;Database=master_test;Trusted_Connection=True;";
 
     private static readonly object _lock = new();
     private static bool _databaseInitialized;
@@ -40,7 +40,7 @@ public class TestUserDatabaseFixture
     {
         return new EFUserRepository(
             new DbContextOptionsBuilder<EFUserRepository>()
-                .UseNpgsql(ConnectionString)
+                .UseSqlServer(ConnectionString)
                 .Options,
             Mock.Of<ILogger<EFUserRepository>>());
     }
