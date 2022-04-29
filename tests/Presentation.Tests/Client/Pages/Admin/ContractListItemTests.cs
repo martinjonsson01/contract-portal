@@ -24,14 +24,14 @@ public class ContractListItemTests : IDisposable
         const string name = "SJ";
         var contract = new Contract() { Name = name };
 
-        void ParameterBuilder(ComponentParameterCollectionBuilder<ContractListItem> parameters) =>
+        void ParameterBuilder(ComponentParameterCollectionBuilder<ContractTableRow> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
         // Act
-        IRenderedComponent<ContractListItem> cut =
-            _context.RenderComponent<ContractListItem>(ParameterBuilder);
+        IRenderedComponent<ContractTableRow> cut =
+            _context.RenderComponent<ContractTableRow>(ParameterBuilder);
 
         // Assert
-        cut.Find($"#{contract.Name}").TextContent.Should().Contain(name);
+        cut.Find($"#contract_id_{contract.Id}").TextContent.Should().Contain(name);
     }
 }

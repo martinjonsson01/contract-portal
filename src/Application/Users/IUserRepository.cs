@@ -20,6 +20,13 @@ public interface IUserRepository
     void Add(User user);
 
     /// <summary>
+    /// Removes the user with the given ID.
+    /// </summary>
+    /// <param name="id">The id of the user to be removed.</param>
+    /// <returns>If the removal was successful.</returns>
+    bool Remove(Guid id);
+
+    /// <summary>
     /// Checks whether a user exists or not.
     /// </summary>
     /// <param name="username">The username to look for.</param>

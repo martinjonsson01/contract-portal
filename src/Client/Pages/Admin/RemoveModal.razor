@@ -1,0 +1,52 @@
+@using Domain.Users
+@inject HttpClient _http
+
+<!-- Modal -->
+<div class="modal fade" id="@($"modal_{Id}")" tabindex="-1" aria-labelledby="Modal Remove dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">@Title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        @Message
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" id="confirm-remove" class="btn btn-danger" @onclick="OnRemove" data-bs-dismiss="modal">Ta bort </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+      </div>
+    </div>
+  </div>
+</div>
+@code
+{
+    /// <summary>
+    ///     Called when remove button has been pressed.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public EventCallback RemovalConfirmed { get; set; } = EventCallback.Empty;
+
+    /// <summary>
+    ///     The title to be displayed.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public string Title { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     The message to be displayed.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public string Message { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     A unique Id for the modal.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public Guid Id { get; set; } = new();
+
+    private async Task OnRemove()
+    {
+        await RemovalConfirmed.InvokeAsync();
+    }
+}

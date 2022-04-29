@@ -1,6 +1,6 @@
 ﻿@using Domain.Users
 @inherits LayoutComponentBase
-<CascadingValue Value="@LoggedInUser" Name="LoggedInUser">
+<CascadingValue Value="@LoggedInUser" Name="@nameof(LoggedInUser)">
     <div class="page">
         <div class="sidebar">
             <NavMenu/>

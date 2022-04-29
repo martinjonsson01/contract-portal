@@ -33,6 +33,12 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
+    public bool Remove(Guid id)
+    {
+        return _repo.Remove(id);
+    }
+
+    /// <inheritdoc />
     public IEnumerable<User> FetchAllUsers()
     {
         return _repo.All;

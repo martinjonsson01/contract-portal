@@ -31,7 +31,9 @@ public class ContractService : IContractService
     /// <inheritdoc />
     public IEnumerable<Contract> FetchAllContracts()
     {
-        return _repo.All;
+        IEnumerable<Contract> contracts = _repo.All;
+        Console.WriteLine(contracts);
+        return contracts;
     }
 
     /// <inheritdoc />

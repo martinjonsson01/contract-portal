@@ -24,12 +24,12 @@ public class UserListItemTests : IDisposable
         const string name = "Foo";
         var user = new User() { Name = name };
 
-        void ParameterBuilder(ComponentParameterCollectionBuilder<UserListItem> parameters) =>
+        void ParameterBuilder(ComponentParameterCollectionBuilder<UserTableRow> parameters) =>
             parameters.Add(property => property.User, user);
 
         // Act
-        IRenderedComponent<UserListItem> cut =
-            _context.RenderComponent<UserListItem>(ParameterBuilder);
+        IRenderedComponent<UserTableRow> cut =
+            _context.RenderComponent<UserTableRow>(ParameterBuilder);
 
         // Assert
         cut.Find($"#user_id_{user.Id}").TextContent.Should().Contain(name);
@@ -42,12 +42,12 @@ public class UserListItemTests : IDisposable
         DateTime latestPaymentDate = DateTime.Now;
         var user = new User() { LatestPaymentDate = latestPaymentDate };
 
-        void ParameterBuilder(ComponentParameterCollectionBuilder<UserListItem> parameters) =>
+        void ParameterBuilder(ComponentParameterCollectionBuilder<UserTableRow> parameters) =>
             parameters.Add(property => property.User, user);
 
         // Act
-        IRenderedComponent<UserListItem> cut =
-            _context.RenderComponent<UserListItem>(ParameterBuilder);
+        IRenderedComponent<UserTableRow> cut =
+            _context.RenderComponent<UserTableRow>(ParameterBuilder);
 
         // Assert
         cut.Find($"#user_id_{user.Id}").TextContent.Should().Contain(latestPaymentDate.ToShortDateString());

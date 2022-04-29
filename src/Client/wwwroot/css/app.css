@@ -119,3 +119,17 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+
+table {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+td {
+    vertical-align: middle;
+}
+
+thead {
+    background-color: var(--prodigo-black);
+    color: var(--prodigo-white);
+}

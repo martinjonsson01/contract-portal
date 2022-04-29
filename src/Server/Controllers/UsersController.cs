@@ -49,6 +49,19 @@ public class UsersController : BaseApiController<UsersController>
     }
 
     /// <summary>
+    /// Removes the specified user.
+    /// </summary>
+    /// <param name="id">Id of the user to be removed.</param>
+    /// <returns>If the user was successfully removed.</returns>
+    [HttpDelete("{id:guid}")]
+    public IActionResult Remove(Guid id)
+    {
+        return _users.Remove(id) ?
+            Ok() :
+            NotFound();
+    }
+
+    /// <summary>
     /// Gets all users.
     /// </summary>
     /// <returns>All the stored users.</returns>
