@@ -15,21 +15,10 @@ Clone the repository: `git clone https://github.com/martinjonsson01/contract-por
 
 For local development, a Postgres daemon needs to be running, and a database instance needs to be created.
 
-1. [Download and install PostgreSQL](https://www.postgresql.org/download/)
-2. Add the following path to your PATH-environment variable (guide
-   for [Windows](https://docs.microsoft.com/en-us/previous-versions/office/developer/sharepoint-2010/ee537574(v=office.14))
-   and [MacOS](https://wpbeaches.com/how-to-add-to-the-shell-path-in-macos-using-terminal/)): for Windows
-   it's `C:\Program Files\PostgreSQL\{YOUR_VERSION}\bin`, and for
-   MacOS `/Applications/Postgres.app/Contents/Versions/{YOUR_VERSION}/bin`
-3. Open a terminal and enter into the postgres command-line by typing `psql -U postgres`
-4. If prompted for a password, try `postgres`, `password` or the password you set during installation (typing will not show anything until you submit using enter)
-5. Change the password: `ALTER USER postgres WITH PASSWORD 'password';`
-6. Create a new instance of the `contract_portal` database with the following command: `CREATE DATABASE contract_portal
-   WITH ENCODING 'UTF8' LC_COLLATE='se-SE' LC_CTYPE='se-SE' TEMPLATE template0;`. If you're on MacOS, replace `se-SE`
-   with `sv_SE`
-7. In your IDE terminal, Navigate to the `Infrastructure` project using `cd src/Infrastructure/`.
-8. Install the Entity Framework tools using `dotnet tool install --global dotnet-ef`
-9. Apply the database migrations using `dotnet ef database update`
+1. [Download and install Microsoft SQL Server (developer version)](https://www.microsoft.com/sv-se/sql-server/sql-server-downloads)
+2. In your IDE terminal, Navigate to the `Infrastructure` project using `cd src/Infrastructure/`.
+3. Install the Entity Framework tools using `dotnet tool install --global dotnet-ef`
+4. Apply the database migrations for every context using `dotnet ef database update --context EF<your context here>Repository`
 
 ### Building and running
 
