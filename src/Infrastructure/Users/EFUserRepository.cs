@@ -1,3 +1,4 @@
+using System.Data;
 using Application.Users;
 
 using Domain.Users;
@@ -39,6 +40,29 @@ public class EFUserRepository : DbContext, IUserRepository
         _ = Users.Add(user);
         _ = SaveChanges();
         _logger.LogInformation("Added a new user with name {Name} and id {Id} to the database", user.Name, user.Id);
+    }
+
+    /// <inheritdoc />
+    public bool Remove(Guid id)
+    {
+        User? toRemove = Users.Find(id);
+        if (toRemove is null)
+            return false;
+
+        _ = Users.Remove(toRemove);
+
+        int changes = 0;
+        try
+        {
+            changes = SaveChanges();
+        }
+        catch (DataException e)
+        {
+            _logger.LogError("Could not remove contract from database: {Message}", e.Message);
+        }
+
+        // If any changes were made, then the remove operation succeeded.
+        return changes > 0;
     }
 
     /// <inheritdoc />
