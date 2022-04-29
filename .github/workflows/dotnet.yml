@@ -20,7 +20,7 @@ jobs:
       uses: Particular/install-sql-server-action@main
       with:
           connection-string-env-var: SQL_SERVER_CONNECTION_STRING
-          catalog: nservicebus
+          catalog: master_test
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
