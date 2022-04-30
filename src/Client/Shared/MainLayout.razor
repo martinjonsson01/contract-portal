@@ -18,7 +18,6 @@
 
     private void OnUserLogIn(string username)
     {
-        Console.WriteLine(username);
         LoggedInUser = username;
         _navMenu.UpdateLoggedInUser(username);
         InvokeAsync(StateHasChanged);

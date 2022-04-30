@@ -32,7 +32,6 @@
                 </li>
             </ul>
             <div class="nav-item">
-                @{ Console.WriteLine(LoggedInUser); }
                 @if (LoggedInUser.IsNullOrEmpty())
                 {
                     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#log-in">
