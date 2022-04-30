@@ -50,7 +50,7 @@
     [Parameter]
     public EventCallback<string> OnUserLogInChange { get; set; } = EventCallback<string>.Empty;
 
-    [CascadingParameter(Name = "LoggedInUser")]
+    [CascadingParameter(Name = nameof(LoggedInUser))]
     private string? LoggedInUser { get; set; }
 
     private async Task ValidateUser()
