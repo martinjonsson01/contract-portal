@@ -1,17 +1,18 @@
 ﻿@inherits LayoutComponentBase
 <CascadingValue Value="@LoggedInUser" Name="@nameof(LoggedInUser)">
-        <div class="page">
-            <main>
-                <div class="sticky-top">
-                    <NavMenu @ref="_navMenu"/>
-                </div>
-                <article class="content px-4">
-                    @Body
-                    <LogIn OnUserLogInChange="@OnUserLogIn"></LogIn>
-                </article>
-            </main>
-        </div>
+    <div class="page">
+        <main>
+            <div class="sticky-top">
+                <NavMenu @ref="_navMenu"/>
+            </div>
+            <article class="content px-4">
+                @Body
+                <LogIn OnUserLogInChange="@OnUserLogIn"/>
+            </article>
+        </main>
+    </div>
 </CascadingValue>
+
 @code
 {
     NavMenu _navMenu = null!;
@@ -22,7 +23,6 @@
         _navMenu.UpdateLoggedInUser(username);
         InvokeAsync(StateHasChanged);
     }
-
 
     private string? LoggedInUser { get; set; } = string.Empty;
 }
