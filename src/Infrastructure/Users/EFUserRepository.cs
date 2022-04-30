@@ -13,6 +13,8 @@ namespace Infrastructure.Users;
 /// </summary>
 public class EFUserRepository : DbContext, IUserRepository
 {
+    private const string AdminName = "admin";
+
     private readonly ILogger<EFUserRepository> _logger;
 
     /// <summary>
@@ -27,6 +29,9 @@ public class EFUserRepository : DbContext, IUserRepository
     {
         _logger = logger;
         _logger.LogInformation("Established a new connection to the database");
+
+        if (!Users.Any(user => user.Name == AdminName))
+            CreateAdminUser();
     }
 
     /// <inheritdoc />
@@ -76,5 +81,19 @@ public class EFUserRepository : DbContext, IUserRepository
     {
         _ = modelBuilder.Entity<User>()
                         .HasKey(user => user.Id);
+    }
+
+    private void CreateAdminUser()
+    {
+        var admin = new User { Name = AdminName, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
+        _ = Users.Add(admin);
+        try
+        {
+            _ = SaveChanges();
+        }
+        catch (DataException e)
+        {
+            _logger.LogError("Could not create admin user: {Message}", e.Message);
+        }
     }
 }

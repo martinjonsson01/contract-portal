@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Linq;
 
 using Application.Users;
+
 using Domain.Users;
 
 namespace Infrastructure.Tests.Users;
 
 public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
 {
-    private readonly IUserRepository _cut;
+    private readonly TestUserDatabaseFixture _fixture;
+    private IUserRepository _cut;
 
     public UserRepositoryTests(TestUserDatabaseFixture fixture)
     {
-        _cut = fixture.CreateContext();
+        _fixture = fixture;
+        _cut = _fixture.CreateContext();
     }
 
     [Fact]
@@ -39,5 +43,43 @@ public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
 
         // Assert
         actual.Should().BeTrue();
+    }
+
+    [Fact]
+    public void AfterCreation_AdminIsCreated_IfNoAdminExistedPreviously()
+    {
+        // Arrange
+        const string adminUsername = "admin";
+        User? admin = _cut.All.FirstOrDefault(user => user.Name == adminUsername);
+        if (admin is not null)
+            _cut.Remove(admin.Id);
+
+        // Re-create database.
+        _cut = _fixture.CreateContext();
+
+        // Act
+        bool exists = _cut.UserExists(adminUsername);
+
+        // Assert
+        exists.Should().BeTrue();
+    }
+
+    [Fact]
+    public void AfterCreation_ThereIsOnlyOneAdmin_IfAdminExistedPreviously()
+    {
+        // Arrange
+        const string adminUsername = "admin";
+        User? admin = _cut.All.FirstOrDefault(user => user.Name == adminUsername);
+
+        if (admin is null) // Ensure admin exists.
+            _cut.Add(new User { Name = adminUsername, });
+
+        _cut = _fixture.CreateContext(); // Re-create database.
+
+        // Act
+        IEnumerable<User> admins = _cut.All.Where(user => user.Name == adminUsername);
+
+        // Assert
+        admins.Should().ContainSingle();
     }
 }
