@@ -34,7 +34,7 @@
             <div>
                 @if (LoggedInUser.IsNullOrEmpty())
                 {
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#log-in">
+                    <button id="login-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#log-in">
                         Logga in
                     </button>
                 }
@@ -51,7 +51,10 @@
 
 @code {
 
+    /// <summary>
+    /// The name of the currently logged in user.
+    /// </summary>
     [CascadingParameter(Name = nameof(LoggedInUser))]
-    private string? LoggedInUser { get; set; }
+    public string? LoggedInUser { get; set; }
 
 }
