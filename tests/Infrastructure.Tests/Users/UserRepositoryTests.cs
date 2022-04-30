@@ -46,40 +46,40 @@ public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
     }
 
     [Fact]
-    public void AfterCreation_AdminIsCreated_IfNoAdminExistedPreviously()
+    public void AfterCreation_DefaultUserIsCreated_IfNoDefaultUserExistedPreviously()
     {
         // Arrange
-        const string adminUsername = "admin";
-        User? admin = _cut.All.FirstOrDefault(user => user.Name == adminUsername);
-        if (admin is not null)
-            _cut.Remove(admin.Id);
+        const string defaultUsername = "default user";
+        User? defaultUser = _cut.All.FirstOrDefault(user => user.Name == defaultUsername);
+        if (defaultUser is not null)
+            _cut.Remove(defaultUser.Id);
 
         // Re-create database.
         _cut = _fixture.CreateContext();
 
         // Act
-        bool exists = _cut.UserExists(adminUsername);
+        bool exists = _cut.UserExists(defaultUsername);
 
         // Assert
         exists.Should().BeTrue();
     }
 
     [Fact]
-    public void AfterCreation_ThereIsOnlyOneAdmin_IfAdminExistedPreviously()
+    public void AfterCreation_ThereIsOnlyOneDefaultUser_IfDefaultUserExistedPreviously()
     {
         // Arrange
-        const string adminUsername = "admin";
-        User? admin = _cut.All.FirstOrDefault(user => user.Name == adminUsername);
+        const string defaultUsername = "default user";
+        User? defaultUser = _cut.All.FirstOrDefault(user => user.Name == defaultUsername);
 
-        if (admin is null) // Ensure admin exists.
-            _cut.Add(new User { Name = adminUsername, });
+        if (defaultUser is null) // Ensure user exists.
+            _cut.Add(new User { Name = defaultUsername, });
 
         _cut = _fixture.CreateContext(); // Re-create database.
 
         // Act
-        IEnumerable<User> admins = _cut.All.Where(user => user.Name == adminUsername);
+        IEnumerable<User> defaultUsers = _cut.All.Where(user => user.Name == defaultUsername);
 
         // Assert
-        admins.Should().ContainSingle();
+        defaultUsers.Should().ContainSingle();
     }
 }

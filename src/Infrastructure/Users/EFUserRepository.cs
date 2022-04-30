@@ -13,7 +13,7 @@ namespace Infrastructure.Users;
 /// </summary>
 public class EFUserRepository : DbContext, IUserRepository
 {
-    private const string AdminName = "admin";
+    private const string DefaultUserName = "default-user";
 
     private readonly ILogger<EFUserRepository> _logger;
 
@@ -30,8 +30,8 @@ public class EFUserRepository : DbContext, IUserRepository
         _logger = logger;
         _logger.LogInformation("Established a new connection to the database");
 
-        if (!Users.Any(user => user.Name == AdminName))
-            CreateAdminUser();
+        if (!Users.Any(user => user.Name == DefaultUserName))
+            CreateDefaultUser();
     }
 
     /// <inheritdoc />
@@ -83,17 +83,17 @@ public class EFUserRepository : DbContext, IUserRepository
                         .HasKey(user => user.Id);
     }
 
-    private void CreateAdminUser()
+    private void CreateDefaultUser()
     {
-        var admin = new User { Name = AdminName, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
-        _ = Users.Add(admin);
+        var defaultUser = new User { Name = DefaultUserName, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
+        _ = Users.Add(defaultUser);
         try
         {
             _ = SaveChanges();
         }
         catch (DataException e)
         {
-            _logger.LogError("Could not create admin user: {Message}", e.Message);
+            _logger.LogError("Could not create default user: {Message}", e.Message);
         }
     }
 }
