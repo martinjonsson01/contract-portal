@@ -1,15 +1,10 @@
-﻿@using Domain.Users
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 <CascadingValue Value="@LoggedInUser" Name="@nameof(LoggedInUser)">
         <div class="page">
-            <div class="sidebar">
-                <NavMenu @ref="_navMenu"/>
-            </div>
             <main>
-                <div class="top-row px-4">
-                    <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                <div class="sticky-top">
+                    <NavMenu @ref="_navMenu"/>
                 </div>
-
                 <article class="content px-4">
                     @Body
                     <LogIn OnUserLogInChange="@OnUserLogIn"></LogIn>
@@ -17,7 +12,6 @@
             </main>
         </div>
 </CascadingValue>
-
 @code
 {
     NavMenu _navMenu = null!;

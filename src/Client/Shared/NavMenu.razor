@@ -1,53 +1,54 @@
 ﻿@using Blazorise.Extensions
 @using Domain.Users
-<div class="top-row ps-3 navbar navbar-dark">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Prodigo Portal</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+        <a class="navbar-brand" href="#">Prodigo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-    </div>
-</div>
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Dashboard
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="contracts">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Contracts
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="admin">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Admin page
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="AboutUs">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> About Us
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            @{ Console.WriteLine(LoggedInUser); }
-            @if (LoggedInUser.IsNullOrEmpty())
-            {
-                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#log-in">
-                    Logga in
-                </button>
-            }
-            else
-            {
-                <NavLink class="nav-link">
-                      Inloggad som: @LoggedInUser
-                </NavLink>
-            }
-        </div>
-    </nav>
-</div>
 
+        <div class="collapse navbar-collapse" id="navbarToggler">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="" aria-hidden="true"></span> Dashboard
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="contracts">
+                        <span class="" aria-hidden="true"></span> Contracts
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="admin">
+                        <span class="" aria-hidden="true"></span> Admin page
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="AboutUs">
+                        <span class="" aria-hidden="true"></span> About Us
+                    </NavLink>
+                </li>
+            </ul>
+            <div class="nav-item">
+                @{ Console.WriteLine(LoggedInUser); }
+                @if (LoggedInUser.IsNullOrEmpty())
+                {
+                    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#log-in">
+                        Logga in
+                    </button>
+                }
+                else
+                {
+                    <NavLink class="nav-link">
+                        Inloggad som: @LoggedInUser
+                    </NavLink>
+                }
+            </div>
+        </div>
+    </div>
+</nav>
 
 @code {
 
@@ -72,4 +73,5 @@
         LoggedInUser = username;
         StateHasChanged();
     }
+
 }
