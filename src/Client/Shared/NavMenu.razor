@@ -51,17 +51,7 @@
 
 @code {
 
-    [CascadingParameter]
+    [CascadingParameter(Name = nameof(LoggedInUser))]
     private string? LoggedInUser { get; set; }
-
-    /// <summary>
-    /// Updates the username for the current user.
-    /// </summary>
-    /// <param name="username">The updated username.</param>
-    public void UpdateLoggedInUser(string username)
-    {
-        LoggedInUser = username;
-        StateHasChanged();
-    }
 
 }
