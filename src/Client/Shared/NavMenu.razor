@@ -31,18 +31,18 @@
                     </NavLink>
                 </li>
             </ul>
-            <div class="nav-item">
+            <div>
                 @if (LoggedInUser.IsNullOrEmpty())
                 {
-                    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#log-in">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#log-in">
                         Logga in
                     </button>
                 }
                 else
                 {
-                    <NavLink class="nav-link">
+                    <p id="logged-in" class="text-center m-0">
                         Inloggad som: @LoggedInUser
-                    </NavLink>
+                    </p>
                 }
             </div>
         </div>
