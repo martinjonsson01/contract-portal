@@ -86,4 +86,18 @@ public class UserServiceTests
         // Assert
         users.Should().HaveCount(numberOfUsers);
     }
+
+    [Fact]
+    public void ValidatePassword_shouldBeTrue_WhenPasswordIsUserPassword()
+    {
+        // Arrange
+        var user = new User();
+        const string password = "password";
+
+        // Act
+        bool valid = _cut.ValidPassword(user.Id, password);
+
+        // Assert
+        valid.Should().BeTrue();
+    }
 }

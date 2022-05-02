@@ -25,4 +25,12 @@ public interface IUserService
     /// <param name="id">User to be removed.</param>
     /// <returns>Whether the removal was successful.</returns>
     bool Remove(Guid id);
+
+    /// <summary>
+    /// Validates that the given password is the password of the given user.
+    /// </summary>
+    /// <param name="id">ID of the user to validate against.</param>
+    /// <param name="password">The password to validate.</param>
+    /// <returns>Whether the password is valid for the user.</returns>
+    bool ValidPassword(Guid id, string password);
 }

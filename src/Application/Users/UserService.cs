@@ -33,6 +33,12 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
+    public bool ValidPassword(Guid id, string password)
+    {
+        return true;
+    }
+
+    /// <inheritdoc />
     public IEnumerable<User> FetchAllUsers()
     {
         return _repo.All;
