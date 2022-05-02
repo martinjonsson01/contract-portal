@@ -57,7 +57,8 @@ public static class InjectionExtensions
         string? dbConnectionstring = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.DbConnectionString);
         if (dbConnectionstring == null)
         {
-            throw new ArgumentException("No environment variable defined for DbConnectionString");
+            throw new ArgumentException("No environment variable defined for " +
+                                        EnvironmentVariableKeys.DbConnectionString);
         }
 
         _ = options.UseSqlServer(dbConnectionstring);

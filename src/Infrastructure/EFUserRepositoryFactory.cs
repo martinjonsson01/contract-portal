@@ -21,7 +21,8 @@ public class EFUserRepositoryFactory : IDesignTimeDbContextFactory<EFUserReposit
         string? dbConnectionstring = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.DbConnectionString);
         if (dbConnectionstring == null)
         {
-            throw new ArgumentException("No environment variable defined for DbConnectionString");
+            throw new ArgumentException("No environment variable defined for " +
+                                        EnvironmentVariableKeys.DbConnectionString);
         }
 
         _ = optionsBuilder.UseSqlServer(dbConnectionstring);
