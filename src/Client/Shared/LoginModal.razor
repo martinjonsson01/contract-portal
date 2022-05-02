@@ -50,15 +50,11 @@
     [Parameter]
     public EventCallback<string> OnUserLogInChange { get; set; } = EventCallback<string>.Empty;
 
-    [CascadingParameter(Name = nameof(LoggedInUser))]
-    private string? LoggedInUser { get; set; }
-
     private async Task ValidateUser()
     {
         HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users/validate", _user.UserName);
         if (response.IsSuccessStatusCode)
         {
-            LoggedInUser = _user.UserName;
             _logInFailed = false;
             await OnUserLogInChange.InvokeAsync(_user.UserName);
             await _js.InvokeVoidAsync("closeModal", "#log-in");
