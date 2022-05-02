@@ -9,34 +9,21 @@ on:
       - '*'
   workflow_dispatch:
 
+env:
+    UNTRUSTED_CONNECTION: true
 
 jobs:
   build-and-test:
 
     runs-on: ubuntu-latest
-
-      # service containers to run with `postgres-job`
     services:
-        # label used to access the service container
-        postgres:
-            # Docker Hub image
-            image: postgres:latest
-            # service environment variables
-            # `POSTGRES_HOST` is `postgres`
+        sql.data:
+            image: mcr.microsoft.com/mssql/server:2019-latest
             env:
-                POSTGRES_DB: contract_portal_test
-                POSTGRES_PASSWORD: password
-                POSTGRES_PORT: 5432
-                POSTGRES_USER: postgres
+                SA_PASSWORD: "ASDjk_shd$$jkASKJ19821"
+                ACCEPT_EULA: Y
             ports:
-                # maps tcp port 5432 on service container to the host
-                - 5432:5432
-            # set health checks to wait until postgres has started
-            options: >-
-                --health-cmd pg_isready
-                --health-interval 10s
-                --health-timeout 5s
-                --health-retries 5
+                - "1433:1433"
 
     steps:
     - uses: actions/checkout@v3
@@ -49,10 +36,10 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Application.Tests
-      run: dotnet test --no-build tests/Application.Tests -p:CollectCoverage=true    -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/                                                                                        -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\" -p:Include=\"[Application]*\"
+      run: dotnet test --no-build tests/Application.Tests -p:CollectCoverage=true    -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/                                                                                        -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\" -p:Include=\"[Application]*\"
     - name: Domain.Tests
-      run: dotnet test --no-build tests/Domain.Tests -p:CollectCoverage=true         -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json"                                     -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\" -p:Include=\"[Domain]*\"
+      run: dotnet test --no-build tests/Domain.Tests -p:CollectCoverage=true         -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json"                                     -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\" -p:Include=\"[Domain]*\"
     - name: Infrastructure.Tests
-      run: dotnet test --no-build tests/Infrastructure.Tests -p:CollectCoverage=true -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json"                                     -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\" -p:Include=\"[Infrastructure]*\"
+      run: dotnet test --no-build tests/Infrastructure.Tests -p:CollectCoverage=true -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json"                                     -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\" -p:Include=\"[Infrastructure]*\"
     - name: Presentation.Tests
-      run: dotnet test --no-build tests/Presentation.Tests -p:CollectCoverage=true   -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json" -p:CoverletOutputFormat="opencover" -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute\" -p:Include=\"[Client]*,[Server]*\"
+      run: dotnet test --no-build tests/Presentation.Tests -p:CollectCoverage=true   -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json" -p:CoverletOutputFormat="opencover" -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\" -p:Include=\"[Client]*,[Server]*\"

@@ -35,7 +35,7 @@ public class UserListTests : UITestFixture
 
         // Assert
         Expression<Func<IElement, bool>>
-            elementWithNewName = contract => contract.TextContent.Contains(newUserName);
+            elementWithNewName = user => user.TextContent.Contains(newUserName);
         cut.FindAll(itemSelector).Should().Contain(elementWithNewName);
     }
 
@@ -58,7 +58,7 @@ public class UserListTests : UITestFixture
 
         // Assert
         Expression<Func<IElement, bool>>
-            elementWithNewName = contract => contract.TextContent.Contains(firstUser.Name);
+            elementWithNewName = user => user.TextContent.Contains(firstUser.Name);
         cut.FindAll(".user-table-row").Should().NotContain(elementWithNewName);
     }
 }

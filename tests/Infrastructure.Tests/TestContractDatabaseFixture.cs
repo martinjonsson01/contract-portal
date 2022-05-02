@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Infrastructure.Contracts;
 
@@ -10,7 +11,7 @@ namespace Infrastructure.Tests;
 public class TestContractDatabaseFixture
 {
     private const string ConnectionString =
-        @"User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal_test;";
+        @"Server=localhost;Database=master_test_contract;User Id=SA; Password=ASDjk_shd$$jkASKJ19821;";
 
     private static readonly object _lock = new();
     private static bool _databaseInitialized;
@@ -38,9 +39,15 @@ public class TestContractDatabaseFixture
         Justification = "Needs to be non-static so each test instance can call it without the entire class being static.")]
     public EFContractRepository CreateContext()
     {
+        string connectionString = ConnectionString;
+
+        string? untrusted = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.UntrustedConnection);
+        if (untrusted is null)
+            connectionString += "Trusted_Connection=True;";
+
         return new EFContractRepository(
             new DbContextOptionsBuilder<EFContractRepository>()
-                .UseNpgsql(ConnectionString)
+                .UseSqlServer(connectionString)
                 .Options,
             Mock.Of<ILogger<EFContractRepository>>());
     }

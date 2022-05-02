@@ -92,7 +92,7 @@ public class UserServiceTests
     {
         // Arrange
         string username = "user";
-        _mockRepo.Setup(repository => repository.UserExists(username)).Returns(true);
+        _mockRepo.Setup(repository => repository.Exists(username)).Returns(true);
 
         // Act
         bool actual = _cut.UserExists(username);
@@ -106,7 +106,7 @@ public class UserServiceTests
     {
         // Arrange
         string username = "user";
-        _mockRepo.Setup(repository => repository.UserExists(username)).Returns(false);
+        _mockRepo.Setup(repository => repository.Exists(username)).Returns(false);
 
         // Act
         bool actual = _cut.UserExists(username);
