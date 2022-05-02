@@ -3,8 +3,6 @@
 using Infrastructure.Contracts;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Tests;
@@ -12,7 +10,7 @@ namespace Infrastructure.Tests;
 public class TestContractDatabaseFixture
 {
     private const string ConnectionString =
-        @"Server=localhost;Database=master_test_contract;User Id=SA; Password=ASDjk_shd$$jkASKJ19821!";
+        @"Server=localhost;Database=master_test_contract;User Id=SA; Password=password";
 
     private static readonly object _lock = new();
     private static bool _databaseInitialized;
@@ -27,8 +25,7 @@ public class TestContractDatabaseFixture
             using (DbContext context = CreateContext())
             {
                 context.Database.EnsureDeleted();
-                if (!context.Database.GetService<IRelationalDatabaseCreator>().Exists())
-                    context.Database.Migrate();
+                context.Database.EnsureCreated();
             }
 
             _databaseInitialized = true;
