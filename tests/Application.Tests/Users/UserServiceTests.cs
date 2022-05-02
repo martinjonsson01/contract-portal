@@ -86,4 +86,32 @@ public class UserServiceTests
         // Assert
         users.Should().HaveCount(numberOfUsers);
     }
+
+    [Fact]
+    public void UserExists_ReturnsTrue_IfUserExistsInRepository()
+    {
+        // Arrange
+        string username = "user";
+        _mockRepo.Setup(repository => repository.Exists(username)).Returns(true);
+
+        // Act
+        bool actual = _cut.UserExists(username);
+
+        // Assert
+        actual.Should().BeTrue();
+    }
+
+    [Fact]
+    public void UserExists_ReturnsFalse_IfUserDoesNotExistInRepository()
+    {
+        // Arrange
+        string username = "user";
+        _mockRepo.Setup(repository => repository.Exists(username)).Returns(false);
+
+        // Act
+        bool actual = _cut.UserExists(username);
+
+        // Assert
+        actual.Should().BeFalse();
+    }
 }

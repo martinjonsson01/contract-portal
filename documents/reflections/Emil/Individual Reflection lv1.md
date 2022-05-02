@@ -1,4 +1,4 @@
-# Emil - Individual Reflection Week 1
+# Emil - Individual Reflection lv1
 * **What do I want to learn or understand better?**  
 I detta startskede av projektet vill jag bekanta mig med Scrum, så att jag med säkerhet kan applicera detta ramverk under kursens gång och efter kursen. 
 Efter de inledande föreläsningarna och den gemensamma övningen känner jag att jag har fått en bra introduktion till Scrum och arbetsmetodiken, men jag vill lära mig mer hur det ser ut i praktiken och hur man kan hantera diverse hinder som man stöter på allt eftersom.

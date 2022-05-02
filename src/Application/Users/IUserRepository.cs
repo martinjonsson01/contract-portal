@@ -25,4 +25,11 @@ public interface IUserRepository
     /// <param name="id">The id of the user to be removed.</param>
     /// <returns>If the removal was successful.</returns>
     bool Remove(Guid id);
+
+    /// <summary>
+    /// Checks whether a user exists or not.
+    /// </summary>
+    /// <param name="username">The username to look for.</param>
+    /// <returns>Whether the user exits or not.</returns>
+    bool Exists(string username);
 }

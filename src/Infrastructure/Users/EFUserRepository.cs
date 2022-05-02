@@ -66,6 +66,12 @@ public class EFUserRepository : DbContext, IUserRepository
     }
 
     /// <inheritdoc />
+    public bool Exists(string username)
+    {
+        return Users.Any(user => user.Name == username);
+    }
+
+    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         _ = modelBuilder.Entity<User>()
