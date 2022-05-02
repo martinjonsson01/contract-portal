@@ -9,6 +9,8 @@ on:
       - '*'
   workflow_dispatch:
 
+env:
+    UNTRUSTED_CONNECTION: true
 
 jobs:
   build-and-test:
