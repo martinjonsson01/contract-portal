@@ -25,7 +25,7 @@ public class TestContractDatabaseFixture
             using (DbContext context = CreateContext())
             {
                 context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
+                context.Database.Migrate();
             }
 
             _databaseInitialized = true;
