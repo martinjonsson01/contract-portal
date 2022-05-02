@@ -1,5 +1,5 @@
 # Individuella reflektioner för Martin
-## Läsvecka 1
+## Läsvecka 2
 
 ## Vad vill jag lära mig eller förstå bättre?
 Nu har vi haft möte med våran stakeholder, VD:n från företaget vi samarbetar med. Från detta möte har jag fått bättre förståelse för hur en icke-teknisk stakeholder ser på projektet. Det är intressant att se hur andra kan tänka helt annorlunda kring en mängd funktioner, t.ex. kring vad som anses vara svårt eller lätt att implementera. Vi kommer snart komma i kontakt med en mer tekniskt lagd stakeholder, vilket kommer vara intressant i jämförelse till VD:n. Jag hoppas få lite mer insikt i den skillnaden.
