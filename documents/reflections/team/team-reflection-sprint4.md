@@ -1,5 +1,5 @@
 # Team Reflection Sprint 3
-* Närvarande: Ella, Emil, Tamás, Mathias, Pawel, Martin, Jacob, Jonathan
+* Närvarande: Ella, Emil, Tamás, Mathias, Pawel, Martin, Jacob, Jonathan.
 ## Customer Value and Scope
 
 your user stories in terms of using a standard pattern, acceptance criteria, task breakdown and effort estimation and how this influenced the way you worked and created value
