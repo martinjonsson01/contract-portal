@@ -1,0 +1,15 @@
+﻿@using Domain.StatusUpdates
+@inject HttpClient _http;
+
+<FetchData TData="StatusUpdate[]"
+           Url="api/v1/status-updates"
+           Context="statusUpdates">
+
+    <div class="list-group list-group-flush shadow w-50">
+        @foreach (StatusUpdate statusUpdate in statusUpdates.OrderByDescending(status => status.Timestamp))
+        {
+            <StatusUpdateItem Status="@statusUpdate"/>
+        }
+    </div>
+
+</FetchData>

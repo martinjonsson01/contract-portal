@@ -1,19 +1,29 @@
 @page "/admin"
 @using Domain.Contracts
+@using Domain.Users
 
-<h3>Adminsida</h3>
+<h2>Adminsida</h2>
 
-<ContractForm OnContractUploaded="OnNewContractAdded"/>
+<ContractForm OnContractUploaded="AddContractToTable"/>
 <hr/>
-<ContractList @ref="@_contractList"/>
+<ContractTable @ref="@_contractTable"/>
+<hr/>
+<UserForm OnUserAdded="AddUserToTable"/>
+<hr/>
+<UserTable @ref="@_userTable"/>
 
 @code {
 
-    private ContractList _contractList = null!;
+    private ContractTable _contractTable = null!;
+    private UserTable _userTable = null!;
 
-    private void OnNewContractAdded(Contract contract)
+    private void AddContractToTable(Contract contract)
     {
-        _contractList.Add(contract);
+        _contractTable.Add(contract);
     }
 
+    private void AddUserToTable(User user)
+    {
+        _userTable.Add(user);
+    }
 }

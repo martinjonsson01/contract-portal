@@ -1,0 +1,75 @@
+﻿@using System.Linq.Expressions
+@using System.ComponentModel
+@using Domain.Contracts
+@typeparam TItem
+
+<InputText class="form-control list-item-input"
+           placeholder="@Placeholder"
+           @bind-Value="@ItemString"
+           @onkeydown="OnKeyDown"/>
+
+@code {
+
+
+    /// <summary>
+    /// Identifier that can be used to distinguish between different list items containing the same text.
+    /// </summary>
+    [Parameter]
+    public int Id { get; set; } = -1;
+
+    /// <summary>
+    /// The item this input element represents.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public TItem? Item { get; set; }
+
+    /// <summary>
+    /// A converter that can translate between strings and the item type.
+    /// </summary>
+    [Parameter]
+    public TypeConverter StringConverter { get; set; } = TypeDescriptor.GetConverter(typeof(TItem));
+
+    private string ItemString
+    {
+        get => Item?.ToString() ?? string.Empty;
+        set
+        {
+            TItem? oldItem = Item;
+            Item = (TItem?)StringConverter.ConvertFrom(value);
+
+            if (Item is null) return;
+
+            if (Item.Equals(oldItem)) return;
+
+            if (Item is null) return;
+
+            ValueChanged.InvokeAsync((Item, Id));
+        }
+    }
+
+    /// <summary>
+    /// A text placeholder that will be placed inside of the input field.
+    /// </summary>
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Called when the enter key is pressed while the text field is in focus.
+    /// </summary>
+    [Parameter]
+    public EventCallback EnterPressed { get; set; } = EventCallback.Empty;
+
+    /// <summary>
+    /// Called when the value of this item has been changed.
+    /// </summary>
+    [Parameter]
+    public EventCallback<(TItem, int)> ValueChanged { get; set; } = EventCallback<(TItem, int)>.Empty;
+
+    private async Task OnKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Code != "Enter") return;
+
+        await EnterPressed.InvokeAsync();
+    }
+
+}

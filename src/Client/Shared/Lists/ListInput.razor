@@ -1,0 +1,57 @@
+﻿@using System.Collections.ObjectModel
+@using System.ComponentModel
+@typeparam TItem
+
+<div class="d-flex flex-column">
+    @for (var i = 0; i < Items.Count; i++)
+    {
+        TItem item = Items[i];
+        <ListItemInput TItem="TItem"
+                       Id="@i"
+                       Item="@item"
+                       StringConverter="@StringConverter"
+                       Placeholder="@Placeholder"
+                       EnterPressed="@CreateItem"
+                       ValueChanged="@OnValueChanged"/>
+    }
+    <button type="button" class="btn btn-secondary" @onclick="CreateItem">Lägg till <span class="oi oi-plus"></span></button>
+</div>
+
+@code {
+
+    /// <summary>
+    /// The items that have been input into the list.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public IList<TItem> Items { get; set; } = new List<TItem>();
+
+    /// <summary>
+    /// Creates a new item.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public Func<TItem> ItemFactory { get; set; } = null!;
+
+    /// <summary>
+    /// A converter that can translate between strings and the item type.
+    /// </summary>
+    [Parameter]
+    public TypeConverter StringConverter { get; set; } = TypeDescriptor.GetConverter(typeof(TItem));
+
+    /// <summary>
+    /// A text placeholder that will be placed inside of the input fields.
+    /// </summary>
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+
+    private void CreateItem()
+    {
+        Items.Add(ItemFactory());
+    }
+
+    private void OnValueChanged((TItem value, int id) tuple)
+    {
+        (TItem value, int id) = tuple;
+        Items[id] = value;
+    }
+
+}

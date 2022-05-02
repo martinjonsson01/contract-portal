@@ -8,6 +8,7 @@ using AngleSharp.Dom;
 using Client.Pages.Admin;
 
 using Domain.Contracts;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Presentation.Tests.Client.Pages.Admin;
 
@@ -18,10 +19,10 @@ public class ContractListTests : UITestFixture
     {
         // Arrange
         Contract[] contracts = { new Contract() { Name = "First", }, new Contract() { Name = "Second", }, };
-        MockHttp.When("/api/v1/Contracts/All").RespondJson(contracts);
+        MockHttp.When("/api/v1/contracts").RespondJson(contracts);
 
-        IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
-        const string itemSelector = ".list-group-item";
+        IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
+        const string itemSelector = ".contract-table-row";
         cut.WaitForElement(itemSelector);
 
         const string newContractName = "New Contract";
@@ -41,13 +42,13 @@ public class ContractListTests : UITestFixture
     public void AddingContract_DoesNotThrow_BeforeContractsAreFetched()
     {
         // Arrange
-        MockHttp.When("/api/v1/Contracts/All").Respond(async () =>
+        MockHttp.When("/api/v1/contracts").Respond(async () =>
         {
             // Simulate slow network.
             await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
             return new HttpResponseMessage(HttpStatusCode.OK);
         });
-        IRenderedComponent<ContractList> cut = Context.RenderComponent<ContractList>();
+        IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
 
         const string newContractName = "New Contract";
         var newContract = new Contract { Name = newContractName, };
@@ -57,5 +58,28 @@ public class ContractListTests : UITestFixture
 
         // Assert
         add.Should().NotThrow();
+    }
+
+    [Fact]
+    public async Task RemovingContract_RendersWithoutTheContractAsync()
+    {
+        // Arrange
+        var firstContract = new Contract() { Name = "first", };
+        Contract[] contracts = { firstContract, new Contract() { Name = "Second", }, };
+        MockHttp.When("/api/v1/contracts").RespondJson(contracts);
+        MockHttp.When(HttpMethod.Delete, $"/api/v1/contracts/{firstContract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
+
+        IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
+        const string removeButton = "#confirm-remove";
+        cut.WaitForElement(removeButton);
+
+        // Act
+        await cut.Find(removeButton).ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+        cut.WaitForState(() => cut.FindAll(removeButton).Count == 1);
+
+        // Assert
+        Expression<Func<IElement, bool>>
+            elementWithNewName = contract => contract.TextContent.Contains(firstContract.Name);
+        cut.FindAll(".contract-table-row").Should().NotContain(elementWithNewName);
     }
 }
