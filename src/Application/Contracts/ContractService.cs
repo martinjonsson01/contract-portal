@@ -32,7 +32,6 @@ public class ContractService : IContractService
     public IEnumerable<Contract> FetchAllContracts()
     {
         IEnumerable<Contract> contracts = _repo.All;
-        Console.WriteLine(contracts);
         return contracts;
     }
 
