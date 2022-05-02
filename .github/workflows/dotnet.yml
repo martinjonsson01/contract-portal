@@ -18,7 +18,7 @@ jobs:
         sql.data:
             image: mcr.microsoft.com/mssql/server:2019-latest
             env:
-                SA_PASSWORD: "password"
+                SA_PASSWORD: "ASDjk_shd$$jkASKJ19821"
                 ACCEPT_EULA: Y
             ports:
                 - "1433:1433"
