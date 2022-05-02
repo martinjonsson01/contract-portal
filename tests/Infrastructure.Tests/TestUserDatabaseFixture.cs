@@ -3,6 +3,8 @@
 using Infrastructure.Users;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Tests;
@@ -25,7 +27,8 @@ public class TestUserDatabaseFixture
             using (DbContext context = CreateContext())
             {
                 context.Database.EnsureDeleted();
-                context.Database.Migrate();
+                if (!context.Database.GetService<IRelationalDatabaseCreator>().Exists())
+                    context.Database.Migrate();
             }
 
             _databaseInitialized = true;
