@@ -18,7 +18,7 @@ For local development, a Postgres daemon needs to be running, and a database ins
 1. [Download and install Microsoft SQL Server (developer version)](https://www.microsoft.com/sv-se/sql-server/sql-server-downloads)
 2. In your IDE terminal, Navigate to the `Infrastructure` project using `cd src/Infrastructure/`.
 3. Install the Entity Framework tools using `dotnet tool install --global dotnet-ef`
-4. Apply the database migrations for every context using `dotnet ef database update --context EF<your context here>Repository`
+4. Apply the database migrations for every context using (you have to run it once with each context as an argument) `dotnet ef database update --context {CONTEXT_NAME_HERE}`
 
 ### Building and running
 
