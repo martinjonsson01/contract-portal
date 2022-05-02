@@ -10,7 +10,7 @@ namespace Infrastructure.Tests;
 public class TestUserDatabaseFixture
 {
     private const string ConnectionString =
-        @"Server=localhost;Database=master_test;Trusted_Connection=True;User Id='SA'; Password='TEST'";
+        @"Server=localhost;Database=master_test;Trusted_Connection=True;User Id='SA'; Password='Password!'";
 
     private static readonly object _lock = new();
     private static bool _databaseInitialized;
