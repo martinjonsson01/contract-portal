@@ -66,7 +66,7 @@ public class EFUserRepository : DbContext, IUserRepository
     }
 
     /// <inheritdoc />
-    public bool UserExists(string username)
+    public bool Exists(string username)
     {
         return Users.Any(user => user.Name == username);
     }
