@@ -3,6 +3,8 @@ using Application.Exceptions;
 using Application.Users;
 using Domain.Users;
 
+using Microsoft.Extensions.Configuration;
+
 namespace Application.Tests.Users;
 
 public class UserServiceTests
@@ -13,7 +15,7 @@ public class UserServiceTests
     public UserServiceTests()
     {
         _mockRepo = new Mock<IUserRepository>();
-        _cut = new UserService(_mockRepo.Object);
+        _cut = new UserService(_mockRepo.Object, Mock.Of<IConfiguration>());
     }
 
     [Fact]

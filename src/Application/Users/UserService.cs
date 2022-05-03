@@ -6,6 +6,7 @@ using Application.Exceptions;
 
 using Domain.Users;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Users;
@@ -14,14 +15,17 @@ namespace Application.Users;
 public class UserService : IUserService
 {
     private readonly IUserRepository _repo;
+    private readonly IConfiguration _config;
 
     /// <summary>
     /// Constructs user service.
     /// </summary>
     /// <param name="repo">Where to store and fetch users from.</param>
-    public UserService(IUserRepository repo)
+    /// <param name="config">The configuration source.</param>
+    public UserService(IUserRepository repo, IConfiguration config)
     {
         _repo = repo;
+        _config = config;
     }
 
     /// <inheritdoc />
@@ -64,23 +68,6 @@ public class UserService : IUserService
         return _repo.All;
     }
 
-    private static string GenerateJwtToken(User user)
-    {
-        // generate token that is valid for 7 days
-        var tokenHandler = new JwtSecurityTokenHandler();
-        byte[] key = GetSecretKey();
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), }),
-            Expires = DateTime.UtcNow.AddHours(1),
-            SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256Signature),
-        };
-        SecurityToken? token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
-    }
-
     private static byte[] GetSecretKey()
     {
         const string environmentVariableKey = "prodigo_portal_jwt_secret";
@@ -88,6 +75,23 @@ public class UserService : IUserService
 
         return jwtSecret is null
             ? throw new ArgumentException("No environment variable defined for " + environmentVariableKey)
-            : Encoding.ASCII.GetBytes(jwtSecret);
+            : Encoding.UTF8.GetBytes(jwtSecret);
+    }
+
+    private string GenerateJwtToken(User user)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        byte[] key = GetSecretKey();
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), }),
+            Audience = _config["Jwt:Issuer"],
+            Issuer = _config["Jwt:Issuer"],
+            Expires = DateTime.UtcNow.AddHours(1),
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+        };
+        SecurityToken? token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
     }
 }

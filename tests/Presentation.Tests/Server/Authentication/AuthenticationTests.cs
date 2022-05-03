@@ -5,6 +5,7 @@ using Domain.Users;
 using FluentAssertions.Execution;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Presentation.Tests.Server.Authentication;
 
@@ -16,7 +17,7 @@ public class AuthenticationTests
     public AuthenticationTests()
     {
         _mockRepo = new Mock<IUserRepository>();
-        var service = new UserService(_mockRepo.Object);
+        var service = new UserService(_mockRepo.Object, Mock.Of<IConfiguration>());
         _cut = new UsersController(Mock.Of<ILogger<UsersController>>(), service);
     }
 
