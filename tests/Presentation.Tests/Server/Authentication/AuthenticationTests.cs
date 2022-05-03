@@ -28,7 +28,7 @@ public class AuthenticationTests
         _mockRepo.Setup(repo => repo.Fetch(user.Name)).Returns(user);
 
         // Act
-        IActionResult result = _cut.Validate(user.Name);
+        IActionResult result = _cut.Authenticate(user.Name);
 
         // Assert
         result.Should().BeAssignableTo<OkObjectResult>();

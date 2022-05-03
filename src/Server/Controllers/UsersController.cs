@@ -75,13 +75,15 @@ public class UsersController : BaseApiController<UsersController>
     }
 
     /// <summary>
-    /// Checks if a user with a certain username exists.
+    /// Authenticates a user.
     /// </summary>
-    /// <param name="username">The username.</param>
-    /// <returns>Whether a user with the specified username exists.</returns>
-    [HttpPost("validate")]
+    /// <param name="username">The name of the user.</param>
+    /// <returns>An authentication token that can be used to identify the user.</returns>
+    [HttpPost("authenticate")]
     [AllowAnonymous]
-    public IActionResult Validate([FromBody] string username)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult Authenticate([FromBody] string username)
     {
         try
         {
