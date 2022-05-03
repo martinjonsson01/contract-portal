@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -25,6 +26,6 @@ public class AuthenticationTests : IClassFixture<WebApplicationFactory<Program>>
         HttpResponseMessage response = await _client.GetAsync(endpointUrl);
 
         // Assert
-        response.Should().HaveError();
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 }

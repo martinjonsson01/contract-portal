@@ -2,33 +2,29 @@ using Application;
 
 using Infrastructure;
 
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication()
-       .AddJwtBearer(options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+       .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
        {
-           options.Audience = "http://localhost:5001/";
-           options.Authority = "http://localhost:5000/";
+           options.Audience = "https://localhost:5001/";
+           options.Authority = "https://localhost:5000/";
        });
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    _ = options.Conventions.AllowAnonymousToAreaFolder("root", "/wwwroot").AllowAnonymousToPage("/index.html");
+});
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
     .AddNewtonsoftJson();
-
-builder.Services.AddAuthorization(options =>
-{
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                             .RequireAuthenticatedUser()
-                             .Build();
-});
 
 WebApplication app = builder.Build();
 
@@ -70,6 +66,9 @@ app.UseRouting();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
 
