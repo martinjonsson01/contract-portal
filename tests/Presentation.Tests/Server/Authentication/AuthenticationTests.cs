@@ -21,7 +21,7 @@ public class AuthenticationTests
     }
 
     [Fact]
-    public void ValidateUser_ReturnsAToken_WhenCorrectUsernameSpecified()
+    public void ValidateUser_ReturnsACorrectToken_WhenCorrectUsernameSpecified()
     {
         // Arrange
         var user = new User { Name = "user name", };
@@ -38,7 +38,8 @@ public class AuthenticationTests
         {
             authResponse.Should().NotBeNull();
             authResponse!.Id.Should().Be(user.Id);
-            authResponse!.Username.Should().Be(user.Name);
+            authResponse.Username.Should().Be(user.Name);
+            authResponse.Token.Should().NotBeNullOrEmpty();
         }
     }
 }
