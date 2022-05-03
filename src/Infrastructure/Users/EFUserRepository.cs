@@ -77,6 +77,12 @@ public class EFUserRepository : DbContext, IUserRepository
     }
 
     /// <inheritdoc />
+    public User? Fetch(string username)
+    {
+        return Users.FirstOrDefault(user => user.Name == username);
+    }
+
+    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         _ = modelBuilder.Entity<User>()
