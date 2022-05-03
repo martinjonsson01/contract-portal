@@ -49,7 +49,7 @@ public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
     public void AfterCreation_DefaultUserIsCreated_IfNoDefaultUserExistedPreviously()
     {
         // Arrange
-        const string defaultUsername = "default user";
+        const string defaultUsername = "default-user";
         User? defaultUser = _cut.All.FirstOrDefault(user => user.Name == defaultUsername);
         if (defaultUser is not null)
             _cut.Remove(defaultUser.Id);
@@ -58,7 +58,7 @@ public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
         _cut = _fixture.CreateContext();
 
         // Act
-        bool exists = _cut.UserExists(defaultUsername);
+        bool exists = _cut.Exists(defaultUsername);
 
         // Assert
         exists.Should().BeTrue();
@@ -68,7 +68,7 @@ public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
     public void AfterCreation_ThereIsOnlyOneDefaultUser_IfDefaultUserExistedPreviously()
     {
         // Arrange
-        const string defaultUsername = "default user";
+        const string defaultUsername = "default-user";
         User? defaultUser = _cut.All.FirstOrDefault(user => user.Name == defaultUsername);
 
         if (defaultUser is null) // Ensure user exists.
