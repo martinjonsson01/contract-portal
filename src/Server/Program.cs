@@ -2,9 +2,17 @@ using Application;
 
 using Infrastructure;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.FileProviders;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication()
+       .AddJwtBearer(options =>
+       {
+           options.Audience = "http://localhost:5001/";
+           options.Authority = "http://localhost:5000/";
+       });
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -14,6 +22,13 @@ builder.Services.AddInfrastructure();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
     .AddNewtonsoftJson();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                             .RequireAuthenticatedUser()
+                             .Build();
+});
 
 WebApplication app = builder.Build();
 
@@ -57,3 +72,12 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+/// <summary>
+/// A partial class that makes the entire class public.
+/// </summary>
+#pragma warning disable CA1050
+public partial class Program
+#pragma warning restore CA1050
+{
+}

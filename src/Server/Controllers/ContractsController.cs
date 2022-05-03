@@ -2,6 +2,7 @@
 using Application.Exceptions;
 
 using Domain.Contracts;
+
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -119,8 +120,8 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="query">The query to filter contracts by.</param>
     /// <returns>The contracts that match the search query.</returns>
     [HttpGet]
-    public IEnumerable<Contract> Search(string? query)
+    public ActionResult<IEnumerable<Contract>> Search(string? query)
     {
-        return _contracts.Search(query ?? string.Empty);
+        return Ok(_contracts.Search(query ?? string.Empty));
     }
 }

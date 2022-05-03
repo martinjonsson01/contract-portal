@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
 
@@ -9,6 +10,7 @@ namespace Server.Controllers;
 [ApiController]
 [Produces("application/json")]
 [Route("api/v1/[controller]")]
+[Authorize]
 public class BaseApiController<TLogging> : ControllerBase
 {
     /// <summary>
