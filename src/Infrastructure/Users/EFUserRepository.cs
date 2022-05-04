@@ -47,6 +47,14 @@ public class EFUserRepository : DbContext, IUserRepository, IRecentContractRepos
     {
         User user = GetUserByUserName(id);
         _ = user.RecentlyViewContracts.AddFirst(contract);
+        try
+        {
+            _ = SaveChanges();
+        }
+        catch (DataException e)
+        {
+            _logger.LogError("Could not add contract to recently viewed for user to database: {Message}", e.Message);
+        }
     }
 
     /// <inheritdoc/>
@@ -57,6 +65,15 @@ public class EFUserRepository : DbContext, IUserRepository, IRecentContractRepos
             Contract contractToRemove = user.RecentlyViewContracts.First(contract => contract.Id == id);
             _ = user.RecentlyViewContracts.Remove(contractToRemove);
         }
+
+        try
+        {
+            _ = SaveChanges();
+        }
+        catch (DataException e)
+        {
+            _logger.LogError("Could not remove contract from recently viewed for all user in database: {Message}", e.Message);
+        }
     }
 
     /// <inheritdoc />
@@ -64,6 +81,7 @@ public class EFUserRepository : DbContext, IUserRepository, IRecentContractRepos
     {
         User user = GetUserByUserName(id);
         user.RecentlyViewContracts.RemoveLast();
+        _ = SaveChanges();
     }
 
     /// <inheritdoc />
@@ -99,6 +117,13 @@ public class EFUserRepository : DbContext, IUserRepository, IRecentContractRepos
     public LinkedList<Contract> FetchRecentContracts(string id)
     {
         User user = GetUserByUserName(id);
+        Console.WriteLine($"Fetching From user{user.Name}");
+        Console.WriteLine($"{user.RecentlyViewContracts.Count}");
+        foreach (Contract recentContract in user.RecentlyViewContracts)
+        {
+            Console.WriteLine(recentContract.Name);
+        }
+
         return user.RecentlyViewContracts ?? throw new InvalidOperationException();
     }
 
