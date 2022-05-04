@@ -76,11 +76,11 @@ public class UsersControllerTests
     public void Validate_ReturnsBadRequest_IfUserDoesNotExist()
     {
         // Arrange
-        var username = new User() { Name = "user", };
-        _mockUsers.Setup(service => service.UserExists(username.Name)).Returns(false);
+        var user = new User() { Name = "user", };
+        _mockUsers.Setup(service => service.UserExists(user.Name)).Returns(false);
 
         // Act
-        IActionResult actual = _cut.Validate(username);
+        IActionResult actual = _cut.Validate(user);
 
         // Assert
         actual.Should().BeOfType<BadRequestResult>();
