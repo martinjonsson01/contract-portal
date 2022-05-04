@@ -2,10 +2,11 @@
 @using Application.Contracts
 @using System.Collections.ObjectModel
 @inject HttpClient _http
-@inject IRecentContractService _recent
-<FetchData TData="Contract[]"
-           Url="/api/v1/contracts/recent"
-           Context="recents">
+<FetchData
+    @ref="_dataFetcher"
+    TData="List<Contract>"
+    Url="api/v1/contracts/recent/123"
+    Context="recents">
 
     <!-- No loading indicator. -->
     <LoadingIndicator></LoadingIndicator>
@@ -14,13 +15,13 @@
     <ChildContent>
         @if (ShouldShowRecent)
         {
-            AddRecents(recents);
-            if (_recent.Size(LoggedInUser) > 0)
+            _dataFetcher.Data?.ForEach(contract => Console.WriteLine(contract.Name));
+            if (_dataFetcher.Data is {Count: > 0 })
             {
                 <h3>Senast besökta</h3>
 
                 <div class="d-flex flex-row justify-content-around flex-wrap">
-                    @foreach (Contract contract in _recent.FetchRecentContracts(LoggedInUser).Reverse())
+                    @foreach (var contract in _dataFetcher.Data)
                     {
                         <ContractCard Contract=@contract/>
                     }
@@ -33,7 +34,9 @@
 </FetchData>
 
 @code {
+        const string BaseUrl = "/api/v1/contracts/recent/";
 
+    private FetchData<List<Contract>> _dataFetcher = null!;
 
     [CascadingParameter(Name = nameof(LoggedInUser))]
     private string LoggedInUser { get; set; } = string.Empty;
@@ -51,23 +54,19 @@
         StateHasChanged();
     }
 
-    private void AddRecents(Contract[]? recents)
-    {
-        if (recents is null) return;
-
-        foreach (Contract contract in recents)
-        {
-            _recent.Add(LoggedInUser, contract);
-        }
-    }
-
     /// <summary>
     /// Tells the component to render itself again.
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
-        _recent.Add(LoggedInUser, newRecent);
+        await _http.PostAsJsonAsync($"api/v1/contracts/recent/123", newRecent);
+        await _dataFetcher.Fetch(GetFetchUrl());
         await InvokeAsync(StateHasChanged);
+    }
+
+    private string GetFetchUrl()
+    {
+        return BaseUrl + LoggedInUser;
     }
 
 }
