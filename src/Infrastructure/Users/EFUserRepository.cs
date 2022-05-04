@@ -1,6 +1,6 @@
 using System.Data;
 using Application.Users;
-
+using Domain.Contracts;
 using Domain.Users;
 
 using Microsoft.EntityFrameworkCore;
@@ -69,6 +69,13 @@ public class EFUserRepository : DbContext, IUserRepository
     public bool Exists(string username)
     {
         return Users.Any(user => user.Name == username);
+    }
+
+    /// <inheritdoc />
+    public IEnumerable<Contract> RecentlyViewed(Guid id)
+    {
+        User? user = Users.Find(id);
+        return user?.RecentlyViewContracts ?? throw new InvalidOperationException();
     }
 
     /// <inheritdoc />

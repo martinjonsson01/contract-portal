@@ -1,3 +1,4 @@
+using Domain.Contracts;
 using Domain.Users;
 
 namespace Application.Users;
@@ -32,4 +33,11 @@ public interface IUserRepository
     /// <param name="username">The username to look for.</param>
     /// <returns>Whether the user exits or not.</returns>
     bool Exists(string username);
+
+    /// <summary>
+    /// Fetches recent view contracts for the user.
+    /// </summary>
+    /// <param name="id">The id of the user.</param>
+    /// <returns>The recently view contracts.</returns>
+    IEnumerable<Contract> RecentlyViewed(Guid id);
 }
