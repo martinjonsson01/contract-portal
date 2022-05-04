@@ -35,7 +35,6 @@ public class UsersController : BaseApiController<UsersController>
     /// <response code="400">The ID of the user was already taken.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [AllowAnonymous] // TODO: should only allow admins
     public IActionResult Create(User user)
     {
         try

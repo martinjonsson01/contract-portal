@@ -15,6 +15,15 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         _client = factory.CreateClient();
     }
 
+    public static IEnumerable<object[]> AdminApiEndpoints =>
+        new List<object[]>
+        {
+            new object[] { HttpMethod.Post, "/api/v1/contracts", },
+            new object[] { HttpMethod.Post, "/api/v1/documents", },
+            new object[] { HttpMethod.Post, "/api/v1/images", },
+            new object[] { HttpMethod.Post, "/api/v1/users", },
+        };
+
     [Theory]
     [InlineData("/api/v1/contracts")]
     [InlineData("/api/v1/users")]
@@ -24,6 +33,22 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
 
         // Act
         HttpResponseMessage response = await _client.GetAsync(endpointUrl);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Theory]
+    [MemberData(nameof(AdminApiEndpoints))]
+    public async Task SendToAdminApiEndpoints_ReturnsUnauthorized_WhenTokenForAdminIsNotSpecifiedAsync(
+        HttpMethod method,
+        string endpointUrl)
+    {
+        // Arrange
+        var message = new HttpRequestMessage(method, endpointUrl);
+
+        // Act
+        HttpResponseMessage response = await _client.SendAsync(message);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
