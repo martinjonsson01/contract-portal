@@ -60,7 +60,6 @@ public static class InjectionExtensions
     private static void ConfigureDatabase(DbContextOptionsBuilder options, IConfiguration config)
     {
         _ = options.UseSqlServer(
-            config[ConfigurationKeys.DbConnectionString],
-            dbOptions => dbOptions.EnableRetryOnFailure());
+            config[ConfigurationKeys.DbConnectionString]);
     }
 }
