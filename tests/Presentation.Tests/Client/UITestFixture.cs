@@ -14,7 +14,6 @@ public class UITestFixture : IDisposable
                .AddBlazorise(options => { options.Immediate = true; })
                .AddBootstrap5Providers()
                .AddFontAwesomeIcons();
-        Console.WriteLine($"created new test context {1}");
     }
 
     protected TestContext Context { get; } = new TestContext();
