@@ -11,6 +11,7 @@ on:
 
 env:
     UNTRUSTED_CONNECTION: true
+    prodigo_portal_jwt_secret: "test-json-web-token-secret"
 
 jobs:
   build-and-test:
