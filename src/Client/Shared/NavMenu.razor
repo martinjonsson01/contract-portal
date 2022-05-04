@@ -41,9 +41,7 @@
             <div>
                 @if (LoggedInUser.IsNullOrEmpty())
                 {
-                    <button id="login-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#log-in">
-                        Logga in
-                    </button>
+                    <LogInButton />
                 }
                 else
                 {

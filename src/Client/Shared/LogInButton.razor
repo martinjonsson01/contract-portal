@@ -1,0 +1,13 @@
+﻿@inject IJSRuntime _js
+
+<button id="login-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#log-in" @onclick="OnClick">
+    Logga in
+</button>
+
+@code {
+    private async Task OnClick()
+    {
+        // Focuses the username text input element.
+        await _js.InvokeVoidAsync("focusElement", "#username");
+    }
+}

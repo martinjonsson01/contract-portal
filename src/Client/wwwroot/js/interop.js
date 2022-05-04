@@ -1,5 +1,10 @@
 ﻿function closeModal(id) {
-    var modalElement = document.querySelector(id)
-    var modal = bootstrap.Modal.getOrCreateInstance(modalElement)
+    const modalElement = document.querySelector(id);
+    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
     modal.hide();
+}
+
+function focusElement(selector) {
+    const element = document.querySelector(selector);
+    element.focus();
 }
