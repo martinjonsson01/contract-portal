@@ -111,12 +111,12 @@ public class UserServiceTests
         // Arrange
         const string password1 = "User1Password";
         const string password2 = "User2Password";
-        var user1 = new User() { Name = "User1", Password = password1, };
-        var user2 = new User() { Name = "User2", Password = password2, };
-        _mockRepo.Setup(repository => repository.Fetch(user1.Name)).Returns(user1);
+        string passwordHash1 = BCrypt.Net.BCrypt.HashPassword(password1);
+        var user = new User() { Name = "User1", Password = passwordHash1, };
+        _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
 
         // Act
-        bool valid = _cut.ValidPassword(user1.Name, password2);
+        bool valid = _cut.ValidPassword(user.Name, password2);
 
         // Assert
         valid.Should().BeFalse();
