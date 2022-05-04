@@ -33,7 +33,7 @@ public class User
     public DateTime LatestPaymentDate { get; set; } = DateTime.MinValue;
 
     /// <summary>
-    /// Gets or sets the most recently view contracts by the user.
+    /// Gets the most recently view contracts by the user.
     /// </summary>
-    public IEnumerable<Contract> RecentlyViewContracts { get; set; } = new List<Contract>();
+    public Queue<Contract> RecentlyViewContracts { get; } = new();
 }
