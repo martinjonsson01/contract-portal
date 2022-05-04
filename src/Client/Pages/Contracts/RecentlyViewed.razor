@@ -10,8 +10,10 @@
     <!-- No loading indicator. -->
     <LoadingIndicator></LoadingIndicator>
 
+
     <ChildContent>
-        @{
+        @if (ShouldShowRecent)
+        {
             AddRecents(recents);
             if (_recent.Size() > 0)
             {
@@ -26,10 +28,24 @@
                 <hr/>
             }
         }
+
     </ChildContent>
 </FetchData>
 
 @code {
+
+    private bool ShouldShowRecent { get; set; } = true;
+
+
+    /// <summary>
+    /// Change whether the recent contracts should be displayed or not.
+    /// </summary>
+    /// <param name="shouldShow">Whether or not the recent contracts should be shown or not</param>
+    public void ShowRecentContracts(bool shouldShow)
+    {
+        ShouldShowRecent = shouldShow;
+        StateHasChanged();
+    }
 
     private IRecentContractService _recent = new RecentContractService(new Collection<Contract>());
 
