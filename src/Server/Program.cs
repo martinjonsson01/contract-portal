@@ -1,6 +1,7 @@
 using System.Text;
 
 using Application;
+using Application.Configuration;
 
 using Infrastructure;
 
@@ -27,7 +28,7 @@ builder.Services.AddAuthentication(options =>
 
            options.Configuration = new OpenIdConnectConfiguration();
 
-           string jwtSecret = builder.Configuration["prodigo_portal_jwt_secret"];
+           string jwtSecret = builder.Configuration[ConfigurationKeys.JwtSecret];
 
            options.TokenValidationParameters = new TokenValidationParameters
            {
@@ -35,8 +36,8 @@ builder.Services.AddAuthentication(options =>
                ValidateAudience = true,
                ValidateLifetime = true,
                ValidateIssuerSigningKey = true,
-               ValidIssuer = builder.Configuration["Jwt:Issuer"],
-               ValidAudience = builder.Configuration["Jwt:Issuer"],
+               ValidIssuer = builder.Configuration[ConfigurationKeys.JwtIssuer],
+               ValidAudience = builder.Configuration[ConfigurationKeys.JwtIssuer],
                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
            };
        });

@@ -16,6 +16,11 @@ public static class ConfigurationKeys
     public const string JwtSecret = "prodigo_portal_jwt_secret";
 
     /// <summary>
+    /// The name of the variable containing the JWT issuer domain.
+    /// </summary>
+    public const string JwtIssuer = "prodigo_portal_jwt_issuer";
+
+    /// <summary>
     /// The name of the variable containing whether the system is running inside a CI-container.
     /// </summary>
     public const string ContinuousIntegration = "CONTINUOUS_INTEGRATION";

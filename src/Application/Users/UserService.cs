@@ -88,8 +88,8 @@ public class UserService : IUserService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(CreateClaims(user)),
-            Audience = _config["Jwt:Issuer"],
-            Issuer = _config["Jwt:Issuer"],
+            Audience = _config[ConfigurationKeys.JwtIssuer],
+            Issuer = _config[ConfigurationKeys.JwtIssuer],
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
