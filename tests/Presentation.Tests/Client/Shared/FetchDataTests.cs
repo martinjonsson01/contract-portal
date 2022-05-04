@@ -6,12 +6,14 @@ namespace Presentation.Tests.Client.Shared;
 
 public class FetchDataTests : UITestFixture
 {
-    [Fact]
-    public void Render_RendersErrorMessage_WhenEndpointUnauthorized()
+    [Theory]
+    [InlineData(HttpStatusCode.Unauthorized)]
+    [InlineData(HttpStatusCode.Forbidden)]
+    public void Render_RendersErrorMessage_WhenEndpointUnauthorized(HttpStatusCode errorCode)
     {
         // Arrange
         const string endpointUrl = "/api/v1/example-endpoint";
-        MockHttp.When(endpointUrl).Respond(HttpStatusCode.Unauthorized);
+        MockHttp.When(endpointUrl).Respond(errorCode);
 
         const string loading = "<p>loading</p>";
 
@@ -22,8 +24,9 @@ public class FetchDataTests : UITestFixture
 
         // Act
         IRenderedComponent<FetchData<int>> cut = Context.RenderComponent<FetchData<int>>(ParameterBuilder);
+        cut.WaitForElement("#error-message");
 
         // Assert
-        cut.Find("#error-message").Should().NotBeNull();
+        cut.Markup.Should().Contain("error-message");
     }
 }
