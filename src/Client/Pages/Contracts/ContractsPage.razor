@@ -13,7 +13,7 @@
 
     @foreach (Contract contract in contracts)
     {
-        <ContractCard Contract=@contract OnViewed="OnRecentContractAdded"/>
+        <ContractCard Contract=@contract OnViewed="OnRecentlyViewed"/>
     }
 
 </FetchData>
@@ -23,7 +23,7 @@
 
     private FetchData<IEnumerable<Contract>> _dataFetcher = null!;
 
-    private void OnRecentContractAdded(Contract viewedContract)
+    private void OnRecentlyViewed(Contract viewedContract)
     {
         _recentlyViewed.AddViewedContract(viewedContract);
     }
