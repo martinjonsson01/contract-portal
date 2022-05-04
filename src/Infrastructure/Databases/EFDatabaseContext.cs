@@ -1,6 +1,4 @@
-﻿using Application.Configuration;
-
-using Domain.Contracts;
+﻿using Domain.Contracts;
 using Domain.Users;
 
 using Microsoft.EntityFrameworkCore;
