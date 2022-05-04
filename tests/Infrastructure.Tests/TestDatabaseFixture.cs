@@ -50,6 +50,7 @@ public class TestDatabaseFixture
         return new EFDatabaseContext(
             new DbContextOptionsBuilder<EFDatabaseContext>()
                 .UseSqlServer(connectionString, options => options.EnableRetryOnFailure())
+                .EnableSensitiveDataLogging()
                 .Options,
             Mock.Of<ILogger<EFDatabaseContext>>());
     }
