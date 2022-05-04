@@ -109,6 +109,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="id">Id of the contract to be removed.</param>
     /// <returns>If the contract was successfully removed.</returns>
     [HttpDelete("{id:guid}")]
+    [Authorize("AdminOnly")]
     public IActionResult Remove(Guid id)
     {
         return _contracts.Remove(id) ?

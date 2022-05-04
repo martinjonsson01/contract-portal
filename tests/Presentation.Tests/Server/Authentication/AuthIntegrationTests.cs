@@ -29,8 +29,25 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
             new object[] { "/api/v1/users", JsonContent.Create(new User()), },
         };
 
-    public static IEnumerable<object[]> AdminDeleteApiEndpoints =>
-        new List<object[]> { new object[] { "/api/v1/contracts", }, new object[] { "/api/v1/users", }, };
+    public static IEnumerable<object[]> AdminDeleteApiEndpoints
+    {
+        get
+        {
+            const string contractEndpoint = "/api/v1/contracts";
+            var contract = new Contract();
+            Func<HttpClient, Task> createContract = async client => await client.PostAsJsonAsync(contractEndpoint, contract);
+
+            const string usersEndpoint = "/api/v1/users";
+            var user = new User();
+            Func<HttpClient, Task> createUser = async client => await client.PostAsJsonAsync(usersEndpoint, user);
+
+            return new List<object[]>
+            {
+                new object[] { contractEndpoint + $"/{contract.Id}", createContract, },
+                new object[] { usersEndpoint + $"/{user.Id}", createUser, },
+            };
+        }
+    }
 
     [Theory]
     [InlineData("/api/v1/contracts")]
@@ -79,7 +96,7 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
 
     [Theory]
     [MemberData(nameof(AdminPostApiEndpoints))]
-    public async Task SendToAdminApiEndpoints_IsSuccessful_WhenAdminIsAuthenticatedAsync(
+    public async Task SendToAdminPostApiEndpoints_IsSuccessful_WhenAdminIsAuthenticatedAsync(
         string endpointUrl,
         HttpContent content)
     {
@@ -88,6 +105,40 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
 
         // Act
         HttpResponseMessage response = await _client.PostAsync(endpointUrl, content);
+
+        // Assert
+        response.Should().BeSuccessful();
+    }
+
+    [Theory]
+    [MemberData(nameof(AdminDeleteApiEndpoints))]
+    public async Task SendToAdminDeleteApiEndpoints_ReturnsForbidden_WhenUserTokenIsSpecifiedAsync(
+        string endpointUrl,
+        Func<HttpClient, Task> createResource)
+    {
+        // Arrange
+        await ArrangeAuthenticatedUser();
+        await createResource(_client);
+
+        // Act
+        HttpResponseMessage response = await _client.DeleteAsync(endpointUrl);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Theory]
+    [MemberData(nameof(AdminDeleteApiEndpoints))]
+    public async Task SendToAdminDeleteApiEndpoints_IsSuccessful_WhenAdminIsAuthenticatedAsync(
+        string endpointUrl,
+        Func<HttpClient, Task> createResource)
+    {
+        // Arrange
+        await ArrangeAuthenticatedAdmin();
+        await createResource(_client);
+
+        // Act
+        HttpResponseMessage response = await _client.DeleteAsync(endpointUrl);
 
         // Assert
         response.Should().BeSuccessful();
