@@ -17,19 +17,16 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _repo;
     private readonly IConfiguration _config;
-    private readonly IEnvironmentConfiguration _environmentConfig;
 
     /// <summary>
     /// Constructs user service.
     /// </summary>
     /// <param name="repo">Where to store and fetch users from.</param>
     /// <param name="config">The configuration source.</param>
-    /// <param name="environmentConfig">The configuration of the current environment.</param>
-    public UserService(IUserRepository repo, IConfiguration config, IEnvironmentConfiguration environmentConfig)
+    public UserService(IUserRepository repo, IConfiguration config)
     {
         _repo = repo;
         _config = config;
-        _environmentConfig = environmentConfig;
 
         _repo.EnsureAdminCreated();
     }
@@ -87,7 +84,7 @@ public class UserService : IUserService
     private string GenerateJwtToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        byte[] key = Encoding.UTF8.GetBytes(_environmentConfig.JwtSecret);
+        byte[] key = Encoding.UTF8.GetBytes(_config[ConfigurationKeys.JwtSecret]);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(CreateClaims(user)),

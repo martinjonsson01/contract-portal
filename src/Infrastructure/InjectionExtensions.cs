@@ -7,7 +7,6 @@ using Application.Images;
 using Application.StatusUpdates;
 using Application.Users;
 
-using Infrastructure.Configuration;
 using Infrastructure.Databases;
 using Infrastructure.Documents;
 using Infrastructure.Images;
@@ -36,7 +35,6 @@ public static class InjectionExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
         return services
-               .AddSingleton<IEnvironmentConfiguration, EnvironmentVariableConfiguration>()
                .AddDbContext<IDatabaseContext, EFDatabaseContext>(
                    options => ConfigureDatabase(options, config),
                    ServiceLifetime.Transient)
@@ -61,6 +59,6 @@ public static class InjectionExtensions
 
     private static void ConfigureDatabase(DbContextOptionsBuilder options, IConfiguration config)
     {
-        _ = options.UseSqlServer(config[EnvironmentVariableKeys.DbConnectionString]);
+        _ = options.UseSqlServer(config[ConfigurationKeys.DbConnectionString]);
     }
 }

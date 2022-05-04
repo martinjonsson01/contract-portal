@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
+using Application.Configuration;
+
 using Infrastructure.Databases;
 
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +43,7 @@ public class TestDatabaseFixture
     {
         string connectionString = ConnectionString;
 
-        string? untrusted = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.UntrustedConnection);
+        string? untrusted = Environment.GetEnvironmentVariable(ConfigurationKeys.UntrustedConnection);
         if (untrusted is null)
             connectionString += "Trusted_Connection=True;";
 

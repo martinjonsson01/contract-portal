@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using Application.Configuration;
+
 using Infrastructure.Databases;
 
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +20,12 @@ internal class EFDatabaseContextFactory : IDesignTimeDbContextFactory<EFDatabase
     public EFDatabaseContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<EFDatabaseContext>();
-        string? dbConnectionstring = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.DbConnectionString);
+        string? dbConnectionstring = Environment.GetEnvironmentVariable(ConfigurationKeys.DbConnectionString);
 
         if (dbConnectionstring == null)
         {
             throw new ArgumentException("No environment variable defined for " +
-                                        EnvironmentVariableKeys.DbConnectionString);
+                                        ConfigurationKeys.DbConnectionString);
         }
 
         _ = optionsBuilder.UseSqlServer(dbConnectionstring);
