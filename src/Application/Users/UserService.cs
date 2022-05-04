@@ -42,7 +42,7 @@ public class UserService : IUserService
     public bool ValidPassword(string username, string password)
     {
         string? userPassword = _repo.Fetch(username)?.Password;
-        return password.Equals(userPassword, StringComparison.Ordinal);
+        return BCrypt.Net.BCrypt.Verify(password, userPassword);
     }
 
     /// <inheritdoc />

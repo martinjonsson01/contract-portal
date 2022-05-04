@@ -94,7 +94,8 @@ public class UserServiceTests
     {
         // Arrange
         const string password = "UserPassword";
-        var user = new User() { Password = password, };
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        var user = new User() { Password = passwordHash, };
         _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
 
         // Act
