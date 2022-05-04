@@ -23,7 +23,10 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
     /// <param name="options">The database configuration options.</param>
     /// <param name="logger">The logging service to use.</param>
     /// <param name="config">The configuration of the current environment.</param>
-    public EFDatabaseContext(DbContextOptions<EFDatabaseContext> options, ILogger<EFDatabaseContext> logger, IConfiguration config)
+    public EFDatabaseContext(
+        DbContextOptions<EFDatabaseContext> options,
+        ILogger<EFDatabaseContext> logger,
+        IConfiguration config)
         : base(options)
     {
         _logger = logger;
@@ -31,8 +34,12 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
 
         if (config[ConfigurationKeys.ContinuousIntegration] != null)
         {
-            _ = Database.EnsureDeleted();
-            _ = Database.EnsureCreated();
+            // If there are migrations yet to be applied.
+            if (Database.GetPendingMigrations().Any())
+            {
+                _ = Database.EnsureDeleted();
+                _ = Database.EnsureCreated();
+            }
         }
     }
 
