@@ -19,6 +19,7 @@
                         </div>
 
                         <InputText id="username" class="form-control" placeholder="Användarnamn" @bind-Value="@_user.UserName"/>
+                        <InputText id="password" type="password" class="form-control" placeholder="Lösenord" @bind-Value="@_user.Password"/>
 
                         @if (_logInFailed)
                         {
@@ -43,6 +44,10 @@
     {
         [Required]
         public string UserName { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
+
     }
     /// <summary>
     /// Called when the username is changed.
