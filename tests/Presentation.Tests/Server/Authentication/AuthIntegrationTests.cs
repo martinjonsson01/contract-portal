@@ -166,6 +166,7 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
             await _client.PostAsJsonAsync("/api/v1/users/authenticate", user.Name);
         AuthenticateResponse? authResponse =
             await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
+        Console.WriteLine($"CODE_WWWWWW12343212 GOT TOKEN BACK: {authResponse?.Token ?? "null"}");
 
         // Swap out the admin token for a normal user token.
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
