@@ -54,9 +54,6 @@ public static class InjectionExtensions
 
     private static void ConfigureDatabase(DbContextOptionsBuilder options)
     {
-#if DEBUG
-        _ = options.UseSqlServer("Server=localhost;Database=master;Trusted_Connection=True;");
-#else
         string? dbConnectionstring = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.DbConnectionString);
         if (dbConnectionstring == null)
         {
@@ -65,6 +62,5 @@ public static class InjectionExtensions
         }
 
         _ = options.UseSqlServer(dbConnectionstring);
-#endif
     }
 }
