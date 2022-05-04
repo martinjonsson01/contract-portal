@@ -7,6 +7,7 @@ using Domain.Users;
 
 namespace Infrastructure.Tests.Users;
 
+[Collection("DatabaseTests")]
 public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
 {
     private readonly TestUserDatabaseFixture _fixture;
@@ -16,6 +17,7 @@ public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
     {
         _fixture = fixture;
         _cut = _fixture.CreateContext();
+        _cut.EnsureAdminCreated();
     }
 
     [Fact]
@@ -56,6 +58,7 @@ public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
 
         // Re-create database.
         _cut = _fixture.CreateContext();
+        _cut.EnsureAdminCreated();
 
         // Act
         bool exists = _cut.Exists(adminName);

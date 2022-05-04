@@ -30,6 +30,8 @@ public class UserService : IUserService
         _repo = repo;
         _config = config;
         _environmentConfig = environmentConfig;
+
+        _repo.EnsureAdminCreated();
     }
 
     /// <inheritdoc />

@@ -33,9 +33,6 @@ public sealed class EFUserRepository : DbContext, IUserRepository
 
         // Creates the database if it is not already created.
         _ = Database.EnsureCreated();
-
-        if (!Users.Any(user => user.Name == AdminUserName))
-            CreateAdmin();
     }
 
     /// <inheritdoc />
@@ -84,6 +81,13 @@ public sealed class EFUserRepository : DbContext, IUserRepository
     public User? Fetch(string username)
     {
         return Users.FirstOrDefault(user => user.Name == username);
+    }
+
+    /// <inheritdoc />
+    public void EnsureAdminCreated()
+    {
+        if (!Users.Any(user => user.Name == AdminUserName))
+            CreateAdmin();
     }
 
     /// <inheritdoc />
