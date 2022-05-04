@@ -10,26 +10,29 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="dashboard">
-                        <span class="" aria-hidden="true"></span> Startsida
-                    </NavLink>
-                </li>
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="contracts">
-                        <span class="" aria-hidden="true"></span> Kontrakt
-                    </NavLink>
-                </li>
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="admin">
-                        <span class="" aria-hidden="true"></span> Admin
-                    </NavLink>
-                </li>
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="AboutUs">
-                        <span class="" aria-hidden="true"></span> Om oss
-                    </NavLink>
-                </li>
+                @if (!LoggedInUser.IsNullOrEmpty())
+                {
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="dashboard">
+                            <span class="" aria-hidden="true"></span> Startsida
+                        </NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="contracts">
+                            <span class="" aria-hidden="true"></span> Kontrakt
+                        </NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="admin">
+                            <span class="" aria-hidden="true"></span> Admin
+                        </NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="AboutUs">
+                            <span class="" aria-hidden="true"></span> Om oss
+                        </NavLink>
+                    </li>
+                }
             </ul>
             <div>
                 @if (LoggedInUser.IsNullOrEmpty())
