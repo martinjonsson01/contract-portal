@@ -100,4 +100,18 @@ public class UserServiceTests
         // Assert
         valid.Should().BeTrue();
     }
+
+    [Fact]
+    public void ValidatePassword_shouldBeFalse_WhenPasswordIsNotUserPassword()
+    {
+        // Arrange
+        var user = new User();
+        const string password = "NotPassword";
+
+        // Act
+        bool valid = _cut.ValidPassword(user.Id, password);
+
+        // Assert
+        valid.Should().BeFalse();
+    }
 }

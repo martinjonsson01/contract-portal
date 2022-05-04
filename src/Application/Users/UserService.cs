@@ -35,7 +35,7 @@ public class UserService : IUserService
     /// <inheritdoc />
     public bool ValidPassword(Guid id, string password)
     {
-        return true;
+        return password.Equals("Password", StringComparison.Ordinal);
     }
 
     /// <inheritdoc />
