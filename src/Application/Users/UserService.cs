@@ -33,9 +33,10 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public bool ValidPassword(Guid id, string password)
+    public bool ValidPassword(string username, string password)
     {
-        return password.Equals("Password", StringComparison.Ordinal);
+        string? userPassword = _repo.Fetch(username)?.Password;
+        return password.Equals(userPassword, StringComparison.Ordinal);
     }
 
     /// <inheritdoc />

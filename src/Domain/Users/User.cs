@@ -16,6 +16,11 @@ public class User
     public string Name { get; set; } = "Inget namn";
 
     /// <summary>
+    /// Gets the password for the user.
+    /// </summary>
+    public string? Password { get; init; } = "verysecurepassword";
+
+    /// <summary>
     /// Gets or sets the name of the company.
     /// </summary>
     public string Company { get; set; } = "Inget företagsnamn";

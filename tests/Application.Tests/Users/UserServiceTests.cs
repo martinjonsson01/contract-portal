@@ -1,6 +1,8 @@
 using System;
+
 using Application.Exceptions;
 using Application.Users;
+
 using Domain.Users;
 
 namespace Application.Tests.Users;
@@ -21,7 +23,7 @@ public class UserServiceTests
     {
         // Arrange
         var user = new User();
-        _mockRepo.Setup(repository => repository.All).Returns(new[] { user });
+        _mockRepo.Setup(repository => repository.All).Returns(new[] { user, });
 
         // Act
         Action add = () => _cut.Add(user);
@@ -91,11 +93,12 @@ public class UserServiceTests
     public void ValidatePassword_shouldBeTrue_WhenPasswordIsUserPassword()
     {
         // Arrange
-        var user = new User();
-        const string password = "password";
+        const string password = "UserPassword";
+        var user = new User() { Password = password, };
+        _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
 
         // Act
-        bool valid = _cut.ValidPassword(user.Id, password);
+        bool valid = _cut.ValidPassword(user.Name, password);
 
         // Assert
         valid.Should().BeTrue();
@@ -105,11 +108,14 @@ public class UserServiceTests
     public void ValidatePassword_shouldBeFalse_WhenPasswordIsNotUserPassword()
     {
         // Arrange
-        var user = new User();
-        const string password = "NotPassword";
+        const string password1 = "User1Password";
+        const string password2 = "User2Password";
+        var user1 = new User() { Name = "User1", Password = password1, };
+        var user2 = new User() { Name = "User2", Password = password2, };
+        _mockRepo.Setup(repository => repository.Fetch(user1.Name)).Returns(user1);
 
         // Act
-        bool valid = _cut.ValidPassword(user.Id, password);
+        bool valid = _cut.ValidPassword(user1.Name, password2);
 
         // Assert
         valid.Should().BeFalse();
