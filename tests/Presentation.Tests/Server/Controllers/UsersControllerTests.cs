@@ -43,14 +43,15 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public void Validate_ReturnsOk_IfUserExists()
+    public void Validate_ReturnsOk_IfUserExistsAndPasswordIsCorrect()
     {
         // Arrange
-        var username = new User() { Name = "user", };
-        _mockUsers.Setup(service => service.UserExists(username.Name)).Returns(true);
+        var user = new User() { Name = "user", Password = "password", };
+        _mockUsers.Setup(service => service.UserExists(user.Name)).Returns(true);
+        _mockUsers.Setup(service => service.ValidPassword(user.Name, user.Password)).Returns(true);
 
         // Act
-        IActionResult actual = _cut.Validate(username);
+        IActionResult actual = _cut.Validate(user);
 
         // Assert
         actual.Should().BeOfType<OkResult>();
