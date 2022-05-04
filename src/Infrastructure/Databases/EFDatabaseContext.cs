@@ -34,9 +34,12 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
 
         if (config[ConfigurationKeys.ContinuousIntegration] != null)
         {
+            _logger.LogInformation("Running in CI mode...");
+
             // If there are migrations yet to be applied.
             if (Database.GetPendingMigrations().Any())
             {
+                _logger.LogWarning("Deleting and recreating database...");
                 _ = Database.EnsureDeleted();
                 _ = Database.EnsureCreated();
             }
