@@ -79,6 +79,14 @@ public class UsersController : BaseApiController<UsersController>
     [HttpPost("validate")]
     public IActionResult Validate(User userInfo)
     {
-        return _users.UserExists(userInfo.Name) ? Ok() : BadRequest();
+        if (_users.UserExists(userInfo.Name))
+        {
+            if (_users.ValidPassword(userInfo.Name, userInfo.Password ?? string.Empty))
+            {
+                return Ok();
+            }
+        }
+
+        return BadRequest();
     }
 }
