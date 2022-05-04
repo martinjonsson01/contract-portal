@@ -4,15 +4,28 @@
 
 <h2>Adminsida</h2>
 
-<ContractForm OnContractUploaded="AddContractToTable"/>
-<hr/>
-<ContractTable @ref="@_contractTable"/>
-<hr/>
-<UserForm OnUserAdded="AddUserToTable"/>
-<hr/>
-<UserTable @ref="@_userTable"/>
+<Tabs SelectedTab="@_selectedTab"
+      SelectedTabChanged="@OnSelectedTabChanged"
+      Justified="true"
+      Pills="true">
+    <Items>
+        <Tab Name="contracts">Kontrakt</Tab>
+        <Tab Name="users">Användare</Tab>
+    </Items>
+    <Content>
+        <TabPanel Name="contracts">
+            <ContractForm OnContractUploaded="AddContractToTable"/>
+            <ContractTable @ref="@_contractTable"/>
+        </TabPanel>
+        <TabPanel Name="users">
+            <UserForm OnUserAdded="AddUserToTable"/>
+            <UserTable @ref="@_userTable"/></TabPanel>
+    </Content>
+</Tabs>
 
 @code {
+
+    private string _selectedTab = "contracts";
 
     private ContractTable _contractTable = null!;
     private UserTable _userTable = null!;
@@ -25,5 +38,11 @@
     private void AddUserToTable(User user)
     {
         _userTable.Add(user);
+    }
+
+    private Task OnSelectedTabChanged(string tabName)
+    {
+        _selectedTab = tabName;
+        return Task.CompletedTask;
     }
 }
