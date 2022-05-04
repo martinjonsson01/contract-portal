@@ -13,7 +13,7 @@ namespace Infrastructure.Contracts;
 /// <summary>
 /// Stores and fetches users from an Entity Framework Core database.
 /// </summary>
-public class EFContractRepository : DbContext, IContractRepository
+public sealed class EFContractRepository : DbContext, IContractRepository
 {
     private readonly ILogger<EFContractRepository> _logger;
     private readonly IRecentContractService _recent;
@@ -31,6 +31,9 @@ public class EFContractRepository : DbContext, IContractRepository
         _logger = logger;
         _recent = new RecentContractService(new Collection<Contract>());
         _logger.LogInformation("Established a new connection to the database");
+
+        // Creates the database if it is not already created.
+        _ = Database.EnsureCreated();
     }
 
     /// <inheritdoc />

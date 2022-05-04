@@ -1,4 +1,5 @@
 using System.Data;
+
 using Application.Users;
 
 using Domain.Users;
@@ -11,7 +12,7 @@ namespace Infrastructure.Users;
 /// <summary>
 /// Stores and fetches users from an Entity Framework Core database.
 /// </summary>
-public class EFUserRepository : DbContext, IUserRepository
+public sealed class EFUserRepository : DbContext, IUserRepository
 {
     private const string DefaultUserName = "default-user";
 
@@ -29,6 +30,9 @@ public class EFUserRepository : DbContext, IUserRepository
     {
         _logger = logger;
         _logger.LogInformation("Established a new connection to the database");
+
+        // Creates the database if it is not already created.
+        _ = Database.EnsureCreated();
 
         if (!Users.Any(user => user.Name == DefaultUserName))
             CreateDefaultUser();
