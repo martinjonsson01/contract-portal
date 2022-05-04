@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-
+using Application.Contracts;
 using Infrastructure.Contracts;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace Infrastructure;
 
@@ -29,6 +29,7 @@ public class EFContractRepositoryFactory : IDesignTimeDbContextFactory<EFContrac
         _ = optionsBuilder.UseSqlServer(dbConnectionstring);
         return new EFContractRepository(
             optionsBuilder.Options,
-            new LoggerFactory().CreateLogger<EFContractRepository>());
+            Mock.Of<ILogger<EFContractRepository>>(),
+            Mock.Of<IRecentContractService>());
     }
 }

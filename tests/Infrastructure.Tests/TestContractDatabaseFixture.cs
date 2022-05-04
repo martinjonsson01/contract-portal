@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-
+using Application.Contracts;
 using Infrastructure.Contracts;
 
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +49,7 @@ public class TestContractDatabaseFixture
             new DbContextOptionsBuilder<EFContractRepository>()
                 .UseSqlServer(connectionString)
                 .Options,
-            Mock.Of<ILogger<EFContractRepository>>());
+            Mock.Of<ILogger<EFContractRepository>>(),
+            Mock.Of<IRecentContractService>());
     }
 }

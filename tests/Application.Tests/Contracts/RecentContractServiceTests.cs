@@ -12,10 +12,12 @@ namespace Application.Tests.Contracts;
 public class RecentContractServiceTests
 {
     private readonly IRecentContractService _cut;
+    private readonly Mock<IRecentContractRepository> _mockRepo;
 
     public RecentContractServiceTests()
     {
-        _cut = new RecentContractService();
+        _mockRepo = new Mock<IRecentContractRepository>();
+        _cut = new RecentContractService(_mockRepo.Object);
     }
 
     [Fact]

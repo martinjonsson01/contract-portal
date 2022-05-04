@@ -2,7 +2,7 @@
 @using Application.Contracts
 @using System.Collections.ObjectModel
 @inject HttpClient _http
-
+@inject IRecentContractService _recent
 <FetchData TData="Contract[]"
            Url="/api/v1/contracts/recent"
            Context="recents">
@@ -50,8 +50,6 @@
         ShouldShowRecent = shouldShow;
         StateHasChanged();
     }
-
-    private IRecentContractService _recent = new RecentContractService();
 
     private void AddRecents(Contract[]? recents)
     {

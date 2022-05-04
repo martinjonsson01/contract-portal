@@ -1,67 +1,49 @@
-﻿using System.Collections.ObjectModel;
-
-using Domain.Contracts;
+﻿using Domain.Contracts;
 
 namespace Application.Contracts;
 
 /// <inheritdoc />
 public class RecentContractService : IRecentContractService
 {
-    private readonly Collection<Contract> _recent;
+    private readonly IRecentContractRepository _recent;
 
     /// <summary>
     /// Constructs recent contract service.
     /// </summary>
-    public RecentContractService()
+    /// <param name="recent">The recent repository to fetch and update data from and to.</param>
+    public RecentContractService(IRecentContractRepository recent)
     {
-        _recent = new Collection<Contract>();
+        _recent = recent;
     }
 
     /// <inheritdoc />
     public int Size(string id)
     {
-        return _recent.Count;
+        return _recent.FetchRecentContracts(id).Count;
     }
 
     /// <param name="id"></param>
     /// <inheritdoc />
     public IEnumerable<Contract> FetchRecentContracts(string id)
     {
-        return _recent;
+        return _recent.FetchRecentContracts(id);
     }
 
     /// <inheritdoc />
     public void Add(string id, Contract contract)
     {
-        if (_recent.Any(recentContract => recentContract.Id.Equals(contract.Id)))
-        {
-            return;
-        }
+        _recent.Add(id, contract);
 
         const int recentAmountMax = 3;
-        if (_recent.Count >= recentAmountMax)
+        if (Size(id) >= recentAmountMax)
         {
-            RemoveLast(id);
+            _recent.RemoveLast(id);
         }
-
-        _recent.Add(contract);
     }
 
     /// <inheritdoc />
     public void Remove(Guid id)
     {
-        foreach (Contract contract in _recent)
-        {
-            if (contract.Id != id)
-                continue;
-            _ = _recent.Remove(contract);
-            break;
-        }
-    }
-
-    /// <inheritdoc />
-    public void RemoveLast(string id)
-    {
-        _recent.RemoveAt(0);
+        _recent.Remove(id);
     }
 }

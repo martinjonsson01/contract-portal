@@ -22,13 +22,15 @@ public class EFContractRepository : DbContext, IContractRepository
     /// </summary>
     /// <param name="options">The database configuration options.</param>
     /// <param name="logger">The logging service to use.</param>
+    /// <param name="recent">The recent contract service to use.</param>
     public EFContractRepository(
         DbContextOptions<EFContractRepository> options,
-        ILogger<EFContractRepository> logger)
+        ILogger<EFContractRepository> logger,
+        IRecentContractService recent)
         : base(options)
     {
         _logger = logger;
-        _recent = new RecentContractService();
+        _recent = recent;
         _logger.LogInformation("Established a new connection to the database");
     }
 

@@ -33,10 +33,4 @@ public interface IRecentContractService
     /// </summary>
     /// <param name="id">The ID of the contract to remove.</param>
     void Remove(Guid id);
-
-    /// <summary>
-    /// Removes the last viewed contract.
-    /// </summary>
-    /// <param name="id">The id of the user.</param>
-    void RemoveLast(string id);
 }

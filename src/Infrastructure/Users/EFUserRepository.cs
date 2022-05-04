@@ -43,6 +43,30 @@ public class EFUserRepository : DbContext, IUserRepository, IRecentContractRepos
     }
 
     /// <inheritdoc />
+    public void Add(string id, Contract contract)
+    {
+        User user = GetUserByUserName(id);
+        _ = user.RecentlyViewContracts.AddFirst(contract);
+    }
+
+    /// <inheritdoc/>
+    void IRecentContractRepository.Remove(Guid id)
+    {
+        foreach (User user in Users)
+        {
+            Contract contractToRemove = user.RecentlyViewContracts.First(contract => contract.Id == id);
+            _ = user.RecentlyViewContracts.Remove(contractToRemove);
+        }
+    }
+
+    /// <inheritdoc />
+    public void RemoveLast(string id)
+    {
+        User user = GetUserByUserName(id);
+        user.RecentlyViewContracts.RemoveLast();
+    }
+
+    /// <inheritdoc />
     public bool Remove(Guid id)
     {
         User? toRemove = Users.Find(id);
@@ -72,23 +96,10 @@ public class EFUserRepository : DbContext, IUserRepository, IRecentContractRepos
     }
 
     /// <inheritdoc />
-    public Queue<Contract> FetchRecentContracts(string id)
+    public LinkedList<Contract> FetchRecentContracts(string id)
     {
-        User? user = Users.Find(id);
-        return user?.RecentlyViewContracts ?? throw new InvalidOperationException();
-    }
-
-    /// <inheritdoc />
-    public void UpdateRecentContracts(string id, Queue<Contract> updatedRecentContracts)
-    {
-        User? currentUser = Users.Find(id);
-        if (currentUser == null)
-            return;
-        currentUser.RecentlyViewContracts.Clear();
-        foreach (Contract contract in updatedRecentContracts)
-        {
-            currentUser.RecentlyViewContracts.Enqueue(contract);
-        }
+        User user = GetUserByUserName(id);
+        return user.RecentlyViewContracts ?? throw new InvalidOperationException();
     }
 
     /// <inheritdoc />
@@ -96,5 +107,10 @@ public class EFUserRepository : DbContext, IUserRepository, IRecentContractRepos
     {
         _ = modelBuilder.Entity<User>()
             .HasKey(user => user.Id);
+    }
+
+    private User GetUserByUserName(string username)
+    {
+        return Users.First(user => user.Name == username);
     }
 }

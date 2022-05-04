@@ -35,5 +35,5 @@ public class User
     /// <summary>
     /// Gets the most recently view contracts by the user.
     /// </summary>
-    public Queue<Contract> RecentlyViewContracts { get; } = new();
+    public LinkedList<Contract> RecentlyViewContracts { get; } = new();
 }
