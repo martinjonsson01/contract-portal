@@ -1,6 +1,9 @@
 using System;
+
+using Application.Configuration;
 using Application.Exceptions;
 using Application.Users;
+
 using Domain.Users;
 
 using Microsoft.Extensions.Configuration;
@@ -15,7 +18,9 @@ public class UserServiceTests
     public UserServiceTests()
     {
         _mockRepo = new Mock<IUserRepository>();
-        _cut = new UserService(_mockRepo.Object, Mock.Of<IConfiguration>());
+        var mockEnvironment = new Mock<IEnvironmentConfiguration>();
+        mockEnvironment.Setup(env => env.JwtSecret).Returns("test-json-web-token-secret");
+        _cut = new UserService(_mockRepo.Object, Mock.Of<IConfiguration>(), mockEnvironment.Object);
     }
 
     [Fact]

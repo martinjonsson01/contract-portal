@@ -1,4 +1,5 @@
-﻿using Application.Users;
+﻿using Application.Configuration;
+using Application.Users;
 
 using Domain.Users;
 
@@ -17,7 +18,9 @@ public class AuthenticationTests
     public AuthenticationTests()
     {
         _mockRepo = new Mock<IUserRepository>();
-        var service = new UserService(_mockRepo.Object, Mock.Of<IConfiguration>());
+        var mockEnvironment = new Mock<IEnvironmentConfiguration>();
+        mockEnvironment.Setup(env => env.JwtSecret).Returns("test-json-web-token-secret");
+        var service = new UserService(_mockRepo.Object, Mock.Of<IConfiguration>(), mockEnvironment.Object);
         _cut = new UsersController(Mock.Of<ILogger<UsersController>>(), service);
     }
 

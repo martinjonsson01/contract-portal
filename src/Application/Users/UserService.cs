@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+using Application.Configuration;
 using Application.Exceptions;
 
 using Domain.Users;
@@ -16,16 +17,19 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _repo;
     private readonly IConfiguration _config;
+    private readonly IEnvironmentConfiguration _environmentConfig;
 
     /// <summary>
     /// Constructs user service.
     /// </summary>
     /// <param name="repo">Where to store and fetch users from.</param>
     /// <param name="config">The configuration source.</param>
-    public UserService(IUserRepository repo, IConfiguration config)
+    /// <param name="environmentConfig">The configuration of the current environment.</param>
+    public UserService(IUserRepository repo, IConfiguration config, IEnvironmentConfiguration environmentConfig)
     {
         _repo = repo;
         _config = config;
+        _environmentConfig = environmentConfig;
     }
 
     /// <inheritdoc />
@@ -68,20 +72,10 @@ public class UserService : IUserService
         return _repo.All;
     }
 
-    private static byte[] GetSecretKey()
-    {
-        const string environmentVariableKey = "prodigo_portal_jwt_secret";
-        string? jwtSecret = Environment.GetEnvironmentVariable(environmentVariableKey);
-
-        return jwtSecret is null
-            ? throw new ArgumentException("No environment variable defined for " + environmentVariableKey)
-            : Encoding.UTF8.GetBytes(jwtSecret);
-    }
-
     private string GenerateJwtToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        byte[] key = GetSecretKey();
+        byte[] key = Encoding.UTF8.GetBytes(_environmentConfig.JwtSecret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), }),
