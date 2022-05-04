@@ -29,6 +29,9 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
             new object[] { "/api/v1/users", JsonContent.Create(new User()), },
         };
 
+    public static IEnumerable<object[]> AdminDeleteApiEndpoints =>
+        new List<object[]> { new object[] { "/api/v1/contracts", }, new object[] { "/api/v1/users", }, };
+
     [Theory]
     [InlineData("/api/v1/contracts")]
     [InlineData("/api/v1/users")]
@@ -64,22 +67,8 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         string endpointUrl,
         HttpContent content)
     {
-        // Arrange - authenticate as admin user.
-        HttpResponseMessage authResponseMessage = await _client.PostAsJsonAsync("/api/v1/users/authenticate", "admin");
-        AuthenticateResponse? authResponse =
-            await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
-
-        // Arrange - create normal user.
-        var user = new User();
-        await _client.PostAsJsonAsync("/api/v1/users", user);
-
-        // Arrange - authenticate as normal user.
-        authResponseMessage = await _client.PostAsJsonAsync("/api/v1/users/authenticate", user.Name);
-        authResponse = await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
-
-        // Swap out the admin token for a normal user token.
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
+        // Arrange
+        await ArrangeAuthenticatedUser();
 
         // Act
         HttpResponseMessage response = await _client.PostAsync(endpointUrl, content);
@@ -95,15 +84,39 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         HttpContent content)
     {
         // Arrange
-        HttpResponseMessage authResponseMessage = await _client.PostAsJsonAsync("/api/v1/users/authenticate", "admin");
-        AuthenticateResponse? authResponse =
-            await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
+        await ArrangeAuthenticatedAdmin();
 
         // Act
         HttpResponseMessage response = await _client.PostAsync(endpointUrl, content);
 
         // Assert
         response.Should().BeSuccessful();
+    }
+
+    private async Task ArrangeAuthenticatedAdmin()
+    {
+        HttpResponseMessage authResponseMessage = await _client.PostAsJsonAsync("/api/v1/users/authenticate", "admin");
+        AuthenticateResponse? authResponse =
+            await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
+    }
+
+    private async Task ArrangeAuthenticatedUser()
+    {
+        // Arrange - authenticate as admin user.
+        await ArrangeAuthenticatedAdmin();
+
+        // Arrange - create normal user.
+        var user = new User();
+        await _client.PostAsJsonAsync("/api/v1/users", user);
+
+        // Arrange - authenticate as normal user.
+        HttpResponseMessage authResponseMessage =
+            await _client.PostAsJsonAsync("/api/v1/users/authenticate", user.Name);
+        AuthenticateResponse? authResponse =
+            await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
+
+        // Swap out the admin token for a normal user token.
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
     }
 }
