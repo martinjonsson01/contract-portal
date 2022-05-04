@@ -66,7 +66,7 @@
 
             await OnUserLogInChange.InvokeAsync(_user.UserName);
             await _js.InvokeVoidAsync("closeModal", "#log-in");
-            _navigationManager.NavigateTo("");
+            _navigationManager.NavigateTo("dashboard");
         }
         else
         {
