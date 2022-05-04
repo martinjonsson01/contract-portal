@@ -58,6 +58,21 @@ public class UsersControllerTests
     }
 
     [Fact]
+    public void Validate_ReturnsBadRequest_IfUserExistsButPasswordIsIncorrect()
+    {
+        // Arrange
+        var user = new User() { Name = "user", Password = "password", };
+        _mockUsers.Setup(service => service.UserExists(user.Name)).Returns(true);
+        _mockUsers.Setup(service => service.ValidPassword(user.Name, "NotPassword")).Returns(false);
+
+        // Act
+        IActionResult actual = _cut.Validate(user);
+
+        // Assert
+        actual.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
     public void Validate_ReturnsBadRequest_IfUserDoesNotExist()
     {
         // Arrange
