@@ -46,40 +46,40 @@ public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
     }
 
     [Fact]
-    public void AfterCreation_DefaultUserIsCreated_IfNoDefaultUserExistedPreviously()
+    public void AfterCreation_AdminUserIsCreated_IfNoAdminUserExistedPreviously()
     {
         // Arrange
-        const string defaultUsername = "default-user";
-        User? defaultUser = _cut.All.FirstOrDefault(user => user.Name == defaultUsername);
-        if (defaultUser is not null)
-            _cut.Remove(defaultUser.Id);
+        const string adminName = "admin";
+        User? admin = _cut.All.FirstOrDefault(user => user.Name == adminName);
+        if (admin is not null)
+            _cut.Remove(admin.Id);
 
         // Re-create database.
         _cut = _fixture.CreateContext();
 
         // Act
-        bool exists = _cut.Exists(defaultUsername);
+        bool exists = _cut.Exists(adminName);
 
         // Assert
         exists.Should().BeTrue();
     }
 
     [Fact]
-    public void AfterCreation_ThereIsOnlyOneDefaultUser_IfDefaultUserExistedPreviously()
+    public void AfterCreation_ThereIsOnlyOneAdmin_IfAdminExistedPreviously()
     {
         // Arrange
-        const string defaultUsername = "default-user";
-        User? defaultUser = _cut.All.FirstOrDefault(user => user.Name == defaultUsername);
+        const string adminName = "admin";
+        User? admin = _cut.All.FirstOrDefault(user => user.Name == adminName);
 
-        if (defaultUser is null) // Ensure user exists.
-            _cut.Add(new User { Name = defaultUsername, });
+        if (admin is null) // Ensure admin exists.
+            _cut.Add(new User { Name = adminName, });
 
         _cut = _fixture.CreateContext(); // Re-create database.
 
         // Act
-        IEnumerable<User> defaultUsers = _cut.All.Where(user => user.Name == defaultUsername);
+        IEnumerable<User> admins = _cut.All.Where(user => user.Name == adminName);
 
         // Assert
-        defaultUsers.Should().ContainSingle();
+        admins.Should().ContainSingle();
     }
 }
