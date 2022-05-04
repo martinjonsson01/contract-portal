@@ -32,7 +32,6 @@ jobs:
     - name: Update database
       run: |
          dotnet tool install --global dotnet-ef
-         dotnet tool restore
          dotnet ef database update -p src/Infrastructure/Infrastructure.csproj
       env:
         ASPNETCORE_ENVIRONMENT: Development
