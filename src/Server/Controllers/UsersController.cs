@@ -74,11 +74,14 @@ public class UsersController : BaseApiController<UsersController>
     /// <summary>
     /// Checks if a user with a certain username exists.
     /// </summary>
-    /// <param name="username">The username.</param>
+    /// <param name="userInfo">The username.</param>
     /// <returns>Whether a user with the specified username exists.</returns>
     [HttpPost("validate")]
-    public IActionResult Validate([FromBody] string username)
+    public IActionResult Validate(User userInfo)
     {
-        return _users.UserExists(username) ? Ok() : BadRequest();
+        Console.WriteLine(userInfo.Name + " " + userInfo.Password);
+        return Ok();
+
+        // return _users.UserExists(username) ? Ok() : BadRequest();
     }
 }
