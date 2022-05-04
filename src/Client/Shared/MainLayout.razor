@@ -1,16 +1,18 @@
 ﻿@inherits LayoutComponentBase
 <CascadingValue Value="@_loggedInUser" Name="LoggedInUser">
-    <div class="page">
-        <main>
-            <div class="sticky-top">
-                <NavMenu />
-            </div>
-            <article class="content px-4">
-                @Body
-                <LoginModal OnUserLogInChange="@OnUserLogIn"/>
-            </article>
-        </main>
-    </div>
+    <ThemeProvider Theme="@_theme">
+        <div class="page">
+            <main>
+                <div class="sticky-top">
+                    <NavMenu/>
+                </div>
+                <article class="content px-4">
+                    @Body
+                    <LoginModal OnUserLogInChange="@OnUserLogIn"/>
+                </article>
+            </main>
+        </div>
+    </ThemeProvider>
 </CascadingValue>
 
 @code
@@ -22,4 +24,17 @@
     }
 
     private string? _loggedInUser = string.Empty;
+
+    private readonly Theme _theme = new()
+    {
+        ColorOptions = new ThemeColorOptions
+        {
+            Primary = "#3e4b65",
+            Secondary = "#f7f1f1",
+            Dark = "222939",
+            Info = "#516285",
+            Link = "#dadee8",
+        },
+        IsRounded = false,
+    };
 }
