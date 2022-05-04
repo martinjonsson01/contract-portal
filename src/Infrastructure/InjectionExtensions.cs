@@ -8,11 +8,10 @@ using Application.StatusUpdates;
 using Application.Users;
 
 using Infrastructure.Configuration;
-using Infrastructure.Contracts;
+using Infrastructure.Databases;
 using Infrastructure.Documents;
 using Infrastructure.Images;
 using Infrastructure.StatusUpdates;
-using Infrastructure.Users;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,9 +35,10 @@ public static class InjectionExtensions
     {
         return services
                .AddSingleton<IEnvironmentConfiguration, EnvironmentVariableConfiguration>()
-               .AddDbContext<IContractRepository, EFContractRepository>(ConfigureDatabase, ServiceLifetime.Transient)
+               .AddDbContext<IDatabaseContext, EFDatabaseContext>(ConfigureDatabase, ServiceLifetime.Transient)
+               .AddScoped<IContractRepository, EFContractRepository>()
+               .AddScoped<IUserRepository, EFUserRepository>()
                .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
-               .AddDbContext<IUserRepository, EFUserRepository>(ConfigureDatabase, ServiceLifetime.Transient)
                .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
                {
                    IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();

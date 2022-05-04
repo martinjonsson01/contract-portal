@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using Infrastructure.Users;
+using Infrastructure.Databases;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -12,13 +12,14 @@ namespace Infrastructure;
 /// Used at design-time by Entity Framework Core to generate the database migrations.
 /// </summary>
 [ExcludeFromCodeCoverage]
-public class EFUserRepositoryFactory : IDesignTimeDbContextFactory<EFUserRepository>
+internal class EFDatabaseContextFactory : IDesignTimeDbContextFactory<EFDatabaseContext>
 {
     /// <inheritdoc />
-    public EFUserRepository CreateDbContext(string[] args)
+    public EFDatabaseContext CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<EFUserRepository>();
+        var optionsBuilder = new DbContextOptionsBuilder<EFDatabaseContext>();
         string? dbConnectionstring = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.DbConnectionString);
+
         if (dbConnectionstring == null)
         {
             throw new ArgumentException("No environment variable defined for " +
@@ -26,8 +27,8 @@ public class EFUserRepositoryFactory : IDesignTimeDbContextFactory<EFUserReposit
         }
 
         _ = optionsBuilder.UseSqlServer(dbConnectionstring);
-        return new EFUserRepository(
+        return new EFDatabaseContext(
             optionsBuilder.Options,
-            new LoggerFactory().CreateLogger<EFUserRepository>());
+            new LoggerFactory().CreateLogger<EFDatabaseContext>());
     }
 }
