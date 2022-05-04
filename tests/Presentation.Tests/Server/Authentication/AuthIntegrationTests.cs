@@ -35,7 +35,8 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         {
             const string contractEndpoint = "/api/v1/contracts";
             var contract = new Contract();
-            Func<HttpClient, Task> createContract = async client => await client.PostAsJsonAsync(contractEndpoint, contract);
+            Func<HttpClient, Task> createContract =
+                async client => await client.PostAsJsonAsync(contractEndpoint, contract);
 
             const string usersEndpoint = "/api/v1/users";
             var user = new User();
@@ -164,8 +165,19 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         // Arrange - authenticate as normal user.
         HttpResponseMessage authResponseMessage =
             await _client.PostAsJsonAsync("/api/v1/users/authenticate", user.Name);
-        AuthenticateResponse? authResponse =
-            await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
+        AuthenticateResponse? authResponse;
+        try
+        {
+            authResponse =
+                await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"got error when trying to read from json {1}:");
+            Console.WriteLine(e);
+            throw;
+        }
+
         Console.WriteLine($"CODE_WWWWWW12343212 GOT TOKEN BACK: {authResponse?.Token ?? "null"}");
 
         // Swap out the admin token for a normal user token.
