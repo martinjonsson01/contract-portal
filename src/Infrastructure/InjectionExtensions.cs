@@ -1,4 +1,6 @@
-﻿using Application.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Application.Configuration;
 using Application.Contracts;
 using Application.Documents;
 using Application.Images;
@@ -22,6 +24,7 @@ namespace Infrastructure;
 /// <summary>
 ///     Injects infrastructure.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class InjectionExtensions
 {
     /// <summary>
