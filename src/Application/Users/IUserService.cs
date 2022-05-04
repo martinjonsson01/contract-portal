@@ -33,4 +33,11 @@ public interface IUserService
     /// <param name="password">The password to validate.</param>
     /// <returns>Whether the password is valid for the user.</returns>
     bool ValidPassword(string username, string password);
+
+    /// <summary>
+    /// Checks whether a user exists or not.
+    /// </summary>
+    /// <param name="username">The username to look for.</param>
+    /// <returns>Whether the user exits or not.</returns>
+    bool UserExists(string username);
 }

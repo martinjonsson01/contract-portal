@@ -32,4 +32,11 @@ public interface IUserRepository
     /// <param name="username">The username of the user to get.</param>
     /// <returns>The user if it exists, otherwise null.</returns>
     User? Fetch(string username);
+
+    /// <summary>
+    /// Checks whether a user exists or not.
+    /// </summary>
+    /// <param name="username">The username to look for.</param>
+    /// <returns>Whether the user exits or not.</returns>
+    bool Exists(string username);
 }

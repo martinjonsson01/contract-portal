@@ -5,15 +5,30 @@ namespace Presentation.Tests.Client.Shared;
 public class NavMenuTests : UITestFixture
 {
     [Fact]
-    public void ToggleNavMenu_ShowsNavBar_WhenClicked()
+    public void NavMenu_DisplaysLoginButton_WhenUserNotLoggedIn()
     {
         // Arrange
-        IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
+        static void ParameterBuilder(ComponentParameterCollectionBuilder<NavMenu> parameters) =>
+            parameters.Add(property => property.LoggedInUser, string.Empty);
 
         // Act
-        cut.Find(".navbar-toggler").Click();
+        IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>(ParameterBuilder);
 
         // Assert
-        cut.FindAll(".nav-item").Count.Should().BePositive();
+        cut.Find("#login-button").Should().NotBeNull();
+    }
+
+    [Fact]
+    public void NavMenu_DisplaysLoginText_WhenUserLoggedIn()
+    {
+        // Arrange
+        static void ParameterBuilder(ComponentParameterCollectionBuilder<NavMenu> parameters) =>
+            parameters.Add(property => property.LoggedInUser, "username");
+
+        // Act
+        IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>(ParameterBuilder);
+
+        // Assert
+        cut.Find("#logged-in").Should().NotBeNull();
     }
 }

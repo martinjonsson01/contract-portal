@@ -43,6 +43,34 @@ public class UsersControllerTests
     }
 
     [Fact]
+    public void Validate_ReturnsOk_IfUserExists()
+    {
+        // Arrange
+        string username = "user";
+        _mockUsers.Setup(service => service.UserExists(username)).Returns(true);
+
+        // Act
+        IActionResult actual = _cut.Validate(username);
+
+        // Assert
+        actual.Should().BeOfType<OkResult>();
+    }
+
+    [Fact]
+    public void Validate_ReturnsBadRequest_IfUserDoesNotExist()
+    {
+        // Arrange
+        string username = "user";
+        _mockUsers.Setup(service => service.UserExists(username)).Returns(false);
+
+        // Act
+        IActionResult actual = _cut.Validate(username);
+
+        // Assert
+        actual.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
     public void Remove_ReturnsOk_WhenIDExists()
     {
         // Arrange

@@ -27,6 +27,12 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
+    public bool UserExists(string username)
+    {
+        return _repo.Exists(username);
+    }
+
+    /// <inheritdoc />
     public bool Remove(Guid id)
     {
         return _repo.Remove(id);

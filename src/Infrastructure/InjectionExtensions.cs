@@ -51,10 +51,17 @@ public static class InjectionExtensions
 
     private static void ConfigureDatabase(DbContextOptionsBuilder options)
     {
-        // Note: this connection string should be stored in an environment variable away from the source code.
-        // If you are replacing this connection string with actual credentials to a real database, don't
-        // just replace the string here in the source code, use an environment variable instead.
-        _ = options.UseNpgsql(
-            "User ID=postgres;Password=password;Host=localhost;Port=5432;Database=contract_portal;");
+#if DEBUG
+        _ = options.UseSqlServer("Server=localhost;Database=master;Trusted_Connection=True;");
+#else
+        string? dbConnectionstring = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.DbConnectionString);
+        if (dbConnectionstring == null)
+        {
+            throw new ArgumentException("No environment variable defined for " +
+                                        EnvironmentVariableKeys.DbConnectionString);
+        }
+
+        _ = options.UseSqlServer(dbConnectionstring);
+#endif
     }
 }

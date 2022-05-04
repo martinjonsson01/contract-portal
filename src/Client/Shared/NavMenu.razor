@@ -1,44 +1,60 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Blazorise.Extensions
+@using Domain.Users
+
+<nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #222939 ">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Prodigo Portal</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+        <a class="navbar-brand" href="#">Prodigo Portal</a>
+        <button class="navbar-toggler" type="button"  data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="" aria-hidden="true"></span> Startsida
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="contracts">
+                        <span class="" aria-hidden="true"></span> Kontrakt
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="admin">
+                        <span class="" aria-hidden="true"></span> Admin
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="AboutUs">
+                        <span class="" aria-hidden="true"></span> Om oss
+                    </NavLink>
+                </li>
+            </ul>
+            <div>
+                @if (LoggedInUser.IsNullOrEmpty())
+                {
+                    <button id="login-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#log-in">
+                        Logga in
+                    </button>
+                }
+                else
+                {
+                    <p id="logged-in" class="text-center m-0">
+                        Inloggad som: @LoggedInUser
+                    </p>
+                }
+            </div>
+        </div>
     </div>
-</div>
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Dashboard
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="contracts">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Contracts
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="admin">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Admin page
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="AboutUs">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> About Us
-            </NavLink>
-        </div>
-    </nav>
-</div>
+</nav>
 
 @code {
-    private bool _collapseNavMenu = true;
 
-    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        _collapseNavMenu = !_collapseNavMenu;
-    }
+    /// <summary>
+    /// The name of the currently logged in user.
+    /// </summary>
+    [CascadingParameter(Name = nameof(LoggedInUser))]
+    public string? LoggedInUser { get; set; }
 
 }
