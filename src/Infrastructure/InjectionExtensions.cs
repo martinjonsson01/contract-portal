@@ -14,6 +14,7 @@ using Infrastructure.Images;
 using Infrastructure.StatusUpdates;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -30,12 +31,15 @@ public static class InjectionExtensions
     ///     Registers infrastructure services.
     /// </summary>
     /// <param name="services">The existing services.</param>
+    /// <param name="config">The configuration for the current environment.</param>
     /// <returns>The same service container.</returns>
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
         return services
                .AddSingleton<IEnvironmentConfiguration, EnvironmentVariableConfiguration>()
-               .AddDbContext<IDatabaseContext, EFDatabaseContext>(ConfigureDatabase, ServiceLifetime.Transient)
+               .AddDbContext<IDatabaseContext, EFDatabaseContext>(
+                   options => ConfigureDatabase(options, config),
+                   ServiceLifetime.Transient)
                .AddScoped<IContractRepository, EFContractRepository>()
                .AddScoped<IUserRepository, EFUserRepository>()
                .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
@@ -55,15 +59,8 @@ public static class InjectionExtensions
                });
     }
 
-    private static void ConfigureDatabase(DbContextOptionsBuilder options)
+    private static void ConfigureDatabase(DbContextOptionsBuilder options, IConfiguration config)
     {
-        string? dbConnectionstring = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.DbConnectionString);
-        if (dbConnectionstring == null)
-        {
-            throw new ArgumentException("No environment variable defined for " +
-                                        EnvironmentVariableKeys.DbConnectionString);
-        }
-
-        _ = options.UseSqlServer(dbConnectionstring);
+        _ = options.UseSqlServer(config[EnvironmentVariableKeys.DbConnectionString]);
     }
 }

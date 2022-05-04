@@ -27,10 +27,7 @@ builder.Services.AddAuthentication(options =>
 
            options.Configuration = new OpenIdConnectConfiguration();
 
-           const string environmentVariableKey = "prodigo_portal_jwt_secret";
-           string? jwtSecret = Environment.GetEnvironmentVariable(environmentVariableKey);
-           if (jwtSecret is null)
-               throw new ArgumentException("No environment variable defined for " + environmentVariableKey);
+           string jwtSecret = builder.Configuration["prodigo_portal_jwt_secret"];
 
            options.TokenValidationParameters = new TokenValidationParameters
            {
@@ -60,7 +57,7 @@ builder.Services.AddRazorPages(options =>
     _ = options.Conventions.AllowAnonymousToAreaFolder("root", "/wwwroot").AllowAnonymousToPage("/index.html");
 });
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
        .AddNewtonsoftJson();
