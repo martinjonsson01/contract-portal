@@ -1,6 +1,5 @@
 ﻿using Application.Contracts;
 using Application.Exceptions;
-
 using Domain.Contracts;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +22,10 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="logger">The logging provider.</param>
     /// <param name="contracts">The contract logic.</param>
     /// <param name="recent">The recent contract logic.</param>
-    public ContractsController(ILogger<ContractsController> logger, IContractService contracts, IRecentContractService recent)
+    public ContractsController(
+        ILogger<ContractsController> logger,
+        IContractService contracts,
+        IRecentContractService recent)
         : base(logger)
     {
         _contracts = contracts;
@@ -61,22 +63,31 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <summary>
     /// Gets all recently viewed contracts.
     /// </summary>
+    /// <param name="username">The logged in user.</param>
     /// <returns>All recently viewed contracts.</returns>
-    [HttpGet("recent")]
-    public IEnumerable<Contract> RecentContracts()
+    [HttpGet("recent/{username}")]
+    public IEnumerable<Contract> RecentContracts(string username)
     {
-        return _recent.FetchRecentContracts(" ");
+        IEnumerable<Contract> recentContracts = _recent.FetchRecentContracts(username);
+        Console.WriteLine($"Fetching Contract for {username}");
+        foreach (Contract recentContract in recentContracts)
+        {
+            Console.WriteLine(recentContract.Name);
+        }
+
+        return recentContracts;
     }
 
     /// <summary>
     /// Adds a contract as recently viewed.
     /// </summary>
+    /// <param name="username">The logged in user.</param>
     /// <param name="contract">The contract to add.</param>
     /// <returns>Returns success after it has added the contract to recently viewed.</returns>
-    [HttpPost("recent")]
-    public IActionResult AddRecent(Contract contract)
+    [HttpPost("recent/{username}")]
+    public IActionResult AddRecent(string username, Contract contract)
     {
-        _recent.Add(" ", contract);
+        _recent.Add(username, contract);
         return Ok();
     }
 
@@ -111,9 +122,7 @@ public class ContractsController : BaseApiController<ContractsController>
     [HttpDelete("{id:guid}")]
     public IActionResult Remove(Guid id)
     {
-        return _contracts.Remove(id) ?
-            Ok() :
-            NotFound();
+        return _contracts.Remove(id) ? Ok() : NotFound();
     }
 
     /// <summary>
