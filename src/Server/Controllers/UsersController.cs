@@ -34,6 +34,7 @@ public class UsersController : BaseApiController<UsersController>
     /// <returns>If the user was successfully added.</returns>
     /// <response code="400">The ID of the user was already taken.</response>
     [HttpPost]
+    [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Create(User user)
     {

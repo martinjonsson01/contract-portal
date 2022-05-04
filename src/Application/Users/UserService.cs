@@ -72,13 +72,23 @@ public class UserService : IUserService
         return _repo.All;
     }
 
+    private static IEnumerable<Claim> CreateClaims(User user)
+    {
+        var claims = new List<Claim> { new("id", user.Id.ToString()), };
+
+        if (user.Name == "admin")
+            claims.Add(new Claim("IsAdmin", "true"));
+
+        return claims;
+    }
+
     private string GenerateJwtToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         byte[] key = Encoding.UTF8.GetBytes(_environmentConfig.JwtSecret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), }),
+            Subject = new ClaimsIdentity(CreateClaims(user)),
             Audience = _config["Jwt:Issuer"],
             Issuer = _config["Jwt:Issuer"],
             Expires = DateTime.UtcNow.AddHours(1),

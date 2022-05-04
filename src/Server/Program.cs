@@ -50,6 +50,7 @@ builder.Services.AddAuthorization(options =>
         new AuthorizationPolicyBuilder()
             .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
             .RequireAuthenticatedUser().Build());
+    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("IsAdmin", "true"));
 });
 
 // Add services to the container.

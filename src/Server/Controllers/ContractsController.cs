@@ -3,6 +3,7 @@ using Application.Exceptions;
 
 using Domain.Contracts;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -85,6 +86,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The ID of the contract was already taken.</response>
     [HttpPost]
+    [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult CreateContract(Contract contract)
     {
