@@ -1,8 +1,11 @@
-﻿using Domain.Contracts;
+﻿using Application.Configuration;
+
+using Domain.Contracts;
 using Domain.Users;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Databases;
@@ -19,11 +22,18 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
     /// </summary>
     /// <param name="options">The database configuration options.</param>
     /// <param name="logger">The logging service to use.</param>
-    public EFDatabaseContext(DbContextOptions<EFDatabaseContext> options, ILogger<EFDatabaseContext> logger)
+    /// <param name="config">The configuration of the current environment.</param>
+    public EFDatabaseContext(DbContextOptions<EFDatabaseContext> options, ILogger<EFDatabaseContext> logger, IConfiguration config)
         : base(options)
     {
         _logger = logger;
         _logger.LogInformation("Established a new connection to the database");
+
+        if (config[ConfigurationKeys.ContinuousIntegration] != null)
+        {
+            _ = Database.EnsureDeleted();
+            _ = Database.EnsureCreated();
+        }
     }
 
     /// <summary>

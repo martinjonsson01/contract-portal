@@ -6,7 +6,10 @@ using Infrastructure.Databases;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+
+using Moq;
 
 namespace Infrastructure;
 
@@ -31,6 +34,7 @@ internal class EFDatabaseContextFactory : IDesignTimeDbContextFactory<EFDatabase
         _ = optionsBuilder.UseSqlServer(dbConnectionstring);
         return new EFDatabaseContext(
             optionsBuilder.Options,
-            new LoggerFactory().CreateLogger<EFDatabaseContext>());
+            new LoggerFactory().CreateLogger<EFDatabaseContext>(),
+            Mock.Of<IConfiguration>());
     }
 }

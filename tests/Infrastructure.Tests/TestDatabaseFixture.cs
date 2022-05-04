@@ -6,6 +6,7 @@ using Application.Configuration;
 using Infrastructure.Databases;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Tests;
@@ -43,8 +44,8 @@ public class TestDatabaseFixture
     {
         string connectionString = ConnectionString;
 
-        string? untrusted = Environment.GetEnvironmentVariable(ConfigurationKeys.UntrustedConnection);
-        if (untrusted is null)
+        string? ciContainer = Environment.GetEnvironmentVariable(ConfigurationKeys.ContinuousIntegration);
+        if (ciContainer is null)
             connectionString += "Trusted_Connection=True;";
 
         return new EFDatabaseContext(
@@ -52,6 +53,7 @@ public class TestDatabaseFixture
                 .UseSqlServer(connectionString, options => options.EnableRetryOnFailure())
                 .EnableSensitiveDataLogging()
                 .Options,
-            Mock.Of<ILogger<EFDatabaseContext>>());
+            Mock.Of<ILogger<EFDatabaseContext>>(),
+            Mock.Of<IConfiguration>());
     }
 }

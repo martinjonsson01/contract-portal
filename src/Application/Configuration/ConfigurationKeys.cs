@@ -16,7 +16,7 @@ public static class ConfigurationKeys
     public const string JwtSecret = "prodigo_portal_jwt_secret";
 
     /// <summary>
-    /// The name of the variable containing whether the database connection is untrusted.
+    /// The name of the variable containing whether the system is running inside a CI-container.
     /// </summary>
-    public const string UntrustedConnection = "UNTRUSTED_CONNECTION";
+    public const string ContinuousIntegration = "CONTINUOUS_INTEGRATION";
 }
