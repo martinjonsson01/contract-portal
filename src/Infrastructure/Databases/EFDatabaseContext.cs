@@ -41,7 +41,7 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
             {
                 _logger.LogWarning("Deleting and recreating database...");
                 _ = Database.EnsureDeleted();
-                _ = Database.EnsureCreated();
+                Database.Migrate();
             }
         }
     }
