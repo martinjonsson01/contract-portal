@@ -47,8 +47,7 @@ public class TestUserDatabaseFixture
 
         return new EFUserRepository(
             new DbContextOptionsBuilder<EFUserRepository>()
-                .UseSqlServer(connectionString)
-                .Options,
+                .UseSqlServer(connectionString, options => options.EnableRetryOnFailure()).Options,
             Mock.Of<ILogger<EFUserRepository>>());
     }
 }
