@@ -11,11 +11,13 @@ public class ContractsControllerTests
 {
     private readonly ContractsController _cut;
     private readonly Mock<IContractService> _mockContracts;
+    private readonly Mock<IRecentContractService> _mockRecent;
 
     public ContractsControllerTests()
     {
         _mockContracts = new Mock<IContractService>();
-        _cut = new ContractsController(Mock.Of<ILogger<ContractsController>>(), _mockContracts.Object);
+        _mockRecent = new Mock<IRecentContractService>();
+        _cut = new ContractsController(Mock.Of<ILogger<ContractsController>>(), _mockContracts.Object, _mockRecent.Object);
     }
 
     [Fact]

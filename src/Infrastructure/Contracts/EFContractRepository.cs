@@ -36,9 +36,6 @@ public class EFContractRepository : DbContext, IContractRepository
     public IEnumerable<Contract> All => Contracts.Include(contract => contract.Tags).ToList();
 
     /// <inheritdoc />
-    public IEnumerable<Contract> Recent => _recent.FetchRecentContracts(" ");
-
-    /// <inheritdoc />
     public IEnumerable<Contract> Favorites => Contracts.Where(contract => contract.IsFavorite);
 
     private DbSet<Contract> Contracts { get; set; } = null!;
@@ -52,12 +49,6 @@ public class EFContractRepository : DbContext, IContractRepository
             "Added a new contract with name {Name} and id {Id} to the database",
             contract.Name,
             contract.Id);
-    }
-
-    /// <inheritdoc />
-    public void AddRecent(Contract contract)
-    {
-        _recent.Add(" ", contract);
     }
 
     /// <inheritdoc />

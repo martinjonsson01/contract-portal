@@ -15,16 +15,19 @@ namespace Server.Controllers;
 public class ContractsController : BaseApiController<ContractsController>
 {
     private readonly IContractService _contracts;
+    private readonly IRecentContractService _recent;
 
     /// <summary>
     /// Constructs contract API.
     /// </summary>
     /// <param name="logger">The logging provider.</param>
     /// <param name="contracts">The contract logic.</param>
-    public ContractsController(ILogger<ContractsController> logger, IContractService contracts)
+    /// <param name="recent">The recent contract logic.</param>
+    public ContractsController(ILogger<ContractsController> logger, IContractService contracts, IRecentContractService recent)
         : base(logger)
     {
         _contracts = contracts;
+        _recent = recent;
     }
 
     /// <summary>
@@ -62,7 +65,7 @@ public class ContractsController : BaseApiController<ContractsController>
     [HttpGet("recent")]
     public IEnumerable<Contract> RecentContracts()
     {
-        return _contracts.FetchRecentContracts();
+        return _recent.FetchRecentContracts(" ");
     }
 
     /// <summary>
@@ -73,7 +76,7 @@ public class ContractsController : BaseApiController<ContractsController>
     [HttpPost("recent")]
     public IActionResult AddRecent(Contract contract)
     {
-        _contracts.AddRecent(contract);
+        _recent.Add(" ", contract);
         return Ok();
     }
 

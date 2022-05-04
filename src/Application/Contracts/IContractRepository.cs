@@ -14,11 +14,6 @@ public interface IContractRepository
     IEnumerable<Contract> All { get; }
 
     /// <summary>
-    /// Gets the most recent contracts that the user has viewed.
-    /// </summary>
-    IEnumerable<Contract> Recent { get; }
-
-    /// <summary>
     /// Gets all contracts marked as favorites.
     /// </summary>
     /// <returns>The contract with a favorite mark.</returns>
@@ -36,12 +31,6 @@ public interface IContractRepository
     /// <param name="id">The id of the contract to be removed.</param>
     /// <returns>If the removal was successful.</returns>
     bool Remove(Guid id);
-
-    /// <summary>
-    /// Stores a contract as recently viewed.
-    /// </summary>
-    /// <param name="contract">The recently viewed contract.</param>
-    void AddRecent(Contract contract);
 
     /// <summary>
     /// Updates the contract in repository.
