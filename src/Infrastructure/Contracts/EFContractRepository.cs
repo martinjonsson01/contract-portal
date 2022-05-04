@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Data;
+﻿using System.Data;
 
 using Application.Contracts;
 
@@ -29,7 +28,7 @@ public class EFContractRepository : DbContext, IContractRepository
         : base(options)
     {
         _logger = logger;
-        _recent = new RecentContractService(new Collection<Contract>());
+        _recent = new RecentContractService();
         _logger.LogInformation("Established a new connection to the database");
     }
 
@@ -37,7 +36,7 @@ public class EFContractRepository : DbContext, IContractRepository
     public IEnumerable<Contract> All => Contracts.Include(contract => contract.Tags).ToList();
 
     /// <inheritdoc />
-    public IEnumerable<Contract> Recent => _recent.FetchRecentContracts();
+    public IEnumerable<Contract> Recent => _recent.FetchRecentContracts(" ");
 
     /// <inheritdoc />
     public IEnumerable<Contract> Favorites => Contracts.Where(contract => contract.IsFavorite);
@@ -58,7 +57,7 @@ public class EFContractRepository : DbContext, IContractRepository
     /// <inheritdoc />
     public void AddRecent(Contract contract)
     {
-        _recent.Add(contract);
+        _recent.Add(" ", contract);
     }
 
     /// <inheritdoc />

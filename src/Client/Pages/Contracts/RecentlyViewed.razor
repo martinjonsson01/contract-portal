@@ -15,12 +15,12 @@
         @if (ShouldShowRecent)
         {
             AddRecents(recents);
-            if (_recent.Size() > 0)
+            if (_recent.Size(LoggedInUser) > 0)
             {
                 <h3>Senast besökta</h3>
 
                 <div class="d-flex flex-row justify-content-around flex-wrap">
-                    @foreach (Contract contract in _recent.FetchRecentContracts().Reverse())
+                    @foreach (Contract contract in _recent.FetchRecentContracts(LoggedInUser).Reverse())
                     {
                         <ContractCard Contract=@contract/>
                     }
@@ -33,6 +33,10 @@
 </FetchData>
 
 @code {
+
+
+    [CascadingParameter(Name = nameof(LoggedInUser))]
+    private string LoggedInUser { get; set; } = string.Empty;
 
     private bool ShouldShowRecent { get; set; } = true;
 
@@ -47,7 +51,7 @@
         StateHasChanged();
     }
 
-    private IRecentContractService _recent = new RecentContractService(new Collection<Contract>());
+    private IRecentContractService _recent = new RecentContractService();
 
     private void AddRecents(Contract[]? recents)
     {
@@ -55,7 +59,7 @@
 
         foreach (Contract contract in recents)
         {
-            _recent.Add(contract);
+            _recent.Add(LoggedInUser, contract);
         }
     }
 
@@ -64,7 +68,7 @@
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
-        _recent.Add(newRecent);
+        _recent.Add(LoggedInUser, newRecent);
         await InvokeAsync(StateHasChanged);
     }
 

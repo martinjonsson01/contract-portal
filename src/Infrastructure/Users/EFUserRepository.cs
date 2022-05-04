@@ -72,20 +72,23 @@ public class EFUserRepository : DbContext, IUserRepository, IRecentContractRepos
     }
 
     /// <inheritdoc />
-    public Queue<Contract> FetchRecentContracts(Guid id)
+    public Queue<Contract> FetchRecentContracts(string id)
     {
         User? user = Users.Find(id);
         return user?.RecentlyViewContracts ?? throw new InvalidOperationException();
     }
 
     /// <inheritdoc />
-    public void UpdateRecentContracts(Guid id, Queue<Contract> updatedRecentContracts)
+    public void UpdateRecentContracts(string id, Queue<Contract> updatedRecentContracts)
     {
-        User? user = Users.Find(id);
-        if (user == null)
+        User? currentUser = Users.Find(id);
+        if (currentUser == null)
             return;
-        user.RecentlyViewContracts.Clear();
-        user.RecentlyViewContracts.Append<>(updatedRecentContracts);
+        currentUser.RecentlyViewContracts.Clear();
+        foreach (Contract contract in updatedRecentContracts)
+        {
+            currentUser.RecentlyViewContracts.Enqueue(contract);
+        }
     }
 
     /// <inheritdoc />

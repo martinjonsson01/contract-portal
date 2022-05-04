@@ -33,6 +33,7 @@ public static class InjectionExtensions
                .AddDbContext<IContractRepository, EFContractRepository>(ConfigureDatabase, ServiceLifetime.Transient)
                .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
                .AddDbContext<IUserRepository, EFUserRepository>(ConfigureDatabase, ServiceLifetime.Transient)
+               .AddDbContext<IRecentContractRepository, EFUserRepository>(ConfigureDatabase, ServiceLifetime.Transient)
                .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
                {
                    IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();

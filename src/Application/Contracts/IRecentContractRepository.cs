@@ -12,12 +12,12 @@ public interface IRecentContractRepository
     /// </summary>
     /// <param name="id">The id of the user.</param>
     /// <returns>Top most recently viewed contracts.</returns>
-    Queue<Contract> FetchRecentContracts(Guid id);
+    Queue<Contract> FetchRecentContracts(string id);
 
     /// <summary>
     /// Updates the recent contracts for a user.
     /// </summary>
     /// <param name="id">The id of the user.</param>
     /// <param name="updatedRecentContracts">The updated recent contracts.</param>
-    void UpdateRecentContracts(Guid id, Queue<Contract> updatedRecentContracts);
+    void UpdateRecentContracts(string id, Queue<Contract> updatedRecentContracts);
 }
