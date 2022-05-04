@@ -1,8 +1,8 @@
 using System.Data;
+using Application.Contracts;
 using Application.Users;
 using Domain.Contracts;
 using Domain.Users;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -11,7 +11,7 @@ namespace Infrastructure.Users;
 /// <summary>
 /// Stores and fetches users from an Entity Framework Core database.
 /// </summary>
-public class EFUserRepository : DbContext, IUserRepository
+public class EFUserRepository : DbContext, IUserRepository, IRecentContractRepository
 {
     private readonly ILogger<EFUserRepository> _logger;
 
@@ -72,16 +72,26 @@ public class EFUserRepository : DbContext, IUserRepository
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> RecentlyViewed(Guid id)
+    public Queue<Contract> FetchRecentContracts(Guid id)
     {
         User? user = Users.Find(id);
         return user?.RecentlyViewContracts ?? throw new InvalidOperationException();
     }
 
     /// <inheritdoc />
+    public void UpdateRecentContracts(Guid id, Queue<Contract> updatedRecentContracts)
+    {
+        User? user = Users.Find(id);
+        if (user == null)
+            return;
+        user.RecentlyViewContracts.Clear();
+        user.RecentlyViewContracts.Append<>(updatedRecentContracts);
+    }
+
+    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         _ = modelBuilder.Entity<User>()
-                        .HasKey(user => user.Id);
+            .HasKey(user => user.Id);
     }
 }
