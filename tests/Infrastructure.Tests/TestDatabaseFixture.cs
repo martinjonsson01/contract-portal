@@ -14,7 +14,7 @@ namespace Infrastructure.Tests;
 public class TestDatabaseFixture
 {
     private const string ConnectionString =
-        @"Server=localhost;Database=master_test;User Id=SA; Password=ASDjk_shd$$jkASKJ19821;";
+        @"Server=localhost;Database=ProdigoPortal_test;User Id=SA; Password=ASDjk_shd$$jkASKJ19821;";
 
     private static readonly object _lock = new();
     private static bool _databaseInitialized;

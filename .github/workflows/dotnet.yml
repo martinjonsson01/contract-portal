@@ -12,7 +12,7 @@ on:
 env:
     CONTINUOUS_INTEGRATION: true
     prodigo_portal_jwt_secret: "test-json-web-token-secret"
-    prodigo_portal_db_connectionstring: "Server=localhost;Database=master_test;User Id=SA; Password=ASDjk_shd$$jkASKJ19821;"
+    prodigo_portal_db_connectionstring: "Server=localhost;Database=ProdigoPortal_test;User Id=SA; Password=ASDjk_shd$$jkASKJ19821;"
 
 jobs:
   build-and-test:
