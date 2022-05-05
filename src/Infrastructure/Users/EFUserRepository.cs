@@ -72,12 +72,6 @@ public sealed class EFUserRepository : DbContext, IUserRepository
     }
 
     /// <inheritdoc />
-    public User? Fetch(string username)
-    {
-        return Users.First(user => user.Name == username);
-    }
-
-    /// <inheritdoc />
     public bool Exists(string username)
     {
         return Users.Any(user => user.Name == username);

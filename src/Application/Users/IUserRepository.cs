@@ -29,8 +29,8 @@ public interface IUserRepository
     /// <summary>
     /// Gets the user with the given username if it exists.
     /// </summary>
-    /// <param name="username">The username of the user to get.</param>
-    /// <returns>The user if it exists, otherwise null.</returns>
+    /// <param name="username">The name of the user to get.</param>
+    /// <returns>The user, if it exists.</returns>
     User? Fetch(string username);
 
     /// <summary>
@@ -39,13 +39,6 @@ public interface IUserRepository
     /// <param name="username">The username to look for.</param>
     /// <returns>Whether the user exits or not.</returns>
     bool Exists(string username);
-
-    /// <summary>
-    /// Gets a user with a given name, if it exists.
-    /// </summary>
-    /// <param name="username">The name of the user.</param>
-    /// <returns>The user, if it exists.</returns>
-    User? Fetch(string username);
 
     /// <summary>
     /// Ensures that an admin user is created.
