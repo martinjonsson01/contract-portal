@@ -53,10 +53,7 @@ builder.Services.AddAuthorization(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages(options =>
-{
-    _ = options.Conventions.AllowAnonymousToAreaFolder("root", "/wwwroot").AllowAnonymousToPage("/index.html");
-});
+builder.Services.AddRazorPages();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddSwaggerGen();
