@@ -45,6 +45,7 @@ public interface IUserService
     /// Generates an authentication token for a given user, if valid.
     /// </summary>
     /// <param name="username">The name of the <see cref="User"/> to authenticate.</param>
+    /// <param name="password">The password of the <see cref="User"/> to validate.</param>
     /// <returns>A response containing the generated token.</returns>
-    AuthenticateResponse Authenticate(string username);
+    AuthenticateResponse Authenticate(string username, string password);
 }

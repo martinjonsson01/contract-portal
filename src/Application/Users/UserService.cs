@@ -50,7 +50,7 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public AuthenticateResponse Authenticate(string username)
+    public AuthenticateResponse Authenticate(string username, string password)
     {
         User? user = _repo.Fetch(username);
 
