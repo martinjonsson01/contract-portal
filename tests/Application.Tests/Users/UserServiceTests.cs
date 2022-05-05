@@ -174,11 +174,13 @@ public class UserServiceTests
     {
         // Arrange
         const string username = "admin";
-        var user = new User { Name = username, };
+        const string password = "password";
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        var user = new User { Name = username, Password = passwordHash, };
         _mockRepo.Setup(repository => repository.Fetch(username)).Returns(user);
 
         // Act
-        AuthenticateResponse authResponse = _cut.Authenticate(username);
+        AuthenticateResponse authResponse = _cut.Authenticate(username, password);
 
         // Assert
         using (new AssertionScope())
