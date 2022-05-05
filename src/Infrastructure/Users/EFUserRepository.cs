@@ -99,7 +99,11 @@ public sealed class EFUserRepository : DbContext, IUserRepository
 
     private void CreateAdmin()
     {
-        var admin = new User { Name = AdminUserName, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
+        string? adminPasswordSecret = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.AdminPassword);
+        Console.WriteLine(adminPasswordSecret);
+        adminPasswordSecret = BCrypt.Net.BCrypt.HashPassword(adminPasswordSecret);
+        Console.WriteLine(adminPasswordSecret);
+        var admin = new User { Name = AdminUserName, Password = adminPasswordSecret, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
         _ = Users.Add(admin);
         try
         {

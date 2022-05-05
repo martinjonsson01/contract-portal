@@ -19,4 +19,9 @@ public static class EnvironmentVariableKeys
     /// The name of the environment variable containing whether the database connection is untrusted.
     /// </summary>
     public const string UntrustedConnection = "UNTRUSTED_CONNECTION";
+
+    /// <summary>
+    /// The name of the environment variable containing the password for the default admin.
+    /// </summary>
+    public const string AdminPassword = "prodigo_portal_admin_password";
 }
