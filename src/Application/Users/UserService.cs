@@ -22,7 +22,7 @@ public class UserService : IUserService
     {
         if (_repo.All.Any(otherUser => user.Id.Equals(otherUser.Id)))
             throw new IdentifierAlreadyTakenException();
-
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
         _repo.Add(user);
     }
 
