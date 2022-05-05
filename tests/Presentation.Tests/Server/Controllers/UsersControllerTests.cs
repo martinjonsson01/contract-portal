@@ -50,10 +50,10 @@ public class UsersControllerTests
         _mockUsers.Setup(service => service.UserExists(username)).Returns(true);
 
         // Act
-        IActionResult actual = _cut.Validate(username);
+        IActionResult actual = _cut.Authenticate(username);
 
         // Assert
-        actual.Should().BeOfType<OkResult>();
+        actual.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -61,10 +61,10 @@ public class UsersControllerTests
     {
         // Arrange
         string username = "user";
-        _mockUsers.Setup(service => service.UserExists(username)).Returns(false);
+        _mockUsers.Setup(service => service.Authenticate(username)).Throws<UserDoesNotExistException>();
 
         // Act
-        IActionResult actual = _cut.Validate(username);
+        IActionResult actual = _cut.Authenticate(username);
 
         // Assert
         actual.Should().BeOfType<BadRequestResult>();

@@ -2,6 +2,8 @@
 
 using Domain.Contracts;
 
+using FluentAssertions.Execution;
+
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,10 +28,14 @@ public class ContractsControllerTests
         _mockContracts.Setup(service => service.Search(string.Empty)).Returns(fakeContracts);
 
         // Act
-        IEnumerable<Contract> contracts = _cut.Search(null);
+        ActionResult<IEnumerable<Contract>> response = _cut.Search(null);
 
         // Assert
-        contracts.Should().BeEquivalentTo(fakeContracts);
+        using (new AssertionScope())
+        {
+            response.Result.Should().BeAssignableTo<OkObjectResult>();
+            response.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(fakeContracts);
+        }
     }
 
     [Fact]
@@ -41,10 +47,14 @@ public class ContractsControllerTests
         _mockContracts.Setup(service => service.Search(searchQuery)).Returns(searchResults);
 
         // Act
-        IEnumerable<Contract> actualWeather = _cut.Search(searchQuery);
+        ActionResult<IEnumerable<Contract>> response = _cut.Search(searchQuery);
 
         // Assert
-        actualWeather.Should().BeEquivalentTo(searchResults);
+        using (new AssertionScope())
+        {
+            response.Result.Should().BeAssignableTo<OkObjectResult>();
+            response.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(searchResults);
+        }
     }
 
     [Fact]

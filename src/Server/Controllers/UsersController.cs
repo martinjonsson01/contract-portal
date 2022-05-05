@@ -1,6 +1,8 @@
 using Application.Exceptions;
 using Application.Users;
 using Domain.Users;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -33,6 +35,7 @@ public class UsersController : BaseApiController<UsersController>
     /// <response code="400">The ID of the user was already taken.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [AllowAnonymous] // TODO: should only allow admins
     public IActionResult Create(User user)
     {
         try
@@ -72,13 +75,25 @@ public class UsersController : BaseApiController<UsersController>
     }
 
     /// <summary>
-    /// Checks if a user with a certain username exists.
+    /// Authenticates a user.
     /// </summary>
-    /// <param name="username">The username.</param>
-    /// <returns>Whether a user with the specified username exists.</returns>
-    [HttpPost("validate")]
-    public IActionResult Validate([FromBody] string username)
+    /// <param name="username">The name of the user.</param>
+    /// <returns>An authentication token that can be used to identify the user.</returns>
+    [HttpPost("authenticate")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult Authenticate([FromBody] string username)
     {
-        return _users.UserExists(username) ? Ok() : BadRequest();
+        try
+        {
+            AuthenticateResponse authResponse = _users.Authenticate(username);
+            return Ok(authResponse);
+        }
+        catch (UserDoesNotExistException e)
+        {
+            Logger.LogError("Could not authenticate user: {Exception}", e.Message);
+            return BadRequest();
+        }
     }
 }

@@ -1,9 +1,11 @@
-﻿using Application.Contracts;
+﻿using Application.Configuration;
+using Application.Contracts;
 using Application.Documents;
 using Application.Images;
 using Application.StatusUpdates;
 using Application.Users;
 
+using Infrastructure.Configuration;
 using Infrastructure.Contracts;
 using Infrastructure.Documents;
 using Infrastructure.Images;
@@ -30,6 +32,7 @@ public static class InjectionExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         return services
+               .AddSingleton<IEnvironmentConfiguration, EnvironmentVariableConfiguration>()
                .AddDbContext<IContractRepository, EFContractRepository>(ConfigureDatabase, ServiceLifetime.Transient)
                .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
                .AddDbContext<IUserRepository, EFUserRepository>(ConfigureDatabase, ServiceLifetime.Transient)

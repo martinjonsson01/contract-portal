@@ -1,4 +1,5 @@
 using System.Data;
+
 using Application.Users;
 
 using Domain.Users;
@@ -11,8 +12,10 @@ namespace Infrastructure.Users;
 /// <summary>
 /// Stores and fetches users from an Entity Framework Core database.
 /// </summary>
-public class EFUserRepository : DbContext, IUserRepository
+public sealed class EFUserRepository : DbContext, IUserRepository
 {
+    private const string DefaultUserName = "default-user";
+
     private readonly ILogger<EFUserRepository> _logger;
 
     /// <summary>
@@ -27,6 +30,12 @@ public class EFUserRepository : DbContext, IUserRepository
     {
         _logger = logger;
         _logger.LogInformation("Established a new connection to the database");
+
+        // Creates the database if it is not already created.
+        _ = Database.EnsureCreated();
+
+        if (!Users.Any(user => user.Name == DefaultUserName))
+            CreateDefaultUser();
     }
 
     /// <inheritdoc />
@@ -72,9 +81,29 @@ public class EFUserRepository : DbContext, IUserRepository
     }
 
     /// <inheritdoc />
+    public User? Fetch(string username)
+    {
+        return Users.FirstOrDefault(user => user.Name == username);
+    }
+
+    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         _ = modelBuilder.Entity<User>()
                         .HasKey(user => user.Id);
+    }
+
+    private void CreateDefaultUser()
+    {
+        var defaultUser = new User { Name = DefaultUserName, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
+        _ = Users.Add(defaultUser);
+        try
+        {
+            _ = SaveChanges();
+        }
+        catch (DataException e)
+        {
+            _logger.LogError("Could not create default user: {Message}", e.Message);
+        }
     }
 }
