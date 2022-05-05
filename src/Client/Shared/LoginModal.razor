@@ -1,4 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using System.Net.Http.Headers
+@using Application.Users
 @using Blazorise.Extensions
 @using Domain.Users
 @inject HttpClient _http
@@ -48,13 +50,19 @@
 
     private async Task ValidateUser()
     {
-        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users/validate", _user);
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users/authenticate", _user);
         if (response.IsSuccessStatusCode)
         {
             _logInFailed = false;
+
+            var authResponse = await response.Content.ReadFromJsonAsync<AuthenticateResponse>();
+            // Store token on http client so all future requests use the token.
+            // TODO: When making the login-state persist then this auth token should be stored in a cookie.
+            _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
+
             await OnUserLogInChange.InvokeAsync(_user.Name);
             await _js.InvokeVoidAsync("closeModal", "#log-in");
-            _navigationManager.NavigateTo("");
+            _navigationManager.NavigateTo("dashboard");
         }
         else
         {

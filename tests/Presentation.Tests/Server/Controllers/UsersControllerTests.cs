@@ -51,10 +51,10 @@ public class UsersControllerTests
         _mockUsers.Setup(service => service.ValidPassword(user.Name, user.Password)).Returns(true);
 
         // Act
-        IActionResult actual = _cut.Validate(user);
+        IActionResult actual = _cut.Authenticate(user);
 
         // Assert
-        actual.Should().BeOfType<OkResult>();
+        actual.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class UsersControllerTests
         _mockUsers.Setup(service => service.ValidPassword(user.Name, "NotPassword")).Returns(false);
 
         // Act
-        IActionResult actual = _cut.Validate(user);
+        IActionResult actual = _cut.Authenticate(user);
 
         // Assert
         actual.Should().BeOfType<BadRequestResult>();
@@ -77,10 +77,10 @@ public class UsersControllerTests
     {
         // Arrange
         var user = new User() { Name = "user", };
-        _mockUsers.Setup(service => service.UserExists(user.Name)).Returns(false);
+        _mockUsers.Setup(service => service.Authenticate(user)).Throws<UserDoesNotExistException>();
 
         // Act
-        IActionResult actual = _cut.Validate(user);
+        IActionResult actual = _cut.Authenticate(user);
 
         // Assert
         actual.Should().BeOfType<BadRequestResult>();

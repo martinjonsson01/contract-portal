@@ -1,9 +1,13 @@
-﻿using Application.Contracts;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Application.Configuration;
+using Application.Contracts;
 using Application.Documents;
 using Application.Images;
 using Application.StatusUpdates;
 using Application.Users;
 
+using Infrastructure.Configuration;
 using Infrastructure.Contracts;
 using Infrastructure.Documents;
 using Infrastructure.Images;
@@ -20,6 +24,7 @@ namespace Infrastructure;
 /// <summary>
 ///     Injects infrastructure.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class InjectionExtensions
 {
     /// <summary>
@@ -30,6 +35,7 @@ public static class InjectionExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         return services
+               .AddSingleton<IEnvironmentConfiguration, EnvironmentVariableConfiguration>()
                .AddDbContext<IContractRepository, EFContractRepository>(ConfigureDatabase, ServiceLifetime.Transient)
                .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
                .AddDbContext<IUserRepository, EFUserRepository>(ConfigureDatabase, ServiceLifetime.Transient)
@@ -51,9 +57,6 @@ public static class InjectionExtensions
 
     private static void ConfigureDatabase(DbContextOptionsBuilder options)
     {
-#if DEBUG
-        _ = options.UseSqlServer("Server=localhost;Database=master;Trusted_Connection=True;");
-#else
         string? dbConnectionstring = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.DbConnectionString);
         if (dbConnectionstring == null)
         {
@@ -62,6 +65,5 @@ public static class InjectionExtensions
         }
 
         _ = options.UseSqlServer(dbConnectionstring);
-#endif
     }
 }

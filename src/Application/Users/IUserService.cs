@@ -40,4 +40,11 @@ public interface IUserService
     /// <param name="username">The username to look for.</param>
     /// <returns>Whether the user exits or not.</returns>
     bool UserExists(string username);
+
+    /// <summary>
+    /// Generates an authentication token for a given user, if valid.
+    /// </summary>
+    /// <param name="username">The name of the <see cref="User"/> to authenticate.</param>
+    /// <returns>A response containing the generated token.</returns>
+    AuthenticateResponse Authenticate(string username);
 }

@@ -9,6 +9,7 @@ using FluentAssertions.Execution;
 
 namespace Infrastructure.Tests.Contracts;
 
+[Collection("DatabaseTests")]
 public class ContractRepositoryTests : IClassFixture<TestContractDatabaseFixture>
 {
     private readonly IContractRepository _cut;

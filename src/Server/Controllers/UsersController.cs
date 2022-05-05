@@ -1,6 +1,8 @@
 using Application.Exceptions;
 using Application.Users;
 using Domain.Users;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -32,6 +34,7 @@ public class UsersController : BaseApiController<UsersController>
     /// <returns>If the user was successfully added.</returns>
     /// <response code="400">The ID of the user was already taken.</response>
     [HttpPost]
+    [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Create(User user)
     {
@@ -54,6 +57,7 @@ public class UsersController : BaseApiController<UsersController>
     /// <param name="id">Id of the user to be removed.</param>
     /// <returns>If the user was successfully removed.</returns>
     [HttpDelete("{id:guid}")]
+    [Authorize("AdminOnly")]
     public IActionResult Remove(Guid id)
     {
         return _users.Remove(id) ?
@@ -72,21 +76,25 @@ public class UsersController : BaseApiController<UsersController>
     }
 
     /// <summary>
-    /// Checks if a user with a certain username exists.
+    /// Authenticates a user.
     /// </summary>
     /// <param name="userInfo">The username and password.</param>
-    /// <returns>Whether a user with the specified username exists and the password is correct.</returns>
-    [HttpPost("validate")]
-    public IActionResult Validate(User userInfo)
+    /// <returns>An authentication token that can be used to identify the user.</returns>
+    [HttpPost("authenticate")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult Authenticate(User userInfo)
     {
-        if (_users.UserExists(userInfo.Name))
+        try
         {
-            if (_users.ValidPassword(userInfo.Name, userInfo.Password ?? string.Empty))
-            {
-                return Ok();
-            }
+            AuthenticateResponse authResponse = _users.Authenticate(userInfo);
+            return Ok(authResponse);
         }
-
-        return BadRequest();
+        catch (UserDoesNotExistException e)
+        {
+            Logger.LogError("Could not authenticate user: {Exception}", e.Message);
+            return BadRequest();
+        }
     }
 }

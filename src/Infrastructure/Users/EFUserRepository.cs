@@ -1,4 +1,5 @@
 using System.Data;
+
 using Application.Users;
 
 using Domain.Users;
@@ -11,8 +12,10 @@ namespace Infrastructure.Users;
 /// <summary>
 /// Stores and fetches users from an Entity Framework Core database.
 /// </summary>
-public class EFUserRepository : DbContext, IUserRepository
+public sealed class EFUserRepository : DbContext, IUserRepository
 {
+    private const string AdminUserName = "admin";
+
     private readonly ILogger<EFUserRepository> _logger;
 
     /// <summary>
@@ -27,6 +30,9 @@ public class EFUserRepository : DbContext, IUserRepository
     {
         _logger = logger;
         _logger.LogInformation("Established a new connection to the database");
+
+        // Creates the database if it is not already created.
+        _ = Database.EnsureCreated();
     }
 
     /// <inheritdoc />
@@ -78,9 +84,36 @@ public class EFUserRepository : DbContext, IUserRepository
     }
 
     /// <inheritdoc />
+    public User? Fetch(string username)
+    {
+        return Users.FirstOrDefault(user => user.Name == username);
+    }
+
+    /// <inheritdoc />
+    public void EnsureAdminCreated()
+    {
+        if (!Users.Any(user => user.Name == AdminUserName))
+            CreateAdmin();
+    }
+
+    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         _ = modelBuilder.Entity<User>()
                         .HasKey(user => user.Id);
+    }
+
+    private void CreateAdmin()
+    {
+        var admin = new User { Name = AdminUserName, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
+        _ = Users.Add(admin);
+        try
+        {
+            _ = SaveChanges();
+        }
+        catch (DataException e)
+        {
+            _logger.LogError("Could not create admin: {Message}", e.Message);
+        }
     }
 }
