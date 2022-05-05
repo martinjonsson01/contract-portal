@@ -42,9 +42,8 @@ public class AdminPageTests : UITestFixture
 
         // Act
         IRenderedComponent<AdminPage> cut = Context.RenderComponent<AdminPage>();
-        cut.WaitForElement(".table");
 
         // Assert
-        cut.FindAll(".contract-table-row").Count.Should().Be(10);
+        cut.WaitForAssertion(() => cut.FindAll(".contract-table-row").Count.Should().Be(10));
     }
 }

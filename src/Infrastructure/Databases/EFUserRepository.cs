@@ -7,44 +7,39 @@ using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Users;
+namespace Infrastructure.Databases;
 
 /// <summary>
 /// Stores and fetches users from an Entity Framework Core database.
 /// </summary>
-public sealed class EFUserRepository : DbContext, IUserRepository
+public sealed class EFUserRepository : IUserRepository
 {
     private const string AdminUserName = "admin";
 
+    private readonly EFDatabaseContext _context;
     private readonly ILogger<EFUserRepository> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EFUserRepository"/> class.
     /// </summary>
-    /// <param name="options">The database configuration options.</param>
+    /// <param name="context">The database context to manipulate data in.</param>
     /// <param name="logger">The logging service to use.</param>
-    public EFUserRepository(
-        DbContextOptions<EFUserRepository> options,
-        ILogger<EFUserRepository> logger)
-        : base(options)
+    public EFUserRepository(EFDatabaseContext context, ILogger<EFUserRepository> logger)
     {
+        _context = context;
         _logger = logger;
-        _logger.LogInformation("Established a new connection to the database");
-
-        // Creates the database if it is not already created.
-        _ = Database.EnsureCreated();
     }
 
     /// <inheritdoc />
     public IEnumerable<User> All => new List<User>(Users);
 
-    private DbSet<User> Users { get; set; } = null!;
+    private DbSet<User> Users => _context.Users;
 
     /// <inheritdoc />
     public void Add(User user)
     {
         _ = Users.Add(user);
-        _ = SaveChanges();
+        _ = _context.SaveChanges();
         _logger.LogInformation("Added a new user with name {Name} and id {Id} to the database", user.Name, user.Id);
     }
 
@@ -60,7 +55,7 @@ public sealed class EFUserRepository : DbContext, IUserRepository
         int changes = 0;
         try
         {
-            changes = SaveChanges();
+            changes = _context.SaveChanges();
         }
         catch (DataException e)
         {
@@ -90,20 +85,13 @@ public sealed class EFUserRepository : DbContext, IUserRepository
             CreateAdmin();
     }
 
-    /// <inheritdoc />
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        _ = modelBuilder.Entity<User>()
-                        .HasKey(user => user.Id);
-    }
-
     private void CreateAdmin()
     {
         var admin = new User { Name = AdminUserName, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
         _ = Users.Add(admin);
         try
         {
-            _ = SaveChanges();
+            _ = _context.SaveChanges();
         }
         catch (DataException e)
         {

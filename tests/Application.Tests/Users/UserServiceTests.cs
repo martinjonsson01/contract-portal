@@ -22,9 +22,9 @@ public class UserServiceTests
     public UserServiceTests()
     {
         _mockRepo = new Mock<IUserRepository>();
-        var mockEnvironment = new Mock<IEnvironmentConfiguration>();
-        mockEnvironment.Setup(env => env.JwtSecret).Returns("test-json-web-token-secret");
-        _cut = new UserService(_mockRepo.Object, Mock.Of<IConfiguration>(), mockEnvironment.Object);
+        var mockEnvironment = new Mock<IConfiguration>();
+        mockEnvironment.Setup(env => env[ConfigurationKeys.JwtSecret]).Returns("test-json-web-token-secret");
+        _cut = new UserService(_mockRepo.Object, mockEnvironment.Object);
     }
 
     [Fact]

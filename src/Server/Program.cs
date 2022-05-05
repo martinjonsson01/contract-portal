@@ -1,6 +1,7 @@
 using System.Text;
 
 using Application;
+using Application.Configuration;
 
 using Infrastructure;
 
@@ -27,10 +28,7 @@ builder.Services.AddAuthentication(options =>
 
            options.Configuration = new OpenIdConnectConfiguration();
 
-           const string environmentVariableKey = "prodigo_portal_jwt_secret";
-           string? jwtSecret = Environment.GetEnvironmentVariable(environmentVariableKey);
-           if (jwtSecret is null)
-               throw new ArgumentException("No environment variable defined for " + environmentVariableKey);
+           string jwtSecret = builder.Configuration[ConfigurationKeys.JwtSecret];
 
            options.TokenValidationParameters = new TokenValidationParameters
            {
@@ -38,8 +36,8 @@ builder.Services.AddAuthentication(options =>
                ValidateAudience = true,
                ValidateLifetime = true,
                ValidateIssuerSigningKey = true,
-               ValidIssuer = builder.Configuration["Jwt:Issuer"],
-               ValidAudience = builder.Configuration["Jwt:Issuer"],
+               ValidIssuer = builder.Configuration[ConfigurationKeys.JwtIssuer],
+               ValidAudience = builder.Configuration[ConfigurationKeys.JwtIssuer],
                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
            };
        });
@@ -57,7 +55,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
        .AddNewtonsoftJson();
