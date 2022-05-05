@@ -11,11 +11,13 @@
     <AnalysisLevel>latest-all</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>CA1812;CA1848;SA1633;SA1101;SA1642;SA1503;SA1309;CLASS0001;SA1200;CA1707;CA1014</NoWarn>
+    <NoWarn>CA1812;CA1848;SA1633;SA1101;SA1642;SA1503;SA1309;CLASS0001;SA1200;CA1707;CA1014;AD0001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="Roslyn.Analyzers" Version="1.0.3.4" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">

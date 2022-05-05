@@ -31,4 +31,18 @@ public class NavMenuTests : UITestFixture
         // Assert
         cut.Find("#logged-in").Should().NotBeNull();
     }
+
+    [Fact]
+    public void NavMenu_DisplaysAdminNavItem_WhenAdminLoggedIn()
+    {
+        // Arrange
+        static void ParameterBuilder(ComponentParameterCollectionBuilder<NavMenu> parameters) =>
+            parameters.Add(property => property.LoggedInUser, "admin");
+
+        // Act
+        IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>(ParameterBuilder);
+
+        // Assert
+        cut.Find("#admin-nav-item").Should().NotBeNull();
+    }
 }

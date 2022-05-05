@@ -2,6 +2,8 @@
 using Application.Exceptions;
 
 using Domain.Contracts;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -84,6 +86,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The ID of the contract was already taken.</response>
     [HttpPost]
+    [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult CreateContract(Contract contract)
     {
@@ -106,6 +109,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="id">Id of the contract to be removed.</param>
     /// <returns>If the contract was successfully removed.</returns>
     [HttpDelete("{id:guid}")]
+    [Authorize("AdminOnly")]
     public IActionResult Remove(Guid id)
     {
         return _contracts.Remove(id) ?
@@ -119,8 +123,8 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="query">The query to filter contracts by.</param>
     /// <returns>The contracts that match the search query.</returns>
     [HttpGet]
-    public IEnumerable<Contract> Search(string? query)
+    public ActionResult<IEnumerable<Contract>> Search(string? query)
     {
-        return _contracts.Search(query ?? string.Empty);
+        return Ok(_contracts.Search(query ?? string.Empty));
     }
 }

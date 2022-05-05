@@ -8,29 +8,27 @@ using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Contracts;
+namespace Infrastructure.Databases;
 
 /// <summary>
 /// Stores and fetches users from an Entity Framework Core database.
 /// </summary>
-public class EFContractRepository : DbContext, IContractRepository
+public sealed class EFContractRepository : IContractRepository
 {
+    private readonly EFDatabaseContext _context;
     private readonly ILogger<EFContractRepository> _logger;
     private readonly IRecentContractService _recent;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EFContractRepository"/> class.
     /// </summary>
-    /// <param name="options">The database configuration options.</param>
+    /// <param name="context">The database context to manipulate data in.</param>
     /// <param name="logger">The logging service to use.</param>
-    public EFContractRepository(
-        DbContextOptions<EFContractRepository> options,
-        ILogger<EFContractRepository> logger)
-        : base(options)
+    public EFContractRepository(EFDatabaseContext context, ILogger<EFContractRepository> logger)
     {
+        _context = context;
         _logger = logger;
         _recent = new RecentContractService(new Collection<Contract>());
-        _logger.LogInformation("Established a new connection to the database");
     }
 
     /// <inheritdoc />
@@ -42,13 +40,13 @@ public class EFContractRepository : DbContext, IContractRepository
     /// <inheritdoc />
     public IEnumerable<Contract> Favorites => Contracts.Where(contract => contract.IsFavorite);
 
-    private DbSet<Contract> Contracts { get; set; } = null!;
+    private DbSet<Contract> Contracts => _context.Contracts;
 
     /// <inheritdoc />
     public void Add(Contract contract)
     {
         _ = Contracts.Add(contract);
-        _ = SaveChanges();
+        _ = _context.SaveChanges();
         _logger.LogInformation(
             "Added a new contract with name {Name} and id {Id} to the database",
             contract.Name,
@@ -74,7 +72,7 @@ public class EFContractRepository : DbContext, IContractRepository
         int changes = 0;
         try
         {
-            changes = SaveChanges();
+            changes = _context.SaveChanges();
         }
         catch (DataException e)
         {
@@ -98,11 +96,11 @@ public class EFContractRepository : DbContext, IContractRepository
         if (oldContract is null)
             _ = Contracts.Add(updatedContract);
         else
-            Entry(oldContract).CurrentValues.SetValues(updatedContract);
+            _context.Entry(oldContract).CurrentValues.SetValues(updatedContract);
 
         try
         {
-            _ = SaveChanges();
+            _ = _context.SaveChanges();
         }
         catch (DataException e)
         {
