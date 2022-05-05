@@ -34,8 +34,8 @@ public class UsersController : BaseApiController<UsersController>
     /// <returns>If the user was successfully added.</returns>
     /// <response code="400">The ID of the user was already taken.</response>
     [HttpPost]
+    [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [AllowAnonymous] // TODO: should only allow admins
     public IActionResult Create(User user)
     {
         try
@@ -57,6 +57,7 @@ public class UsersController : BaseApiController<UsersController>
     /// <param name="id">Id of the user to be removed.</param>
     /// <returns>If the user was successfully removed.</returns>
     [HttpDelete("{id:guid}")]
+    [Authorize("AdminOnly")]
     public IActionResult Remove(Guid id)
     {
         return _users.Remove(id) ?

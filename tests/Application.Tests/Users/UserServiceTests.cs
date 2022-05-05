@@ -1,10 +1,14 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 using Application.Configuration;
 using Application.Exceptions;
 using Application.Users;
 
 using Domain.Users;
+
+using FluentAssertions.Execution;
 
 using Microsoft.Extensions.Configuration;
 
@@ -147,5 +151,28 @@ public class UserServiceTests
 
         // Assert
         tryAuthenticate.Should().Throw<UserDoesNotExistException>();
+    }
+
+    [Fact]
+    public void Authenticate_ReturnsAuthResponseWithAdminClaim_WhenUserIsAdmin()
+    {
+        // Arrange
+        const string username = "admin";
+        var user = new User { Name = username, };
+        _mockRepo.Setup(repository => repository.Fetch(username)).Returns(user);
+
+        // Act
+        AuthenticateResponse authResponse = _cut.Authenticate(username);
+
+        // Assert
+        using (new AssertionScope())
+        {
+            authResponse.Should().NotBeNull();
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var securityToken = (JwtSecurityToken)tokenHandler.ReadToken(authResponse.Token);
+            string? claimValue = securityToken.Claims.FirstOrDefault(c => c.Type == "IsAdmin")?.Value;
+            claimValue.Should().Be("true");
+        }
     }
 }

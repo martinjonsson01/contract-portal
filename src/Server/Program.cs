@@ -50,14 +50,12 @@ builder.Services.AddAuthorization(options =>
         new AuthorizationPolicyBuilder()
             .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
             .RequireAuthenticatedUser().Build());
+    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("IsAdmin", "true"));
 });
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages(options =>
-{
-    _ = options.Conventions.AllowAnonymousToAreaFolder("root", "/wwwroot").AllowAnonymousToPage("/index.html");
-});
+builder.Services.AddRazorPages();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 builder.Services.AddSwaggerGen();

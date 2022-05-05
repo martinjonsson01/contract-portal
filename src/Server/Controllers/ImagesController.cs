@@ -1,5 +1,6 @@
 ﻿using Application.Images;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -30,6 +31,7 @@ public class ImagesController : BaseApiController<ImagesController>
     /// <response code="400">The uploaded file is not a valid image.</response>
     [HttpPost]
     [Produces("text/plain")]
+    [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<string>> UploadImageAsync()
     {

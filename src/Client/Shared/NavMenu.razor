@@ -23,13 +23,17 @@
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="admin">
-                            <span class="" aria-hidden="true"></span> Admin
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
                         <NavLink class="nav-link" href="AboutUs">
                             <span class="" aria-hidden="true"></span> Om oss
+                        </NavLink>
+                    </li>
+                }
+                @if (LoggedInUser == "admin")
+                {
+
+                    <li id="admin-nav-item" class="nav-item">
+                        <NavLink class="nav-link" href="admin">
+                            <span class="" aria-hidden="true"></span> Admin
                         </NavLink>
                     </li>
                 }
@@ -37,9 +41,7 @@
             <div>
                 @if (LoggedInUser.IsNullOrEmpty())
                 {
-                    <button id="login-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#log-in">
-                        Logga in
-                    </button>
+                    <LogInButton />
                 }
                 else
                 {

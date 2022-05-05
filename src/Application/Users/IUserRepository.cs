@@ -39,4 +39,9 @@ public interface IUserRepository
     /// <param name="username">The name of the user.</param>
     /// <returns>The user, if it exists.</returns>
     User? Fetch(string username);
+
+    /// <summary>
+    /// Ensures that an admin user is created.
+    /// </summary>
+    void EnsureAdminCreated();
 }

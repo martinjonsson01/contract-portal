@@ -1,4 +1,6 @@
-﻿using Application.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Application.Configuration;
 using Application.Contracts;
 using Application.Documents;
 using Application.Images;
@@ -22,6 +24,7 @@ namespace Infrastructure;
 /// <summary>
 ///     Injects infrastructure.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class InjectionExtensions
 {
     /// <summary>
@@ -54,9 +57,6 @@ public static class InjectionExtensions
 
     private static void ConfigureDatabase(DbContextOptionsBuilder options)
     {
-#if DEBUG
-        _ = options.UseSqlServer("Server=localhost;Database=master;Trusted_Connection=True;");
-#else
         string? dbConnectionstring = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.DbConnectionString);
         if (dbConnectionstring == null)
         {
@@ -65,6 +65,5 @@ public static class InjectionExtensions
         }
 
         _ = options.UseSqlServer(dbConnectionstring);
-#endif
     }
 }

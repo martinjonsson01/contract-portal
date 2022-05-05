@@ -1,5 +1,6 @@
 ﻿using Application.Documents;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -30,6 +31,7 @@ public class DocumentsController : BaseApiController<DocumentsController>
     /// <response code="400">The uploaded file is not a valid document.</response>
     [HttpPost]
     [Produces("text/plain")]
+    [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<string>> UploadDocumentAsync()
     {
