@@ -60,7 +60,7 @@ jobs:
           key: cache-dotnet
 
       - name: Update database
-        run: |
+        run: >
           dotnet tool install --global dotnet-ef
           dotnet ef database update -p src/Infrastructure/Infrastructure.csproj
         env:
@@ -80,7 +80,7 @@ jobs:
           key: cache-dotnet
 
       - name: Run tests and collect coverage
-        run: |
+        run: >
           dotnet test --no-build tests/Application.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
@@ -104,7 +104,7 @@ jobs:
           key: cache-dotnet
 
       - name: Run tests and collect coverage
-        run: |
+        run: >
           dotnet test --no-build tests/Domain.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
@@ -128,7 +128,7 @@ jobs:
           key: cache-dotnet
 
       - name: Run tests and collect coverage
-        run: |
+        run: >
           dotnet test --no-build tests/Client.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
@@ -152,7 +152,7 @@ jobs:
           key: cache-dotnet
 
       - name: Run tests and collect coverage
-        run: |
+        run: >
           dotnet test --no-build tests/Infrastructure.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
@@ -176,7 +176,7 @@ jobs:
           key: cache-dotnet
 
       - name: Run tests and collect coverage
-        run: |
+        run: >
           dotnet test --no-build tests/Server.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
@@ -200,7 +200,7 @@ jobs:
           key: cache-dotnet
 
       - name: Run tests and collect coverage
-        run: |
+        run: >
           dotnet test --no-build tests/Server.Tests.Integration
           -p:CollectCoverage=true
           -p:Threshold=80
