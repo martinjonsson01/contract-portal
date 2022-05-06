@@ -43,12 +43,11 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public void Validate_ReturnsOk_IfUserExistsAndPasswordIsCorrect()
+    public void Authenticate_ReturnsOk_IfUserExistsAndPasswordIsCorrect()
     {
         // Arrange
         var user = new User() { Name = "user", Password = "password", };
-        _mockUsers.Setup(service => service.UserExists(user.Name)).Returns(true);
-        _mockUsers.Setup(service => service.ValidPassword(user.Name, user.Password)).Returns(true);
+        _mockUsers.Setup(service => service.Authenticate(user.Name, user.Password)).Returns(new AuthenticateResponse(user, "token"));
 
         // Act
         IActionResult actual = _cut.Authenticate(user);
@@ -58,12 +57,11 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public void Validate_ReturnsBadRequest_IfUserExistsButPasswordIsIncorrect()
+    public void Authenticate_ReturnsBadRequest_IfUserExistsButPasswordIsIncorrect()
     {
         // Arrange
         var user = new User() { Name = "user", Password = "password", };
-        _mockUsers.Setup(service => service.UserExists(user.Name)).Returns(true);
-        _mockUsers.Setup(service => service.ValidPassword(user.Name, "NotPassword")).Returns(false);
+        _mockUsers.Setup(service => service.Authenticate(user.Name, "password")).Throws<InvalidPasswordException>();
 
         // Act
         IActionResult actual = _cut.Authenticate(user);
@@ -73,11 +71,11 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public void Validate_ReturnsBadRequest_IfUserDoesNotExist()
+    public void Authenticate_ReturnsBadRequest_IfUserDoesNotExist()
     {
         // Arrange
-        var user = new User() { Name = "user", };
-        _mockUsers.Setup(service => service.Authenticate(user)).Throws<UserDoesNotExistException>();
+        var user = new User() { Name = "user", Password = string.Empty, };
+        _mockUsers.Setup(service => service.Authenticate(user.Name, string.Empty)).Throws<UserDoesNotExistException>();
 
         // Act
         IActionResult actual = _cut.Authenticate(user);
