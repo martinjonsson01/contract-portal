@@ -12,7 +12,6 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>CA1812;CA1848;SA1633;SA1101;SA1642;SA1503;SA1309;CLASS0001;SA1200;CA1707;CA1014</NoWarn>
-    <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <ItemGroup>
