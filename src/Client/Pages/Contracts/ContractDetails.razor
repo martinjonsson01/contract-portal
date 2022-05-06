@@ -39,16 +39,19 @@
                         <MarkdownViewer Markdown="@Contract.SupplierDescription"/>
                         </Body>
                     </AccordionItem>
-                    <AccordionItem>
-                        <Title>
-                            <h2>Övriga filer</h2>
-                        </Title>
-                        <Body>
-                        <a href="@Contract.AdditionalDocument" download>
-                            Ladda ned fil
-                        </a>
-                        </Body>
-                    </AccordionItem>
+                    @if (!string.IsNullOrEmpty(Contract.AdditionalDocument))
+                    {
+                        <AccordionItem>
+                            <Title>
+                                <h2>Övriga filer</h2>
+                            </Title>
+                            <Body>
+                            <a id="additional-document" href="@Contract.AdditionalDocument" download>
+                                Ladda ned fil
+                            </a>
+                            </Body>
+                        </AccordionItem>
+                    }
                     @if (!String.IsNullOrEmpty(Contract.FAQ))
                     {
                     <AccordionItem>
