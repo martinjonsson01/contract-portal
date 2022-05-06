@@ -47,6 +47,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
       - name: Update database
         run: |
           dotnet tool install --global dotnet-ef
@@ -60,6 +66,12 @@ jobs:
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
 
       - name: Run tests and collect coverage
         run: |
@@ -79,6 +91,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
       - name: Run tests and collect coverage
         run: |
           dotnet test --no-build tests/Domain.Tests
@@ -96,6 +114,12 @@ jobs:
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
 
       - name: Run tests and collect coverage
         run: |
@@ -115,6 +139,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
       - name: Run tests and collect coverage
         run: |
           dotnet test --no-build tests/Infrastructure.Tests
@@ -133,6 +163,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
       - name: Run tests and collect coverage
         run: |
           dotnet test --no-build tests/Server.Tests
@@ -150,6 +186,12 @@ jobs:
     needs: [ build, set-up-database ]
     steps:
       - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
 
       - name: Run tests and collect coverage
         run: |
