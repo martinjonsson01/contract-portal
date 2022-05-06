@@ -2,7 +2,7 @@
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 
-namespace Presentation.Tests.Client;
+namespace Client.Tests;
 
 public class UITestFixture : IDisposable
 {

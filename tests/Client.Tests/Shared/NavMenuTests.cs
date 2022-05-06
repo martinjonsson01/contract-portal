@@ -1,6 +1,6 @@
 ﻿using Client.Shared;
 
-namespace Presentation.Tests.Client.Shared;
+namespace Client.Tests.Shared;
 
 public class NavMenuTests : UITestFixture
 {

@@ -2,7 +2,7 @@
 
 using Domain.Contracts;
 
-namespace Presentation.Tests.Client.Pages;
+namespace Client.Tests.Pages;
 
 public class RecentlyViewedTests : UITestFixture
 {

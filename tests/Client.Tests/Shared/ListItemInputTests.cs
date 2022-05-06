@@ -5,7 +5,7 @@ using Client.Shared.Lists;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace Presentation.Tests.Client.Shared;
+namespace Client.Tests.Shared;
 
 public class ListItemInputTests : UITestFixture
 {

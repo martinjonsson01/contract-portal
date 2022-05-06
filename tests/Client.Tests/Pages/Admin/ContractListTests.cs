@@ -8,9 +8,10 @@ using AngleSharp.Dom;
 using Client.Pages.Admin;
 
 using Domain.Contracts;
+
 using Microsoft.AspNetCore.Components.Web;
 
-namespace Presentation.Tests.Client.Pages.Admin;
+namespace Client.Tests.Pages.Admin;
 
 public class ContractListTests : UITestFixture
 {

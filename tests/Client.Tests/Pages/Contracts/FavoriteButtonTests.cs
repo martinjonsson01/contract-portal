@@ -1,7 +1,8 @@
 ﻿using Client.Pages.Contracts;
+
 using Domain.Contracts;
 
-namespace Presentation.Tests.Client.Pages.Contracts;
+namespace Client.Tests.Pages.Contracts;
 
 public class FavoriteButtonTests : UITestFixture
 {

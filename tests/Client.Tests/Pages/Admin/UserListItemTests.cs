@@ -1,7 +1,8 @@
 using Client.Pages.Admin;
+
 using Domain.Users;
 
-namespace Presentation.Tests.Client.Pages.Admin;
+namespace Client.Tests.Pages.Admin;
 
 public class UserListItemTests : IDisposable
 {

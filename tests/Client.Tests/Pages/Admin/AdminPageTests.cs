@@ -8,7 +8,7 @@ using Client.Pages.Contracts;
 using Domain.Contracts;
 using Domain.Users;
 
-namespace Presentation.Tests.Client.Pages.Admin;
+namespace Client.Tests.Pages.Admin;
 
 public class AdminPageTests : UITestFixture
 {

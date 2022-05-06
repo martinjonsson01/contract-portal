@@ -4,12 +4,14 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 using AngleSharp.Dom;
+
 using Client.Pages.Admin;
+
 using Domain.Users;
 
 using Microsoft.AspNetCore.Components.Web;
 
-namespace Presentation.Tests.Client.Pages.Admin;
+namespace Client.Tests.Pages.Admin;
 
 public class UserListTests : UITestFixture
 {

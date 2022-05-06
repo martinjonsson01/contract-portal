@@ -2,7 +2,7 @@
 
 using Domain.StatusUpdates;
 
-namespace Presentation.Tests.Client.Pages.Dashboard;
+namespace Client.Tests.Pages.Dashboard;
 
 public class StatusUpdatesTests : UITestFixture
 {

@@ -1,7 +1,8 @@
 ﻿using Client.Pages.Dashboard;
+
 using Domain.Contracts;
 
-namespace Presentation.Tests.Client.Pages.Dashboard;
+namespace Client.Tests.Pages.Dashboard;
 
 public class FavoriteCardsTests : UITestFixture
 {

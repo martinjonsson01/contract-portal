@@ -1,9 +1,12 @@
 ﻿using AngleSharp.Dom;
+
 using Client.Pages.Contracts;
+
 using Domain.Contracts;
+
 using FluentAssertions.Execution;
 
-namespace Presentation.Tests.Client.Pages.Contracts;
+namespace Client.Tests.Pages.Contracts;
 
 public class ContractDetailsTests : UITestFixture
 {
