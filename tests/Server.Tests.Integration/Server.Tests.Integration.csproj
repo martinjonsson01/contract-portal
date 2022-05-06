@@ -52,7 +52,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Server\Server.csproj" />
-    <ProjectReference Include="..\..\src\Client\Client.csproj" />
   </ItemGroup>
 
 </Project>
