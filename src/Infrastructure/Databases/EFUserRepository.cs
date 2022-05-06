@@ -1,5 +1,6 @@
 using System.Data;
 
+using Application.Configuration;
 using Application.Users;
 
 using Domain.Users;
@@ -87,7 +88,7 @@ public sealed class EFUserRepository : IUserRepository
 
     private void CreateAdmin()
     {
-        string? adminPasswordSecret = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.AdminPassword);
+        string? adminPasswordSecret = Environment.GetEnvironmentVariable(ConfigurationKeys.AdminPassword);
         Console.WriteLine(adminPasswordSecret);
         adminPasswordSecret = BCrypt.Net.BCrypt.HashPassword(adminPasswordSecret);
         Console.WriteLine(adminPasswordSecret);
