@@ -28,7 +28,7 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
-        
+
   set-up-database:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -64,7 +64,7 @@ jobs:
           -p:ExcludeByFile=\"**/Program.cs\"
           -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
           -p:Include=\"[Application]*\"
-  
+
   domain-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -79,67 +79,67 @@ jobs:
           -p:ExcludeByFile=\"**/Program.cs\"
           -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
           -p:Include=\"[Domain]*\"
-  
+
   client-tests:
-      runs-on: ubuntu-latest
-      timeout-minutes: 10
-      needs: [ build ]
-      steps:
-          -   name: Run tests and collect coverage
-              run: |
-                  dotnet test --no-build tests/Client.Tests
-                  -p:CollectCoverage=true
-                  -p:Threshold=80
-                  -p:ThresholdType=branch
-                  -p:CoverletOutput=../../CoverageResults/
-                  -p:ExcludeByFile=\"**/Program.cs\"
-                  -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
-                  -p:Include=\"[Client]*\"
-  
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [ build ]
+    steps:
+      - name: Run tests and collect coverage
+        run: |
+          dotnet test --no-build tests/Client.Tests
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Client]*\"
+
   infrastructure-tests:
-      runs-on: ubuntu-latest
-      timeout-minutes: 10
-      needs: [ build, set-up-database ]
-      steps:
-          -   name: Run tests and collect coverage
-              run: |
-                  dotnet test --no-build tests/Infrastructure.Tests
-                  -p:CollectCoverage=true
-                  -p:Threshold=80
-                  -p:ThresholdType=branch
-                  -p:CoverletOutput=../../CoverageResults/
-                  -p:ExcludeByFile=\"**/Program.cs\"
-                  -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
-                  -p:Include=\"[Infrastructure]*\"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [ build, set-up-database ]
+    steps:
+      - name: Run tests and collect coverage
+        run: |
+          dotnet test --no-build tests/Infrastructure.Tests
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Infrastructure]*\"
 
   server-tests:
-      runs-on: ubuntu-latest
-      timeout-minutes: 10
-      needs: [ build, set-up-database ]
-      steps:
-          -   name: Run tests and collect coverage
-              run: |
-                  dotnet test --no-build tests/Server.Tests
-                  -p:CollectCoverage=true
-                  -p:Threshold=80
-                  -p:ThresholdType=branch
-                  -p:CoverletOutput=../../CoverageResults/
-                  -p:ExcludeByFile=\"**/Program.cs\"
-                  -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
-                  -p:Include=\"[Server]*\"
-  
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [ build, set-up-database ]
+    steps:
+      - name: Run tests and collect coverage
+        run: |
+          dotnet test --no-build tests/Server.Tests
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Server]*\"
+
   server-integration-tests:
-      runs-on: ubuntu-latest
-      timeout-minutes: 10
-      needs: [ build, set-up-database ]
-      steps:
-          -   name: Run tests and collect coverage
-              run: |
-                  dotnet test --no-build tests/Server.Tests.Integration
-                  -p:CollectCoverage=true
-                  -p:Threshold=80
-                  -p:ThresholdType=branch
-                  -p:CoverletOutput=../../CoverageResults/
-                  -p:ExcludeByFile=\"**/Program.cs\"
-                  -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
-                  -p:Include=\"[Server]*\"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [ build, set-up-database ]
+    steps:
+      - name: Run tests and collect coverage
+        run: |
+          dotnet test --no-build tests/Server.Tests.Integration
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Server]*\"
