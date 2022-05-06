@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using Infrastructure.Users;
+using Application.Configuration;
+
+using Infrastructure.Databases;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Tests;
 
-public class TestUserDatabaseFixture
+public class TestDatabaseFixture
 {
     private const string ConnectionString =
-        @"Server=localhost;Database=master_test;User Id=SA; Password=ASDjk_shd$$jkASKJ19821;";
+        @"Server=localhost;Database=ProdigoPortal_test;User Id=SA; Password=ASDjk_shd$$jkASKJ19821;";
 
     private static readonly object _lock = new();
     private static bool _databaseInitialized;
 
-    public TestUserDatabaseFixture()
+    public TestDatabaseFixture()
     {
         lock (_lock)
         {
@@ -37,18 +40,20 @@ public class TestUserDatabaseFixture
         "Performance",
         "CA1822:Mark members as static",
         Justification = "Needs to be non-static so each test instance can call it without the entire class being static.")]
-    public EFUserRepository CreateContext()
+    public EFDatabaseContext CreateContext()
     {
         string connectionString = ConnectionString;
 
-        string? untrusted = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.UntrustedConnection);
-        if (untrusted is null)
+        string? ciContainer = Environment.GetEnvironmentVariable(ConfigurationKeys.ContinuousIntegration);
+        if (ciContainer is null)
             connectionString += "Trusted_Connection=True;";
 
-        return new EFUserRepository(
-            new DbContextOptionsBuilder<EFUserRepository>()
+        return new EFDatabaseContext(
+            new DbContextOptionsBuilder<EFDatabaseContext>()
                 .UseSqlServer(connectionString, options => options.EnableRetryOnFailure())
+                .EnableSensitiveDataLogging()
                 .Options,
-            Mock.Of<ILogger<EFUserRepository>>());
+            Mock.Of<ILogger<EFDatabaseContext>>(),
+            Mock.Of<IConfiguration>());
     }
 }

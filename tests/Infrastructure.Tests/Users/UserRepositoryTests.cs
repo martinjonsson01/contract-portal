@@ -5,18 +5,23 @@ using Application.Users;
 
 using Domain.Users;
 
+using Infrastructure.Databases;
+
+using Microsoft.Extensions.Logging;
+
 namespace Infrastructure.Tests.Users;
 
 [Collection("DatabaseTests")]
-public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
+public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
 {
-    private readonly TestUserDatabaseFixture _fixture;
+    private readonly TestDatabaseFixture _fixture;
     private IUserRepository _cut;
 
-    public UserRepositoryTests(TestUserDatabaseFixture fixture)
+    public UserRepositoryTests(TestDatabaseFixture fixture)
     {
         _fixture = fixture;
-        _cut = _fixture.CreateContext();
+        EFDatabaseContext context = _fixture.CreateContext();
+        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>());
         _cut.EnsureAdminCreated();
     }
 
@@ -57,7 +62,8 @@ public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
             _cut.Remove(admin.Id);
 
         // Re-create database.
-        _cut = _fixture.CreateContext();
+        EFDatabaseContext context = _fixture.CreateContext();
+        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>());
         _cut.EnsureAdminCreated();
 
         // Act
@@ -77,7 +83,9 @@ public class UserRepositoryTests : IClassFixture<TestUserDatabaseFixture>
         if (admin is null) // Ensure admin exists.
             _cut.Add(new User { Name = adminName, });
 
-        _cut = _fixture.CreateContext(); // Re-create database.
+        // Re-create database.
+        EFDatabaseContext context = _fixture.CreateContext();
+        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>());
 
         // Act
         IEnumerable<User> admins = _cut.All.Where(user => user.Name == adminName);
