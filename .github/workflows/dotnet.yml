@@ -140,6 +140,30 @@ jobs:
           -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
           -p:Include=\"[Client]*\"
 
+  server-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [ build ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
+      - name: Run tests and collect coverage
+        run: >
+          dotnet test --no-build tests/Server.Tests
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Server]*\"
+
   infrastructure-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -163,30 +187,6 @@ jobs:
           -p:ExcludeByFile=\"**/Program.cs\"
           -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
           -p:Include=\"[Infrastructure]*\"
-
-  server-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: [ build, set-up-database ]
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Cache dotnet
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
-
-      - name: Run tests and collect coverage
-        run: >
-          dotnet test --no-build tests/Server.Tests
-          -p:CollectCoverage=true
-          -p:Threshold=80
-          -p:ThresholdType=branch
-          -p:CoverletOutput=../../CoverageResults/
-          -p:ExcludeByFile=\"**/Program.cs\"
-          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
-          -p:Include=\"[Server]*\"
 
   server-integration-tests:
     runs-on: ubuntu-latest
