@@ -60,7 +60,7 @@ jobs:
           key: cache-dotnet
 
       - name: Update database
-        run: >
+        run: |
           dotnet tool install --global dotnet-ef
           dotnet ef database update -p src/Infrastructure/Infrastructure.csproj
         env:
