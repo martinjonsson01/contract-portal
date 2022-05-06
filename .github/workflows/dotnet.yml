@@ -71,6 +71,7 @@ jobs:
     needs: [ build ]
     steps:
       - name: Run tests and collect coverage
+        run: |
           dotnet test --no-build tests/Domain.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
