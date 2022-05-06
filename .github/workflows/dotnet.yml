@@ -27,6 +27,12 @@ jobs:
           path: /home/runner/.dotnet
           key: cache-dotnet
 
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/contract-portal
+          key: cache-build
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
@@ -58,6 +64,12 @@ jobs:
         with:
           path: /home/runner/.dotnet
           key: cache-dotnet
+
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/contract-portal
+          key: cache-build
 
       - name: Install dotnet-ef
         run: dotnet tool install --global dotnet-ef
