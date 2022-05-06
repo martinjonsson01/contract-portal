@@ -2,9 +2,9 @@
 
 #nullable disable
 
-namespace Infrastructure.Migrations.EFUserRepositoryMigrations
+namespace Infrastructure.Migrations
 {
-    public partial class AddPassword : Migration
+    public partial class AddPasswordToUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
