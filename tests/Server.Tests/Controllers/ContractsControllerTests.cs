@@ -7,7 +7,7 @@ using FluentAssertions.Execution;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Presentation.Tests.Server.Controllers;
+namespace Server.Tests.Controllers;
 
 public class ContractsControllerTests
 {

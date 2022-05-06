@@ -4,7 +4,7 @@ using Domain.StatusUpdates;
 
 using Infrastructure.StatusUpdates;
 
-namespace Presentation.Tests.Server.Controllers;
+namespace Server.Tests.Controllers;
 
 public class StatusUpdatesControllerTests
 {

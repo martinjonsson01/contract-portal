@@ -11,7 +11,7 @@ using Domain.Users;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace Presentation.Tests.Server.Authentication;
+namespace Server.Tests.Authentication;
 
 public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {

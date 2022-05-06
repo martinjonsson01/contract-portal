@@ -1,9 +1,11 @@
 using Application.Exceptions;
 using Application.Users;
+
 using Domain.Users;
+
 using Microsoft.AspNetCore.Mvc;
 
-namespace Presentation.Tests.Server.Controllers;
+namespace Server.Tests.Controllers;
 
 public class UsersControllerTests
 {

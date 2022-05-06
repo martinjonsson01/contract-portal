@@ -8,7 +8,7 @@ using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-namespace Presentation.Tests.Server.Authentication;
+namespace Server.Tests.Authentication;
 
 public class AuthenticationTests
 {
