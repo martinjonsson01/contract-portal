@@ -3,6 +3,9 @@ name: .NET build and test
 on:
   push:
     branches: [ master ]
+    paths:
+      - 'src/*'
+      - 'tests/*'
   pull_request:
     branches:
       - master
