@@ -21,6 +21,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
