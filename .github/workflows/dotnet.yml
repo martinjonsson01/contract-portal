@@ -33,7 +33,7 @@ jobs:
       - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/work/contract-portal/contract-portal
+          path: /home/runner/work/contract-portal/
           key: cache-build
 
       - name: Setup .NET
