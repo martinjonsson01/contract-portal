@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Tests", "tests\Clien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Tests", "tests\Server.Tests\Server.Tests.csproj", "{7375CF35-F70E-4203-8DCE-3C325529BDC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.IntegrationTests", "tests\Server.IntegrationTests\Server.IntegrationTests.csproj", "{CEE5C97D-0EE6-442B-8189-78393C5FA9D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Tests.Integration", "tests\Server.Tests.Integration\Server.Tests.Integration.csproj", "{CEE5C97D-0EE6-442B-8189-78393C5FA9D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
