@@ -70,14 +70,7 @@ public class ContractsController : BaseApiController<ContractsController>
     [HttpGet("recent/{username}")]
     public IEnumerable<Contract> RecentContracts(string username)
     {
-        IEnumerable<Contract> recentContracts = _recent.FetchRecentContracts(username);
-        Console.WriteLine($"Fetching Contract for {username}");
-        foreach (Contract recentContract in recentContracts)
-        {
-            Console.WriteLine(recentContract.Name);
-        }
-
-        return recentContracts;
+        return _recent.FetchRecentContracts(username);
     }
 
     /// <summary>
@@ -89,6 +82,7 @@ public class ContractsController : BaseApiController<ContractsController>
     [HttpPost("recent/{username}")]
     public IActionResult AddRecent(string username, Contract contract)
     {
+        Console.WriteLine($"Adding {contract.Name} to recent");
         _recent.Add(username, contract);
         return Ok();
     }
