@@ -112,9 +112,7 @@ public class ContractsController : BaseApiController<ContractsController>
     [Authorize("AdminOnly")]
     public IActionResult Remove(Guid id)
     {
-        return _contracts.Remove(id) ?
-            Ok() :
-            NotFound();
+        return _contracts.Remove(id) ? Ok() : NotFound();
     }
 
     /// <summary>
@@ -123,8 +121,12 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="query">The query to filter contracts by.</param>
     /// <returns>The contracts that match the search query.</returns>
     [HttpGet]
+    [AllowAnonymous]
     public ActionResult<IEnumerable<Contract>> Search(string? query)
     {
-        return Ok(_contracts.Search(query ?? string.Empty));
+        if (User?.Identity?.IsAuthenticated ?? false)
+            return Ok(_contracts.Search(query ?? string.Empty));
+        else
+            return Unauthorized(_contracts.Search(query ?? string.Empty));
     }
 }

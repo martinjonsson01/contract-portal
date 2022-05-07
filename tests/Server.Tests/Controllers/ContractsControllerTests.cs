@@ -33,8 +33,8 @@ public class ContractsControllerTests
         // Assert
         using (new AssertionScope())
         {
-            response.Result.Should().BeAssignableTo<OkObjectResult>();
-            response.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(fakeContracts);
+            response.Result.Should().BeAssignableTo<ObjectResult>();
+            response.Result.As<ObjectResult>().Value.Should().BeEquivalentTo(fakeContracts);
         }
     }
 
@@ -52,8 +52,8 @@ public class ContractsControllerTests
         // Assert
         using (new AssertionScope())
         {
-            response.Result.Should().BeAssignableTo<OkObjectResult>();
-            response.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(searchResults);
+            response.Result.Should().BeAssignableTo<ObjectResult>();
+            response.Result.As<ObjectResult>().Value.Should().BeEquivalentTo(searchResults);
         }
     }
 
