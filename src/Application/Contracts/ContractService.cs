@@ -68,12 +68,6 @@ public class ContractService : IContractService
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> FetchFavorites()
-    {
-        return _repo.Favorites;
-    }
-
-    /// <inheritdoc />
     public void UpdateContract(Contract contract)
     {
         _repo.UpdateContract(contract);

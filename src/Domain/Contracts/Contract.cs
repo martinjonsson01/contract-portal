@@ -13,11 +13,6 @@ public class Contract
     public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
-    /// Gets or sets a value indicating whether the contract is a favorite or not.
-    /// </summary>
-    public bool IsFavorite { get; set; }
-
-    /// <summary>
     ///     Gets or sets the name of the contract.
     /// </summary>
     public string Name { get; set; } = "Inget namn";
