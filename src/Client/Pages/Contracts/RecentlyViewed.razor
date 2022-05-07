@@ -15,7 +15,6 @@
     <ChildContent>
         @if (ShouldShowRecent)
         {
-            _dataFetcher.Data?.ForEach(contract => Console.WriteLine(contract.Name));
             if (_dataFetcher.Data is {Count: > 0 })
             {
                 <h3>Senast besökta</h3>
@@ -59,9 +58,9 @@
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
-        await _http.PostAsJsonAsync($"api/v1/contracts/recent/123", newRecent);
+        await _http.PostAsJsonAsync($"api/v1/contracts/recent/{LoggedInUser}", newRecent);
         await _dataFetcher.Fetch(GetFetchUrl());
-        await InvokeAsync(StateHasChanged);
+        StateHasChanged();
     }
 
     private string GetFetchUrl()
