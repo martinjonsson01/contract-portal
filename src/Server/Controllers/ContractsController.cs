@@ -82,7 +82,6 @@ public class ContractsController : BaseApiController<ContractsController>
     [HttpPost("recent/{username}")]
     public IActionResult AddRecent(string username, Contract contract)
     {
-        Console.WriteLine($"Adding {contract.Name} to recent");
         _recent.Add(username, contract);
         return Ok();
     }

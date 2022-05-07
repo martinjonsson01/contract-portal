@@ -120,14 +120,7 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     public LinkedList<Contract> FetchRecentContracts(string id)
     {
         User user = GetUserByUserName(id);
-        Console.WriteLine($"Fetching From user{user.Name}");
-        Console.WriteLine($"{user.RecentlyViewContracts.Count}");
-        foreach (Contract recentContract in user.RecentlyViewContracts)
-        {
-            Console.WriteLine(recentContract.Name);
-        }
-
-        return user.RecentlyViewContracts ?? throw new InvalidOperationException();
+        return user.RecentlyViewContracts;
     }
 
     /// <inheritdoc />
