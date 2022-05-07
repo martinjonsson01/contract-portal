@@ -11,11 +11,15 @@ public class FavoriteCardsTests : UITestFixture
     {
         // Arrange
         const string name = "SJ";
+        const string userName = "user";
         var contract = new Contract() { Name = name, };
-        MockHttp.When("/api/v1/Contracts/favorites").RespondJson(new[] { contract, });
+        MockHttp.When($"/api/v1/favorites/{userName}").RespondJson(new[] { contract, });
+
+        static void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteCards> parameters) =>
+            parameters.Add(property => property.LoggedInUser, userName);
 
         // Act
-        IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();
+        IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>(ParameterBuilder);
         cut.WaitForElement("#favorite-cards-container");
 
         // Assert
@@ -25,10 +29,14 @@ public class FavoriteCardsTests : UITestFixture
     [Fact]
     public void ShowNoFavoriteMessage_WhenThereAreNoFavorites()
     {
-        MockHttp.When("/api/v1/Contracts/favorites").RespondJson(Array.Empty<Contract>());
+        const string userName = "user";
+        MockHttp.When($"/api/v1/favorites/{userName}").RespondJson(Array.Empty<Contract>());
+
+        static void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteCards> parameters) =>
+            parameters.Add(property => property.LoggedInUser, userName);
 
         // Act
-        IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();
+        IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>(ParameterBuilder);
         cut.WaitForElement("#no-favorites");
 
         // Assert

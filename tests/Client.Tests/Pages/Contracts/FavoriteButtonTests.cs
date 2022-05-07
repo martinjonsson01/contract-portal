@@ -1,4 +1,6 @@
-﻿using Client.Pages.Contracts;
+﻿using System.Net;
+using System.Net.Http;
+using Client.Pages.Contracts;
 
 using Domain.Contracts;
 
@@ -10,11 +12,14 @@ public class FavoriteButtonTests : UITestFixture
     public void ContractCard_ShowsFavoriteIcon_WhenContractIsFavoriteMarked()
     {
         // Arrange
-        const bool favorite = true;
-        var contract = new Contract() { IsFavorite = favorite, };
+        string userName = "user";
+        var contract = new Contract();
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
-            parameters.Add(property => property.Contract, contract);
+            parameters.Add(property => property.Contract, contract)
+                      .Add(property => property.LoggedInUser, userName);
+
+        MockHttp.When($"/api/v1/favorites/{userName}/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
 
         // Act
         IRenderedComponent<FavoriteButton> cut =
@@ -29,11 +34,14 @@ public class FavoriteButtonTests : UITestFixture
     public void ContractCard_ShowsNonFavoriteIcon_WhenContractIsNotFavoriteMarked()
     {
         // Arrange
-        const bool favorite = false;
-        var contract = new Contract() { IsFavorite = favorite, };
+        string userName = "user";
+        Contract contract = new();
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
-            parameters.Add(property => property.Contract, contract);
+            parameters.Add(property => property.Contract, contract)
+                      .Add(property => property.LoggedInUser, userName);
+
+        MockHttp.When($"/api/v1/favorites/{userName}/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.NotFound));
 
         // Act
         IRenderedComponent<FavoriteButton> cut =
