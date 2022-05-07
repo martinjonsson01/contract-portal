@@ -3,6 +3,9 @@ name: .NET build and test
 on:
   push:
     branches: [ master ]
+    paths:
+      - 'src/*'
+      - 'tests/*'
   pull_request:
     branches:
       - master
@@ -10,45 +13,204 @@ on:
   workflow_dispatch:
 
 env:
-    CONTINUOUS_INTEGRATION: true
-    prodigo_portal_jwt_secret: "test-json-web-token-secret"
-    prodigo_portal_db_connectionstring: "Server=localhost;Database=ProdigoPortal_test;User Id=SA; Password=ASDjk_shd$$jkASKJ19821;"
+  CONTINUOUS_INTEGRATION: true
+  prodigo_portal_jwt_secret: "test-json-web-token-secret"
+  prodigo_portal_db_connectionstring: "Server=localhost;Database=ProdigoPortal_test;User Id=SA; Password=ASDjk_shd$$jkASKJ19821;"
 
 jobs:
-  build-and-test:
-
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    services:
-        sql.data:
-            image: mcr.microsoft.com/mssql/server:2019-latest
-            env:
-                SA_PASSWORD: "ASDjk_shd$$jkASKJ19821"
-                ACCEPT_EULA: Y
-            ports:
-                - "1433:1433"
-
+    timeout-minutes: 5
     steps:
-    - uses: actions/checkout@v3
-    - name: Update database
-      run: |
-         dotnet tool install --global dotnet-ef
-         dotnet ef database update -p src/Infrastructure/Infrastructure.csproj
-      env:
-        ASPNETCORE_ENVIRONMENT: Development
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Presentation.Tests
-      run: dotnet test --no-build tests/Presentation.Tests -p:CollectCoverage=true   -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json" -p:CoverletOutputFormat="opencover" -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\" -p:Include=\"[Client]*,[Server]*\"
-    - name: Infrastructure.Tests
-      run: dotnet test --no-build tests/Infrastructure.Tests -p:CollectCoverage=true -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json"                                     -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\" -p:Include=\"[Infrastructure]*\"
-    - name: Application.Tests
-      run: dotnet test --no-build tests/Application.Tests -p:CollectCoverage=true    -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/                                                                                        -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\" -p:Include=\"[Application]*\"
-    - name: Domain.Tests
-      run: dotnet test --no-build tests/Domain.Tests -p:CollectCoverage=true         -p:Threshold=80 -p:ThresholdType=branch -p:CoverletOutput=../../CoverageResults/ -p:MergeWith="../../CoverageResults/coverage.json"                                     -p:ExcludeByFile=\"**/Program.cs\" -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\" -p:Include=\"[Domain]*\"
+      - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+  set-up-database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [ build ]
+    services:
+      sql.data:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          SA_PASSWORD: "ASDjk_shd$$jkASKJ19821"
+          ACCEPT_EULA: Y
+        ports:
+          - "1433:1433"
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
+      - name: Install dotnet-ef
+        run: dotnet tool install --global dotnet-ef
+        continue-on-error: true
+
+      - name: Update database
+        run: dotnet ef database update -p src/Infrastructure
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
+
+  application-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    needs: [ build ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
+      - name: Run tests and collect coverage
+        run: >
+          dotnet test --no-build tests/Application.Tests
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Application]*\"
+
+  domain-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    needs: [ build ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
+      - name: Run tests and collect coverage
+        run: >
+          dotnet test --no-build tests/Domain.Tests
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Domain]*\"
+
+  client-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    needs: [ build ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
+      - name: Run tests and collect coverage
+        run: >
+          dotnet test --no-build tests/Client.Tests
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Client]*\"
+
+  server-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    needs: [ build ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
+      - name: Run tests and collect coverage
+        run: >
+          dotnet test --no-build tests/Server.Tests
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Server]*\"
+
+  infrastructure-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    needs: [ build, set-up-database ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
+      - name: Run tests and collect coverage
+        run: >
+          dotnet test --no-build tests/Infrastructure.Tests
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Infrastructure]*\"
+
+  server-integration-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    needs: [ build, set-up-database ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache dotnet
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.dotnet
+          key: cache-dotnet
+
+      - name: Run tests and collect coverage
+        run: >
+          dotnet test --no-build tests/Server.Tests.Integration
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Server]*\"
