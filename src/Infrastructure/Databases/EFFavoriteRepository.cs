@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace Infrastructure.Databases;
 
 /// <summary>
-/// Stores and fetches users from an Entity Framework Core database.
+/// Stores and fetches favorites from an Entity Framework Core database.
 /// </summary>
 public sealed class EFFavoriteRepository : IFavoriteContractRepository
 {
@@ -15,7 +15,7 @@ public sealed class EFFavoriteRepository : IFavoriteContractRepository
     private readonly ILogger<EFUserRepository> _logger;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EFUserRepository"/> class.
+    /// Initializes a new instance of the <see cref="EFFavoriteRepository"/> class.
     /// </summary>
     /// <param name="context">The database context to manipulate data in.</param>
     /// <param name="logger">The logging service to use.</param>

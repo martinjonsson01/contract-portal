@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Server.Controllers;
 
 /// <summary>
-/// WebAPI for users.
+/// WebAPI for favorites.
 /// </summary>
 [ApiController]
 [Route("api/v1/[controller]")]
@@ -15,10 +15,10 @@ public class FavoritesController : BaseApiController<FavoritesController>
     private readonly IFavoriteContractService _favorites;
 
     /// <summary>
-    /// Constructs user API.
+    /// Constructs favorite API.
     /// </summary>
     /// <param name="logger">The logging provider.</param>
-    /// <param name="favorites">The user logic.</param>
+    /// <param name="favorites">The favorite logic.</param>
     public FavoritesController(ILogger<FavoritesController> logger, IFavoriteContractService favorites)
         : base(logger)
     {
@@ -26,14 +26,13 @@ public class FavoritesController : BaseApiController<FavoritesController>
     }
 
     /// <summary>
-    /// Creates a new contract.
+    /// Adds a favorite.
     /// </summary>
-    /// <param name="setFavorite">The contract to add.</param>
-    /// <returns>The identifier of the stored image.</returns>
-    /// <response code="400">The ID of the contract was already taken.</response>
+    /// <param name="setFavorite">The favorite to add.</param>
+    /// <returns>Whether the favorite was successfully added.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult CreateContract(SetFavoriteContract setFavorite)
+    public IActionResult Add(SetFavoriteContract setFavorite)
     {
         if (setFavorite is null)
             return BadRequest();
@@ -51,21 +50,11 @@ public class FavoritesController : BaseApiController<FavoritesController>
     }
 
     /// <summary>
-    /// Gets all users.
+    /// Checks if a certain contract is marked as favorite by a certain user.
     /// </summary>
-    /// <returns>All the stored users.</returns>
-    [HttpGet]
-    public IActionResult Get()
-    {
-        return Ok();
-    }
-
-    /// <summary>
-    /// Gets all users.
-    /// </summary>
-    /// <param name="userName">Name of the user.</param>
-    /// <param name="contractId">Id of contract.</param>
-    /// <returns>All the stored users.</returns>
+    /// <param name="userName">The name of the user.</param>
+    /// <param name="contractId">The id of the contract.</param>
+    /// <returns>Whether the contract is marked as favorite by the user.</returns>
     [HttpGet("{userName}/{contractId:guid}")]
     public IActionResult GetIsFavorite(string userName, Guid contractId)
     {
@@ -73,12 +62,12 @@ public class FavoritesController : BaseApiController<FavoritesController>
     }
 
     /// <summary>
-    /// Gets all users.
+    /// Gets all contracts marked as favorite by a certain user.
     /// </summary>
-    /// <param name="userName">Name of the user.</param>
-    /// <returns>All the stored users.</returns>
+    /// <param name="userName">The name of the user.</param>
+    /// <returns>All contracts marked as favorite by the user.</returns>
     [HttpGet("{userName}")]
-    public IEnumerable<Contract> GetIsFavorite(string userName)
+    public IEnumerable<Contract> GetAll(string userName)
     {
         return _favorites.FetchAllFavorites(userName);
     }
