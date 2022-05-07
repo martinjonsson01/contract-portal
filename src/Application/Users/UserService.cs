@@ -54,7 +54,7 @@ public class UserService : IUserService
 
         return user is null
             ? throw new UserDoesNotExistException(username)
-            : ValidPassword(user, password)
+            : IsPasswordValid(user, password)
                 ? new AuthenticateResponse(user, GenerateJwtToken(user))
                 : throw new InvalidPasswordException("Wrong password.");
     }
@@ -81,7 +81,7 @@ public class UserService : IUserService
         return claims;
     }
 
-    private static bool ValidPassword(User user, string password)
+    private static bool IsPasswordValid(User user, string password)
     {
         return BCrypt.Net.BCrypt.Verify(password, user.Password);
     }
