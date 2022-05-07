@@ -89,9 +89,7 @@ public sealed class EFUserRepository : IUserRepository
     private void CreateAdmin()
     {
         string? adminPasswordSecret = Environment.GetEnvironmentVariable(ConfigurationKeys.AdminPassword);
-        Console.WriteLine(adminPasswordSecret);
         adminPasswordSecret = BCrypt.Net.BCrypt.HashPassword(adminPasswordSecret);
-        Console.WriteLine(adminPasswordSecret);
         var admin = new User { Name = AdminUserName, Password = adminPasswordSecret, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
         _ = Users.Add(admin);
         try
