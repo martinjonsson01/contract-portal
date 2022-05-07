@@ -78,17 +78,17 @@ public class UsersController : BaseApiController<UsersController>
     /// <summary>
     /// Authenticates a user.
     /// </summary>
-    /// <param name="userInfo">The user to authentication.</param>
+    /// <param name="user">The user to authentication.</param>
     /// <returns>An authentication token that can be used to identify the user.</returns>
     [HttpPost("authenticate")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Authenticate(User userInfo)
+    public IActionResult Authenticate(User user)
     {
         try
         {
-            AuthenticateResponse authResponse = _users.Authenticate(userInfo.Name, userInfo.Password ?? string.Empty);
+            AuthenticateResponse authResponse = _users.Authenticate(user.Name, user.Password ?? string.Empty);
             return Ok(authResponse);
         }
         catch (Exception e)
