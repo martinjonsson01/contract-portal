@@ -78,7 +78,7 @@ public class UsersController : BaseApiController<UsersController>
     /// <summary>
     /// Authenticates a user.
     /// </summary>
-    /// <param name="user">The user to authentication.</param>
+    /// <param name="user">The user to authenticate.</param>
     /// <returns>An authentication token that can be used to identify the user.</returns>
     [HttpPost("authenticate")]
     [AllowAnonymous]
