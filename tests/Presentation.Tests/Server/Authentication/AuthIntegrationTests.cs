@@ -9,15 +9,13 @@ using Application.Users;
 using Domain.Contracts;
 using Domain.Users;
 
-using Microsoft.AspNetCore.Mvc.Testing;
-
 namespace Presentation.Tests.Server.Authentication;
 
-public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
 {
     private readonly HttpClient _client;
 
-    public AuthIntegrationTests(WebApplicationFactory<Program> factory)
+    public AuthIntegrationTests(TestWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
     }
