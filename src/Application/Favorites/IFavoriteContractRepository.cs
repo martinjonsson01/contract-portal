@@ -3,7 +3,7 @@ using Domain.Contracts;
 namespace Application.FavoriteContracts;
 
 /// <summary>
-/// Logic for fetching and storing users.
+/// Logic for fetching and storing favorites.
 /// </summary>
 public interface IFavoriteContractRepository
 {
@@ -16,21 +16,21 @@ public interface IFavoriteContractRepository
     bool CheckIfFavorite(string userName, Guid contractId);
 
     /// <summary>
-    /// Fetches all contracts marked as favorite.
+    /// Fetches all contracts marked as favorite by a certain user.
     /// </summary>
     /// <param name="userName">The name of the user.</param>
-    /// <returns>All contracts marked as favorite.</returns>
+    /// <returns>All contracts marked as favorite by the user.</returns>
     IEnumerable<Contract> FetchAllFavorites(string userName);
 
     /// <summary>
-    /// Adds a new favorite to store.
+    /// Adds a favorite contract to store, for a certain user.
     /// </summary>
     /// <param name="userName">The name of the user.</param>
     /// <param name="contractId">The id of the contract.</param>
     void Add(string userName, Guid contractId);
 
     /// <summary>
-    /// Removes the user with the given ID.
+    /// Removes a stored favorite contract, for a certain user.
     /// </summary>
     /// <param name="userName">The name of the user.</param>
     /// <param name="contractId">The id of the contract.</param>

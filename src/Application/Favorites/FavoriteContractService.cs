@@ -8,7 +8,7 @@ public class FavoriteContractService : IFavoriteContractService
     private readonly IFavoriteContractRepository _repo;
 
     /// <summary>
-    /// Constructs user service.
+    /// Constructs favorite service.
     /// </summary>
     /// <param name="repo">Where to store and fetch favorites from.</param>
     public FavoriteContractService(IFavoriteContractRepository repo)
