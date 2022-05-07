@@ -1,4 +1,5 @@
 ﻿using Application.Contracts;
+using Application.FavoriteContracts;
 using Application.Search;
 using Application.StatusUpdates;
 using Application.Users;
@@ -19,6 +20,7 @@ public static class InjectionExtensions
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         return services.AddTransient<IContractService, ContractService>()
+                       .AddTransient<IFavoriteContractService, FavoriteContractService>()
                        .AddTransient<IStatusUpdateService, NotificationService>()
                        .AddTransient<IUserService, UserService>()
                        .AddScoped(typeof(SearchEngine<>))

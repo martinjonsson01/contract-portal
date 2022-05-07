@@ -1,11 +1,12 @@
-﻿@using Microsoft.AspNetCore.JsonPatch
+﻿@using Application.MessagePassing
+@using Microsoft.AspNetCore.JsonPatch
 @using Newtonsoft.Json
 @using Domain.Contracts
 @using System.Text
 @inject HttpClient _http
 
 <button class="btn ms-auto p-2 flex-shrink-0" @onclick="ChangeFavorite">
-    @if (Contract.IsFavorite)
+    @if (isFavorite)
     {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
@@ -31,23 +32,44 @@
     /// Called when a contract has its favorite status changed.
     /// </summary>
     [Parameter]
-    public EventCallback<Contract> OnFavoriteChange { get; set; } = EventCallback<Contract>.Empty;
+    public EventCallback<(Guid, bool)> OnFavoriteChange { get; set; } = EventCallback<(Guid, bool)>.Empty;
+
+    /// <summary>
+    /// The name of the currently logged in user.
+    /// </summary>
+    [CascadingParameter(Name = nameof(LoggedInUser))]
+    public string? LoggedInUser { get; set; }
+
+    /// <summary>
+    /// whether the contract is mark as favorite
+    /// </summary>
+    private bool isFavorite { get; set; }
+
+    protected override async void OnInitialized()
+    {
+        HttpResponseMessage response = await _http.GetAsync($"/api/v1/favorites/{LoggedInUser}/{Contract.Id}");
+        if (response.IsSuccessStatusCode)
+        {
+            isFavorite = true;
+        }
+        else
+        {
+            isFavorite = false;
+        }
+        await InvokeAsync(StateHasChanged);
+        base.OnInitialized();
+    }
 
     private async Task ChangeFavorite()
     {
-        var patchDocument = new JsonPatchDocument<Contract>();
-        patchDocument.Replace(contract => contract.IsFavorite, !Contract.IsFavorite);
-        var serializedDocument = JsonConvert.SerializeObject(patchDocument);
-        var content = new StringContent(serializedDocument, Encoding.UTF8, "application/json-patch+json");
+        SetFavoriteContract setFavorite = new() { UserName = LoggedInUser!, ContractId = Contract.Id, IsFavorite = !isFavorite };
 
-        var response = await _http.PatchAsync($"/api/v1/Contracts/{Contract.Id}", content);
+        HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/favorites", setFavorite);
         if (response.IsSuccessStatusCode)
         {
-            var contract = await response.Content.ReadFromJsonAsync<Contract>();
-            if (contract != null) Contract = contract;
+            isFavorite = !isFavorite;
             await InvokeAsync(StateHasChanged);
-            await OnFavoriteChange.InvokeAsync(Contract);
+            await OnFavoriteChange.InvokeAsync((Contract.Id, isFavorite));
         }
     }
-
 }

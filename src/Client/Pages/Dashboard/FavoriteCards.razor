@@ -6,7 +6,7 @@
     <h3>Favoriter</h3>
     <FetchData @ref="_dataFetcher"
                TData="List<Contract>"
-               Url="/api/v1/Contracts/favorites"
+               Url=@($"/api/v1/favorites/{LoggedInUser}")
                Context="contracts">
         @{
             var contractsList = contracts.ToList();
@@ -16,7 +16,7 @@
             <div id="favorite-cards-container" class="d-flex flex-row justify-content-around flex-wrap">
                 @foreach (var contract in contractsList)
                 {
-                    <ContractCard Contract=@contract OnFavoriteChange="OnFavoriteChange"/>
+                    <ContractCard Contract=@contract OnFavoriteChange="@((args)=> OnFavoriteChange(((Guid, bool))args))"/>
                 }
             </div>
         }
@@ -34,10 +34,16 @@
 @code {
     private FetchData<List<Contract>> _dataFetcher = null!;
 
-    private async Task OnFavoriteChange(Contract contract)
+    /// <summary>
+    /// The name of the currently logged in user.
+    /// </summary>
+    [CascadingParameter(Name = nameof(LoggedInUser))]
+    public string? LoggedInUser { get; set; }
+
+    private async Task OnFavoriteChange((Guid Id, bool IsFavorite)args)
     {
-        if (contract.IsFavorite) return;
-        _dataFetcher.Data?.RemoveAll(other => other.Id == contract.Id);
+        if (args.IsFavorite) return;
+        _dataFetcher.Data?.RemoveAll(other => other.Id == args.Id);
         await InvokeAsync(StateHasChanged);
     }
 

@@ -10,7 +10,7 @@
     <img id="contract-thumbnail" src="@Contract.SupplierLogoImagePath" class="img-thumbnail img-fluid" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"/>
     <div class="card-body d-flex bd-highlight mb-3 d-flex align-items-center">
         <h3 class="p-2 bd-highlight flex-grow-1" id="contract-name">@Contract.Name</h3>
-        <FavoriteButton @ref="_favoriteButton" Contract="@Contract" OnFavoriteChange="@FavoriteChange"></FavoriteButton>
+        <FavoriteButton @ref="_favoriteButton" Contract="@Contract" OnFavoriteChange="@((args)=> FavoriteChange(((Guid, bool))args))"></FavoriteButton>
     </div>
 
 </div>
@@ -37,7 +37,7 @@
     /// Called when a contract has its favorite status changed.
     /// </summary>
     [Parameter]
-    public EventCallback<Contract> OnFavoriteChange { get; set; } = EventCallback<Contract>.Empty;
+    public EventCallback<(Guid, bool)> OnFavoriteChange { get; set; } = EventCallback<(Guid, bool)>.Empty;
 
     private async Task AddToRecentlyViewed()
     {
@@ -48,10 +48,9 @@
         }
     }
 
-    private async Task FavoriteChange(Contract contract)
+    private async Task FavoriteChange((Guid Id, bool IsFavorite)args)
     {
-        Contract = contract;
-        await OnFavoriteChange.InvokeAsync(contract);
+        await OnFavoriteChange.InvokeAsync(args);
     }
 
 }
