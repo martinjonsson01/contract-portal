@@ -55,7 +55,6 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
     }
 
     [Theory]
-    [InlineData("/api/v1/contracts")]
     [InlineData("/api/v1/users")]
     public async Task GetApiEndpoints_ReturnsUnauthorized_WhenNoTokenIsSpecifiedAsync(string endpointUrl)
     {
@@ -150,7 +149,7 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
     }
 
     [Fact]
-    public async Task GetContractsApiEndpoint_ReturnsUnauthorizedContent_WhenUserIsNotAuthenticatedAsync()
+    public async Task GetContractsApiEndpoint_ReturnsPreviewContent_WhenUserIsNotAuthenticatedAsync()
     {
         // Arrange
         var contract = new Contract();
@@ -160,7 +159,7 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         HttpResponseMessage response = await _client.GetAsync("/api/v1/contracts");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var contractPreviews = await response.Content.ReadFromJsonAsync<ICollection<ContractPreviewDto>>();
         contractPreviews.Should().NotBeNull();
@@ -187,7 +186,7 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         HttpResponseMessage response = await _client.GetAsync("/api/v1/contracts");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var contracts = await response.Content.ReadFromJsonAsync<IEnumerable<Contract>>();
         contracts.Should().NotContainEquivalentOf(contract);

@@ -129,6 +129,6 @@ public class ContractsController : BaseApiController<ContractsController>
         if (User?.Identity?.IsAuthenticated ?? false)
             return Ok(_contracts.Search(query));
 
-        return Unauthorized(_contracts.SearchUnauthorized(query));
+        return Ok(_contracts.SearchUnauthorized(query));
     }
 }
