@@ -21,6 +21,11 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
     public AuthIntegrationTests(TestWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
+
+        Environment.SetEnvironmentVariable(
+            ConfigurationKeys.AdminPassword,
+            "test_password",
+            EnvironmentVariableTarget.Process);
     }
 
     public static IEnumerable<object[]> AdminPostApiEndpoints =>
