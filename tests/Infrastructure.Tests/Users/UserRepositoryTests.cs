@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 
+using Application.Configuration;
 using Application.Users;
 
 using Domain.Users;
 
 using Infrastructure.Databases;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Tests.Users;
@@ -21,7 +23,9 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
     {
         _fixture = fixture;
         EFDatabaseContext context = _fixture.CreateContext();
-        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>());
+        var mockEnvironment = new Mock<IConfiguration>();
+        mockEnvironment.Setup(env => env[ConfigurationKeys.AdminPassword]).Returns("test_password");
+        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>(), mockEnvironment.Object);
         _cut.EnsureAdminCreated();
     }
 
@@ -63,7 +67,9 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
 
         // Re-create database.
         EFDatabaseContext context = _fixture.CreateContext();
-        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>());
+        var mockEnvironment = new Mock<IConfiguration>();
+        mockEnvironment.Setup(env => env[ConfigurationKeys.AdminPassword]).Returns("test_password");
+        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>(), mockEnvironment.Object);
         _cut.EnsureAdminCreated();
 
         // Act
@@ -85,7 +91,9 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
 
         // Re-create database.
         EFDatabaseContext context = _fixture.CreateContext();
-        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>());
+        var mockEnvironment = new Mock<IConfiguration>();
+        mockEnvironment.Setup(env => env[ConfigurationKeys.AdminPassword]).Returns("test_password");
+        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>(), mockEnvironment.Object);
 
         // Act
         IEnumerable<User> admins = _cut.All.Where(user => user.Name == adminName);

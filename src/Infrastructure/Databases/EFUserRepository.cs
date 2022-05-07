@@ -1,11 +1,9 @@
 using System.Data;
-
 using Application.Configuration;
 using Application.Users;
-
 using Domain.Users;
-
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Databases;
@@ -19,16 +17,19 @@ public sealed class EFUserRepository : IUserRepository
 
     private readonly EFDatabaseContext _context;
     private readonly ILogger<EFUserRepository> _logger;
+    private readonly IConfiguration _config;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EFUserRepository"/> class.
     /// </summary>
     /// <param name="context">The database context to manipulate data in.</param>
     /// <param name="logger">The logging service to use.</param>
-    public EFUserRepository(EFDatabaseContext context, ILogger<EFUserRepository> logger)
+    /// <param name="config">The configuration source.</param>
+    public EFUserRepository(EFDatabaseContext context, ILogger<EFUserRepository> logger, IConfiguration config)
     {
         _context = context;
         _logger = logger;
+        _config = config;
     }
 
     /// <inheritdoc />
@@ -88,7 +89,7 @@ public sealed class EFUserRepository : IUserRepository
 
     private void CreateAdmin()
     {
-        string? adminPasswordSecret = Environment.GetEnvironmentVariable(ConfigurationKeys.AdminPassword);
+        string? adminPasswordSecret = _config[ConfigurationKeys.AdminPassword];
         adminPasswordSecret = BCrypt.Net.BCrypt.HashPassword(adminPasswordSecret);
         var admin = new User { Name = AdminUserName, Password = adminPasswordSecret, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
         _ = Users.Add(admin);
