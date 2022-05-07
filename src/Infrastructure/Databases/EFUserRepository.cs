@@ -1,5 +1,4 @@
 using System.Data;
-
 using Application.Contracts;
 using Application.Users;
 using Domain.Contracts;
@@ -59,11 +58,12 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     }
 
     /// <inheritdoc/>
-    void IRecentContractRepository.Remove(Guid id)
+    public void RemoveContractFromUserRecents(Guid id)
     {
         foreach (User user in Users)
         {
-            Contract contractToRemove = user.RecentlyViewContracts.First(contract => contract.Id == id);
+            Contract contractToRemove = user.RecentlyViewContracts.Where(contract => contract.Id == id)
+                    .GetEnumerator().Current;
             _ = user.RecentlyViewContracts.Remove(contractToRemove);
         }
 
@@ -73,7 +73,9 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
         }
         catch (DataException e)
         {
-            _logger.LogError("Could not remove contract from recently viewed for all user in database: {Message}", e.Message);
+            _logger.LogError(
+                "Could not remove contract from recently viewed for all user in database: {Message}",
+                e.Message);
         }
     }
 

@@ -15,12 +15,12 @@
     <ChildContent>
         @if (ShouldShowRecent)
         {
-            if (_dataFetcher.Data is {Count: > 0 })
+            if (recents is {Count: > 0 })
             {
                 <h3>Senast besökta</h3>
 
                 <div class="d-flex flex-row justify-content-around flex-wrap">
-                    @foreach (var contract in _dataFetcher.Data)
+                    @foreach (var contract in recents)
                     {
                         <ContractCard Contract=@contract/>
                     }
@@ -60,7 +60,7 @@
     {
         await _http.PostAsJsonAsync($"api/v1/contracts/recent/{LoggedInUser}", newRecent);
         await _dataFetcher.Fetch(GetFetchUrl());
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     private string GetFetchUrl()
