@@ -118,14 +118,14 @@ public class UserServiceTests
     public void ValidatePassword_ShouldBeFalse_WhenPasswordIsNotUserPassword()
     {
         // Arrange
-        const string password1 = "User1Password";
-        const string password2 = "User2Password";
-        string passwordHash1 = BCrypt.Net.BCrypt.HashPassword(password1);
+        const string correctPassword = "CorrectPassword";
+        const string incorrectPassword = "IncorrectPassword";
+        string passwordHash1 = BCrypt.Net.BCrypt.HashPassword(correctPassword);
         var user = new User() { Name = "User1", Password = passwordHash1, };
         _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
 
         // Act
-        Action tryAuthenticate = () => _cut.Authenticate(user.Name, password2);
+        Action tryAuthenticate = () => _cut.Authenticate(user.Name, incorrectPassword);
 
         // Assert
         tryAuthenticate.Should().Throw<InvalidPasswordException>();
