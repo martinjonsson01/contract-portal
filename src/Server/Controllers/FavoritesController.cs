@@ -32,7 +32,7 @@ public class FavoritesController : BaseApiController<FavoritesController>
     /// <returns>Whether the favorite was successfully added.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult CreateContract(SetFavoriteContract setFavorite)
+    public IActionResult Add(SetFavoriteContract setFavorite)
     {
         if (setFavorite is null)
             return BadRequest();
@@ -67,7 +67,7 @@ public class FavoritesController : BaseApiController<FavoritesController>
     /// <param name="userName">The name of the user.</param>
     /// <returns>All contracts marked as favorite by the user.</returns>
     [HttpGet("{userName}")]
-    public IEnumerable<Contract> GetIsFavorite(string userName)
+    public IEnumerable<Contract> GetAll(string userName)
     {
         return _favorites.FetchAllFavorites(userName);
     }
