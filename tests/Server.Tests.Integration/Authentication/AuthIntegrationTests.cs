@@ -14,11 +14,11 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Server.IntegrationTests.Authentication;
 
-public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
 {
     private readonly HttpClient _client;
 
-    public AuthIntegrationTests(WebApplicationFactory<Program> factory)
+    public AuthIntegrationTests(TestWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
     }
