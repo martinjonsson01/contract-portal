@@ -6,6 +6,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>Server.IntegrationTests</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -50,11 +52,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Server\Server.csproj" />
-    <ProjectReference Include="..\..\src\Client\Client.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Server" />
   </ItemGroup>
 
 </Project>
