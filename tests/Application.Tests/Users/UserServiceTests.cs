@@ -99,7 +99,7 @@ public class UserServiceTests
     }
 
     [Fact]
-    public void ValidatePassword_shouldBeTrue_WhenPasswordIsUserPassword()
+    public void ValidatePassword_ShouldBeTrue_WhenPasswordIsUserPassword()
     {
         // Arrange
         const string password = "UserPassword";
@@ -115,7 +115,7 @@ public class UserServiceTests
     }
 
     [Fact]
-    public void ValidatePassword_shouldBeFalse_WhenPasswordIsNotUserPassword()
+    public void ValidatePassword_ShouldBeFalse_WhenPasswordIsNotUserPassword()
     {
         // Arrange
         const string password1 = "User1Password";
