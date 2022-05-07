@@ -18,11 +18,15 @@
             {
                 <h3>Senast besökta</h3>
 
-                <div class="d-flex flex-row justify-content-around flex-wrap">
-                    @foreach (Contract contract in _recent.FetchRecentContracts().Reverse())
-                    {
-                        <ContractCard Contract=@contract/>
-                    }
+                <div class="container-fluid">
+                    <div class="row">
+                        @foreach (Contract contract in _recent.FetchRecentContracts().Reverse())
+                        {
+                            <div class="col-sm-4">
+                                <ContractCard Contract=@contract />
+                            </div>
+                        }
+                    </div>
                 </div>
                 <hr/>
             }
