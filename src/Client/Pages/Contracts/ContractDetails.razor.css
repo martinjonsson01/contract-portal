@@ -22,6 +22,11 @@ h1 {
 }
 
 h2 {
+    font-size: 1.6rem !important;
+    line-height: 2rem !important;
+}
+
+h3 {
     font-size: 1.4rem !important;
     line-height: 2rem !important;
 }
