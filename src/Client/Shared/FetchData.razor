@@ -1,8 +1,13 @@
 ﻿@using Newtonsoft.Json
+@using System.Net
 @typeparam TData
 @inject HttpClient _http;
 
-@if (Data is null)
+@if (_errorMessage is not null)
+{
+    <p id="error-message">@_errorMessage</p>
+}
+else if (Data is null)
 {
     @LoadingIndicator
 }
@@ -37,6 +42,8 @@ else
     /// </summary>
     public TData? Data { get; set; }
 
+    private string? _errorMessage;
+
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
@@ -48,8 +55,24 @@ else
     /// </summary>
     public async Task Fetch(string url)
     {
-        string json = await _http.GetStringAsync(url);
-        Data = JsonConvert.DeserializeObject<TData>(json);
+        HttpResponseMessage response = await _http.GetAsync(url);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            _errorMessage = CreateErrorMessage(response.StatusCode);
+            return;
+        }
+
+        Data = await response.Content.ReadFromJsonAsync<TData>();
+    }
+
+    private string CreateErrorMessage(HttpStatusCode statusCode)
+    {
+        if (statusCode == HttpStatusCode.Unauthorized)
+        {
+            return "Du måste vara inloggad för att se detta innehåll.";
+        }
+        return "Ett okänt fel har inträffat.";
     }
 
 }

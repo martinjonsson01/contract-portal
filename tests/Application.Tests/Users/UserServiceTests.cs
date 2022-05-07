@@ -1,7 +1,16 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+
+using Application.Configuration;
 using Application.Exceptions;
 using Application.Users;
+
 using Domain.Users;
+
+using FluentAssertions.Execution;
+
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Tests.Users;
 
@@ -13,7 +22,9 @@ public class UserServiceTests
     public UserServiceTests()
     {
         _mockRepo = new Mock<IUserRepository>();
-        _cut = new UserService(_mockRepo.Object);
+        var mockEnvironment = new Mock<IConfiguration>();
+        mockEnvironment.Setup(env => env[ConfigurationKeys.JwtSecret]).Returns("test-json-web-token-secret");
+        _cut = new UserService(_mockRepo.Object, mockEnvironment.Object);
     }
 
     [Fact]
@@ -113,5 +124,55 @@ public class UserServiceTests
 
         // Assert
         actual.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Authenticate_ReturnsAuthResponse_WhenUserExists()
+    {
+        // Arrange
+        const string username = "user";
+        var user = new User { Name = username, };
+        _mockRepo.Setup(repository => repository.Fetch(username)).Returns(user);
+
+        // Act
+        AuthenticateResponse authResponse = _cut.Authenticate(username);
+
+        // Assert
+        authResponse.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Authenticate_ThrowsException_WhenUserDoesNotExist()
+    {
+        // Arrange
+
+        // Act
+        Action tryAuthenticate = () => _cut.Authenticate("non-existent user");
+
+        // Assert
+        tryAuthenticate.Should().Throw<UserDoesNotExistException>();
+    }
+
+    [Fact]
+    public void Authenticate_ReturnsAuthResponseWithAdminClaim_WhenUserIsAdmin()
+    {
+        // Arrange
+        const string username = "admin";
+        var user = new User { Name = username, };
+        _mockRepo.Setup(repository => repository.Fetch(username)).Returns(user);
+
+        // Act
+        AuthenticateResponse authResponse = _cut.Authenticate(username);
+
+        // Assert
+        using (new AssertionScope())
+        {
+            authResponse.Should().NotBeNull();
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var securityToken = (JwtSecurityToken)tokenHandler.ReadToken(authResponse.Token);
+            string? claimValue = securityToken.Claims.FirstOrDefault(c => c.Type == "IsAdmin")?.Value;
+            claimValue.Should().Be("true");
+        }
     }
 }

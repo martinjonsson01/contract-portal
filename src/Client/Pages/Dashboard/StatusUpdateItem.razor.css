@@ -1,4 +1,8 @@
-﻿.oi {
+﻿* {
+    color: var(--prodigo-black);
+}
+
+.oi {
     width: 2rem;
     align-self: baseline;
 }

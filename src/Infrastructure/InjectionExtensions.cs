@@ -1,16 +1,19 @@
-﻿using Application.Contracts;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Application.Configuration;
+using Application.Contracts;
 using Application.Documents;
 using Application.Images;
 using Application.StatusUpdates;
 using Application.Users;
 
-using Infrastructure.Contracts;
+using Infrastructure.Databases;
 using Infrastructure.Documents;
 using Infrastructure.Images;
 using Infrastructure.StatusUpdates;
-using Infrastructure.Users;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -20,20 +23,25 @@ namespace Infrastructure;
 /// <summary>
 ///     Injects infrastructure.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class InjectionExtensions
 {
     /// <summary>
     ///     Registers infrastructure services.
     /// </summary>
     /// <param name="services">The existing services.</param>
+    /// <param name="config">The configuration for the current environment.</param>
     /// <returns>The same service container.</returns>
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
         return services
-               .AddDbContext<IContractRepository, EFContractRepository>(ConfigureDatabase, ServiceLifetime.Transient)
+               .AddDbContext<IDatabaseContext, EFDatabaseContext>(
+                   options => ConfigureDatabase(options, config),
+                   ServiceLifetime.Transient)
+               .AddScoped<IContractRepository, EFContractRepository>()
+               .AddScoped<IUserRepository, EFUserRepository>()
                .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
-               .AddDbContext<IUserRepository, EFUserRepository>(ConfigureDatabase, ServiceLifetime.Transient)
-               .AddDbContext<IRecentContractRepository, EFUserRepository>(ConfigureDatabase, ServiceLifetime.Transient)
+               .AddScoped<IRecentContractRepository, EFUserRepository>()
                .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
                {
                    IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();
@@ -50,19 +58,9 @@ public static class InjectionExtensions
                });
     }
 
-    private static void ConfigureDatabase(DbContextOptionsBuilder options)
+    private static void ConfigureDatabase(DbContextOptionsBuilder options, IConfiguration config)
     {
-#if DEBUG
-        _ = options.UseSqlServer("Server=localhost;Database=master;Trusted_Connection=True;");
-#else
-        string? dbConnectionstring = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.DbConnectionString);
-        if (dbConnectionstring == null)
-        {
-            throw new ArgumentException("No environment variable defined for " +
-                                        EnvironmentVariableKeys.DbConnectionString);
-        }
-
-        _ = options.UseSqlServer(dbConnectionstring);
-#endif
+        _ = options.UseSqlServer(
+            config[ConfigurationKeys.DbConnectionString]);
     }
 }

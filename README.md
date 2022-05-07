@@ -13,7 +13,7 @@ Clone the repository: `git clone https://github.com/martinjonsson01/contract-por
 
 ### Setting up a local database (only needs to be done once)
 
-For local development, a Postgres daemon needs to be running, and a database instance needs to be created.
+For local development, a database daemon needs to be running, and a database instance needs to be created.
 
 1. [Download and install Microsoft SQL Server (developer version)](https://www.microsoft.com/sv-se/sql-server/sql-server-downloads)
 2. Add an environment variable with key `prodigo_portal_db_connectionstring` and value `Server=localhost;Database=master;Trusted_Connection=True;` (guide
@@ -22,6 +22,10 @@ For local development, a Postgres daemon needs to be running, and a database ins
 3. In your IDE terminal, Navigate to the `Infrastructure` project using `cd src/Infrastructure/`.
 4. Install the Entity Framework tools using `dotnet tool install --global dotnet-ef`
 5. Apply the database migrations for every context using (you have to run it once with each context as an argument) `dotnet ef database update --context {CONTEXT_NAME_HERE}`
+
+### Local environment configuration
+There are some environment secrets that need to be configured:
+1. Add an environment variable with key `prodigo_portal_jwt_secret` and the secret value.
 
 ### Building and running
 
