@@ -18,8 +18,7 @@ public class ContractDetailsTests : UITestFixture
         const string logoImagePath = "images/logo.jpg";
         var contract = new Contract
         {
-            InspirationalImagePath = inspirationalImagePath,
-            SupplierLogoImagePath = logoImagePath,
+            InspirationalImagePath = inspirationalImagePath, SupplierLogoImagePath = logoImagePath,
         };
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
@@ -48,8 +47,7 @@ public class ContractDetailsTests : UITestFixture
         const string logoImagePath = "images/logo.jpg";
         var contract = new Contract
         {
-            InspirationalImagePath = inspirationalImagePath,
-            SupplierLogoImagePath = logoImagePath,
+            InspirationalImagePath = inspirationalImagePath, SupplierLogoImagePath = logoImagePath,
         };
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
@@ -76,17 +74,15 @@ public class ContractDetailsTests : UITestFixture
         // Arrange
         string faqText = "Frequently asked question";
 
-        var contract = new Contract
-        {
-            FAQ = faqText,
-        };
+        var contract = new Contract { FAQ = faqText, };
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
-        IElement? faqElement = cut.FindAll(".accordion-body").ToList().Find(p => p.InnerHtml.Contains(faqText, StringComparison.CurrentCulture));
+        IElement? faqElement = cut.FindAll(".accordion-body").ToList()
+                                  .Find(p => p.InnerHtml.Contains(faqText, StringComparison.CurrentCulture));
 
         // Assert
         faqElement.Should().NotBeNull();
@@ -96,17 +92,15 @@ public class ContractDetailsTests : UITestFixture
     public void FAQSection_IsShown_WhenFAQExists()
     {
         // Arrange
-        var contract = new Contract
-        {
-            FAQ = "Frequently asked question",
-        };
+        var contract = new Contract { FAQ = "Frequently asked question", };
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
-        IElement? titleElement = cut.FindAll(".accordion-item").ToList().Find(p => p.InnerHtml.Contains("faq-title", StringComparison.CurrentCulture));
+        IElement? titleElement = cut.FindAll(".accordion-item").ToList()
+                                    .Find(p => p.InnerHtml.Contains("faq-title", StringComparison.CurrentCulture));
 
         // Assert
         titleElement.Should().NotBeNull();
@@ -116,18 +110,48 @@ public class ContractDetailsTests : UITestFixture
     public void FAQSection_IsNotShown_WhenThereIsNoContractFAQ()
     {
         // Arrange
-        var contract = new Contract
-        {
-            FAQ = string.Empty,
-        };
+        var contract = new Contract { FAQ = string.Empty, };
+
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
-        IElement? titleElement = cut.FindAll(".accordion-item").ToList().Find(p => p.InnerHtml.Contains("faq-title", StringComparison.CurrentCulture));
+        IElement? titleElement = cut.FindAll(".accordion-item").ToList()
+                                    .Find(p => p.InnerHtml.Contains("faq-title", StringComparison.CurrentCulture));
 
         // Assert
         titleElement.Should().BeNull();
+    }
+
+    [Fact]
+    public void RegisterPrompt_IsShown_WhenUserIsNotLoggedIn()
+    {
+        // Arrange
+        void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
+            parameters.Add(property => property.Contract, new Contract());
+
+        // Act
+        IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
+
+        // Assert
+        Action findPrompt = () => cut.Find(".register-prompt");
+        findPrompt.Should().NotThrow();
+    }
+
+    [Fact]
+    public void RegisterPrompt_IsNotShown_WhenUserIsLoggedIn()
+    {
+        // Arrange
+        void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
+            parameters.Add(property => property.Contract, new Contract())
+                      .Add(property => property.LoggedInUser, "user-name");
+
+        // Act
+        IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
+
+        // Assert
+        Action findPrompt = () => cut.Find(".register-prompt");
+        findPrompt.Should().Throw<ElementNotFoundException>();
     }
 }
