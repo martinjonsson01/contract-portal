@@ -1,4 +1,6 @@
-﻿namespace Domain.Contracts;
+﻿using Domain.Users;
+
+namespace Domain.Contracts;
 
 /// <summary>
 ///     A document containing negotiated discounts and benefits.
@@ -69,4 +71,9 @@ public class Contract
     ///     Gets or sets the contact information for the supplier.
     /// </summary>
     public string SupplierContactInfo { get; set; } = "Kontaktinformation till leverantör saknas.";
+
+    /// <summary>
+    /// Gets users that has marked this as favorite.
+    /// </summary>
+    public ICollection<User>? Users { get; init; }
 }

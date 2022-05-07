@@ -51,7 +51,10 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        _ = modelBuilder.Entity<User>()
-                        .HasKey(user => user.Id);
+        _ = modelBuilder
+        .Entity<User>()
+        .HasMany(u => u.Contracts)
+        .WithMany(c => c.Users)
+        .UsingEntity(j => j.ToTable("UserContracts"));
     }
 }
