@@ -177,6 +177,23 @@ public class AuthIntegrationTests : IClassFixture<WebApplicationFactory<Program>
     }
 
     [Fact]
+    public async Task GetContractsApiEndpoint_DoesNotReturnConfidentialContent_WhenUserIsNotAuthenticatedAsync()
+    {
+        // Arrange
+        var contract = new Contract { Instructions = "very secret usage instructions", };
+        await ArrangeResource("/api/v1/contracts", contract);
+
+        // Act
+        HttpResponseMessage response = await _client.GetAsync("/api/v1/contracts");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+
+        var contracts = await response.Content.ReadFromJsonAsync<IEnumerable<Contract>>();
+        contracts.Should().NotContainEquivalentOf(contract);
+    }
+
+    [Fact]
     public async Task GetContractsApiEndpoint_ReturnsOkContent_WhenUserIsAuthenticatedAsync()
     {
         // Arrange

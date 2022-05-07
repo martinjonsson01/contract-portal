@@ -124,9 +124,11 @@ public class ContractsController : BaseApiController<ContractsController>
     [AllowAnonymous]
     public ActionResult<IEnumerable<Contract>> Search(string? query)
     {
+        query ??= string.Empty;
+
         if (User?.Identity?.IsAuthenticated ?? false)
-            return Ok(_contracts.Search(query ?? string.Empty));
-        else
-            return Unauthorized(_contracts.Search(query ?? string.Empty));
+            return Ok(_contracts.Search(query));
+
+        return Unauthorized(_contracts.SearchUnauthorized(query));
     }
 }

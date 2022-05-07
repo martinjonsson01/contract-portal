@@ -63,4 +63,11 @@ public interface IContractService
     /// <param name="query">The query to search for.</param>
     /// <returns>The found contracts.</returns>
     IEnumerable<Contract> Search(string query);
+
+    /// <summary>
+    /// Searches for and returns <see cref="ContractPreviewDto"/>s that match the given query.
+    /// </summary>
+    /// <param name="query">The query to search for.</param>
+    /// <returns>Previews of the matching <see cref="Contract"/>s.</returns>
+    IEnumerable<ContractPreviewDto> SearchUnauthorized(string query);
 }
