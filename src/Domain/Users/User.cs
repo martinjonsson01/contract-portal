@@ -35,5 +35,5 @@ public class User
     /// <summary>
     /// Gets favorite contracts.
     /// </summary>
-    public ICollection<Contract>? Contracts { get; init; }
+    public ICollection<Contract> Contracts { get; init; } = new List<Contract>();
 }
