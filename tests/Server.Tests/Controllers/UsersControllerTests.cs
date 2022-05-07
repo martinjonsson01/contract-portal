@@ -69,7 +69,7 @@ public class UsersControllerTests
         IActionResult actual = _cut.Authenticate(user);
 
         // Assert
-        actual.Should().BeOfType<BadRequestResult>();
+        actual.Should().BeOfType<UnauthorizedResult>();
     }
 
     [Fact]
@@ -83,7 +83,7 @@ public class UsersControllerTests
         IActionResult actual = _cut.Authenticate(user);
 
         // Assert
-        actual.Should().BeOfType<BadRequestResult>();
+        actual.Should().BeOfType<UnauthorizedResult>();
     }
 
     [Fact]

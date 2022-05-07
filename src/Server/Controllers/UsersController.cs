@@ -94,12 +94,12 @@ public class UsersController : BaseApiController<UsersController>
         catch (UserDoesNotExistException e)
         {
             Logger.LogError("Can't authenticate a user that does not exist: {Exception}", e.Message);
-            return BadRequest();
+            return Unauthorized();
         }
         catch (InvalidPasswordException e)
         {
             Logger.LogError("An incorrect password was given for the user: {Exception}", e.Message);
-            return BadRequest();
+            return Unauthorized();
         }
     }
 }
