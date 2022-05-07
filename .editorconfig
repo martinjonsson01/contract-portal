@@ -12,6 +12,9 @@ indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
 
+[{*.yml,*.yaml}]
+indent_size = 2
+
 # Make all rules cause errors in the build
 dotnet_analyzer_diagnostic.severity = error
 
