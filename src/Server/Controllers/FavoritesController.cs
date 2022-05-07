@@ -50,16 +50,6 @@ public class FavoritesController : BaseApiController<FavoritesController>
     }
 
     /// <summary>
-    /// Gets all users.
-    /// </summary>
-    /// <returns>All the stored users.</returns>
-    [HttpGet]
-    public IActionResult Get()
-    {
-        return Ok();
-    }
-
-    /// <summary>
     /// Checks if a certain contract is marked as favorite by a certain user.
     /// </summary>
     /// <param name="userName">The name of the user.</param>
