@@ -91,18 +91,15 @@ public class UsersController : BaseApiController<UsersController>
             AuthenticateResponse authResponse = _users.Authenticate(user.Name, user.Password ?? string.Empty);
             return Ok(authResponse);
         }
-        catch (Exception e)
+        catch (UserDoesNotExistException e)
         {
-            switch (e)
-            {
-                case UserDoesNotExistException:
-                    Logger.LogError("Could not authenticate user: {Exception}", e.Message);
-                    return BadRequest();
-                case InvalidPasswordException:
-                    Logger.LogError("Could not login: {Exception}", e.Message);
-                    return BadRequest();
-                default: throw;
-            }
+            Logger.LogError("Can't authenticate a user that does not exist: {Exception}", e.Message);
+            return BadRequest();
+        }
+        catch (InvalidPasswordException e)
+        {
+            Logger.LogError("An incorrect password was given for the user: {Exception}", e.Message);
+            return BadRequest();
         }
     }
 }
