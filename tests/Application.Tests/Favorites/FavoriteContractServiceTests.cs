@@ -3,7 +3,7 @@
 using Domain.Contracts;
 using Domain.Users;
 
-namespace Application.Tests.Contracts;
+namespace Application.Tests.Favorites;
 
 public class FavoriteContractServiceTests
 {
@@ -78,15 +78,14 @@ public class FavoriteContractServiceTests
     {
         // Arrange
         var user = new User();
-        const int numberOfFavoriteContracts = 5;
-        List<Contract> mockFavoriteContracts = new Faker<Contract>().Generate(numberOfFavoriteContracts);
+        List<Contract> mockFavoriteContracts = new Faker<Contract>().Generate(5);
         _mockRepo.Setup(repository => repository.FetchAllFavorites(user.Name)).Returns(mockFavoriteContracts);
 
         // Act
         IEnumerable<Contract> favoriteContracts = _cut.FetchAllFavorites(user.Name);
 
         // Assert
-        favoriteContracts.Should().HaveCount(numberOfFavoriteContracts);
+        favoriteContracts.Should().BeEquivalentTo(mockFavoriteContracts);
     }
 
     [Fact]
