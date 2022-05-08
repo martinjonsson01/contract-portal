@@ -59,13 +59,13 @@ public class UserServiceTests
     {
         // Arrange
         const string rawPassword = "abc123";
-        var test = new User { PasswordHash = rawPassword };
+        var test = new User { Password = rawPassword };
 
         // Act
         _cut.Add(test);
 
         // Assert
-        _mockRepo.Verify(repo => repo.Add(It.Is<User>(usr => usr.PasswordHash != rawPassword)));
+        _mockRepo.Verify(repo => repo.Add(It.Is<User>(usr => usr.Password != rawPassword)));
     }
 
     [Fact]
@@ -145,13 +145,13 @@ public class UserServiceTests
     {
         // Arrange
         const string rawPassword = "abc123";
-        var test = new User { PasswordHash = rawPassword };
+        var test = new User { Password = rawPassword };
         var encryptedUser = new User();
         _mockRepo.Setup(repo => repo.Add(It.IsAny<User>())).Callback<User>(usr => encryptedUser = usr);
         _cut.Add(test);
 
         // Act
-        bool valid = BCrypt.Net.BCrypt.Verify("abc123", encryptedUser.PasswordHash);
+        bool valid = BCrypt.Net.BCrypt.Verify("abc123", encryptedUser.Password);
 
         // Assert
         valid.Should().BeTrue();
@@ -162,13 +162,13 @@ public class UserServiceTests
     {
         // Arrange
         const string rawPassword = "abc123";
-        var test = new User { PasswordHash = rawPassword };
+        var test = new User { Password = rawPassword };
         var encryptedUser = new User();
         _mockRepo.Setup(repo => repo.Add(It.IsAny<User>())).Callback<User>(usr => encryptedUser = usr);
         _cut.Add(test);
 
         // Act
-        bool valid = BCrypt.Net.BCrypt.Verify("wrongPassword", encryptedUser.PasswordHash);
+        bool valid = BCrypt.Net.BCrypt.Verify("wrongPassword", encryptedUser.Password);
 
         // Assert
         valid.Should().BeFalse();

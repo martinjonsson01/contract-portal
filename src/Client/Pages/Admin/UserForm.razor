@@ -11,7 +11,7 @@
     </div>
   <div class="mb-3">
         <label for="user-password" class="form-label">Lösenord</label>
-        <InputText id="user-password" class="form-control" placeholder="Användarens lösenord" @bind-Value="@_user.PasswordHash"/>
+        <InputText id="user-password" class="form-control" placeholder="Användarens lösenord" @bind-Value="@_user.Password"/>
     </div>
     <div class="mb-3">
         <label for="user-company" class="form-label">Företag</label>
@@ -33,7 +33,7 @@
         return new User
         {
             Name = string.Empty,
-            PasswordHash = string.Empty,
+            Password = string.Empty,
             Company = string.Empty,
             LatestPaymentDate = DateTime.UtcNow,
         };
