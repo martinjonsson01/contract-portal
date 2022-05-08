@@ -81,15 +81,20 @@ app.UseHttpLogging();
 
 app.UseHttpsRedirection();
 
-string imagesDirectory = Path.Combine(
+string uploadsDirectory = Path.Combine(
     app.Environment.ContentRootPath,
     app.Environment.EnvironmentName,
     "unsafe_uploads");
-Directory.CreateDirectory(imagesDirectory);
+Directory.CreateDirectory(uploadsDirectory);
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(imagesDirectory),
+    FileProvider = new PhysicalFileProvider(uploadsDirectory),
     RequestPath = "/images",
+});
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsDirectory),
+    RequestPath = "/documents",
 });
 
 app.UseBlazorFrameworkFiles();

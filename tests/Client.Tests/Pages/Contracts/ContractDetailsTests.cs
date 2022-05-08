@@ -154,4 +154,37 @@ public class ContractDetailsTests : UITestFixture
         Action findPrompt = () => cut.Find(".register-prompt");
         findPrompt.Should().Throw<ElementNotFoundException>();
     }
+
+    [Fact]
+    public void AdditionalDocumentSection_IsShown_WhenAdditionalDocumentExists()
+    {
+        // Arrange
+        var contract = new Contract { AdditionalDocument = "/link/to/additional.document", };
+
+        void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
+            parameters.Add(property => property.Contract, contract);
+
+        // Act
+        IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
+
+        // Assert
+        cut.Find("#additional-document").Should().NotBeNull();
+    }
+
+    [Fact]
+    public void AdditionalDocumentSectionSection_IsNotShown_WhenThereIsNoAdditionalDocument()
+    {
+        // Arrange
+        var contract = new Contract { AdditionalDocument = string.Empty, };
+
+        void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
+            parameters.Add(property => property.Contract, contract);
+
+        // Act
+        IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
+        Action findLink = () => cut.Find("#additional-document");
+
+        // Assert
+        findLink.Should().Throw<ElementNotFoundException>();
+    }
 }
