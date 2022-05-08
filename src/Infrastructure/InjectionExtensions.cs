@@ -40,8 +40,8 @@ public static class InjectionExtensions
                    ServiceLifetime.Transient)
                .AddScoped<IContractRepository, EFContractRepository>()
                .AddScoped<IUserRepository, EFUserRepository>()
-               .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
                .AddScoped<IRecentContractRepository, EFUserRepository>()
+               .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
                .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
                {
                    IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();

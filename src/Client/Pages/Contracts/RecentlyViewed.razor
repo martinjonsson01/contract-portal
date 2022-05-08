@@ -5,7 +5,7 @@
 <FetchData
     @ref="_dataFetcher"
     TData="List<Contract>"
-    Url="api/v1/contracts/recent/123"
+    Url="@GetFetchUrl()"
     Context="recents">
 
     <!-- No loading indicator. -->
@@ -15,12 +15,12 @@
     <ChildContent>
         @if (ShouldShowRecent)
         {
-            if (recents is {Count: > 0 })
+            if (_dataFetcher.Data is {Count: > 0 })
             {
                 <h3>Senast besökta</h3>
 
                 <div class="d-flex flex-row justify-content-around flex-wrap">
-                    @foreach (var contract in recents)
+                    @foreach (var contract in _dataFetcher.Data)
                     {
                         <ContractCard Contract=@contract/>
                     }

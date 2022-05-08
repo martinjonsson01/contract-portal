@@ -46,10 +46,10 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     public void Add(string id, Contract contract)
     {
         User user = GetUserByUserName(id);
-        _ = user.RecentlyViewContracts.AddFirst(contract);
+        user.RecentlyViewContracts.AddFirst(contract);
         try
         {
-            _ = _context.SaveChanges();
+            _context.SaveChanges();
         }
         catch (DataException e)
         {
@@ -63,7 +63,7 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
         foreach (User user in Users)
         {
             Contract contractToRemove = user.RecentlyViewContracts.Where(contract => contract.Id == id)
-                    .GetEnumerator().Current;
+                .GetEnumerator().Current;
             _ = user.RecentlyViewContracts.Remove(contractToRemove);
         }
 
@@ -152,6 +152,6 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
 
     private User GetUserByUserName(string username)
     {
-        return Users.First(user => user.Name == username);
+        return Users.Include(user => user.RecentlyViewContracts).First(user => user.Name == username);
     }
 }
