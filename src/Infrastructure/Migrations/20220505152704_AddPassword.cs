@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class AddPasswordHash : Migration
+    public partial class AddPassword : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "PasswordHash",
+                name: "Password",
                 table: "Users",
                 type: "nvarchar(max)",
                 nullable: false,
@@ -20,7 +20,7 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "PasswordHash",
+                name: "Password",
                 table: "Users");
         }
     }
