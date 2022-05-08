@@ -35,7 +35,7 @@ public class RecentContractService : IRecentContractService
         _recent.Add(id, contract);
 
         const int recentAmountMax = 3;
-        if (Size(id) >= recentAmountMax)
+        if (Size(id) > recentAmountMax)
         {
             _recent.RemoveLast(id);
         }

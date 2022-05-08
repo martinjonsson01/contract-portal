@@ -46,7 +46,9 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     public void Add(string id, Contract contract)
     {
         User user = GetUserByUserName(id);
-        user.RecentlyViewContracts.AddFirst(contract);
+        if (user.RecentlyViewContracts.Contains(contract))
+            return;
+        user.RecentlyViewContracts.AddLast(contract);
         try
         {
             _context.SaveChanges();
@@ -54,6 +56,10 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
         catch (DataException e)
         {
             _logger.LogError("Could not add contract to recently viewed for user to database: {Message}", e.Message);
+        }
+        catch (InvalidOperationException)
+        {
+            _logger.LogInformation("{Contract} is already in recently viewed", contract.Name);
         }
     }
 
@@ -83,7 +89,7 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     public void RemoveLast(string id)
     {
         User user = GetUserByUserName(id);
-        user.RecentlyViewContracts.RemoveLast();
+        user.RecentlyViewContracts.RemoveFirst();
         _ = _context.SaveChanges();
     }
 
@@ -120,6 +126,7 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     public LinkedList<Contract> FetchRecentContracts(string id)
     {
         User user = GetUserByUserName(id);
+        Console.WriteLine(user.RecentlyViewContracts.Count);
         return user.RecentlyViewContracts;
     }
 
