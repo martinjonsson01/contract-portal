@@ -24,8 +24,8 @@ public class ContractsControllerTests
     public void Get_ReturnsAll_WhenQueryIsNull()
     {
         // Arrange
-        List<Contract> fakeContracts = new Faker<Contract>().Generate(10);
-        _mockContracts.Setup(service => service.Search(string.Empty)).Returns(fakeContracts);
+        List<ContractPreviewDto> fakePreviews = new Faker<ContractPreviewDto>().Generate(10);
+        _mockContracts.Setup(service => service.SearchUnauthorized(string.Empty)).Returns(fakePreviews);
 
         // Act
         ActionResult<IEnumerable<Contract>> response = _cut.Search(null);
@@ -33,8 +33,8 @@ public class ContractsControllerTests
         // Assert
         using (new AssertionScope())
         {
-            response.Result.Should().BeAssignableTo<OkObjectResult>();
-            response.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(fakeContracts);
+            response.Result.Should().BeAssignableTo<ObjectResult>();
+            response.Result.As<ObjectResult>().Value.Should().BeEquivalentTo(fakePreviews);
         }
     }
 
@@ -42,9 +42,9 @@ public class ContractsControllerTests
     public void Get_ReturnsSearchResults_WhenQueryIsSet()
     {
         // Arrange
-        List<Contract> searchResults = new Faker<Contract>().Generate(10);
+        List<ContractPreviewDto> fakePreviews = new Faker<ContractPreviewDto>().Generate(10);
         const string searchQuery = "keyword1 keyword2";
-        _mockContracts.Setup(service => service.Search(searchQuery)).Returns(searchResults);
+        _mockContracts.Setup(service => service.SearchUnauthorized(searchQuery)).Returns(fakePreviews);
 
         // Act
         ActionResult<IEnumerable<Contract>> response = _cut.Search(searchQuery);
@@ -52,8 +52,8 @@ public class ContractsControllerTests
         // Assert
         using (new AssertionScope())
         {
-            response.Result.Should().BeAssignableTo<OkObjectResult>();
-            response.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(searchResults);
+            response.Result.Should().BeAssignableTo<ObjectResult>();
+            response.Result.As<ObjectResult>().Value.Should().BeEquivalentTo(fakePreviews);
         }
     }
 

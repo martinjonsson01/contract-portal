@@ -4,28 +4,26 @@
 <!-- modal-dialog-scrollable -->
 <div class="modal w-100" id="@("id_" + Contract.Id)">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+
+        <div class="modal-content @(ShouldHideDetails ? "blackout" : "")">
+
             <div class="modal-header flex-column p-0">
                 <div class="position-relative w-100">
                     <button type="button" class="btn-close m-0 position-absolute top-0 end-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     <img alt="@Contract.Name" id="contract-thumbnail" src="@ImagePath" class="p-0 border-0 w-100"/>
                 </div>
-                <h1 class="modal-title" id="exampleModalToggleLabel">@Contract.Name</h1>
+                <h1 class="modal-title">@Contract.Name</h1>
             </div>
-            <div class="modal-body">
 
+            <div class="modal-body">
+                <div class="m-3">
+                    <h2>Om erbjudandet</h2>
+                    <MarkdownViewer Markdown="@Contract.Description"/>
+                </div>
                 <AccordionList>
-                    <AccordionItem OpenByDefault="true">
+                    <AccordionItem OpenByDefault="@(!ShouldHideDetails)">
                         <Title>
-                            <h2>Om erbjudandet</h2>
-                        </Title>
-                        <Body>
-                        <MarkdownViewer Markdown="@Contract.Description"/>
-                        </Body>
-                    </AccordionItem>
-                    <AccordionItem>
-                        <Title>
-                            <h2>Hur man nyttjar erbjudandet</h2>
+                            <h3>Hur man nyttjar erbjudandet</h3>
                         </Title>
                         <Body>
                         <MarkdownViewer Markdown="@Contract.Instructions"/>
@@ -33,7 +31,7 @@
                     </AccordionItem>
                     <AccordionItem>
                         <Title>
-                            <h2>Om @Contract.SupplierName</h2>
+                            <h3>Om @Contract.SupplierName</h3>
                         </Title>
                         <Body>
                         <MarkdownViewer Markdown="@Contract.SupplierDescription"/>
@@ -43,7 +41,7 @@
                     {
                         <AccordionItem>
                             <Title>
-                                <h2>Övriga filer</h2>
+                                <h3>Övriga filer</h3>
                             </Title>
                             <Body>
                             <a id="additional-document" href="@Contract.AdditionalDocument" download>
@@ -54,23 +52,40 @@
                     }
                     @if (!string.IsNullOrEmpty(Contract.FAQ))
                     {
-                    <AccordionItem>
-                        <Title>
-                            <h2 id="faq-title">Vanliga frågor</h2>
-                        </Title>
-                        <Body>
-                        <MarkdownViewer Markdown="@Contract.FAQ"/>
-                        </Body>
-                    </AccordionItem>
+                        <AccordionItem>
+                            <Title>
+                                <h3 id="faq-title">Vanliga frågor</h3>
+                            </Title>
+                            <Body>
+                            <MarkdownViewer Markdown="@Contract.FAQ"/>
+                            </Body>
+                        </AccordionItem>
                     }
                 </AccordionList>
-
             </div>
+
             <div class="modal-footer">
                 <MarkdownViewer Markdown="@Contract.SupplierContactInfo"/>
             </div>
+
         </div>
+
     </div>
+
+    @if (ShouldHideDetails)
+    {
+        <div class="register-prompt d-flex justify-content-center">
+            <div class="card p-4">
+                <h4 class="text-body">
+                    Bli medlem idag för att få åtkomst till erbjudandet!
+                </h4>
+                <a class="btn btn-primary" href="https://prodigo.se/kontakt/" target="_blank">
+                    Kontakta oss här för att bli medlem
+                </a>
+            </div>
+        </div>
+    }
+
 </div>
 
 @code {
@@ -80,6 +95,14 @@
     /// </summary>
     [Parameter, EditorRequired,]
     public Contract Contract { get; set; } = null!;
+
+    /// <summary>
+    /// The name of the currently logged in user.
+    /// </summary>
+    [CascadingParameter(Name = nameof(LoggedInUser))]
+    public string? LoggedInUser { get; set; }
+
+    private bool ShouldHideDetails => string.IsNullOrEmpty(LoggedInUser);
 
     private string ImagePath => string.IsNullOrEmpty(Contract.InspirationalImagePath) ?
         Contract.SupplierLogoImagePath :
