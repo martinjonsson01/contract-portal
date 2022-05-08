@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Linq;
-
 using Application.Contracts;
-
 using Domain.Contracts;
-
 using FluentAssertions.Execution;
 
 namespace Application.Tests.Contracts;
 
 public class RecentContractServiceTests
 {
+    private const string UserId = "123";
     private readonly IRecentContractService _cut;
     private readonly Mock<IRecentContractRepository> _mockRepo;
 
@@ -21,30 +19,37 @@ public class RecentContractServiceTests
     }
 
     [Fact]
-    public void AddRecent_AddsContractToQueue_WhenContractNotAlreadyInQueue()
+    public void Size_ReturnsTheExpectedAmount()
     {
         // Arrange
         var contract = new Contract();
+        var contracts = new LinkedList<Contract>();
+        contracts.AddFirst(contract);
+        _mockRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
+            .Returns(contracts);
 
         // Act
-        _cut.Add(" ", contract);
+        int size = _cut.Size(UserId);
 
         // Assert
-        _cut.Size(" ").Should().Be(1);
+        size.Should().Be(1);
     }
 
     [Fact]
-    public void AddRecent_DoesNotAddContractToQueue_WhenContractAlreadyInQueue()
+    public void AddRecent_DelegatesCorrectlyToRepository()
     {
         // Arrange
         var contract = new Contract();
+        var contracts = new LinkedList<Contract>();
+        contracts.AddFirst(contract);
+        _mockRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
+            .Returns(contracts);
 
         // Act
-        _cut.Add(" ", contract);
-        _cut.Add(" ", contract);
+        _cut.Add(UserId, contract);
 
         // Assert
-        _cut.Size(" ").Should().Be(1);
+        _mockRepo.Verify(repo => repo.Add(UserId, contract), Times.Once);
     }
 
     [Fact]
@@ -55,41 +60,32 @@ public class RecentContractServiceTests
         var contract2 = new Contract();
         var contract3 = new Contract();
         var contract4 = new Contract();
+        var contracts = new LinkedList<Contract>();
+        contracts.AddFirst(contract1);
+        contracts.AddFirst(contract2);
+        contracts.AddFirst(contract3);
+
+        _mockRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
+            .Returns(contracts);
 
         // Act
-        _cut.Add(" ", contract1);
-        _cut.Add(" ", contract2);
-        _cut.Add(" ", contract3);
-        _cut.Add(" ", contract4);
+        _cut.Add(UserId, contract4);
 
         // Assert
-        using (new AssertionScope())
-        {
-            _cut.Size(" ").Should().Be(3);
-            ICollection<Contract> recentContracts = _cut.FetchRecentContracts(" ").ToList();
-            recentContracts.Should().NotContain(contract1);
-            recentContracts.Should().Contain(contract2);
-            recentContracts.Should().Contain(contract3);
-            recentContracts.Should().Contain(contract4);
-        }
+        _mockRepo.Verify(repo => repo.RemoveLast(UserId), Times.Once);
     }
 
     [Fact]
-    public void RemoveContract_ShouldRemoveFromRecentlyViewed_WhenContractHasBeenViewed()
+    public void RemoveContract_ShouldDelegateToRepo()
     {
         // Arrange
         var contract1 = new Contract();
-        var contract2 = new Contract() { Name = "contract 2", };
-        _cut.Add(" ", contract1);
-        _cut.Add(" ", contract2);
-        Guid id = contract2.Id;
+        Guid id = contract1.Id;
 
         // Act
-        _cut.Add(" ", contract1);
-        _cut.Add(" ", contract2);
         _cut.Remove(id);
 
         // Assert
-        _cut.FetchRecentContracts(" ").Count().Should().Be(1);
+        _mockRepo.Verify(repo => repo.RemoveContractFromUserRecents(id), Times.Once);
     }
 }
