@@ -12,14 +12,14 @@ namespace Infrastructure.Databases;
 public sealed class EFFavoriteRepository : IFavoriteContractRepository
 {
     private readonly EFDatabaseContext _context;
-    private readonly ILogger<EFUserRepository> _logger;
+    private readonly ILogger<EFFavoriteRepository> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EFFavoriteRepository"/> class.
     /// </summary>
     /// <param name="context">The database context to manipulate data in.</param>
     /// <param name="logger">The logging service to use.</param>
-    public EFFavoriteRepository(EFDatabaseContext context, ILogger<EFUserRepository> logger)
+    public EFFavoriteRepository(EFDatabaseContext context, ILogger<EFFavoriteRepository> logger)
     {
         _context = context;
         _logger = logger;
