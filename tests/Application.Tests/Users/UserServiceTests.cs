@@ -55,6 +55,20 @@ public class UserServiceTests
     }
 
     [Fact]
+    public void AddingUser_EncryptsPassword_IfPasswordHasValue()
+    {
+        // Arrange
+        const string rawPassword = "abc123";
+        var test = new User { Password = rawPassword };
+
+        // Act
+        _cut.Add(test);
+
+        // Assert
+        _mockRepo.Verify(repo => repo.Add(It.Is<User>(usr => usr.Password != rawPassword)));
+    }
+
+    [Fact]
     public void RemovingUser_DoesReturnTrue_WhenAUserExists()
     {
         // Arrange
@@ -124,6 +138,40 @@ public class UserServiceTests
 
         // Assert
         actual.Should().BeFalse();
+    }
+
+    [Fact]
+    public void DecryptedPassword_ReturnsTrue_IfCorrectPasswordIsEntered()
+    {
+        // Arrange
+        const string rawPassword = "abc123";
+        var test = new User { Password = rawPassword };
+        var encryptedUser = new User();
+        _mockRepo.Setup(repo => repo.Add(It.IsAny<User>())).Callback<User>(usr => encryptedUser = usr);
+        _cut.Add(test);
+
+        // Act
+        bool valid = BCrypt.Net.BCrypt.Verify("abc123", encryptedUser.Password);
+
+        // Assert
+        valid.Should().BeTrue();
+    }
+
+    [Fact]
+    public void DecryptedPassword_ReturnsFalse_IfIncorrectPasswordIsEntered()
+    {
+        // Arrange
+        const string rawPassword = "abc123";
+        var test = new User { Password = rawPassword };
+        var encryptedUser = new User();
+        _mockRepo.Setup(repo => repo.Add(It.IsAny<User>())).Callback<User>(usr => encryptedUser = usr);
+        _cut.Add(test);
+
+        // Act
+        bool valid = BCrypt.Net.BCrypt.Verify("wrongPassword", encryptedUser.Password);
+
+        // Assert
+        valid.Should().BeFalse();
     }
 
     [Fact]
