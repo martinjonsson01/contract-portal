@@ -36,7 +36,7 @@ public class UserService : IUserService
     {
         if (_repo.All.Any(otherUser => user.Id.Equals(otherUser.Id)))
             throw new IdentifierAlreadyTakenException();
-
+        user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
         _repo.Add(user);
     }
 
