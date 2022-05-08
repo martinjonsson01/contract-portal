@@ -3,7 +3,7 @@
 using Domain.Contracts;
 using Domain.Users;
 
-namespace Application.Tests.Contracts;
+namespace Application.Tests.Favorites;
 
 public class FavoriteContractServiceTests
 {

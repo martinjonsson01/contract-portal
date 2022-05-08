@@ -21,51 +21,95 @@ public class FavoritesControllerTests
     }
 
     [Fact]
-    public void Gets_Favorites()
+    public void GetAll_ReturnsAllFavoriteContracts()
     {
         // Arrange
         string userName = "user";
-        List<Contract> fakeContracts = new Faker<Contract>().Generate(10);
-        _mockContracts.Setup(service => service.FetchAllFavorites(userName)).Returns(fakeContracts);
+        List<Contract> fakeFavoriteContracts = new Faker<Contract>().Generate(10);
+        _mockContracts.Setup(service => service.FetchAllFavorites(userName)).Returns(fakeFavoriteContracts);
 
         // Act
-        IEnumerable<Contract> favorites = _cut.GetAll(userName);
+        IEnumerable<Contract> favoriteContracts = _cut.GetAll(userName);
 
         // Assert
-        favorites.Should().BeEquivalentTo(fakeContracts);
+        favoriteContracts.Should().BeEquivalentTo(fakeFavoriteContracts);
     }
 
     [Fact]
-    public void Adds_Favorite()
+    public void Change_ReturnsOk()
     {
         // Arrange
-        string userName = "user";
-        _mockContracts.Setup(service => service.FetchAllFavorites(userName));
-        SetFavoriteContract setFavoriteContract = new SetFavoriteContract()
+        var setFavoriteContract = new SetFavoriteContract()
         {
-            UserName = userName, ContractId = Guid.NewGuid(), IsFavorite = true,
+            UserName = "user", ContractId = Guid.NewGuid(), IsFavorite = true,
         };
 
         // Act
-        var result = _cut.Add(setFavoriteContract);
+        IActionResult actual = _cut.Change(setFavoriteContract);
 
         // Assert
+        actual.Should().BeOfType<OkResult>();
     }
 
     [Fact]
-    public void UpdatesContract_ChangesContractFavoriteStatusCorrectly()
+    public void Change_CallsAddInService_IfTheContractShouldBeAFavorite()
     {
-        // Broken test moved over from contract controller
         // Arrange
-        var patchDocument = new JsonPatchDocument<Contract>();
-        var contract = new Contract();
-        patchDocument.Replace(c => c.IsFavorite, !contract.IsFavorite);
-        _mockContracts.Setup(service => service.FetchContract(contract.Id)).Returns(contract);
+        var setFavoriteContract = new SetFavoriteContract()
+        {
+            UserName = "user", ContractId = Guid.NewGuid(), IsFavorite = true,
+        };
 
         // Act
-        _cut.UpdateContract(patchDocument, contract.Id);
+        _cut.Change(setFavoriteContract);
 
         // Assert
-        contract.IsFavorite.Should().Be(false);
+        _mockContracts.Verify(service => service.Add(setFavoriteContract.UserName, setFavoriteContract.ContractId), Times.Once);
+    }
+
+    [Fact]
+    public void Change_CallsRemoveInService_IfTheContractShouldNotBeAFavorite()
+    {
+        // Arrange
+        var setFavoriteContract = new SetFavoriteContract()
+        {
+            UserName = "user", ContractId = Guid.NewGuid(), IsFavorite = false,
+        };
+
+        // Act
+        _cut.Change(setFavoriteContract);
+
+        // Assert
+        _mockContracts.Verify(service => service.Remove(setFavoriteContract.UserName, setFavoriteContract.ContractId), Times.Once);
+    }
+
+    [Fact]
+    public void GetIsFavorite_ReturnsOk_IfTheContractIsMarkedAsFavoriteByTheUser()
+    {
+        // Arrange
+        string userName = "user";
+        Guid contractId = Guid.NewGuid();
+        _mockContracts.Setup(service => service.CheckIfFavorite(userName, contractId)).Returns(true);
+
+        // Act
+        IActionResult actual = _cut.GetIsFavorite(userName, contractId);
+
+        // Assert
+        actual.Should().BeOfType<OkResult>();
+    }
+
+    [Fact]
+    public void GetIsFavorite_ReturnsBadRequest_IfTheContractIsNotMarkedAsFavoriteByTheUser()
+    {
+        // Arrange
+        string userName = "user";
+        Guid contractId = Guid.NewGuid();
+        _mockContracts.Setup(service => service.CheckIfFavorite(userName, contractId)).Returns(false);
+
+        // Act
+        IActionResult actual = _cut.GetIsFavorite(userName, contractId);
+
+        // Assert
+        actual.Should().BeOfType<BadRequestResult>();
     }
 }
