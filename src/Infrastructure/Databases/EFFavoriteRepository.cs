@@ -1,4 +1,6 @@
+using Application.Contracts;
 using Application.FavoriteContracts;
+using Application.Users;
 using Domain.Contracts;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
@@ -28,35 +30,32 @@ public sealed class EFFavoriteRepository : IFavoriteContractRepository
     /// <inheritdoc />
     public bool CheckIfFavorite(string userName, Guid contractId)
     {
-        User user = _context.Users.Where(s => s.Name == userName).Include(s => s.Contracts).First();
-        Contract contract = _context.Contracts.Where(s => s.Id == contractId).First();
+        User user = FetchUser(userName);
+        Contract contract = FetchContract(contractId);
         return user.Contracts.Contains(contract);
     }
 
     /// <inheritdoc />
     public void Add(string userName, Guid contractId)
     {
-        User user = _context.Users.Where(s => s.Name == userName).Include(s => s.Contracts).First();
-        Contract contract = _context.Contracts.Where(s => s.Id == contractId).First();
+        User user = FetchUser(userName);
+        Contract contract = FetchContract(contractId);
 
         user.Contracts.Add(contract);
         _ = _context.SaveChanges();
-        _logger.LogInformation("A contract was marked as favorite by a user");
+        _logger.LogInformation("Contract {ContractId} was added as favorite for user {UserName}", contractId, userName);
     }
 
     /// <inheritdoc />
     public bool Remove(string userName, Guid contractId)
     {
-        User user = _context.Users.Where(s => s.Name == userName).Include(s => s.Contracts).First();
-        Contract contract = _context.Contracts.Where(s => s.Id == contractId).First();
+        User user = FetchUser(userName);
+        Contract contract = FetchContract(contractId);
+        bool result = user.Contracts.Remove(contract);
+        _context.SaveChanges();
 
-        _ = user.Contracts.Remove(contract);
-        int changes = _context.SaveChanges();
-
-        _logger.LogInformation("A contract was unfavorited by a user");
-
-        // If any changes were made, then the remove operation succeeded.
-        return changes > 0;
+        _logger.LogInformation("Contract {ContractId} was removed as favorite from user {UserName}", contractId, userName);
+        return result;
     }
 
     /// <inheritdoc />
@@ -72,5 +71,29 @@ public sealed class EFFavoriteRepository : IFavoriteContractRepository
         }
 
         return contractsWithoutSelfReference;
+    }
+
+    private User FetchUser(string userName)
+    {
+        try
+        {
+            return _context.Users.Where(s => s.Name == userName).Include(s => s.Contracts).First();
+        }
+        catch (InvalidOperationException)
+        {
+            throw new UserDoesNotExistException();
+        }
+    }
+
+    private Contract FetchContract(Guid contractId)
+    {
+        try
+        {
+            return _context.Contracts.Where(s => s.Id == contractId).First();
+        }
+        catch (InvalidOperationException)
+        {
+            throw new ContractDoesNotExistException();
+        }
     }
 }
