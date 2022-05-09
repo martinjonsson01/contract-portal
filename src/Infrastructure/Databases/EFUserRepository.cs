@@ -46,9 +46,12 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     public void Add(string id, Contract contract)
     {
         User user = GetUserByUserName(id);
-        if (user.RecentlyViewContracts.Contains(contract))
+        if (user.RecentlyViewContracts.Any(other => other.Id == contract.Id))
+        {
             return;
-        user.RecentlyViewContracts.AddLast(contract);
+        }
+
+        user.RecentlyViewContracts.AddFirst(contract);
         try
         {
             _context.SaveChanges();
@@ -56,10 +59,6 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
         catch (DataException e)
         {
             _logger.LogError("Could not add contract to recently viewed for user to database: {Message}", e.Message);
-        }
-        catch (InvalidOperationException)
-        {
-            _logger.LogInformation("{Contract} is already in recently viewed", contract.Name);
         }
     }
 
@@ -89,7 +88,7 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     public void RemoveLast(string id)
     {
         User user = GetUserByUserName(id);
-        user.RecentlyViewContracts.RemoveFirst();
+        user.RecentlyViewContracts.RemoveLast();
         _ = _context.SaveChanges();
     }
 
@@ -126,7 +125,6 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     public LinkedList<Contract> FetchRecentContracts(string id)
     {
         User user = GetUserByUserName(id);
-        Console.WriteLine(user.RecentlyViewContracts.Count);
         return user.RecentlyViewContracts;
     }
 
@@ -145,7 +143,7 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
 
     private void CreateAdmin()
     {
-        var admin = new User { Name = AdminUserName, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
+        var admin = new User { Name = AdminUserName, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue };
         _ = Users.Add(admin);
         try
         {
