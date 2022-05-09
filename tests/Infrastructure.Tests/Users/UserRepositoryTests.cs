@@ -157,4 +157,42 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
         contracts.First().Should().BeEquivalentTo(contract2);
         contracts.Should().ContainSingle();
     }
+
+    [Fact]
+    public void RemoveContract_RemovesAllContractFromAllUser()
+    {
+        // Arrange
+        var user1 = new User() { Name = "User1" };
+        var user2 = new User() { Name = "User2" };
+        _cut.Add(user1);
+        _cut.Add(user2);
+        var contract1 = new Contract();
+        _context.Contracts.Add(contract1);
+        _cut.Add(user1.Name, contract1);
+        _cut.Add(user2.Name, contract1);
+
+        // Act
+        _cut.RemoveContract(contract1.Id);
+
+        _cut.Fetch(user1.Name) !.RecentlyViewContracts.Should().BeEmpty();
+        _cut.Fetch(user2.Name) !.RecentlyViewContracts.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void RemoveContract_DoesNotChangeRecentlyViewedForUser_WhenRecentlyViewedDoesNotContainContract()
+    {
+        // Arrange
+        var user1 = new User() { Name = "User1" };
+        _cut.Add(user1);
+        var contract1 = new Contract();
+        var contract2 = new Contract();
+        _context.Contracts.Add(contract1);
+        _context.Contracts.Add(contract2);
+        _cut.Add(user1.Name, contract1);
+
+        // Act
+        _cut.RemoveContract(contract2.Id);
+
+        _cut.Fetch(user1.Name) !.RecentlyViewContracts.Should().ContainSingle();
+    }
 }
