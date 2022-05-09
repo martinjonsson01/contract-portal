@@ -78,23 +78,28 @@ public class UsersController : BaseApiController<UsersController>
     /// <summary>
     /// Authenticates a user.
     /// </summary>
-    /// <param name="username">The name of the user.</param>
+    /// <param name="user">The user to authenticate.</param>
     /// <returns>An authentication token that can be used to identify the user.</returns>
     [HttpPost("authenticate")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Authenticate([FromBody] string username)
+    public IActionResult Authenticate(User user)
     {
         try
         {
-            AuthenticateResponse authResponse = _users.Authenticate(username);
+            AuthenticateResponse authResponse = _users.Authenticate(user.Name, user.Password);
             return Ok(authResponse);
         }
         catch (UserDoesNotExistException e)
         {
-            Logger.LogError("Could not authenticate user: {Exception}", e.Message);
-            return BadRequest();
+            Logger.LogError("Can't authenticate a user that does not exist: {Exception}", e.Message);
+            return Unauthorized();
+        }
+        catch (InvalidPasswordException e)
+        {
+            Logger.LogError("An incorrect password was given for the user: {Exception}", e.Message);
+            return Unauthorized();
         }
     }
 }

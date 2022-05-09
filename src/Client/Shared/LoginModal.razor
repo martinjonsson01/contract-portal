@@ -18,13 +18,14 @@
                 <EditForm Model="@_user" OnSubmit="ValidateUser">
                     <div class="mb-3">
                         <div class="d-flex justify-content-between">
-                            <label for="username" class="form-label">
-                                <h3>Användarnamn</h3>
+                            <label class="form-label">
+                                <h3>Logga in</h3>
                             </label>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                        <InputText id="username" class="form-control" placeholder="Användarnamn" @bind-Value="@_user.UserName"/>
+                        <InputText id="username" class="form-control" placeholder="Användarnamn" @bind-Value="@_user.Name"/>
+                        <InputText id="password" type="password" class="form-control mt-3" placeholder="Lösenord" @bind-Value="@_user.Password"/>
 
                         @if (_logInFailed)
                         {
@@ -42,18 +43,12 @@
 
 @code {
 
-    UserInputFields _user = new();
+    User _user = new (){ Name = "", Password = "", };
     bool _logInFailed = false;
-
-    private class UserInputFields
-    {
-        [Required]
-        public string UserName { get; set; } = string.Empty;
-    }
 
     private async Task ValidateUser()
     {
-        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users/authenticate", _user.UserName);
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users/authenticate", _user);
         if (response.IsSuccessStatusCode)
         {
             _logInFailed = false;

@@ -24,4 +24,9 @@ public static class ConfigurationKeys
     /// The name of the variable containing whether the system is running inside a CI-container.
     /// </summary>
     public const string ContinuousIntegration = "CONTINUOUS_INTEGRATION";
+
+    /// <summary>
+    /// The name of the variable containing the default admin password.
+    /// </summary>
+    public const string AdminPassword = "prodigo_portal_admin_password";
 }

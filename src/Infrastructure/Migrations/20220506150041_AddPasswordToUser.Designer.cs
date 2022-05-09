@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(EFDatabaseContext))]
-    [Migration("20220505152704_AddPassword")]
-    partial class AddPassword
+    [Migration("20220506150041_AddPasswordToUser")]
+    partial class AddPasswordToUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
