@@ -28,14 +28,6 @@ public sealed class EFFavoriteRepository : IFavoriteContractRepository
     }
 
     /// <inheritdoc />
-    public bool CheckIfFavorite(string userName, Guid contractId)
-    {
-        User user = FetchUser(userName);
-        Contract contract = FetchContract(contractId);
-        return user.Contracts.Contains(contract);
-    }
-
-    /// <inheritdoc />
     public void Add(string userName, Guid contractId)
     {
         User user = FetchUser(userName);
@@ -56,21 +48,6 @@ public sealed class EFFavoriteRepository : IFavoriteContractRepository
 
         _logger.LogInformation("Contract {ContractId} was removed as favorite from user {UserName}", contractId, userName);
         return result;
-    }
-
-    /// <inheritdoc />
-    public IEnumerable<Contract> FetchAllFavorites(string userName)
-    {
-        User user = _context.Users.Where(s => s.Name == userName).Include(s => s.Contracts).First();
-        List<Contract> contractsWithoutSelfReference = new();
-
-        foreach (Contract? contract in user.Contracts)
-        {
-            contract.Users = null!;
-            contractsWithoutSelfReference.Add(contract);
-        }
-
-        return contractsWithoutSelfReference;
     }
 
     private User FetchUser(string userName)
