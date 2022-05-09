@@ -208,21 +208,6 @@ public class UserServiceTests
     }
 
     [Fact]
-    public void Authenticate_ReturnsAuthResponse_WhenUserExists()
-    {
-        // Arrange
-        const string username = "user";
-        var user = new User { Name = username, };
-        _mockRepo.Setup(repository => repository.Fetch(username)).Returns(user);
-
-        // Act
-        AuthenticateResponse authResponse = _cut.Authenticate(username);
-
-        // Assert
-        authResponse.Should().NotBeNull();
-    }
-
-    [Fact]
     public void Authenticate_ThrowsException_WhenUserDoesNotExist()
     {
         // Act
