@@ -32,13 +32,13 @@ public class RecentContractService : IRecentContractService
     /// <inheritdoc />
     public void Add(string id, Contract contract)
     {
-        _recent.Add(id, contract);
-
         const int recentAmountMax = 3;
-        if (Size(id) > recentAmountMax)
+        if (Size(id) >= recentAmountMax)
         {
             _recent.RemoveLast(id);
         }
+
+        _recent.Add(id, contract);
     }
 
     /// <inheritdoc />

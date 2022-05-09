@@ -61,12 +61,12 @@ public class RecentContractServiceTests
         var contract3 = new Contract();
         var contract4 = new Contract();
         var contracts = new LinkedList<Contract>();
-        contracts.AddFirst(contract1);
-        contracts.AddFirst(contract2);
-        contracts.AddFirst(contract3);
 
         _mockRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
             .Returns(contracts);
+        contracts.AddFirst(contract1);
+        contracts.AddFirst(contract2);
+        contracts.AddFirst(contract3);
 
         // Act
         _cut.Add(UserId, contract4);
