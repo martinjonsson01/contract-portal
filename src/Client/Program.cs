@@ -1,3 +1,5 @@
+using Blazored.SessionStorage;
+
 using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
@@ -16,6 +18,7 @@ builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.H
 builder.Services
        .AddBlazorise(options => { options.Immediate = true; })
        .AddBootstrap5Providers()
-       .AddFontAwesomeIcons();
+       .AddFontAwesomeIcons()
+       .AddBlazoredSessionStorage();
 
 await builder.Build().RunAsync().ConfigureAwait(false);
