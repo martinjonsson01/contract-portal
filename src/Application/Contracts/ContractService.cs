@@ -68,6 +68,13 @@ public class ContractService : IContractService
     }
 
     /// <inheritdoc />
+    public IEnumerable<ContractPreviewDto> SearchUnauthorized(string query)
+    {
+        IEnumerable<Contract> results = _search.Search(query, FetchAllContracts());
+        return ConvertToPreviews(results);
+    }
+
+    /// <inheritdoc />
     public void UpdateContract(Contract contract)
     {
         _repo.UpdateContract(contract);
@@ -77,5 +84,10 @@ public class ContractService : IContractService
     public Contract FetchContract(Guid id)
     {
         return _repo.FetchContract(id) ?? throw new ContractDoesNotExistException();
+    }
+
+    private static IEnumerable<ContractPreviewDto> ConvertToPreviews(IEnumerable<Contract> contracts)
+    {
+        return contracts.Select(contract => new ContractPreviewDto(contract));
     }
 }

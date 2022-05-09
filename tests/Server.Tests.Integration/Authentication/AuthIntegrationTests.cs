@@ -3,13 +3,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-
+using Application.Configuration;
+using Application.Contracts;
 using Application.Users;
-
 using Domain.Contracts;
 using Domain.Users;
-
-using Microsoft.AspNetCore.Mvc.Testing;
+using FluentAssertions.Execution;
 
 namespace Server.IntegrationTests.Authentication;
 
@@ -20,6 +19,11 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
     public AuthIntegrationTests(TestWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
+
+        Environment.SetEnvironmentVariable(
+            ConfigurationKeys.AdminPassword,
+            "test_password",
+            EnvironmentVariableTarget.Process);
     }
 
     public static IEnumerable<object[]> AdminPostApiEndpoints =>
@@ -35,7 +39,8 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
         {
             const string contractEndpoint = "/api/v1/contracts";
             var contract = new Contract();
-            Func<HttpClient, Task> createContract = async client => await client.PostAsJsonAsync(contractEndpoint, contract);
+            Func<HttpClient, Task> createContract =
+                async client => await client.PostAsJsonAsync(contractEndpoint, contract);
 
             const string usersEndpoint = "/api/v1/users";
             var user = new User();
@@ -50,7 +55,6 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
     }
 
     [Theory]
-    [InlineData("/api/v1/contracts")]
     [InlineData("/api/v1/users")]
     public async Task GetApiEndpoints_ReturnsUnauthorized_WhenNoTokenIsSpecifiedAsync(string endpointUrl)
     {
@@ -144,9 +148,81 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
         response.Should().BeSuccessful();
     }
 
+    [Fact]
+    public async Task GetContractsApiEndpoint_ReturnsPreviewContent_WhenUserIsNotAuthenticatedAsync()
+    {
+        // Arrange
+        var contract = new Contract();
+        await ArrangeResource("/api/v1/contracts", contract);
+
+        // Act
+        HttpResponseMessage response = await _client.GetAsync("/api/v1/contracts");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var contractPreviews = await response.Content.ReadFromJsonAsync<ICollection<ContractPreviewDto>>();
+        contractPreviews.Should().NotBeNull();
+        ContractPreviewDto preview = contractPreviews!.First(preview => preview.Id == contract.Id);
+
+        using (new AssertionScope())
+        {
+            preview.Id.Should().Be(contract.Id);
+            preview.Name.Should().Be(contract.Name);
+            preview.Description.Should().Be(contract.Description);
+            preview.SupplierLogoImagePath.Should().Be(contract.SupplierLogoImagePath);
+            preview.InspirationalImagePath.Should().Be(contract.InspirationalImagePath);
+        }
+    }
+
+    [Fact]
+    public async Task GetContractsApiEndpoint_DoesNotReturnConfidentialContent_WhenUserIsNotAuthenticatedAsync()
+    {
+        // Arrange
+        var contract = new Contract { Instructions = "very secret usage instructions", };
+        await ArrangeResource("/api/v1/contracts", contract);
+
+        // Act
+        HttpResponseMessage response = await _client.GetAsync("/api/v1/contracts");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var contracts = await response.Content.ReadFromJsonAsync<IEnumerable<Contract>>();
+        contracts.Should().NotContainEquivalentOf(contract);
+    }
+
+    [Fact]
+    public async Task GetContractsApiEndpoint_ReturnsOkContent_WhenUserIsAuthenticatedAsync()
+    {
+        // Arrange
+        var contract = new Contract();
+        await ArrangeResource("/api/v1/contracts", contract);
+
+        await ArrangeAuthenticatedUser();
+
+        // Act
+        HttpResponseMessage response = await _client.GetAsync("/api/v1/contracts");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var contracts = await response.Content.ReadFromJsonAsync<IEnumerable<Contract>>();
+        contracts.Should().ContainEquivalentOf(contract);
+    }
+
+    private async Task ArrangeResource<TResource>(string url, TResource resource)
+    {
+        await ArrangeAuthenticatedAdmin();
+        await _client.PostAsJsonAsync(url, resource);
+
+        // Log out.
+        _client.DefaultRequestHeaders.Authorization = null;
+    }
+
     private async Task ArrangeAuthenticatedAdmin()
     {
-        HttpResponseMessage authResponseMessage = await _client.PostAsJsonAsync("/api/v1/users/authenticate", "admin");
+        var userInfo = new User() { Name = "admin", Password = Environment.GetEnvironmentVariable(ConfigurationKeys.AdminPassword) ?? string.Empty, };
+        HttpResponseMessage authResponseMessage = await _client.PostAsJsonAsync("/api/v1/users/authenticate", userInfo);
         AuthenticateResponse? authResponse =
             await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
@@ -163,7 +239,7 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
 
         // Arrange - authenticate as normal user.
         HttpResponseMessage authResponseMessage =
-            await _client.PostAsJsonAsync("/api/v1/users/authenticate", user.Name);
+            await _client.PostAsJsonAsync("/api/v1/users/authenticate", user);
         AuthenticateResponse? authResponse =
             await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
 

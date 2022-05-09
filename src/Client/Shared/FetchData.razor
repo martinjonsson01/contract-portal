@@ -3,7 +3,7 @@
 @typeparam TData
 @inject HttpClient _http;
 
-@if (_errorMessage is not null)
+@if (_errorMessage is not null && ShouldShowErrors)
 {
     <p id="error-message">@_errorMessage</p>
 }
@@ -36,6 +36,12 @@ else
     /// </summary>
     [Parameter,]
     public RenderFragment LoadingIndicator { get; set; } = @<LoadingIndicator />;
+
+    /// <summary>
+    /// Whether any errors that occur while fetching data should be shown to the user.
+    /// </summary>
+    [Parameter]
+    public bool ShouldShowErrors { get; set; } = true;
 
     /// <summary>
     /// The data that has been fetched.

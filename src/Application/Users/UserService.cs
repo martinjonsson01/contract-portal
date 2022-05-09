@@ -37,6 +37,7 @@ public class UserService : IUserService
         if (_repo.All.Any(otherUser => user.Id.Equals(otherUser.Id)))
             throw new IdentifierAlreadyTakenException();
 
+        user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
         _repo.Add(user);
     }
 
@@ -47,16 +48,15 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public AuthenticateResponse Authenticate(string username)
+    public AuthenticateResponse Authenticate(string username, string password)
     {
         User? user = _repo.Fetch(username);
 
-        if (user is null)
-            throw new UserDoesNotExistException(username);
-
-        string token = GenerateJwtToken(user);
-
-        return new AuthenticateResponse(user, token);
+        return user is null
+            ? throw new UserDoesNotExistException(username)
+            : IsPasswordValid(user, password)
+                ? new AuthenticateResponse(user, GenerateJwtToken(user))
+                : throw new InvalidPasswordException("Wrong password.");
     }
 
     /// <inheritdoc />
@@ -79,6 +79,11 @@ public class UserService : IUserService
             claims.Add(new Claim("IsAdmin", "true"));
 
         return claims;
+    }
+
+    private static bool IsPasswordValid(User user, string password)
+    {
+        return BCrypt.Net.BCrypt.Verify(password, user.Password);
     }
 
     private string GenerateJwtToken(User user)

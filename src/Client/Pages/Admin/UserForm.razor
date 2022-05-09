@@ -1,4 +1,5 @@
 @using Domain.Users
+@using Microsoft.VisualBasic
 @inject HttpClient _http
 
 <h4>Skapa användare</h4>
@@ -9,11 +10,15 @@
         <InputText id="user-name" class="form-control" placeholder="Användarens namn" @bind-Value="@_user.Name"/>
     </div>
     <div class="mb-3">
+        <label for="user-password" class="form-label">Lösenord</label>
+        <InputText id="user-password" class="form-control" placeholder="Användarens lösenord" @bind-Value="@_user.Password"/>
+    </div>
+    <div class="mb-3">
         <label for="user-company" class="form-label">Företag</label>
         <InputText id="user-company" class="form-control" placeholder="Företagets namn" @bind-Value="@_user.Company"/>
     </div>
     <div class="mb-3">
-        <label for="" class="form-label">Senaste betaldatum</label>
+        <label for="user-latest-payment-date" class="form-label">Senaste betaldatum</label>
         <InputDate id="user-latest-payment-date" class="form-control" @bind-Value="_user.LatestPaymentDate"/>
     </div>
 
@@ -28,6 +33,7 @@
         return new User
         {
             Name = string.Empty,
+            Password = string.Empty,
             Company = string.Empty,
             LatestPaymentDate = DateTime.UtcNow,
         };
@@ -43,7 +49,6 @@
     {
         // Make sure date is in UTC.
         _user.LatestPaymentDate = _user.LatestPaymentDate.ToUniversalTime();
-
         HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users", _user);
         if (response.IsSuccessStatusCode)
         {
