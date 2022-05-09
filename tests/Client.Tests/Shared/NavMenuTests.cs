@@ -15,25 +15,12 @@ namespace Client.Tests.Shared;
 
 public class NavMenuTests : UITestFixture
 {
-    private readonly ISessionStorageService _sessionStorage;
-    private readonly User _loggedInUser = new();
-    private readonly string _fakeToken = "asdöflkjasdfölkasdf";
-    private readonly Mock<ISessionService> _mockSession;
-
-    public NavMenuTests()
-    {
-        _sessionStorage = Context.AddBlazoredSessionStorage();
-        _mockSession = new Mock<ISessionService>();
-        _mockSession.Setup(session => session.IsAuthenticated).Returns(true);
-        Context.Services.AddScoped(_ => _mockSession.Object);
-    }
-
     [Fact]
     public async Task NavMenu_DisplaysLoginButton_WhenUserNotLoggedIn()
     {
         // Arrange
-        _mockSession.Setup(session => session.IsAuthenticated).Returns(false);
-        await _sessionStorage.SetItemAsync("user", new AuthenticateResponse(_loggedInUser, _fakeToken));
+        MockSession.Setup(session => session.IsAuthenticated).Returns(false);
+        await SessionStorage.SetItemAsync("user", new AuthenticateResponse(LoggedInUser, FakeToken));
 
         // Act
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
@@ -46,7 +33,7 @@ public class NavMenuTests : UITestFixture
     public async Task NavMenu_DisplaysLoginText_WhenUserLoggedIn()
     {
         // Arrange
-        await _sessionStorage.SetItemAsync("user", new AuthenticateResponse(_loggedInUser, _fakeToken));
+        await SessionStorage.SetItemAsync("user", new AuthenticateResponse(LoggedInUser, FakeToken));
 
         // Act
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
@@ -59,8 +46,8 @@ public class NavMenuTests : UITestFixture
     public async Task NavMenu_DisplaysAdminNavItem_WhenAdminLoggedIn()
     {
         // Arrange
-        _mockSession.Setup(session => session.Username).Returns("admin");
-        await _sessionStorage.SetItemAsync("user", new AuthenticateResponse(_loggedInUser, _fakeToken));
+        MockSession.Setup(session => session.Username).Returns("admin");
+        await SessionStorage.SetItemAsync("user", new AuthenticateResponse(LoggedInUser, FakeToken));
 
         // Act
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();

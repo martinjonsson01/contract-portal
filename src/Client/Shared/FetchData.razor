@@ -68,6 +68,7 @@ else
         if (!response.IsSuccessStatusCode)
         {
             _errorMessage = CreateErrorMessage(response.StatusCode);
+            StateHasChanged();
             return;
         }
 
