@@ -21,6 +21,6 @@ builder.Services
        .AddBootstrap5Providers()
        .AddFontAwesomeIcons()
        .AddBlazoredSessionStorage()
-       .AddScoped<ISessionService, SessionManagerService>();
+       .AddScoped<ISessionService, SessionManagerService>(); // Scoped behaves like Singleton.
 
 await builder.Build().RunAsync().ConfigureAwait(false);

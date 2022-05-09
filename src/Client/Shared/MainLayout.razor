@@ -3,7 +3,7 @@
 @inherits LayoutComponentBase
 @inject ISessionService _session
 
-<CascadingValue Value="@_loggedInUser" Name="LoggedInUser">
+<CascadingValue Value="@_session" Name="Session">
     <ThemeProvider Theme="@_theme">
         <div class="page">
             <main>
@@ -12,7 +12,7 @@
                 </div>
                 <article class="content px-4">
                     @Body
-                    <LoginModal OnUserLogInChange="@OnUserLogIn"/>
+                    <LoginModal/>
                 </article>
             </main>
         </div>
@@ -21,14 +21,6 @@
 
 @code
 {
-    private void OnUserLogIn(string username)
-    {
-        _loggedInUser = username;
-        StateHasChanged();
-    }
-
-    private string? _loggedInUser = string.Empty;
-
     private readonly Theme _theme = new()
     {
         ColorOptions = new ThemeColorOptions
@@ -46,7 +38,6 @@
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        AuthenticateResponse? authState = await _session.TryResumeAsync();
-        _loggedInUser = authState?.Username;
+        await _session.TryResumeAsync();
     }
 }

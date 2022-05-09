@@ -13,10 +13,14 @@ public interface ISessionService
     event EventHandler<AuthenticationEventArgs> AuthenticationStateChanged;
 
     /// <summary>
-    /// Checks whether the current session is authenticated.
+    /// Gets a value indicating whether the current session is authenticated.
     /// </summary>
-    /// <returns>Whether the current session is authenticated.</returns>
-    Task<bool> IsAuthenticatedAsync();
+    bool IsAuthenticated { get; }
+
+    /// <summary>
+    /// Gets the name of the currently authenticated user, if authenticated.
+    /// </summary>
+    string? Username { get; }
 
     /// <summary>
     /// Begins a new authenticated user session.
