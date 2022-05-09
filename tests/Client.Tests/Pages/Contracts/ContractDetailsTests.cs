@@ -1,10 +1,20 @@
-﻿using AngleSharp.Dom;
+﻿using System.Threading.Tasks;
+
+using AngleSharp.Dom;
+
+using Application.Users;
+
+using Blazored.SessionStorage;
 
 using Client.Pages.Contracts;
+using Client.Services.Authentication;
 
 using Domain.Contracts;
+using Domain.Users;
 
 using FluentAssertions.Execution;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Tests.Pages.Contracts;
 
@@ -140,12 +150,19 @@ public class ContractDetailsTests : UITestFixture
     }
 
     [Fact]
-    public void RegisterPrompt_IsNotShown_WhenUserIsLoggedIn()
+    public async Task RegisterPrompt_IsNotShown_WhenUserIsLoggedIn()
     {
         // Arrange
+        var loggedInUser = new User();
+        const string fakeToken = "asdöflkjasdfölkasdf";
+        ISessionStorageService sessionStorage = Context.AddBlazoredSessionStorage();
+        var mockSession = new Mock<ISessionService>();
+        mockSession.Setup(session => session.IsAuthenticated).Returns(true);
+        Context.Services.AddScoped(_ => mockSession.Object);
+        await sessionStorage.SetItemAsync("user", new AuthenticateResponse(loggedInUser, fakeToken));
+
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
-            parameters.Add(property => property.Contract, new Contract())
-                      .Add(property => property.LoggedInUser, "user-name");
+            parameters.Add(property => property.Contract, new Contract());
 
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
