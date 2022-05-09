@@ -24,7 +24,7 @@ public class FavoriteContractServiceTests
     {
         // Arrange
         List<Contract> contracts = new List<Contract>() { new Contract(), new Contract(), new Contract() };
-        var user = new User() { Contracts = contracts };
+        var user = new User() { Favorites = contracts };
         _mockUserRepo.Setup(repo => repo.Fetch(user.Name)).Returns(user);
 
         // Act
@@ -54,7 +54,7 @@ public class FavoriteContractServiceTests
         // Arrange
         Contract contract = new Contract();
         List<Contract> contracts = new List<Contract>() { contract, new Contract(), new Contract() };
-        var user = new User() { Contracts = contracts };
+        var user = new User() { Favorites = contracts };
         _mockUserRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
 
         // Act
@@ -70,7 +70,7 @@ public class FavoriteContractServiceTests
         // Arrange
         Contract contract = new Contract();
         List<Contract> contracts = new List<Contract>() { new Contract(), new Contract(), new Contract() };
-        var user = new User() { Contracts = contracts };
+        var user = new User() { Favorites = contracts };
         _mockUserRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
 
         // Act
@@ -85,7 +85,7 @@ public class FavoriteContractServiceTests
     {
         // Arrange
         List<Contract> mockFavoriteContracts = new Faker<Contract>().Generate(5);
-        var user = new User() { Contracts = mockFavoriteContracts };
+        var user = new User() { Favorites = mockFavoriteContracts };
         _mockUserRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
 
         // Act
@@ -100,7 +100,7 @@ public class FavoriteContractServiceTests
     {
         // Arrange
         List<Contract> mockFavoriteContracts = new Faker<Contract>().Generate(5);
-        var user = new User() { Contracts = mockFavoriteContracts };
+        var user = new User() { Favorites = mockFavoriteContracts };
         _mockUserRepo.Setup(repository => repository.Fetch(user.Name)).Returns<User?>(null);
 
         // Act

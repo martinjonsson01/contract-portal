@@ -53,8 +53,7 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
     {
         _ = modelBuilder
         .Entity<User>()
-        .HasMany(u => u.Contracts)
-        .WithMany(c => c.Users)
-        .UsingEntity(j => j.ToTable("UserContracts"));
+        .HasMany(p => p.Favorites)
+        .WithMany("FavoriteUsers");
     }
 }

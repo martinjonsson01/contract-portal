@@ -47,8 +47,8 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisp
         _cut.Add(user.Name, contract.Id);
 
         // Assert
-        User databaseUser = _context.Users.Where(u => u.Id == user.Id).Include(u => u.Contracts).First();
-        databaseUser.Contracts.Should().Contain(contract);
+        User databaseUser = _context.Users.Where(u => u.Id == user.Id).Include(u => u.Favorites).First();
+        databaseUser.Favorites.Should().Contain(contract);
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisp
         User user = new() { Name = "user" };
         Contract contract = new();
 
-        user.Contracts.Add(contract);
+        user.Favorites.Add(contract);
         _context.Contracts.Add(contract);
         _context.Users.Add(user);
         _context.SaveChanges();

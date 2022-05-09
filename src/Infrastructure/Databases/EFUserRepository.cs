@@ -77,7 +77,7 @@ public sealed class EFUserRepository : IUserRepository
     /// <inheritdoc />
     public User? Fetch(string username)
     {
-        return Users.Where(user => user.Name == username).Include(c => c.Contracts).First();
+        return Users.Where(user => user.Name == username).Include(c => c.Favorites).First();
     }
 
     /// <inheritdoc />

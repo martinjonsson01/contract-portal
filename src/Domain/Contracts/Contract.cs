@@ -67,10 +67,5 @@ public class Contract
     /// </summary>
     public string SupplierContactInfo { get; set; } = "Kontaktinformation till leverantör saknas.";
 
-    /// <summary>
-    /// Gets or sets users that has marked this as favorite.
-    /// </summary>
-#pragma warning disable CA2227 // Collection properties should be read only
-    public ICollection<User> Users { get; set; } = new List<User>();
-#pragma warning restore CA2227 // Collection properties should be read only
+    private ICollection<User> FavoriteUsers { get; } = new List<User>();
 }

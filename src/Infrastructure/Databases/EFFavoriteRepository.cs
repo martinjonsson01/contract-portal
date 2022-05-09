@@ -33,7 +33,7 @@ public sealed class EFFavoriteRepository : IFavoriteContractRepository
         User user = FetchUser(userName);
         Contract contract = FetchContract(contractId);
 
-        user.Contracts.Add(contract);
+        user.Favorites.Add(contract);
         _ = _context.SaveChanges();
         _logger.LogInformation("Contract {ContractId} was added as favorite for user {UserName}", contractId, userName);
     }
@@ -43,7 +43,7 @@ public sealed class EFFavoriteRepository : IFavoriteContractRepository
     {
         User user = FetchUser(userName);
         Contract contract = FetchContract(contractId);
-        bool result = user.Contracts.Remove(contract);
+        bool result = user.Favorites.Remove(contract);
         _context.SaveChanges();
 
         _logger.LogInformation("Contract {ContractId} was removed as favorite from user {UserName}", contractId, userName);
@@ -54,7 +54,7 @@ public sealed class EFFavoriteRepository : IFavoriteContractRepository
     {
         try
         {
-            return _context.Users.Where(s => s.Name == userName).Include(s => s.Contracts).First();
+            return _context.Users.Where(s => s.Name == userName).Include(s => s.Favorites).First();
         }
         catch (InvalidOperationException)
         {

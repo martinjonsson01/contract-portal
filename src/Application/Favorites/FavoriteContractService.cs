@@ -38,23 +38,13 @@ public class FavoriteContractService : IFavoriteContractService
     public bool IsFavorite(string userName, Guid contractId)
     {
         User user = FetchUser(userName);
-        return user.Contracts.Any(c => c.Id == contractId);
+        return user.Favorites.Any(c => c.Id == contractId);
     }
 
     /// <inheritdoc/>
     public IEnumerable<Contract> FetchAllFavorites(string userName)
     {
-        User user = FetchUser(userName);
-
-        List<Contract> contractsWithoutSelfReference = new();
-
-        foreach (Contract? contract in user.Contracts)
-        {
-            contract.Users = null!;
-            contractsWithoutSelfReference.Add(contract);
-        }
-
-        return contractsWithoutSelfReference;
+        return FetchUser(userName).Favorites;
     }
 
     private User FetchUser(string username)
