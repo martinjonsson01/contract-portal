@@ -88,7 +88,7 @@ public class UsersController : BaseApiController<UsersController>
     {
         try
         {
-            AuthenticateResponse authResponse = _users.Authenticate(user.Name, user.Password ?? string.Empty);
+            AuthenticateResponse authResponse = _users.Authenticate(user.Name, user.Password);
             return Ok(authResponse);
         }
         catch (UserDoesNotExistException e)

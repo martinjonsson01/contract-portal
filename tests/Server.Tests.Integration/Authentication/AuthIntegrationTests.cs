@@ -2,19 +2,13 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
-
-using Application.Contracts;
 using Application.Configuration;
+using Application.Contracts;
 using Application.Users;
-
 using Domain.Contracts;
 using Domain.Users;
-
 using FluentAssertions.Execution;
-
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Server.IntegrationTests.Authentication;
 
@@ -227,7 +221,7 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
 
     private async Task ArrangeAuthenticatedAdmin()
     {
-        var userInfo = new User() { Name = "admin", Password = Environment.GetEnvironmentVariable(ConfigurationKeys.AdminPassword), };
+        var userInfo = new User() { Name = "admin", Password = Environment.GetEnvironmentVariable(ConfigurationKeys.AdminPassword) ?? string.Empty, };
         HttpResponseMessage authResponseMessage = await _client.PostAsJsonAsync("/api/v1/users/authenticate", userInfo);
         AuthenticateResponse? authResponse =
             await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
