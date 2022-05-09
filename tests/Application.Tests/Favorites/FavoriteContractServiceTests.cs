@@ -52,7 +52,7 @@ public class FavoriteContractServiceTests
         _mockRepo.Setup(repository => repository.CheckIfFavorite(user.Name, contract.Id)).Returns(true);
 
         // Act
-        bool actual = _cut.CheckIfFavorite(user.Name, contract.Id);
+        bool actual = _cut.IsFavorite(user.Name, contract.Id);
 
         // Assert
         actual.Should().BeTrue();
@@ -67,7 +67,7 @@ public class FavoriteContractServiceTests
         _mockRepo.Setup(repository => repository.CheckIfFavorite(user.Name, contract.Id)).Returns(false);
 
         // Act
-        bool actual = _cut.CheckIfFavorite(user.Name, contract.Id);
+        bool actual = _cut.IsFavorite(user.Name, contract.Id);
 
         // Assert
         actual.Should().BeFalse();

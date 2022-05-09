@@ -35,7 +35,7 @@ public class FavoriteContractService : IFavoriteContractService
     }
 
     /// <inheritdoc />
-    public bool CheckIfFavorite(string userName, Guid contractId)
+    public bool IsFavorite(string userName, Guid contractId)
     {
         User user = FetchUser(userName);
         return user.Contracts.Any(c => c.Id == contractId);

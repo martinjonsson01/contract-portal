@@ -89,7 +89,7 @@ public class FavoritesControllerTests
         // Arrange
         string userName = "user";
         Guid contractId = Guid.NewGuid();
-        _mockContracts.Setup(service => service.CheckIfFavorite(userName, contractId)).Returns(true);
+        _mockContracts.Setup(service => service.IsFavorite(userName, contractId)).Returns(true);
 
         // Act
         IActionResult actual = _cut.GetIsFavorite(userName, contractId);
@@ -104,7 +104,7 @@ public class FavoritesControllerTests
         // Arrange
         string userName = "user";
         Guid contractId = Guid.NewGuid();
-        _mockContracts.Setup(service => service.CheckIfFavorite(userName, contractId)).Returns(false);
+        _mockContracts.Setup(service => service.IsFavorite(userName, contractId)).Returns(false);
 
         // Act
         IActionResult actual = _cut.GetIsFavorite(userName, contractId);

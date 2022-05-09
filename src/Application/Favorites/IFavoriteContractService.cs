@@ -20,7 +20,7 @@ public interface IFavoriteContractService
     /// <param name="userName">The name of the user.</param>
     /// <param name="contractId">The id of the contract.</param>
     /// <returns>Whether the contract was marked as favorite.</returns>
-    bool CheckIfFavorite(string userName, Guid contractId);
+    bool IsFavorite(string userName, Guid contractId);
 
     /// <summary>
     /// Adds a favorite contract for a certain user.
