@@ -47,9 +47,7 @@ internal class SessionManagerService : ISessionService
     {
         IsAuthenticated = await _storage.ContainKeyAsync("user").ConfigureAwait(true);
         if (!IsAuthenticated)
-#pragma warning disable RETURN0001
             return false;
-#pragma warning restore RETURN0001
 
         AuthenticateResponse state = await _storage.GetItemAsync<AuthenticateResponse>("user").ConfigureAwait(true);
         Authenticate(state);
