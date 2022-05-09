@@ -47,8 +47,8 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisp
         _cut.Add(user.Name, contract.Id);
 
         // Assert
-        var contracts = _context.Users.Where(u => u.Id == user.Id).Include(c => c.Contracts);
-        contracts.Where(c => c.Id == contract.Id).Should().NotBeNull();
+        var databaseUser = _context.Users.Find(user.id).Include(u => u.Contracts);
+        databaseUser.Contracts.Should().Contain(contract);
     }
 
     [Fact]

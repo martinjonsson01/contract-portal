@@ -31,7 +31,7 @@ public class FavoritesController : BaseApiController<FavoritesController>
     /// Adds a favorite or removes it if it already exists.
     /// </summary>
     /// <param name="setFavoriteContract">The favorite to add or remove.</param>
-    /// <returns>Whether the favorite was tried to be changed.</returns>
+    /// <returns>Whether the change succeeded.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Change(SetFavoriteContract setFavoriteContract)
