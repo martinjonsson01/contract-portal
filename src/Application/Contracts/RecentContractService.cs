@@ -44,6 +44,6 @@ public class RecentContractService : IRecentContractService
     /// <inheritdoc />
     public void Remove(Guid id)
     {
-        _recent.RemoveContractFromUserRecents(id);
+        _recent.RemoveContract(id);
     }
 }

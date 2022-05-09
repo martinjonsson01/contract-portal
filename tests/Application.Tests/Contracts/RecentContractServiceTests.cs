@@ -86,6 +86,6 @@ public class RecentContractServiceTests
         _cut.Remove(id);
 
         // Assert
-        _mockRepo.Verify(repo => repo.RemoveContractFromUserRecents(id), Times.Once);
+        _mockRepo.Verify(repo => repo.RemoveContract(id), Times.Once);
     }
 }

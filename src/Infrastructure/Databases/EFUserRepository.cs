@@ -48,7 +48,7 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
         User user = GetUserByUserName(id);
         if (user.RecentlyViewContracts.Any(other => other.Id == contract.Id))
         {
-            return;
+            user.RecentlyViewContracts.Remove(contract);
         }
 
         user.RecentlyViewContracts.AddFirst(contract);
@@ -63,7 +63,7 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     }
 
     /// <inheritdoc/>
-    public void RemoveContractFromUserRecents(Guid id)
+    public void RemoveContract(Guid id)
     {
         foreach (User user in Users)
         {
@@ -90,6 +90,7 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
         User user = GetUserByUserName(id);
         user.RecentlyViewContracts.RemoveLast();
         _ = _context.SaveChanges();
+        _logger.LogInformation("Removed last contract from user {UserName}'s recently viewed contracts",  user.Name);
     }
 
     /// <inheritdoc />
