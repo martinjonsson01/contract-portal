@@ -5,6 +5,7 @@ using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 
 using Client;
+using Client.Services.Authentication;
 
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -19,6 +20,7 @@ builder.Services
        .AddBlazorise(options => { options.Immediate = true; })
        .AddBootstrap5Providers()
        .AddFontAwesomeIcons()
-       .AddBlazoredSessionStorage();
+       .AddBlazoredSessionStorage()
+       .AddScoped<ISessionService, SessionManagerService>();
 
 await builder.Build().RunAsync().ConfigureAwait(false);

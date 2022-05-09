@@ -1,11 +1,13 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using System.Net.Http.Headers
 @using Application.Users
+@using Blazored.SessionStorage
 @using Blazorise.Extensions
 @using Domain.Users
 @inject HttpClient _http
 @inject IJSRuntime _js
 @inject NavigationManager _navigationManager
+@inject ISessionStorageService _session
 
 <div class="modal" id="log-in">
     <div class="modal-dialog">
@@ -60,9 +62,12 @@
             _logInFailed = false;
 
             var authResponse = await response.Content.ReadFromJsonAsync<AuthenticateResponse>();
+
             // Store token on http client so all future requests use the token.
-            // TODO: When making the login-state persist then this auth token should be stored in a cookie.
             _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
+
+            // Store user state in a session.
+            await _session.SetItemAsync("user", authResponse);
 
             await OnUserLogInChange.InvokeAsync(_user.UserName);
             await _js.InvokeVoidAsync("closeModal", "#log-in");
