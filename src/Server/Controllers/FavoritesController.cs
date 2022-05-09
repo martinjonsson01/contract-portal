@@ -1,5 +1,7 @@
+using Application.Contracts;
 using Application.FavoriteContracts;
 using Application.MessagePassing;
+using Application.Users;
 using Domain.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,19 +36,27 @@ public class FavoritesController : BaseApiController<FavoritesController>
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Change(SetFavoriteContract setFavoriteContract)
     {
-        if (setFavoriteContract is null)
+        try
+        {
+            if (setFavoriteContract.IsFavorite)
+            {
+                _favorites.Add(setFavoriteContract.UserName, setFavoriteContract.ContractId);
+            }
+            else
+            {
+                _ = _favorites.Remove(setFavoriteContract.UserName, setFavoriteContract.ContractId);
+            }
+
+            return Ok();
+        }
+        catch (UserDoesNotExistException)
+        {
             return BadRequest();
-
-        if (setFavoriteContract.IsFavorite)
-        {
-            _favorites.Add(setFavoriteContract.UserName, setFavoriteContract.ContractId);
         }
-        else
+        catch (ContractDoesNotExistException)
         {
-            _ = _favorites.Remove(setFavoriteContract.UserName, setFavoriteContract.ContractId);
+            return BadRequest();
         }
-
-        return Ok();
     }
 
     /// <summary>
