@@ -14,12 +14,13 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
 {
     private readonly TestDatabaseFixture _fixture;
     private EFUserRepository _cut;
+    private EFDatabaseContext _context;
 
     public UserRepositoryTests(TestDatabaseFixture fixture)
     {
         _fixture = fixture;
-        EFDatabaseContext context = _fixture.CreateContext();
-        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>());
+        _context = _fixture.CreateContext();
+        _cut = new EFUserRepository(_context, Mock.Of<ILogger<EFUserRepository>>());
         _cut.EnsureAdminCreated();
     }
 
@@ -96,21 +97,64 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
     public void AddRecent_ContractsAreInExpectedOrderAfterBeingAdded()
     {
         // Arrange
-        // const string adminName = "admin";
-        var user = new User();
+        const string adminName = "admin";
         var contract1 = new Contract();
         var contract2 = new Contract();
         var contract3 = new Contract();
-        _cut.Add(user);
+        _context.Contracts.Add(contract1);
+        _context.Contracts.Add(contract2);
+        _context.Contracts.Add(contract3);
 
         // Act
-        _cut.Add(user.Name, contract1);
-        _cut.Add(user.Name, contract2);
-        _cut.Add(user.Name, contract3);
-        IEnumerable<Contract> contracts = _cut.Fetch(user.Name) !.RecentlyViewContracts;
+        _cut.Add(adminName, contract1);
+        _cut.Add(adminName, contract2);
+        _cut.Add(adminName, contract3);
+        IEnumerable<Contract> contracts = _cut.Fetch(adminName) !.RecentlyViewContracts;
 
         // Assert
         contracts.First().Should().BeEquivalentTo(contract3);
         contracts.Last().Should().BeEquivalentTo(contract1);
+    }
+
+    [Fact]
+    public void AddRecent_ReAddingAnExistingContractPlacesItFirst()
+    {
+        // Arrange
+        const string adminName = "admin";
+        var contract1 = new Contract();
+        var contract2 = new Contract();
+        _context.Contracts.Add(contract1);
+        _context.Contracts.Add(contract2);
+
+        // Act
+        _cut.Add(adminName, contract1);
+        _cut.Add(adminName, contract2);
+        _cut.Add(adminName, contract1);
+        IEnumerable<Contract> contracts = _cut.Fetch(adminName) !.RecentlyViewContracts;
+
+        // Assert
+        contracts.First().Should().BeEquivalentTo(contract1);
+        contracts.Last().Should().BeEquivalentTo(contract2);
+    }
+
+    [Fact]
+    public void RemoveLast_RemovesTheLastAddedContract()
+    {
+        // Arrange
+        const string adminName = "admin";
+        var contract1 = new Contract();
+        var contract2 = new Contract();
+        _context.Contracts.Add(contract1);
+        _context.Contracts.Add(contract2);
+        _cut.Add(adminName, contract1);
+        _cut.Add(adminName, contract2);
+
+        // Act
+        _cut.RemoveLast(adminName);
+        IEnumerable<Contract> contracts = _cut.Fetch(adminName) !.RecentlyViewContracts;
+
+        // Assert
+        contracts.First().Should().BeEquivalentTo(contract2);
+        contracts.Should().ContainSingle();
     }
 }
