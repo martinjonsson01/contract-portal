@@ -13,11 +13,17 @@ public interface ISessionService
     event EventHandler<AuthenticationEventArgs> AuthenticationStateChanged;
 
     /// <summary>
+    /// Checks whether the current session is authenticated.
+    /// </summary>
+    /// <returns>Whether the current session is authenticated.</returns>
+    Task<bool> IsAuthenticatedAsync();
+
+    /// <summary>
     /// Begins a new authenticated user session.
     /// </summary>
     /// <param name="authentication">The authentication used to identify the user.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task StartAsync(AuthenticateResponse authentication);
+    Task BeginAsync(AuthenticateResponse authentication);
 
     /// <summary>
     /// Tries to resume a user session from the already available data.

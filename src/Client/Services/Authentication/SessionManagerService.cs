@@ -24,16 +24,21 @@ internal class SessionManagerService : ISessionService
     public event EventHandler<AuthenticationEventArgs>? AuthenticationStateChanged;
 
     /// <inheritdoc/>
-    public Task StartAsync(AuthenticateResponse authentication)
+    public async Task<bool> IsAuthenticatedAsync()
     {
-        return Task.CompletedTask;
+        return await _storage.ContainKeyAsync("user").ConfigureAwait(true);
+    }
+
+    /// <inheritdoc/>
+    public async Task BeginAsync(AuthenticateResponse authentication)
+    {
+        await _storage.SetItemAsync("user", authentication).ConfigureAwait(true);
     }
 
     /// <inheritdoc/>
     public async Task<AuthenticateResponse?> TryResumeAsync()
     {
-        bool loggedIn = await _storage.ContainKeyAsync("user").ConfigureAwait(true);
-        if (!loggedIn)
+        if (!await IsAuthenticatedAsync().ConfigureAwait(true))
 #pragma warning disable RETURN0001
             return null;
 #pragma warning restore RETURN0001
