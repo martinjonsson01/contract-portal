@@ -1,10 +1,12 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using AngleSharp.Dom;
 using Bunit;
 using Client.Pages.Contracts;
 
 using Domain.Contracts;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Client.Tests.Pages.Contracts;
 
@@ -48,6 +50,7 @@ public class FavoriteButtonTests : UITestFixture
         // Act
         IRenderedComponent<FavoriteButton> cut =
             Context.RenderComponent<FavoriteButton>(ParameterBuilder);
+        cut.WaitForElement(".bi-heart");
 
         // Assert
         cut.Find(".bi-heart").Should().NotBeNull();
@@ -55,7 +58,7 @@ public class FavoriteButtonTests : UITestFixture
     }
 
     [Fact]
-    public void FavoriteButton_CallsOnFavoriteChange_WhenClicked()
+    public async Task FavoriteButton_CallsOnFavoriteChange_WhenClickedAsync()
     {
         // Arrange
         string userName = "user";
@@ -72,8 +75,10 @@ public class FavoriteButtonTests : UITestFixture
 
         IRenderedComponent<FavoriteButton> cut = Context.RenderComponent<FavoriteButton>(ParameterBuilder);
 
+        cut.WaitForElement("#Favorite-button");
+
         // Act
-        cut.Find("#Favorite-button").Click();
+        await cut.Find("#Favorite-button").ClickAsync(new MouseEventArgs());
 
         // Assert
         Assert.True(eventCalled);
@@ -95,10 +100,13 @@ public class FavoriteButtonTests : UITestFixture
 
         IRenderedComponent<FavoriteButton> cut = Context.RenderComponent<FavoriteButton>(ParameterBuilder);
 
+        cut.WaitForElement(".bi-heart-fill");
         IElement beforeClicked = cut.Find(".bi-heart-fill");
+        cut.WaitForElement("#Favorite-button");
 
         // Act
         cut.Find("#Favorite-button").Click();
+        cut.WaitForElement(".bi-heart-fill");
         IElement afterClicked = cut.Find(".bi-heart-fill");
 
         // Assert
@@ -122,10 +130,13 @@ public class FavoriteButtonTests : UITestFixture
 
         IRenderedComponent<FavoriteButton> cut = Context.RenderComponent<FavoriteButton>(ParameterBuilder);
 
+        cut.WaitForElement(".bi-heart-fill");
         IElement beforeClicked = cut.Find(".bi-heart-fill");
+        cut.WaitForElement("#Favorite-button");
 
         // Act
         cut.Find("#Favorite-button").Click();
+        cut.WaitForElement(".bi-heart");
         IElement afterClicked = cut.Find(".bi-heart");
 
         // Assert

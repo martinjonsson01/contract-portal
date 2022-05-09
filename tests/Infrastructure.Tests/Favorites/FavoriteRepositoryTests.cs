@@ -2,6 +2,7 @@
 using System.Linq;
 using Application.Contracts;
 using Application.FavoriteContracts;
+using Application.Users;
 using Domain.Contracts;
 using Domain.Users;
 
@@ -43,11 +44,12 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public void Add_DoesNotMarkContractAsFavorite_WhenContractDoesNotExist()
+    public void Add_Throws_WhenContractDoesNotExist()
     {
         // Arrange
         User user = new() { Name = "user" };
         Guid fakeId = Guid.NewGuid();
+
         _context.Users.Add(user);
         _context.SaveChanges();
 
@@ -56,6 +58,23 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>
 
         // Assert
         fetch.Should().Throw<ContractDoesNotExistException>();
+    }
+
+    [Fact]
+    public void Add_Throws_WhenUserDoesNotExist()
+    {
+        // Arrange
+        string fakeUsername = "fakeUsername";
+        Contract contract = new();
+
+        _context.Contracts.Add(contract);
+        _context.SaveChanges();
+
+        // Act
+        Action fetch = () => _cut.Add(fakeUsername, contract.Id);
+
+        // Assert
+        fetch.Should().Throw<UserDoesNotExistException>();
     }
 
     [Fact]
@@ -81,11 +100,15 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>
     public void Remove_ReturnsFalse_WhenContractIsNotAFavorite()
     {
         // Arrange
-        var id = Guid.NewGuid();
-        string userName = "notAUser";
+        User user = new() { Name = "user" };
+        Contract contract = new();
+
+        _context.Contracts.Add(contract);
+        _context.Users.Add(user);
+        _context.SaveChanges();
 
         // Act
-        bool actual = _cut.Remove(userName, id);
+        bool actual = _cut.Remove(user.Name, contract.Id);
 
         // Assert
         actual.Should().BeFalse();
