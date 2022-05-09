@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Linq;
-
+using System.Threading;
 using Application.Users;
-
+using Domain.Contracts;
 using Domain.Users;
-
 using Infrastructure.Databases;
-
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Tests.Users;
@@ -15,7 +13,7 @@ namespace Infrastructure.Tests.Users;
 public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
 {
     private readonly TestDatabaseFixture _fixture;
-    private IUserRepository _cut;
+    private EFUserRepository _cut;
 
     public UserRepositoryTests(TestDatabaseFixture fixture)
     {
@@ -92,5 +90,27 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
 
         // Assert
         admins.Should().ContainSingle();
+    }
+
+    [Fact]
+    public void AddRecent_ContractsAreInExpectedOrderAfterBeingAdded()
+    {
+        // Arrange
+        // const string adminName = "admin";
+        var user = new User();
+        var contract1 = new Contract();
+        var contract2 = new Contract();
+        var contract3 = new Contract();
+        _cut.Add(user);
+
+        // Act
+        _cut.Add(user.Name, contract1);
+        _cut.Add(user.Name, contract2);
+        _cut.Add(user.Name, contract3);
+        IEnumerable<Contract> contracts = _cut.Fetch(user.Name) !.RecentlyViewContracts;
+
+        // Assert
+        contracts.First().Should().BeEquivalentTo(contract3);
+        contracts.Last().Should().BeEquivalentTo(contract1);
     }
 }
