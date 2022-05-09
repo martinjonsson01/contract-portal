@@ -75,10 +75,10 @@ public class FavoriteButtonTests : UITestFixture
 
         IRenderedComponent<FavoriteButton> cut = Context.RenderComponent<FavoriteButton>(ParameterBuilder);
 
-        cut.WaitForElement("#Favorite-button");
+        cut.WaitForElement("#favorite-button");
 
         // Act
-        await cut.Find("#Favorite-button").ClickAsync(new MouseEventArgs());
+        await cut.Find("#favorite-button").ClickAsync(new MouseEventArgs());
 
         // Assert
         Assert.True(eventCalled);
@@ -102,10 +102,10 @@ public class FavoriteButtonTests : UITestFixture
 
         cut.WaitForElement(".bi-heart-fill");
         IElement beforeClicked = cut.Find(".bi-heart-fill");
-        cut.WaitForElement("#Favorite-button");
+        cut.WaitForElement("#favorite-button");
 
         // Act
-        cut.Find("#Favorite-button").Click();
+        cut.Find("#favorite-button").Click();
         cut.WaitForElement(".bi-heart-fill");
         IElement afterClicked = cut.Find(".bi-heart-fill");
 
@@ -132,10 +132,10 @@ public class FavoriteButtonTests : UITestFixture
 
         cut.WaitForElement(".bi-heart-fill");
         IElement beforeClicked = cut.Find(".bi-heart-fill");
-        cut.WaitForElement("#Favorite-button");
+        cut.WaitForElement("#favorite-button");
 
         // Act
-        cut.Find("#Favorite-button").Click();
+        cut.Find("#favorite-button").Click();
         cut.WaitForElement(".bi-heart");
         IElement afterClicked = cut.Find(".bi-heart");
 
