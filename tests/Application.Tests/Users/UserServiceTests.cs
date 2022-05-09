@@ -59,7 +59,7 @@ public class UserServiceTests
     {
         // Arrange
         const string rawPassword = "abc123";
-        var test = new User { Password = rawPassword };
+        var test = new User { Password = rawPassword, };
 
         // Act
         _cut.Add(test);
@@ -178,7 +178,7 @@ public class UserServiceTests
     {
         // Arrange
         const string rawPassword = "abc123";
-        var test = new User { Password = rawPassword };
+        var test = new User { Password = rawPassword, };
         var encryptedUser = new User();
         _mockRepo.Setup(repo => repo.Add(It.IsAny<User>())).Callback<User>(usr => encryptedUser = usr);
         _cut.Add(test);
@@ -195,7 +195,7 @@ public class UserServiceTests
     {
         // Arrange
         const string rawPassword = "abc123";
-        var test = new User { Password = rawPassword };
+        var test = new User { Password = rawPassword, };
         var encryptedUser = new User();
         _mockRepo.Setup(repo => repo.Add(It.IsAny<User>())).Callback<User>(usr => encryptedUser = usr);
         _cut.Add(test);
