@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 namespace Infrastructure.Tests.Contracts;
 
 [Collection("DatabaseTests")]
-public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>
+public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposable
 {
     private readonly IFavoriteContractRepository _cut;
     private EFDatabaseContext _context;
@@ -22,6 +22,14 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>
     {
         _context = fixture.CreateContext();
         _cut = new EFFavoriteRepository(_context, Mock.Of<ILogger<EFFavoriteRepository>>());
+    }
+
+    public void Dispose()
+    {
+        _context.Contracts.RemoveRange(_context.Contracts);
+        _context.Users.RemoveRange(_context.Users);
+        _context.SaveChanges();
+        _context.Dispose();
     }
 
     [Fact]
