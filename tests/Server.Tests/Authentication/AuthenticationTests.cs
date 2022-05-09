@@ -25,14 +25,17 @@ public class AuthenticationTests
     }
 
     [Fact]
-    public void ValidateUser_ReturnsACorrectToken_WhenCorrectUsernameSpecified()
+    public void ValidateUser_ReturnsACorrectToken_WhenCorrectUsernameAndPasswordSpecified()
     {
         // Arrange
-        var user = new User { Name = "user name", };
+        const string password = "Password";
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        var user = new User { Name = "user name", Password = passwordHash, };
+        var userInfo = new User() { Name = "user name", Password = password, };
         _mockRepo.Setup(repo => repo.Fetch(user.Name)).Returns(user);
 
         // Act
-        IActionResult result = _cut.Authenticate(user.Name);
+        IActionResult result = _cut.Authenticate(userInfo);
 
         // Assert
         result.Should().BeAssignableTo<OkObjectResult>();

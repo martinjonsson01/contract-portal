@@ -45,31 +45,45 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public void Validate_ReturnsOk_IfUserExists()
+    public void Authenticate_ReturnsOk_IfUserExistsAndPasswordIsCorrect()
     {
         // Arrange
-        string username = "user";
-        _mockUsers.Setup(service => service.UserExists(username)).Returns(true);
+        var user = new User() { Name = "user", Password = "password", };
+        _mockUsers.Setup(service => service.Authenticate(user.Name, user.Password)).Returns(new AuthenticateResponse(user, "token"));
 
         // Act
-        IActionResult actual = _cut.Authenticate(username);
+        IActionResult actual = _cut.Authenticate(user);
 
         // Assert
         actual.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
-    public void Validate_ReturnsBadRequest_IfUserDoesNotExist()
+    public void Authenticate_ReturnsBadRequest_IfUserExistsButPasswordIsIncorrect()
     {
         // Arrange
-        string username = "user";
-        _mockUsers.Setup(service => service.Authenticate(username)).Throws<UserDoesNotExistException>();
+        var user = new User() { Name = "user", Password = "password", };
+        _mockUsers.Setup(service => service.Authenticate(user.Name, "password")).Throws<InvalidPasswordException>();
 
         // Act
-        IActionResult actual = _cut.Authenticate(username);
+        IActionResult actual = _cut.Authenticate(user);
 
         // Assert
-        actual.Should().BeOfType<BadRequestResult>();
+        actual.Should().BeOfType<UnauthorizedResult>();
+    }
+
+    [Fact]
+    public void Authenticate_ReturnsBadRequest_IfUserDoesNotExist()
+    {
+        // Arrange
+        var user = new User() { Name = "user", Password = string.Empty, };
+        _mockUsers.Setup(service => service.Authenticate(user.Name, string.Empty)).Throws<UserDoesNotExistException>();
+
+        // Act
+        IActionResult actual = _cut.Authenticate(user);
+
+        // Assert
+        actual.Should().BeOfType<UnauthorizedResult>();
     }
 
     [Fact]
