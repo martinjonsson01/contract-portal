@@ -1,0 +1,11 @@
+﻿@inject ISessionService Session
+
+@code {
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        Session.AuthenticationStateChanged += (_, _) => StateHasChanged();
+    }
+
+}

@@ -32,6 +32,6 @@ public interface ISessionService
     /// <summary>
     /// Tries to resume a user session from the already available data.
     /// </summary>
-    /// <returns>The task result contains the authentication state, if it succeeded.</returns>
-    Task<AuthenticateResponse?> TryResumeAsync();
+    /// <returns>The task result contains the whether it succeeded.</returns>
+    Task<bool> TryResumeAsync();
 }

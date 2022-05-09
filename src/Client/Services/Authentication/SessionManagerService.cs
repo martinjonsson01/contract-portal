@@ -1,4 +1,6 @@
-﻿using Application.Users;
+﻿using System.Net.Http.Headers;
+
+using Application.Users;
 
 using Blazored.SessionStorage;
 
@@ -10,14 +12,17 @@ namespace Client.Services.Authentication;
 internal class SessionManagerService : ISessionService
 {
     private readonly ISessionStorageService _storage;
+    private readonly HttpClient _http;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SessionManagerService"/> class.
     /// </summary>
     /// <param name="storage">A way to store session data.</param>
-    public SessionManagerService(ISessionStorageService storage)
+    /// <param name="http">The client to add authentication tokens to.</param>
+    public SessionManagerService(ISessionStorageService storage, HttpClient http)
     {
         _storage = storage;
+        _http = http;
     }
 
     /// <inheritdoc/>
@@ -33,22 +38,30 @@ internal class SessionManagerService : ISessionService
     public async Task BeginAsync(AuthenticateResponse authentication)
     {
         await _storage.SetItemAsync("user", authentication).ConfigureAwait(true);
-        IsAuthenticated = true;
-        Username = authentication.Username;
-        AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = authentication, });
+
+        Authenticate(authentication);
     }
 
     /// <inheritdoc/>
-    public async Task<AuthenticateResponse?> TryResumeAsync()
+    public async Task<bool> TryResumeAsync()
     {
         IsAuthenticated = await _storage.ContainKeyAsync("user").ConfigureAwait(true);
         if (!IsAuthenticated)
 #pragma warning disable RETURN0001
-            return null;
+            return false;
 #pragma warning restore RETURN0001
 
         AuthenticateResponse state = await _storage.GetItemAsync<AuthenticateResponse>("user").ConfigureAwait(true);
-        AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = state, });
-        return state;
+        Authenticate(state);
+        return true;
+    }
+
+    private void Authenticate(AuthenticateResponse authentication)
+    {
+        // Store token on http client so all future requests use the token.
+        _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authentication.Token);
+        IsAuthenticated = true;
+        Username = authentication.Username;
+        AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = authentication, });
     }
 }

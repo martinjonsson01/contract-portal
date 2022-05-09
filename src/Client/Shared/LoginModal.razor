@@ -3,11 +3,13 @@
 @using Application.Users
 @using Blazored.SessionStorage
 @using Blazorise.Extensions
+@using Client.Services.Authentication
 @using Domain.Users
+@inherits AuthenticatedView
 @inject HttpClient _http
 @inject IJSRuntime _js
 @inject NavigationManager _navigationManager
-@inject ISessionStorageService _session
+@inject ISessionService _session
 
 <div class="modal" id="log-in">
     <div class="modal-dialog">
@@ -26,7 +28,7 @@
 
                         @if (_logInFailed)
                         {
-                            <p class="text-danger">Inloggningen misslyckades </p>
+                            <p class="text-danger">Inloggningen misslyckades</p>
                         }
                     </div>
                     <div class="login-footer">
@@ -48,11 +50,6 @@
         [Required]
         public string UserName { get; set; } = string.Empty;
     }
-    /// <summary>
-    /// Called when the username is changed.
-    /// </summary>
-    [Parameter]
-    public EventCallback<string> OnUserLogInChange { get; set; } = EventCallback<string>.Empty;
 
     private async Task ValidateUser()
     {
@@ -63,13 +60,15 @@
 
             var authResponse = await response.Content.ReadFromJsonAsync<AuthenticateResponse>();
 
-            // Store token on http client so all future requests use the token.
-            _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
+            if (authResponse is null)
+            {
+                _logInFailed = true;
+                return;
+            }
 
-            // Store user state in a session.
-            await _session.SetItemAsync("user", authResponse);
+            // Begin new session.
+            await _session.BeginAsync(authResponse);
 
-            await OnUserLogInChange.InvokeAsync(_user.UserName);
             await _js.InvokeVoidAsync("closeModal", "#log-in");
             _navigationManager.NavigateTo("dashboard");
         }
