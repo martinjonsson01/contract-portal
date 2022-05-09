@@ -20,7 +20,7 @@ public class FavoriteContractServiceTests
     }
 
     [Fact]
-    public void FetchAllFavorites_CallsFetchAllFavoritesFromRepoExactlyOnce()
+    public void FetchAll_CallsFetchAllFavoritesFromRepoExactlyOnce()
     {
         // Arrange
         List<Contract> contracts = new List<Contract>() { new Contract(), new Contract(), new Contract() };
@@ -28,7 +28,7 @@ public class FavoriteContractServiceTests
         _mockUserRepo.Setup(repo => repo.Fetch(user.Name)).Returns(user);
 
         // Act
-        IEnumerable<Contract> fetchedContracts = _cut.FetchAllFavorites(user.Name);
+        IEnumerable<Contract> fetchedContracts = _cut.FetchAll(user.Name);
 
         // Assert
         fetchedContracts.Should().BeEquivalentTo(contracts);
@@ -81,7 +81,7 @@ public class FavoriteContractServiceTests
     }
 
     [Fact]
-    public void FetchAllFavorites_ReturnsAllFavoriteContracts()
+    public void FetchAll_ReturnsAllFavoriteContracts()
     {
         // Arrange
         List<Contract> mockFavoriteContracts = new Faker<Contract>().Generate(5);
@@ -89,14 +89,14 @@ public class FavoriteContractServiceTests
         _mockUserRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
 
         // Act
-        IEnumerable<Contract> favoriteContracts = _cut.FetchAllFavorites(user.Name);
+        IEnumerable<Contract> favoriteContracts = _cut.FetchAll(user.Name);
 
         // Assert
         favoriteContracts.Should().BeEquivalentTo(mockFavoriteContracts);
     }
 
     [Fact]
-    public void FetchAllFavorites_Throws_WhenTheUserDoesNotExist()
+    public void FetchAll_Throws_WhenTheUserDoesNotExist()
     {
         // Arrange
         List<Contract> mockFavoriteContracts = new Faker<Contract>().Generate(5);
@@ -104,7 +104,7 @@ public class FavoriteContractServiceTests
         _mockUserRepo.Setup(repository => repository.Fetch(user.Name)).Returns<User?>(null);
 
         // Act
-        Action add = () => _cut.FetchAllFavorites(user.Name);
+        Action add = () => _cut.FetchAll(user.Name);
 
         // Assert
         add.Should().Throw<UserDoesNotExistException>();

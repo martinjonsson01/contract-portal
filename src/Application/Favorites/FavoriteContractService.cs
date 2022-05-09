@@ -42,7 +42,7 @@ public class FavoriteContractService : IFavoriteContractService
     }
 
     /// <inheritdoc/>
-    public IEnumerable<Contract> FetchAllFavorites(string userName)
+    public IEnumerable<Contract> FetchAll(string userName)
     {
         return FetchUser(userName).Favorites;
     }

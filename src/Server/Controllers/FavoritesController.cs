@@ -84,6 +84,6 @@ public class FavoritesController : BaseApiController<FavoritesController>
     [HttpGet("{userName}")]
     public IEnumerable<Contract> GetAll(string userName)
     {
-        return _favorites.FetchAllFavorites(userName);
+        return _favorites.FetchAll(userName);
     }
 }
