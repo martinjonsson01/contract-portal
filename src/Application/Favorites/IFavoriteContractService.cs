@@ -12,7 +12,7 @@ public interface IFavoriteContractService
     /// </summary>
     /// <param name="userName">The name of the user.</param>
     /// <returns>All contracts marked as favorite by the user.</returns>
-    IEnumerable<Contract> FetchAllFavorites(string userName);
+    IEnumerable<Contract> FetchAll(string userName);
 
     /// <summary>
     /// Checks if the contract is marked as favorite by the user.

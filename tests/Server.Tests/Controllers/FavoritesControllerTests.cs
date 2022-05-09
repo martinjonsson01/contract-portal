@@ -26,7 +26,7 @@ public class FavoritesControllerTests
         // Arrange
         string userName = "user";
         List<Contract> fakeFavoriteContracts = new Faker<Contract>().Generate(10);
-        _mockContracts.Setup(service => service.FetchAllFavorites(userName)).Returns(fakeFavoriteContracts);
+        _mockContracts.Setup(service => service.FetchAll(userName)).Returns(fakeFavoriteContracts);
 
         // Act
         IEnumerable<Contract> favoriteContracts = _cut.GetAll(userName);
