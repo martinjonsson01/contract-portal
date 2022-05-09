@@ -16,9 +16,9 @@ public class User
     public string Name { get; set; } = "Inget namn";
 
     /// <summary>
-    /// Gets or sets the password for the user.
+    /// Gets or sets the hashed and salted version of the inserted password.
     /// </summary>
-    public string? Password { get; set; } = "verysecurepassword";
+    public string Password { get; set; } = "Inget lösenord";
 
     /// <summary>
     /// Gets or sets the name of the company.
