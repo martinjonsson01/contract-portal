@@ -1,5 +1,7 @@
 ﻿@using Blazorise.Extensions
-@inject IJSRuntime _js
+@using System.Net.Http.Headers
+@inject IJSRuntime Js
+@inject HttpClient Http
 
 @if (LoggedInUser.IsNullOrEmpty())
 {
@@ -17,6 +19,7 @@ else
         <p id="logged-in" class="text-center m-0">
             Inloggad som: @LoggedInUser
         </p>
+        <button class="btn btn-link" @onclick="LogOut">Logga ut</button>
     </div>
 }
 @code {
@@ -27,9 +30,21 @@ else
     [CascadingParameter(Name = nameof(LoggedInUser))]
     public string? LoggedInUser { get; set; }
 
+    /// <summary>
+    /// Called to notify that the username has been changed.
+    /// </summary>
+    [CascadingParameter(Name = nameof(OnUserLoginChange))]
+    public EventCallback<string> OnUserLoginChange { get; set; } = EventCallback<string>.Empty;
+
     private async Task FocusUsernameField()
     {
         // Focuses the username text input element.
-        await _js.InvokeVoidAsync("focusElement", "#username");
+        await Js.InvokeVoidAsync("focusElement", "#username");
+    }
+
+    private async Task LogOut()
+    {
+        Http.DefaultRequestHeaders.Authorization = null;
+        await OnUserLoginChange.InvokeAsync(string.Empty);
     }
 }

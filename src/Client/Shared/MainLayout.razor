@@ -1,22 +1,26 @@
 ﻿@inherits LayoutComponentBase
 <CascadingValue Value="@_loggedInUser" Name="LoggedInUser">
-    <ThemeProvider Theme="@_theme">
-        <div class="page">
-            <main>
-                <div class="sticky-top">
-                    <NavMenu/>
-                </div>
-                <article class="content px-4">
-                    @Body
-                    <LoginModal OnUserLogInChange="@OnUserLogIn"/>
-                </article>
-            </main>
-        </div>
-    </ThemeProvider>
+    <CascadingValue Value="@OnUserLoginEventHandler" Name="OnUserLoginChange">
+        <ThemeProvider Theme="@_theme">
+            <div class="page">
+                <main>
+                    <div class="sticky-top">
+                        <NavMenu/>
+                    </div>
+                    <article class="content px-4">
+                        @Body
+                        <LoginModal/>
+                    </article>
+                </main>
+            </div>
+        </ThemeProvider>
+    </CascadingValue>
 </CascadingValue>
 
 @code
 {
+    private EventCallback<string> OnUserLoginEventHandler => new(this, OnUserLogIn);
+
     private void OnUserLogIn(string username)
     {
         _loggedInUser = username;

@@ -43,10 +43,10 @@
     bool _logInFailed = false;
 
     /// <summary>
-    /// Called when the username is changed.
+    /// Called to notify that the username has been changed.
     /// </summary>
-    [Parameter]
-    public EventCallback<string> OnUserLogInChange { get; set; } = EventCallback<string>.Empty;
+    [CascadingParameter(Name=nameof(OnUserLoginChange))]
+    public EventCallback<string> OnUserLoginChange { get; set; } = EventCallback<string>.Empty;
 
     private async Task ValidateUser()
     {
@@ -60,7 +60,7 @@
             // TODO: When making the login-state persist then this auth token should be stored in a cookie.
             _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
 
-            await OnUserLogInChange.InvokeAsync(_user.Name);
+            await OnUserLoginChange.InvokeAsync(_user.Name);
             await _js.InvokeVoidAsync("closeModal", "#log-in");
             _navigationManager.NavigateTo("dashboard");
         }
