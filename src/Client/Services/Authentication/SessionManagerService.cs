@@ -51,7 +51,13 @@ internal class SessionManagerService : ISessionService
     public async Task EndAsync()
     {
         await _storage.RemoveItemAsync("user").ConfigureAwait(true);
+
         _http.DefaultRequestHeaders.Authorization = null;
+
+        IsAuthenticated = false;
+        Username = null;
+
+        AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = null, });
         _navigationManager.NavigateTo("/");
     }
 

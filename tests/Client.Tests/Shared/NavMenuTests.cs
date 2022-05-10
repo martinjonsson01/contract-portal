@@ -46,7 +46,7 @@ public class NavMenuTests : UITestFixture
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
 
         // Assert
-        cut.Find("#logout-button").Should().NotBeNull();
+        cut.Find("#logged-in").Should().NotBeNull();
     }
 
     [Fact]
