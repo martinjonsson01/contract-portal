@@ -12,4 +12,18 @@ public class ContractApiIntegrationTests : IntegrationTest
         : base(factory)
     {
     }
+
+    [Fact]
+    public async Task PutContract_CreatesNewContract_IfItDoesNotExist()
+    {
+        // Arrange
+        await ArrangeAuthenticatedAdminAsync();
+        var newContract = new Contract();
+
+        // Act
+        HttpResponseMessage response = await Client.PutAsJsonAsync("api/v1/contracts", newContract);
+
+        // Assert
+        response.Should().BeSuccessful();
+    }
 }

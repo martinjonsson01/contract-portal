@@ -24,16 +24,16 @@ public class IntegrationTest : IClassFixture<TestWebApplicationFactory>
 
     protected HttpClient Client { get; }
 
-    protected async Task ArrangeResource<TResource>(string url, TResource resource)
+    protected async Task ArrangeResourceAsync<TResource>(string url, TResource resource)
     {
-        await ArrangeAuthenticatedAdmin();
+        await ArrangeAuthenticatedAdminAsync();
         await Client.PostAsJsonAsync(url, resource);
 
         // Log out.
         Client.DefaultRequestHeaders.Authorization = null;
     }
 
-    protected async Task ArrangeAuthenticatedAdmin()
+    protected async Task ArrangeAuthenticatedAdminAsync()
     {
         var userInfo = new User()
         {
@@ -46,10 +46,10 @@ public class IntegrationTest : IClassFixture<TestWebApplicationFactory>
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
     }
 
-    protected async Task ArrangeAuthenticatedUser()
+    protected async Task ArrangeAuthenticatedUserAsync()
     {
         // Arrange - authenticate as admin user.
-        await ArrangeAuthenticatedAdmin();
+        await ArrangeAuthenticatedAdminAsync();
 
         // Arrange - create normal user.
         var user = new User();

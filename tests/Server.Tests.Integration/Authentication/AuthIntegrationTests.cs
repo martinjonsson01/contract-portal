@@ -85,7 +85,7 @@ public class AuthIntegrationTests : IntegrationTest
         HttpContent content)
     {
         // Arrange
-        await ArrangeAuthenticatedUser();
+        await ArrangeAuthenticatedUserAsync();
 
         // Act
         HttpResponseMessage response = await Client.PostAsync(endpointUrl, content);
@@ -101,7 +101,7 @@ public class AuthIntegrationTests : IntegrationTest
         HttpContent content)
     {
         // Arrange
-        await ArrangeAuthenticatedAdmin();
+        await ArrangeAuthenticatedAdminAsync();
 
         // Act
         HttpResponseMessage response = await Client.PostAsync(endpointUrl, content);
@@ -117,7 +117,7 @@ public class AuthIntegrationTests : IntegrationTest
         Func<HttpClient, Task> createResource)
     {
         // Arrange
-        await ArrangeAuthenticatedUser();
+        await ArrangeAuthenticatedUserAsync();
         await createResource(Client);
 
         // Act
@@ -134,7 +134,7 @@ public class AuthIntegrationTests : IntegrationTest
         Func<HttpClient, Task> createResource)
     {
         // Arrange
-        await ArrangeAuthenticatedAdmin();
+        await ArrangeAuthenticatedAdminAsync();
         await createResource(Client);
 
         // Act
@@ -149,7 +149,7 @@ public class AuthIntegrationTests : IntegrationTest
     {
         // Arrange
         var contract = new Contract();
-        await ArrangeResource("/api/v1/contracts", contract);
+        await ArrangeResourceAsync("/api/v1/contracts", contract);
 
         // Act
         HttpResponseMessage response = await Client.GetAsync("/api/v1/contracts");
@@ -176,7 +176,7 @@ public class AuthIntegrationTests : IntegrationTest
     {
         // Arrange
         var contract = new Contract { Instructions = "very secret usage instructions", };
-        await ArrangeResource("/api/v1/contracts", contract);
+        await ArrangeResourceAsync("/api/v1/contracts", contract);
 
         // Act
         HttpResponseMessage response = await Client.GetAsync("/api/v1/contracts");
@@ -193,9 +193,9 @@ public class AuthIntegrationTests : IntegrationTest
     {
         // Arrange
         var contract = new Contract();
-        await ArrangeResource("/api/v1/contracts", contract);
+        await ArrangeResourceAsync("/api/v1/contracts", contract);
 
-        await ArrangeAuthenticatedUser();
+        await ArrangeAuthenticatedUserAsync();
 
         // Act
         HttpResponseMessage response = await Client.GetAsync("/api/v1/contracts");
