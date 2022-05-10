@@ -111,6 +111,27 @@
         await _js.InvokeVoidAsync("scrollToElement", "#contract-form-title");
         _shouldRender = true;
         _contract = contract;
+        await DownloadContractFiles();
+    }
+
+    private async Task DownloadContractFiles()
+    {
+        await DownloadContractFile(_contract.InspirationalImagePath, content => _inspirationalContent = content);
+        await DownloadContractFile(_contract.SupplierLogoImagePath, content => _supplierLogoContent = content);
+        await DownloadContractFile(_contract.AdditionalDocument, content => _additionalDocumentContent = content);
+    }
+
+    private async Task DownloadContractFile(string path, Action<MultipartFormDataContent> setContent)
+    {
+
+        var fileUri = new Uri(Path.Join(_http.BaseAddress?.ToString(), path[1..]), UriKind.Absolute);
+
+        HttpResponseMessage response = await _http.GetAsync(fileUri);
+        string mediaType = response.Content.Headers.ContentType?.MediaType ?? "images/jpeg";
+        Stream stream = await response.Content.ReadAsStreamAsync();
+
+        MultipartFormDataContent content = CreateFormDataContent(stream, fileUri.Segments.Last(), mediaType);
+        setContent(content);
     }
 
     private static Contract CreateEmptyContract()
@@ -163,8 +184,7 @@
             throw;
         }
 
-        fileContent.Headers.ContentType =
-            new MediaTypeHeaderValue(contentType);
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 
         var content = new MultipartFormDataContent();
         content.Add(fileContent, "\"file\"", fileName);
