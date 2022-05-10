@@ -1,23 +1,26 @@
 .text-block {
     position: absolute;
     text-align: center;
-    width: 100%;
-    background-color: white;
+    background-color: blue;
     top: 50%;
 }
 
-.img {
+.container img {
     position: absolute;
-    height: auto;
-    width: 100%;
-    overflow: hidden;
-    display: block;
-    justify-content: center;
+    flex-shrink:0;
+    min-width: 100%;
+    min-height: 100%;
     object-fit: cover;
-    transform: translate(-50%, -50%);
 }
 .container {
-    position: relative;
-    padding-right: 0;
     padding-left: 0;
+    padding-right: 0;
+    left:0;
+    height:auto;
+    max-width:100%;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    oevrflow: hidden;
 }
+
