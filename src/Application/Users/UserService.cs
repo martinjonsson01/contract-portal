@@ -95,7 +95,7 @@ public class UserService : IUserService
             Subject = new ClaimsIdentity(CreateClaims(user)),
             Audience = _config[ConfigurationKeys.JwtIssuer],
             Issuer = _config[ConfigurationKeys.JwtIssuer],
-            Expires = DateTime.UtcNow.AddHours(1),
+            Expires = DateTime.MaxValue,
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
         };
