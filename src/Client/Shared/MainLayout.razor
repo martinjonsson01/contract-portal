@@ -73,5 +73,12 @@
 
     private void LogOut(object? sender, ElapsedEventArgs elapsedEventArgs)
     {
+        InvokeAsync(() =>
+        {
+            // TODO: this method should be moved into the session management service when merging with #118
+            Http.DefaultRequestHeaders.Authorization = null;
+            OnUserLogIn(string.Empty);
+            NavigationManager.NavigateTo("/");
+        });
     }
 }
