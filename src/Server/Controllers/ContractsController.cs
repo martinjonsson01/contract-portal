@@ -95,10 +95,9 @@ public class ContractsController : BaseApiController<ContractsController>
         {
             _contracts.Add(contract);
         }
-        catch (IdentifierAlreadyTakenException e)
+        catch (IdentifierAlreadyTakenException)
         {
-            Logger.LogInformation("ID of contract was already taken: {Error}", e.Message);
-            return BadRequest();
+            _contracts.UpdateContract(contract);
         }
 
         return Ok();

@@ -14,7 +14,7 @@ public class ContractApiIntegrationTests : IntegrationTest
     }
 
     [Fact]
-    public async Task PutContract_CreatesNewContract_IfItDoesNotExist()
+    public async Task PutContract_CreatesNewContract_WhenItDoesNotExist()
     {
         // Arrange
         await ArrangeAuthenticatedAdminAsync();
@@ -27,5 +27,24 @@ public class ContractApiIntegrationTests : IntegrationTest
         response.Should().BeSuccessful();
         var contracts = await Client.GetFromJsonAsync<IEnumerable<Contract>>("api/v1/contracts");
         contracts.Should().ContainEquivalentOf(newContract);
+    }
+
+    [Fact]
+    public async Task PutContract_UpdatesExistingContract_WhenItExists()
+    {
+        // Arrange
+        var contract = new Contract();
+        string endpointUrl = $"api/v1/contracts/{contract.Id}";
+        await PutResourceAsync(endpointUrl, contract);
+        await ArrangeAuthenticatedAdminAsync();
+        contract.Name = "Modified name";
+
+        // Act
+        HttpResponseMessage response = await Client.PutAsJsonAsync(endpointUrl, contract);
+
+        // Assert
+        response.Should().BeSuccessful();
+        var contracts = await Client.GetFromJsonAsync<IEnumerable<Contract>>("api/v1/contracts");
+        contracts.Should().ContainEquivalentOf(contract);
     }
 }
