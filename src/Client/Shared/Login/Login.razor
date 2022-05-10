@@ -45,6 +45,7 @@ else
 
     private async Task LogOut()
     {
+        // TODO: this method should be moved into the session management service when merging with #118
         Http.DefaultRequestHeaders.Authorization = null;
         await OnUserLoginChange.InvokeAsync(string.Empty);
         NavigationManager.NavigateTo("/");
