@@ -19,7 +19,7 @@
         <Content>
             <TabPanel Name="contracts">
                 <ContractForm OnContractUploaded="AddContractToTable"/>
-                <ContractTable @ref="@_contractTable"/>
+                <ContractTable @ref="@_contractTable" ContractOpeningForEdit="@OnContractOpeningForEdit"/>
             </TabPanel>
             <TabPanel Name="users">
                 <UserForm OnUserAdded="AddUserToTable"/>
@@ -51,4 +51,10 @@
         _selectedTab = tabName;
         return Task.CompletedTask;
     }
+
+    private void OnContractOpeningForEdit(Contract contract)
+    {
+        Console.WriteLine("Contract being edited " + contract.Name);
+    }
+
 }

@@ -12,6 +12,7 @@
             <tr>
                 <th scope="col">Kontraktnamn</th>
                 <th scope="col">Företag</th>
+                <th scope="col">Redigera</th>
                 <th scope="col">Ta bort</th>
             </tr>
         </thead>
@@ -19,7 +20,9 @@
         <tbody>
         @foreach (Contract contract in contracts)
         {
-            <ContractTableRow Contract=@contract OnContractRemoved=@Remove/>
+            <ContractTableRow Contract=@contract
+                              OnContractRemoved=@Remove
+                              ContractOpeningForEdit="@(async () => await ContractOpeningForEdit.InvokeAsync(contract))"/>
         }
         </tbody>
     </table>
@@ -28,7 +31,11 @@
 
 @code {
 
-    private FetchData<List<Contract>> _dataFetcher = null!;
+    /// <summary>
+    /// Called when a <see cref="Contract"/> is being opened to be edited.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Contract> ContractOpeningForEdit { get; set; } = EventCallback<Contract>.Empty;
 
     /// <summary>
     /// Adds a contract to the list.
@@ -39,6 +46,8 @@
         _dataFetcher.Data?.Add(contract);
         InvokeAsync(StateHasChanged);
     }
+
+    private FetchData<List<Contract>> _dataFetcher = null!;
 
     /// <summary>
     /// Removes a contract from the list.
