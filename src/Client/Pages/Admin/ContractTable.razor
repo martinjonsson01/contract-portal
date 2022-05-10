@@ -49,7 +49,7 @@
 
         if (_dataFetcher.Data.Any(other => other.Id == contract.Id))
         {
-            _dataFetcher.Data.Remove(contract);
+            _dataFetcher.Data.RemoveAll(toRemove => toRemove.Id == contract.Id);
             _dataFetcher.Data.Add(contract);
         }
         else
