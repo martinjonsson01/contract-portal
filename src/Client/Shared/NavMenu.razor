@@ -38,18 +38,7 @@
                     </li>
                 }
             </ul>
-            <div>
-                @if (LoggedInUser.IsNullOrEmpty())
-                {
-                    <LogInButton />
-                }
-                else
-                {
-                    <p id="logged-in" class="text-center m-0">
-                        Inloggad som: @LoggedInUser
-                    </p>
-                }
-            </div>
+            <Login />
         </div>
     </div>
 </nav>

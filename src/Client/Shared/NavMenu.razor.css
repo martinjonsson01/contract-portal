@@ -9,7 +9,3 @@
 .navbar {
     padding: 1rem 0;
 }
-
-#logged-in {
-    color: var(--prodigo-white);
-}

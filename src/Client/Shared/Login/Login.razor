@@ -1,0 +1,35 @@
+﻿@using Blazorise.Extensions
+@inject IJSRuntime _js
+
+@if (LoggedInUser.IsNullOrEmpty())
+{
+    <button id="login-button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#log-in"
+            @onclick="FocusUsernameField">
+        Logga in
+    </button>
+}
+else
+{
+    <div class="d-flex flex-row align-items-center">
+        <p id="logged-in" class="text-center m-0">
+            Inloggad som: @LoggedInUser
+        </p>
+    </div>
+}
+@code {
+
+    /// <summary>
+    /// The name of the currently logged in user.
+    /// </summary>
+    [CascadingParameter(Name = nameof(LoggedInUser))]
+    public string? LoggedInUser { get; set; }
+
+    private async Task FocusUsernameField()
+    {
+        // Focuses the username text input element.
+        await _js.InvokeVoidAsync("focusElement", "#username");
+    }
+}
