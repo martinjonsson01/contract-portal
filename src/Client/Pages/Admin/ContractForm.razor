@@ -138,34 +138,38 @@
     {
         _shouldRender = false;
 
-        content = new MultipartFormDataContent();
-        StreamContent fileContent;
-
         const long bitsInAKilobyte = 1024;
         const long kilobytesInAMegabyte = 1024;
         const long maxFileSize = bitsInAKilobyte * kilobytesInAMegabyte * 100;
 
+        Stream fileStream = arg.File.OpenReadStream(maxFileSize);
+
+        content = CreateFormDataContent(fileStream, arg.File.Name, arg.File.ContentType);
+
+        _shouldRender = true;
+    }
+
+    private MultipartFormDataContent CreateFormDataContent(Stream fileStream, string fileName, string contentType)
+    {
+        StreamContent fileContent;
+
         try
         {
-            fileContent = new StreamContent(arg.File.OpenReadStream(maxFileSize));
+            fileContent = new StreamContent(fileStream);
         }
         catch (IOException ex)
         {
-            _logger.LogInformation(
-                "{FileName} not uploaded: {Message}",
-                arg.File.Name, ex.Message);
-            return;
+            _logger.LogInformation("{FileName} not uploaded: {Message}", fileName, ex.Message);
+            throw;
         }
 
         fileContent.Headers.ContentType =
-            new MediaTypeHeaderValue(arg.File.ContentType);
+            new MediaTypeHeaderValue(contentType);
 
-        content.Add(
-            fileContent,
-            "\"file\"",
-            arg.File.Name);
+        var content = new MultipartFormDataContent();
+        content.Add(fileContent, "\"file\"", fileName);
 
-        _shouldRender = true;
+        return content;
     }
 
     private async Task OnSubmit()
