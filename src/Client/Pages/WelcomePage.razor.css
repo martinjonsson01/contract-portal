@@ -1,19 +1,22 @@
 .text-block {
     position: absolute;
     text-align: center;
-    background-color: blue;
-    top: 50%;
+    top: 40px;
+    left:15%;
+    justify-content:center;
+    padding-left:10px;
+    padding-right:10px;
 }
 
-.container img {
-    position: absolute;
-    flex-shrink:0;
-    min-width: 100%;
+.container img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width:100%;
     min-height: 100%;
-    object-fit: cover;
 }
 .container {
-    padding-left: 0;
+    padding-left:0;
     padding-right: 0;
     left:0;
     height:auto;
