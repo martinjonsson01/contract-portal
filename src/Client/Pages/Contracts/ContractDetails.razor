@@ -1,5 +1,6 @@
 ﻿@using Domain.Contracts
 @using System.Runtime.Serialization
+@inject ISessionService _session
 
 <!-- modal-dialog-scrollable -->
 <div class="modal w-100" id="@("id_" + Contract.Id)">
@@ -96,13 +97,7 @@
     [Parameter, EditorRequired,]
     public Contract Contract { get; set; } = null!;
 
-    /// <summary>
-    /// The name of the currently logged in user.
-    /// </summary>
-    [CascadingParameter(Name = nameof(LoggedInUser))]
-    public string? LoggedInUser { get; set; }
-
-    private bool ShouldHideDetails => string.IsNullOrEmpty(LoggedInUser);
+    private bool ShouldHideDetails => !_session.IsAuthenticated;
 
     private string ImagePath => string.IsNullOrEmpty(Contract.InspirationalImagePath) ?
         Contract.SupplierLogoImagePath :

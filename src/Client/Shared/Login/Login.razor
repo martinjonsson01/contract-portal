@@ -1,10 +1,19 @@
 ﻿@using Blazorise.Extensions
 @using System.Net.Http.Headers
 @inject IJSRuntime Js
-@inject HttpClient Http
-@inject NavigationManager NavigationManager
+@inject ISessionService Session
+@inherits AuthenticatedView
 
-@if (LoggedInUser.IsNullOrEmpty())
+@if (Session.IsAuthenticated)
+{
+    <div class="d-flex flex-row align-items-center">
+        <p id="logged-in" class="text-center m-0">
+            Inloggad som: @Session.Username
+        </p>
+        <button class="btn btn-link" @onclick="@(async () => await Session.EndAsync())">Logga ut</button>
+    </div>
+}
+else
 {
     <button id="login-button"
             class="btn btn-primary"
@@ -14,40 +23,11 @@
         Logga in
     </button>
 }
-else
-{
-    <div class="d-flex flex-row align-items-center">
-        <p id="logged-in" class="text-center m-0">
-            Inloggad som: @LoggedInUser
-        </p>
-        <button class="btn btn-link" @onclick="LogOut">Logga ut</button>
-    </div>
-}
 @code {
-
-    /// <summary>
-    /// The name of the currently logged in user.
-    /// </summary>
-    [CascadingParameter(Name = nameof(LoggedInUser))]
-    public string? LoggedInUser { get; set; }
-
-    /// <summary>
-    /// Called to notify that the username has been changed.
-    /// </summary>
-    [CascadingParameter(Name = nameof(OnUserLoginChange))]
-    public EventCallback<string> OnUserLoginChange { get; set; } = EventCallback<string>.Empty;
 
     private async Task FocusUsernameField()
     {
         // Focuses the username text input element.
         await Js.InvokeVoidAsync("focusElement", "#username");
-    }
-
-    private async Task LogOut()
-    {
-        // TODO: this method should be moved into the session management service when merging with #118
-        Http.DefaultRequestHeaders.Authorization = null;
-        await OnUserLoginChange.InvokeAsync(string.Empty);
-        NavigationManager.NavigateTo("/");
     }
 }
