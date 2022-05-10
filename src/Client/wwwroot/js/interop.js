@@ -8,3 +8,12 @@ function focusElement(selector) {
     const element = document.querySelector(selector);
     element.focus();
 }
+
+function registerActivityCallback(dotNetHelper) {
+    document.onmousemove = resetTimeDelay;
+    document.onkeydown = resetTimeDelay;
+
+    function resetTimeDelay() {
+        dotNetHelper.invokeMethodAsync("ResetTimer");
+    }
+}
