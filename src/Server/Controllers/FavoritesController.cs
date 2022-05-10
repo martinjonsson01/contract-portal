@@ -69,11 +69,6 @@ public class FavoritesController : BaseApiController<FavoritesController>
     public IActionResult GetIsFavorite(string userName, Guid contractId)
     {
         return _favorites.IsFavorite(userName, contractId) ? Ok() : BadRequest();
-
-        // bool result = _favorites.CheckIfFavorite(userName, contractId);
-        // if (result)
-        //    return Ok();
-        // return BadRequest();
     }
 
     /// <summary>
