@@ -82,13 +82,14 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <summary>
     /// Creates a new contract.
     /// </summary>
-    /// <param name="contract">The contract to add.</param>
+    /// <param name="contract">The contract to put.</param>
+    /// <param name="id">The identifier of the contract to put.</param>
     /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The ID of the contract was already taken.</response>
-    [HttpPost]
+    [HttpPut("{id:guid}")]
     [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult CreateContract(Contract contract)
+    public IActionResult CreateContract([FromBody] Contract contract, Guid id)
     {
         try
         {

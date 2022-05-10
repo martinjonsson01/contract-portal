@@ -21,9 +21,11 @@ public class ContractApiIntegrationTests : IntegrationTest
         var newContract = new Contract();
 
         // Act
-        HttpResponseMessage response = await Client.PutAsJsonAsync("api/v1/contracts", newContract);
+        HttpResponseMessage response = await Client.PutAsJsonAsync($"api/v1/contracts/{newContract.Id}", newContract);
 
         // Assert
         response.Should().BeSuccessful();
+        var contracts = await Client.GetFromJsonAsync<IEnumerable<Contract>>("api/v1/contracts");
+        contracts.Should().ContainEquivalentOf(newContract);
     }
 }

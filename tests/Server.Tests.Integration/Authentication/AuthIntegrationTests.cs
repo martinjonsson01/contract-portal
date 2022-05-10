@@ -1,12 +1,9 @@
 ﻿using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-using Application.Configuration;
 using Application.Contracts;
-using Application.Users;
 
 using Domain.Contracts;
 using Domain.Users;
@@ -25,7 +22,6 @@ public class AuthIntegrationTests : IntegrationTest
     public static IEnumerable<object[]> AdminPostApiEndpoints =>
         new List<object[]>
         {
-            new object[] { "/api/v1/contracts", JsonContent.Create(new Contract()), },
             new object[] { "/api/v1/users", JsonContent.Create(new User()), },
         };
 
@@ -33,10 +29,10 @@ public class AuthIntegrationTests : IntegrationTest
     {
         get
         {
-            const string contractEndpoint = "/api/v1/contracts";
             var contract = new Contract();
+            string contractEndpoint = $"/api/v1/contracts/{contract.Id}";
             Func<HttpClient, Task> createContract =
-                async client => await client.PostAsJsonAsync(contractEndpoint, contract);
+                async client => await client.PutAsJsonAsync(contractEndpoint, contract);
 
             const string usersEndpoint = "/api/v1/users";
             var user = new User();
@@ -44,7 +40,7 @@ public class AuthIntegrationTests : IntegrationTest
 
             return new List<object[]>
             {
-                new object[] { contractEndpoint + $"/{contract.Id}", createContract, },
+                new object[] { contractEndpoint, createContract, },
                 new object[] { usersEndpoint + $"/{user.Id}", createUser, },
             };
         }
@@ -149,7 +145,7 @@ public class AuthIntegrationTests : IntegrationTest
     {
         // Arrange
         var contract = new Contract();
-        await ArrangeResourceAsync("/api/v1/contracts", contract);
+        await PutResourceAsync($"/api/v1/contracts/{contract.Id}", contract);
 
         // Act
         HttpResponseMessage response = await Client.GetAsync("/api/v1/contracts");
@@ -176,7 +172,7 @@ public class AuthIntegrationTests : IntegrationTest
     {
         // Arrange
         var contract = new Contract { Instructions = "very secret usage instructions", };
-        await ArrangeResourceAsync("/api/v1/contracts", contract);
+        await PutResourceAsync("/api/v1/contracts", contract);
 
         // Act
         HttpResponseMessage response = await Client.GetAsync("/api/v1/contracts");
@@ -193,7 +189,7 @@ public class AuthIntegrationTests : IntegrationTest
     {
         // Arrange
         var contract = new Contract();
-        await ArrangeResourceAsync("/api/v1/contracts", contract);
+        await PutResourceAsync($"/api/v1/contracts/{contract.Id}", contract);
 
         await ArrangeAuthenticatedUserAsync();
 

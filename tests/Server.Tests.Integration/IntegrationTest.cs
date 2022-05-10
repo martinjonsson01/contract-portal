@@ -24,10 +24,19 @@ public class IntegrationTest : IClassFixture<TestWebApplicationFactory>
 
     protected HttpClient Client { get; }
 
-    protected async Task ArrangeResourceAsync<TResource>(string url, TResource resource)
+    protected async Task PostResourceAsync<TResource>(string url, TResource resource)
     {
         await ArrangeAuthenticatedAdminAsync();
         await Client.PostAsJsonAsync(url, resource);
+
+        // Log out.
+        Client.DefaultRequestHeaders.Authorization = null;
+    }
+
+    protected async Task PutResourceAsync<TResource>(string url, TResource resource)
+    {
+        await ArrangeAuthenticatedAdminAsync();
+        await Client.PutAsJsonAsync(url, resource);
 
         // Log out.
         Client.DefaultRequestHeaders.Authorization = null;
