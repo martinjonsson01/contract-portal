@@ -7,7 +7,7 @@
 @if (Session.IsAuthenticated)
 {
     <div class="d-flex flex-row align-items-center">
-        <p id="logged-in" class="text-center m-0">
+        <p id="logout-button" class="text-center m-0">
             Inloggad som: @Session.Username
         </p>
         <button class="btn btn-link" @onclick="@(async () => await Session.EndAsync())">Logga ut</button>
