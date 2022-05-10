@@ -3,27 +3,23 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+
 using Application.Configuration;
 using Application.Contracts;
 using Application.Users;
+
 using Domain.Contracts;
 using Domain.Users;
+
 using FluentAssertions.Execution;
 
 namespace Server.IntegrationTests.Authentication;
 
-public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
+public class AuthIntegrationTests : IntegrationTest
 {
-    private readonly HttpClient _client;
-
     public AuthIntegrationTests(TestWebApplicationFactory factory)
+        : base(factory)
     {
-        _client = factory.CreateClient();
-
-        Environment.SetEnvironmentVariable(
-            ConfigurationKeys.AdminPassword,
-            "test_password",
-            EnvironmentVariableTarget.Process);
     }
 
     public static IEnumerable<object[]> AdminPostApiEndpoints =>
@@ -61,7 +57,7 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
         // Arrange
 
         // Act
-        HttpResponseMessage response = await _client.GetAsync(endpointUrl);
+        HttpResponseMessage response = await Client.GetAsync(endpointUrl);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -76,7 +72,7 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
         // Arrange
 
         // Act
-        HttpResponseMessage response = await _client.PostAsync(endpointUrl, content);
+        HttpResponseMessage response = await Client.PostAsync(endpointUrl, content);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -92,7 +88,7 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
         await ArrangeAuthenticatedUser();
 
         // Act
-        HttpResponseMessage response = await _client.PostAsync(endpointUrl, content);
+        HttpResponseMessage response = await Client.PostAsync(endpointUrl, content);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
@@ -108,7 +104,7 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
         await ArrangeAuthenticatedAdmin();
 
         // Act
-        HttpResponseMessage response = await _client.PostAsync(endpointUrl, content);
+        HttpResponseMessage response = await Client.PostAsync(endpointUrl, content);
 
         // Assert
         response.Should().BeSuccessful();
@@ -122,10 +118,10 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
     {
         // Arrange
         await ArrangeAuthenticatedUser();
-        await createResource(_client);
+        await createResource(Client);
 
         // Act
-        HttpResponseMessage response = await _client.DeleteAsync(endpointUrl);
+        HttpResponseMessage response = await Client.DeleteAsync(endpointUrl);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
@@ -139,10 +135,10 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
     {
         // Arrange
         await ArrangeAuthenticatedAdmin();
-        await createResource(_client);
+        await createResource(Client);
 
         // Act
-        HttpResponseMessage response = await _client.DeleteAsync(endpointUrl);
+        HttpResponseMessage response = await Client.DeleteAsync(endpointUrl);
 
         // Assert
         response.Should().BeSuccessful();
@@ -156,7 +152,7 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
         await ArrangeResource("/api/v1/contracts", contract);
 
         // Act
-        HttpResponseMessage response = await _client.GetAsync("/api/v1/contracts");
+        HttpResponseMessage response = await Client.GetAsync("/api/v1/contracts");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -183,7 +179,7 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
         await ArrangeResource("/api/v1/contracts", contract);
 
         // Act
-        HttpResponseMessage response = await _client.GetAsync("/api/v1/contracts");
+        HttpResponseMessage response = await Client.GetAsync("/api/v1/contracts");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -202,48 +198,11 @@ public class AuthIntegrationTests : IClassFixture<TestWebApplicationFactory>
         await ArrangeAuthenticatedUser();
 
         // Act
-        HttpResponseMessage response = await _client.GetAsync("/api/v1/contracts");
+        HttpResponseMessage response = await Client.GetAsync("/api/v1/contracts");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var contracts = await response.Content.ReadFromJsonAsync<IEnumerable<Contract>>();
         contracts.Should().ContainEquivalentOf(contract);
-    }
-
-    private async Task ArrangeResource<TResource>(string url, TResource resource)
-    {
-        await ArrangeAuthenticatedAdmin();
-        await _client.PostAsJsonAsync(url, resource);
-
-        // Log out.
-        _client.DefaultRequestHeaders.Authorization = null;
-    }
-
-    private async Task ArrangeAuthenticatedAdmin()
-    {
-        var userInfo = new User() { Name = "admin", Password = Environment.GetEnvironmentVariable(ConfigurationKeys.AdminPassword) ?? string.Empty, };
-        HttpResponseMessage authResponseMessage = await _client.PostAsJsonAsync("/api/v1/users/authenticate", userInfo);
-        AuthenticateResponse? authResponse =
-            await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
-    }
-
-    private async Task ArrangeAuthenticatedUser()
-    {
-        // Arrange - authenticate as admin user.
-        await ArrangeAuthenticatedAdmin();
-
-        // Arrange - create normal user.
-        var user = new User();
-        await _client.PostAsJsonAsync("/api/v1/users", user);
-
-        // Arrange - authenticate as normal user.
-        HttpResponseMessage authResponseMessage =
-            await _client.PostAsJsonAsync("/api/v1/users/authenticate", user);
-        AuthenticateResponse? authResponse =
-            await authResponseMessage.Content.ReadFromJsonAsync<AuthenticateResponse>();
-
-        // Swap out the admin token for a normal user token.
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
     }
 }
