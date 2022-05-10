@@ -30,7 +30,7 @@ public class ContractListTests : UITestFixture
         var newContract = new Contract { Name = newContractName, };
 
         // Act
-        cut.Instance.Add(newContract);
+        cut.Instance.AddOrUpdate(newContract);
         cut.WaitForState(() => cut.FindAll(itemSelector).Count == 3);
 
         // Assert
@@ -55,7 +55,7 @@ public class ContractListTests : UITestFixture
         var newContract = new Contract { Name = newContractName, };
 
         // Act
-        Action add = () => cut.Instance.Add(newContract);
+        Action add = () => cut.Instance.AddOrUpdate(newContract);
 
         // Assert
         add.Should().NotThrow();

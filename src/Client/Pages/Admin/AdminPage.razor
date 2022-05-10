@@ -40,7 +40,7 @@
 
     private void AddContractToTable(Contract contract)
     {
-        _contractTable.Add(contract);
+        _contractTable.AddOrUpdate(contract);
     }
 
     private void AddUserToTable(User user)

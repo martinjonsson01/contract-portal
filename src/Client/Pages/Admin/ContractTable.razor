@@ -20,7 +20,8 @@
         <tbody>
         @foreach (Contract contract in contracts)
         {
-            <ContractTableRow Contract=@contract
+            <ContractTableRow @key="@contract.Id"
+                              Contract=@contract
                               OnContractRemoved=@Remove
                               ContractOpeningForEdit="@(async () => await ContractOpeningForEdit.InvokeAsync(contract))"/>
         }
@@ -41,9 +42,20 @@
     /// Adds a contract to the list.
     /// </summary>
     /// <param name="contract">The contract to add.</param>
-    public void Add(Contract contract)
+    public void AddOrUpdate(Contract contract)
     {
-        _dataFetcher.Data?.Add(contract);
+        if (_dataFetcher.Data is null)
+            return;
+
+        if (_dataFetcher.Data.Any(other => other.Id == contract.Id))
+        {
+            _dataFetcher.Data.Remove(contract);
+            _dataFetcher.Data.Add(contract);
+        }
+        else
+        {
+            _dataFetcher.Data.Add(contract);
+        }
         InvokeAsync(StateHasChanged);
     }
 
