@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Client.Tests.Pages.Admin;
 
-public class ContractListTests : UITestFixture
+public class ContractTableTests : UITestFixture
 {
     [Fact]
     public void AddingContract_RendersTheNewContract()

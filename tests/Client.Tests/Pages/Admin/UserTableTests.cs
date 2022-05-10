@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Client.Tests.Pages.Admin;
 
-public class UserListTests : UITestFixture
+public class UserTableTests : UITestFixture
 {
     [Fact]
     public void AddingUser_RendersTheNewUser()
