@@ -4,25 +4,30 @@
 
 <h2>Adminsida</h2>
 
-<Tabs SelectedTab="@_selectedTab"
-      SelectedTabChanged="@OnSelectedTabChanged"
-      Justified="true"
-      Pills="true">
-    <Items>
-        <Tab Name="contracts">Hantera kontrakt</Tab>
-        <Tab Name="users">Hantera användare</Tab>
-    </Items>
-    <Content>
-        <TabPanel Name="contracts">
-            <ContractForm OnContractUploaded="AddContractToTable"/>
-            <ContractTable @ref="@_contractTable"/>
-        </TabPanel>
-        <TabPanel Name="users">
-            <UserForm OnUserAdded="AddUserToTable"/>
-            <UserTable @ref="@_userTable"/>
-        </TabPanel>
-    </Content>
-</Tabs>
+<!-- Extra div needed to style the Blazorise-components (see https://github.com/Megabit/Blazorise/issues/1599) -->
+<div>
+    <Tabs SelectedTab="@_selectedTab"
+          SelectedTabChanged="@OnSelectedTabChanged"
+          Justified="true"
+          Pills="true"
+          TextColor="TextColor.Primary"
+          Class="tabs">
+        <Items>
+            <Tab Name="contracts">Hantera kontrakt</Tab>
+            <Tab Name="users">Hantera användare</Tab>
+        </Items>
+        <Content>
+            <TabPanel Name="contracts">
+                <ContractForm OnContractUploaded="AddContractToTable"/>
+                <ContractTable @ref="@_contractTable"/>
+            </TabPanel>
+            <TabPanel Name="users">
+                <UserForm OnUserAdded="AddUserToTable"/>
+                <UserTable @ref="@_userTable"/>
+            </TabPanel>
+        </Content>
+    </Tabs>
+</div>
 
 @code {
 
