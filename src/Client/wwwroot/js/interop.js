@@ -8,3 +8,7 @@ function focusElement(selector) {
     const element = document.querySelector(selector);
     element.focus();
 }
+
+function scrollToElement(selector) {
+    document.querySelector(selector).scrollIntoView({behavior: 'smooth', block: 'start'});
+}

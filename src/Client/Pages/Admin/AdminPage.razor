@@ -18,7 +18,7 @@
         </Items>
         <Content>
             <TabPanel Name="contracts">
-                <ContractForm OnContractUploaded="AddContractToTable"/>
+                <ContractForm @ref="_contractForm" OnContractUploaded="AddContractToTable"/>
                 <ContractTable @ref="@_contractTable" ContractOpeningForEdit="@OnContractOpeningForEdit"/>
             </TabPanel>
             <TabPanel Name="users">
@@ -33,8 +33,10 @@
 
     private string _selectedTab = "contracts";
 
+    // Null-forgiving operator used because these fields are set by the Blazor runtime using @ref
     private ContractTable _contractTable = null!;
     private UserTable _userTable = null!;
+    private ContractForm _contractForm = null!;
 
     private void AddContractToTable(Contract contract)
     {
@@ -52,9 +54,9 @@
         return Task.CompletedTask;
     }
 
-    private void OnContractOpeningForEdit(Contract contract)
+    private async Task OnContractOpeningForEdit(Contract contract)
     {
-        Console.WriteLine("Contract being edited " + contract.Name);
+        await _contractForm.EditContractAsync(contract);
     }
 
 }

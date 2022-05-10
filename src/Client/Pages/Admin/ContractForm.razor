@@ -6,8 +6,9 @@
 @using Blazorise.Markdown
 @inject ILogger<AdminPage> _logger
 @inject HttpClient _http
+@inject IJSRuntime _js
 
-<h4>Skapa nytt kontrakt</h4>
+<h4 id="contract-form-title" style="scroll-margin-top: 4.5rem;">Skapa nytt kontrakt</h4>
 
 <EditForm Model="@_contract" OnSubmit="OnSubmit">
 
@@ -198,6 +199,18 @@
             await OnContractUploaded.InvokeAsync(_contract);
             _contract = CreateEmptyContract();
         }
+    }
+
+
+    /// <summary>
+    /// Populates the form with the values of the given <see cref="Contract"/>.
+    /// </summary>
+    /// <param name="contract">The data to edit.</param>
+    public async Task EditContractAsync(Contract contract)
+    {
+        await _js.InvokeVoidAsync("scrollToElement", "#contract-form-title");
+        _shouldRender = true;
+        _contract = contract;
     }
 
 }
