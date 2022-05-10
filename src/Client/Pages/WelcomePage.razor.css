@@ -1,17 +1,23 @@
 .text-block {
     position: absolute;
     text-align: center;
-    top: 50%;
-    width: 50%;
+    width: 100%;
     background-color: white;
-    left: 0;
+    top: 50%;
 }
 
 .img {
-    position: relative;
-    padding: 0;
-    margin: 0;
+    position: absolute;
     height: auto;
     width: 100%;
-    left: 0;
+    overflow: hidden;
+    display: block;
+    justify-content: center;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+}
+.container {
+    position: relative;
+    padding-right: 0;
+    padding-left: 0;
 }
