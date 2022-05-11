@@ -62,14 +62,17 @@
 
     private async Task ChangeFavorite()
     {
-        SetFavoriteContract setFavorite = new() { UserName = LoggedInUser!, ContractId = Contract.Id, IsFavorite = !isFavorite };
-
-        HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{LoggedInUser}/favorites", setFavorite);
-        if (response.IsSuccessStatusCode)
+        if (LoggedInUser != null)
         {
-            isFavorite = !isFavorite;
-            await InvokeAsync(StateHasChanged);
-            await OnFavoriteChange.InvokeAsync((Contract.Id, isFavorite));
+            SetFavoriteContract setFavorite = new() { UserName = LoggedInUser, ContractId = Contract.Id, IsFavorite = !isFavorite };
+
+            HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{LoggedInUser}/favorites", setFavorite);
+            if (response.IsSuccessStatusCode)
+            {
+                isFavorite = !isFavorite;
+                await InvokeAsync(StateHasChanged);
+                await OnFavoriteChange.InvokeAsync((Contract.Id, isFavorite));
+            }
         }
     }
 }
