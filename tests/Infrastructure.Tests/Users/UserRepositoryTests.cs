@@ -86,8 +86,8 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
         const string adminName = "admin";
         User? admin = _cut.All.FirstOrDefault(user => user.Name == adminName);
 
-        if (admin is null) // Ensure admin exists.
-            _cut.Add(new User { Name = adminName, });
+        if (admin is null)
+            _cut.EnsureAdminCreated();
 
         // Re-create database.
         EFDatabaseContext context = _fixture.CreateContext();

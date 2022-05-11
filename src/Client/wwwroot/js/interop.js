@@ -9,6 +9,15 @@ function focusElement(selector) {
     element.focus();
 }
 
+function registerActivityCallback(dotNetHelper) {
+    document.onmousemove = resetTimeDelay;
+    document.onkeydown = resetTimeDelay;
+
+    function resetTimeDelay() {
+        dotNetHelper.invokeMethodAsync("ResetTimer");
+    }
+}
+
 function scrollToElement(selector) {
     document.querySelector(selector).scrollIntoView({behavior: 'smooth', block: 'start'});
 }

@@ -1,5 +1,7 @@
 ﻿@using Blazorise.Extensions
 @using Domain.Users
+@inherits AuthenticatedView
+@inject ISessionService _session
 
 <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #222939 ">
     <div class="container-fluid">
@@ -10,7 +12,7 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
-                @if (!LoggedInUser.IsNullOrEmpty())
+                @if (_session.IsAuthenticated)
                 {
                     <li class="nav-item">
                         <NavLink class="nav-link" href="dashboard">
@@ -28,7 +30,7 @@
                         <span class="" aria-hidden="true"></span> Om oss
                     </NavLink>
                 </li>
-                @if (LoggedInUser == "admin")
+                @if (_session.Username == "admin")
                 {
 
                     <li id="admin-nav-item" class="nav-item">
@@ -38,28 +40,7 @@
                     </li>
                 }
             </ul>
-            <div>
-                @if (LoggedInUser.IsNullOrEmpty())
-                {
-                    <LogInButton />
-                }
-                else
-                {
-                    <p id="logged-in" class="text-center m-0">
-                        Inloggad som: @LoggedInUser
-                    </p>
-                }
-            </div>
+            <Login />
         </div>
     </div>
 </nav>
-
-@code {
-
-    /// <summary>
-    /// The name of the currently logged in user.
-    /// </summary>
-    [CascadingParameter(Name = nameof(LoggedInUser))]
-    public string? LoggedInUser { get; set; }
-
-}
