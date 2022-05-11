@@ -1,5 +1,4 @@
 using Application.Contracts;
-using Application.FavoriteContracts;
 using Application.MessagePassing;
 using Application.Users;
 using Domain.Contracts;
@@ -14,17 +13,17 @@ namespace Server.Controllers;
 [Route("api/v1/[controller]")]
 public class FavoritesController : BaseApiController<FavoritesController>
 {
-    private readonly IFavoriteContractService _favorites;
+    private readonly IUserService _users;
 
     /// <summary>
     /// Constructs favorite API.
     /// </summary>
     /// <param name="logger">The logging provider.</param>
-    /// <param name="favorites">The favorite logic.</param>
-    public FavoritesController(ILogger<FavoritesController> logger, IFavoriteContractService favorites)
+    /// <param name="users">The users logic.</param>
+    public FavoritesController(ILogger<FavoritesController> logger, IUserService users)
         : base(logger)
     {
-        _favorites = favorites;
+        _users = users;
     }
 
     /// <summary>
@@ -40,11 +39,11 @@ public class FavoritesController : BaseApiController<FavoritesController>
         {
             if (setFavoriteContract.IsFavorite)
             {
-                _favorites.Add(setFavoriteContract.UserName, setFavoriteContract.ContractId);
+                _users.AddFavorite(setFavoriteContract.UserName, setFavoriteContract.ContractId);
             }
             else
             {
-                _ = _favorites.Remove(setFavoriteContract.UserName, setFavoriteContract.ContractId);
+                _ = _users.RemoveFavorite(setFavoriteContract.UserName, setFavoriteContract.ContractId);
             }
 
             return Ok();
@@ -68,7 +67,7 @@ public class FavoritesController : BaseApiController<FavoritesController>
     [HttpGet("{userName}/{contractId:guid}")]
     public IActionResult GetIsFavorite(string userName, Guid contractId)
     {
-        return _favorites.IsFavorite(userName, contractId) ? Ok() : BadRequest();
+        return _users.IsFavorite(userName, contractId) ? Ok() : BadRequest();
     }
 
     /// <summary>
@@ -79,6 +78,6 @@ public class FavoritesController : BaseApiController<FavoritesController>
     [HttpGet("{userName}")]
     public IEnumerable<Contract> GetAll(string userName)
     {
-        return _favorites.FetchAll(userName);
+        return _users.FetchAllFavorites(userName);
     }
 }

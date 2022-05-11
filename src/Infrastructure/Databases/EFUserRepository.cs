@@ -1,5 +1,6 @@
 using System.Data;
 using Application.Configuration;
+using Application.Contracts;
 using Application.Users;
 using Domain.Contracts;
 using Domain.Users;

@@ -3,7 +3,6 @@
 using Application.Configuration;
 using Application.Contracts;
 using Application.Documents;
-using Application.FavoriteContracts;
 using Application.Images;
 using Application.StatusUpdates;
 using Application.Users;
@@ -41,7 +40,6 @@ public static class InjectionExtensions
                    ServiceLifetime.Transient)
                .AddScoped<IContractRepository, EFContractRepository>()
                .AddScoped<IUserRepository, EFUserRepository>()
-               .AddScoped<IFavoriteContractRepository, EFFavoriteRepository>()
                .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
                .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
                {
