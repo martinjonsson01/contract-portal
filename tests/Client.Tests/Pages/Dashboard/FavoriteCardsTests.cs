@@ -13,7 +13,7 @@ public class FavoriteCardsTests : UITestFixture
         const string name = "SJ";
         const string userName = "user";
         var contract = new Contract() { Name = name, };
-        MockHttp.When($"/api/v1/favorites/{userName}").RespondJson(new[] { contract, });
+        MockHttp.When($"/api/v1/users/{userName}/favorites").RespondJson(new[] { contract, });
 
         static void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteCards> parameters) =>
             parameters.Add(property => property.LoggedInUser, userName);
@@ -30,7 +30,7 @@ public class FavoriteCardsTests : UITestFixture
     public void ShowNoFavoriteMessage_WhenThereAreNoFavorites()
     {
         const string userName = "user";
-        MockHttp.When($"/api/v1/favorites/{userName}").RespondJson(Array.Empty<Contract>());
+        MockHttp.When($"/api/v1/users/{userName}/favorites").RespondJson(Array.Empty<Contract>());
 
         static void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteCards> parameters) =>
             parameters.Add(property => property.LoggedInUser, userName);

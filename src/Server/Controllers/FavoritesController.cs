@@ -10,7 +10,7 @@ namespace Server.Controllers;
 /// WebAPI for favorites.
 /// </summary>
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v1/users/{username}/[controller]")]
 public class FavoritesController : BaseApiController<FavoritesController>
 {
     private readonly IUserService _users;
@@ -50,11 +50,11 @@ public class FavoritesController : BaseApiController<FavoritesController>
         }
         catch (UserDoesNotExistException)
         {
-            return BadRequest();
+            return BadRequest("Unable to add/remove favorite because the user does not exist.");
         }
         catch (ContractDoesNotExistException)
         {
-            return BadRequest();
+            return BadRequest("Unable to add/remove favorite because the contract does not exist.");
         }
     }
 
@@ -64,10 +64,10 @@ public class FavoritesController : BaseApiController<FavoritesController>
     /// <param name="userName">The name of the user.</param>
     /// <param name="contractId">The id of the contract.</param>
     /// <returns>Whether the contract is marked as favorite by the user.</returns>
-    [HttpGet("{userName}/{contractId:guid}")]
+    [HttpGet("/{contractId:guid}")]
     public IActionResult GetIsFavorite(string userName, Guid contractId)
     {
-        return _users.IsFavorite(userName, contractId) ? Ok() : BadRequest();
+        return _users.IsFavorite(userName, contractId) ? Ok() : NotFound();
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public class FavoritesController : BaseApiController<FavoritesController>
     /// </summary>
     /// <param name="userName">The name of the user.</param>
     /// <returns>All contracts marked as favorite by the user.</returns>
-    [HttpGet("{userName}")]
+    [HttpGet]
     public IEnumerable<Contract> GetAll(string userName)
     {
         return _users.FetchAllFavorites(userName);
