@@ -1,7 +1,7 @@
 .text-block {
     position: absolute;
     text-align: center;
-    top: 40px;
+    top: 300px;
     left:15%;
     justify-content:center;
     padding-left:10px;
@@ -24,6 +24,6 @@
     position: absolute;
     justify-content: center;
     align-items: center;
-    oevrflow: hidden;
+    overflow: hidden;
 }
 
