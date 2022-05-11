@@ -12,7 +12,7 @@
            Context="contracts">
 
     <div class="container-fluid">
-        <div class="d-flex flex-wrap">
+        <div class="d-flex flex-wrap justify-content-center">
             @foreach (Contract contract in contracts)
             {
                 <ContractCard Contract=@contract OnViewed="OnRecentContractAdded"/>
