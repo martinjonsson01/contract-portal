@@ -1,4 +1,6 @@
-﻿namespace Domain.Contracts;
+﻿using Domain.Users;
+
+namespace Domain.Contracts;
 
 /// <summary>
 ///     A document containing negotiated discounts and benefits.
@@ -69,4 +71,10 @@ public class Contract
     ///     Gets or sets the contact information for the supplier.
     /// </summary>
     public string SupplierContactInfo { get; set; } = "Kontaktinformation till leverantör saknas.";
+
+    // Entity Framework requires that a navigation property exists in both
+    // classes (User and Contract) when a many-to-many relation is to be genereated,
+    // and exists only for this reason.
+    // See the Entity Framework documentation for more information.
+    private IEnumerable<User> RecentOf { get; } = new List<User>();
 }

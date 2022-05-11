@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace Infrastructure.Tests.Users;
 
 [Collection("DatabaseTests")]
-public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
+public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposable
 {
     private readonly TestDatabaseFixture _fixture;
     private EFUserRepository _cut;
@@ -22,6 +22,7 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
         _context = _fixture.CreateContext();
         _cut = new EFUserRepository(_context, Mock.Of<ILogger<EFUserRepository>>());
         _cut.EnsureAdminCreated();
+        _context.Database.BeginTransaction();
     }
 
     [Fact]
@@ -98,9 +99,9 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
     {
         // Arrange
         const string adminName = "admin";
-        var contract1 = new Contract();
-        var contract2 = new Contract();
-        var contract3 = new Contract();
+        var contract1 = new Contract() { Name = "1" };
+        var contract2 = new Contract() { Name = "2" };
+        var contract3 = new Contract() { Name = "3" };
         _context.Contracts.Add(contract1);
         _context.Contracts.Add(contract2);
         _context.Contracts.Add(contract3);
@@ -168,12 +169,15 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
         _cut.Add(user2);
         var contract1 = new Contract();
         _context.Contracts.Add(contract1);
+        _context.SaveChanges();
         _cut.Add(user1.Name, contract1);
         _cut.Add(user2.Name, contract1);
 
         // Act
-        _cut.RemoveContract(contract1.Id);
+        _context.Contracts.Remove(contract1);
+        _context.SaveChanges();
 
+        // Assert
         _cut.Fetch(user1.Name) !.RecentlyViewContracts.Should().BeEmpty();
         _cut.Fetch(user2.Name) !.RecentlyViewContracts.Should().BeEmpty();
     }
@@ -188,11 +192,19 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
         var contract2 = new Contract();
         _context.Contracts.Add(contract1);
         _context.Contracts.Add(contract2);
+        _context.SaveChanges();
         _cut.Add(user1.Name, contract1);
 
         // Act
-        _cut.RemoveContract(contract2.Id);
+        _context.Contracts.Remove(contract2);
+        _context.SaveChanges();
 
         _cut.Fetch(user1.Name) !.RecentlyViewContracts.Should().ContainSingle();
+    }
+
+    public void Dispose()
+    {
+        _context.ChangeTracker.Clear();
+        _context.Dispose();
     }
 }

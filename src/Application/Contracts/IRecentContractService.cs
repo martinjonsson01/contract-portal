@@ -27,10 +27,4 @@ public interface IRecentContractService
     /// <param name="id">The id of the user.</param>
     /// <param name="contract">Possible new recent contract.</param>
     void Add(string id, Contract contract);
-
-    /// <summary>
-    /// Removes the contract with the specified ID if it exists.
-    /// </summary>
-    /// <param name="id">The ID of the contract to remove.</param>
-    void Remove(Guid id);
 }

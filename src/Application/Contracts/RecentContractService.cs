@@ -40,10 +40,4 @@ public class RecentContractService : IRecentContractService
 
         _recent.Add(id, contract);
     }
-
-    /// <inheritdoc />
-    public void Remove(Guid id)
-    {
-        _recent.RemoveContract(id);
-    }
 }

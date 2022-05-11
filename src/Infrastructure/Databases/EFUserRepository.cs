@@ -62,35 +62,13 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
         }
     }
 
-    /// <inheritdoc/>
-    public void RemoveContract(Guid id)
-    {
-        foreach (User user in Users)
-        {
-            Contract contractToRemove = user.RecentlyViewContracts.Where(contract => contract.Id == id)
-                .GetEnumerator().Current;
-            _ = user.RecentlyViewContracts.Remove(contractToRemove);
-        }
-
-        try
-        {
-            _ = _context.SaveChanges();
-        }
-        catch (DataException e)
-        {
-            _logger.LogError(
-                "Could not remove contract from recently viewed for all user in database: {Message}",
-                e.Message);
-        }
-    }
-
     /// <inheritdoc />
     public void RemoveLast(string id)
     {
         User user = GetUserByUserName(id);
         user.RecentlyViewContracts.RemoveLast();
         _ = _context.SaveChanges();
-        _logger.LogInformation("Removed last contract from user {UserName}'s recently viewed contracts",  user.Name);
+        _logger.LogInformation("Removed last contract from user {UserName}'s recently viewed contracts", user.Name);
     }
 
     /// <inheritdoc />

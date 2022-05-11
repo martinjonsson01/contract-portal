@@ -22,12 +22,6 @@ public interface IRecentContractRepository
     void Add(string id, Contract contract);
 
     /// <summary>
-    /// Removes the contract from recently viewed for all users.
-    /// </summary>
-    /// <param name="id">The ID of the contract to remove.</param>
-    void RemoveContract(Guid id);
-
-    /// <summary>
     /// Removes the last viewed contract for user.
     /// </summary>
     /// <param name="id">The id of the user.</param>

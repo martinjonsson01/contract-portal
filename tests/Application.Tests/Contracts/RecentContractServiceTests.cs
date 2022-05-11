@@ -74,18 +74,4 @@ public class RecentContractServiceTests
         // Assert
         _mockRepo.Verify(repo => repo.RemoveLast(UserId), Times.Once);
     }
-
-    [Fact]
-    public void RemoveContract_ShouldDelegateToRepo()
-    {
-        // Arrange
-        var contract1 = new Contract();
-        Guid id = contract1.Id;
-
-        // Act
-        _cut.Remove(id);
-
-        // Assert
-        _mockRepo.Verify(repo => repo.RemoveContract(id), Times.Once);
-    }
 }

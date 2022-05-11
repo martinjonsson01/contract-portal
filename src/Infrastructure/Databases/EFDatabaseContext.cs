@@ -1,6 +1,5 @@
 ﻿using Domain.Contracts;
 using Domain.Users;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +51,7 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         _ = modelBuilder.Entity<User>()
-                        .HasKey(user => user.Id);
+            .HasMany(user => user.RecentlyViewContracts)
+            .WithMany("RecentOf");
     }
 }
