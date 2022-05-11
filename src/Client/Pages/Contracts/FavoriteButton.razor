@@ -4,7 +4,7 @@
 @using System.Text
 @inject HttpClient _http
 
-<button class="btn ms-auto p-2" @onclick="ChangeFavorite">
+<button class="btn p-0" @onclick="ChangeFavorite">
     @if (Contract.IsFavorite)
     {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
