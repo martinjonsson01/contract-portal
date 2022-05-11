@@ -1,6 +1,5 @@
 using Application.Contracts;
 using Application.FavoriteContracts;
-using Application.MessagePassing;
 using Application.Users;
 using Domain.Contracts;
 using Microsoft.AspNetCore.Mvc;

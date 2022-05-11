@@ -1,4 +1,4 @@
-﻿namespace Application.MessagePassing;
+﻿namespace Application.Users;
 
 /// <summary>
 /// Used to send information about making a Contract a users favorite.

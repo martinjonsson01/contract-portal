@@ -1,7 +1,6 @@
 using Application.Contracts;
 using Application.Exceptions;
 using Application.FavoriteContracts;
-using Application.MessagePassing;
 using Application.Users;
 using Domain.Contracts;
 using Domain.Users;
