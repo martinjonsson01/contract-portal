@@ -1,6 +1,4 @@
 using Application.Contracts;
-using Application.Exceptions;
-using Application.FavoriteContracts;
 using Application.Users;
 using Domain.Contracts;
 using Microsoft.AspNetCore.Mvc;
