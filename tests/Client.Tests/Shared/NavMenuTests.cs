@@ -2,14 +2,7 @@
 
 using Application.Users;
 
-using Blazored.SessionStorage;
-
-using Client.Services.Authentication;
 using Client.Shared;
-
-using Domain.Users;
-
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Tests.Shared;
 
@@ -27,6 +20,20 @@ public class NavMenuTests : UITestFixture
 
         // Assert
         cut.Find("#login-button").Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task NavMenu_DisplaysLogoutButton_WhenUserLoggedIn()
+    {
+        // Arrange
+        MockSession.Setup(session => session.IsAuthenticated).Returns(true);
+        await SessionStorage.SetItemAsync("user", new AuthenticateResponse(LoggedInUser, FakeToken));
+
+        // Act
+        IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
+
+        // Assert
+        cut.Find("#logout-button").Should().NotBeNull();
     }
 
     [Fact]

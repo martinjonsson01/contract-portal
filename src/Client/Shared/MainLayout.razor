@@ -37,7 +37,7 @@
         IsRounded = true,
     };
 
-        private const int InactivityLogoutMilliseconds = 1000 * 60 * 15; // 15 minutes
+        private const int InactivityLogoutMilliseconds = 3000; //  TODO: * 60 * 15; // 15 minutes
 
     private readonly Timer _timer = new(InactivityLogoutMilliseconds);
 
@@ -65,11 +65,6 @@
 
     private void LogOut(object? sender, ElapsedEventArgs elapsedEventArgs)
     {
-        InvokeAsync(() =>
-        {
-            // TODO: this method should be moved into the session management service when merging with #118
-            Http.DefaultRequestHeaders.Authorization = null;
-            NavigationManager.NavigateTo("/");
-        });
+        InvokeAsync(async () => await Session.EndAsync());
     }
 }

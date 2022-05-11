@@ -4,6 +4,8 @@ using Application.Users;
 
 using Blazored.SessionStorage;
 
+using Microsoft.AspNetCore.Components;
+
 namespace Client.Services.Authentication;
 
 /// <summary>
@@ -13,16 +15,19 @@ internal class SessionManagerService : ISessionService
 {
     private readonly ISessionStorageService _storage;
     private readonly HttpClient _http;
+    private readonly NavigationManager _navigationManager;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SessionManagerService"/> class.
     /// </summary>
     /// <param name="storage">A way to store session data.</param>
     /// <param name="http">The client to add authentication tokens to.</param>
-    public SessionManagerService(ISessionStorageService storage, HttpClient http)
+    /// <param name="navigationManager">The window navigation controller.</param>
+    public SessionManagerService(ISessionStorageService storage, HttpClient http, NavigationManager navigationManager)
     {
         _storage = storage;
         _http = http;
+        _navigationManager = navigationManager;
     }
 
     /// <inheritdoc/>
@@ -43,6 +48,20 @@ internal class SessionManagerService : ISessionService
     }
 
     /// <inheritdoc/>
+    public async Task EndAsync()
+    {
+        await _storage.RemoveItemAsync("user").ConfigureAwait(true);
+
+        _http.DefaultRequestHeaders.Authorization = null;
+
+        IsAuthenticated = false;
+        Username = null;
+
+        AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = null, });
+        _navigationManager.NavigateTo("/");
+    }
+
+    /// <inheritdoc/>
     public async Task<bool> TryResumeAsync()
     {
         IsAuthenticated = await _storage.ContainKeyAsync("user").ConfigureAwait(true);
@@ -58,6 +77,7 @@ internal class SessionManagerService : ISessionService
     {
         // Store token on http client so all future requests use the token.
         _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authentication.Token);
+        Console.WriteLine($"setting bearer to {_http.DefaultRequestHeaders.Authorization}");
         IsAuthenticated = true;
         Username = authentication.Username;
         AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = authentication, });
