@@ -40,18 +40,7 @@
                     </li>
                 }
             </ul>
-            <div>
-                @if (!_session.IsAuthenticated)
-                {
-                    <LogInButton />
-                }
-                else
-                {
-                    <p id="logged-in" class="text-center m-0">
-                        Inloggad som: @_session?.Username
-                    </p>
-                }
-            </div>
+            <Login />
         </div>
     </div>
 </nav>

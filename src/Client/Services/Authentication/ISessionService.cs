@@ -30,6 +30,12 @@ public interface ISessionService
     Task BeginAsync(AuthenticateResponse authentication);
 
     /// <summary>
+    /// Ends the current authenticated user session.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    Task EndAsync();
+
+    /// <summary>
     /// Tries to resume a user session from the already available data.
     /// </summary>
     /// <returns>The task result contains the whether it succeeded.</returns>

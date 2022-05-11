@@ -54,7 +54,7 @@ else
     /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (Data is null)
+        if (Data is null && _errorMessage is null)
             await Fetch(Url);
     }
 
