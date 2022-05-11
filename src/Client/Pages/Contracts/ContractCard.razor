@@ -7,16 +7,25 @@
 @inject HttpClient _http
 
 <div class="card ms-1 me-1" style="margin-top: 1em; width: 18rem; height: 18rem;">
-    <img id="contract-thumbnail" src="@Contract.SupplierLogoImagePath" class="img-thumbnail img-fluid card-img-top rounded p-0" style="height: 65%; object-fit: cover;" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"/>
-    <div class="card-body d-flex align-items-center" style="height: 35%;">
-        <div style="width: 90%; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed">
-            <h4 class="card-title text-truncate m-0" id="contract-name">@Contract.Name</h4>
-        </div>
-        <div class="d-flex justify-content-end" style="width: 10%;">
-           <FavoriteButton @ref="_favoriteButton" Contract="@Contract" OnFavoriteChange="@FavoriteChange"></FavoriteButton>
-        </div>
-    </div>
+    <img id="contract-thumbnail" src="@Contract.SupplierLogoImagePath" class="img-thumbnail img-fluid card-img-top rounded p-0" style="height: 65%; object-fit: cover; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"/>
+    <div class="card-body d-flex align-items-center p-0" style="height: 35%;">
 
+        <div class="d-flex flex-column" style="width: 100%;">
+            <div class="pt-4" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"></div>
+            <div class="d-flex flex-row">
+                <div class="ps-3" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"></div>
+                <div wclass=" text-truncate" style=" width: 80%; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed">
+                    <h4 class="card-title text-truncate m-0" id="contract-name">@Contract.Name</h4>
+                </div>
+                <div class="d-flex justify-content-end" style="width: 10%;">
+                    <FavoriteButton @ref="_favoriteButton" Contract="@Contract" OnFavoriteChange="@FavoriteChange"></FavoriteButton>
+                </div>
+                <div class="pe-3" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"></div>
+            </div>
+            <div class="pb-4" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"></div>
+        </div>
+
+    </div>
 </div>
 
 <ContractDetails Contract="@Contract"/>
