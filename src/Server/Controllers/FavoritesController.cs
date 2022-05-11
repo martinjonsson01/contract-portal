@@ -11,7 +11,7 @@ namespace Server.Controllers;
 /// WebAPI for favorites.
 /// </summary>
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v1/users/{username}/[controller]")]
 public class FavoritesController : BaseApiController<FavoritesController>
 {
     private readonly IFavoriteContractService _favorites;
@@ -65,7 +65,7 @@ public class FavoritesController : BaseApiController<FavoritesController>
     /// <param name="userName">The name of the user.</param>
     /// <param name="contractId">The id of the contract.</param>
     /// <returns>Whether the contract is marked as favorite by the user.</returns>
-    [HttpGet("{userName}/{contractId:guid}")]
+    [HttpGet("/{contractId:guid}")]
     public IActionResult GetIsFavorite(string userName, Guid contractId)
     {
         return _favorites.IsFavorite(userName, contractId) ? Ok() : BadRequest();
@@ -76,7 +76,7 @@ public class FavoritesController : BaseApiController<FavoritesController>
     /// </summary>
     /// <param name="userName">The name of the user.</param>
     /// <returns>All contracts marked as favorite by the user.</returns>
-    [HttpGet("{userName}")]
+    [HttpGet]
     public IEnumerable<Contract> GetAll(string userName)
     {
         return _favorites.FetchAll(userName);

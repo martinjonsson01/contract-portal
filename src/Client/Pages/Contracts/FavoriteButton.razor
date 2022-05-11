@@ -47,7 +47,7 @@
 
     protected override async void OnInitialized()
     {
-        HttpResponseMessage response = await _http.GetAsync($"/api/v1/favorites/{LoggedInUser}/{Contract.Id}");
+        HttpResponseMessage response = await _http.GetAsync($"/api/v1/users/{LoggedInUser}/favorites/{Contract.Id}");
         if (response.IsSuccessStatusCode)
         {
             isFavorite = true;
@@ -64,7 +64,7 @@
     {
         SetFavoriteContract setFavorite = new() { UserName = LoggedInUser!, ContractId = Contract.Id, IsFavorite = !isFavorite };
 
-        HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/favorites", setFavorite);
+        HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{LoggedInUser}/favorites", setFavorite);
         if (response.IsSuccessStatusCode)
         {
             isFavorite = !isFavorite;

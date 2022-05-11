@@ -6,7 +6,7 @@
     <h3>Favoriter</h3>
     <FetchData @ref="_dataFetcher"
                TData="List<Contract>"
-               Url=@($"/api/v1/favorites/{LoggedInUser}")
+               Url=@($"/api/v1/users/{LoggedInUser}/favorites")
                Context="contracts">
         @{
             var contractsList = contracts.ToList();
