@@ -9,7 +9,7 @@
 <div class="card" style="margin-top: 1em; width: 18rem; height: 18rem;">
     <img id="contract-thumbnail" src="@Contract.SupplierLogoImagePath" class="img-thumbnail img-fluid card-img-top" data-bs-toggle="modal" style="height: 65%; object-fit: cover;" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"/>
     <div class="card-body d-flex bd-highlight d-flex align-items-center card-body" style="height: 35%;">
-        <h3 class="card-title" id="contract-name">@Contract.Name</h3>
+        <h4 class="card-title text-truncate" id="contract-name">@Contract.Name</h4>
         <FavoriteButton @ref="_favoriteButton" Contract="@Contract" OnFavoriteChange="@FavoriteChange"></FavoriteButton>
     </div>
 
