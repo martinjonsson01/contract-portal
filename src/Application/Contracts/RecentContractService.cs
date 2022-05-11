@@ -30,7 +30,8 @@ public class RecentContractService : IRecentContractService
     public IEnumerable<Contract> FetchRecentContracts(string id)
     {
         var contracts = new List<Contract>();
-        foreach (RecentlyViewedContract recentContract in _recent.FetchRecentContracts(id))
+        foreach (RecentlyViewedContract recentContract in _recent.FetchRecentContracts(id)
+                     .OrderByDescending(recentContract => recentContract.LastViewed))
         {
             contracts.Add(_contract.FetchContract(recentContract.ContractId) ??
                           throw new ContractDoesNotExistException());
