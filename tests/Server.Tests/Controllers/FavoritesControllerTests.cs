@@ -1,3 +1,4 @@
+using Application.Contracts;
 using Application.Exceptions;
 using Application.FavoriteContracts;
 using Application.MessagePassing;
@@ -36,7 +37,7 @@ public class FavoritesControllerTests
     }
 
     [Fact]
-    public void Change_ReturnsOk()
+    public void Change_ReturnsOk_WhenContractAndUserExists()
     {
         // Arrange
         var setFavoriteContract = new SetFavoriteContract()
@@ -49,6 +50,42 @@ public class FavoritesControllerTests
 
         // Assert
         actual.Should().BeOfType<OkResult>();
+    }
+
+    [Fact]
+    public void Change_ReturnsBadRequest_IfUserDoesNotExist()
+    {
+        // Arrange
+        var setFavoriteContract = new SetFavoriteContract()
+        {
+            UserName = "user", ContractId = Guid.NewGuid(), IsFavorite = true,
+        };
+        _mockContracts.Setup(service => service.Add(setFavoriteContract.UserName, setFavoriteContract.ContractId))
+            .Throws<UserDoesNotExistException>();
+
+        // Act
+        IActionResult actual = _cut.Change(setFavoriteContract);
+
+        // Assert
+        actual.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
+    public void Change_ReturnsBadRequest_IfContractDoesNotExist()
+    {
+        // Arrange
+        var setFavoriteContract = new SetFavoriteContract()
+        {
+            UserName = "user", ContractId = Guid.NewGuid(), IsFavorite = true,
+        };
+        _mockContracts.Setup(service => service.Add(setFavoriteContract.UserName, setFavoriteContract.ContractId))
+            .Throws<ContractDoesNotExistException>();
+
+        // Act
+        IActionResult actual = _cut.Change(setFavoriteContract);
+
+        // Assert
+        actual.Should().BeOfType<BadRequestResult>();
     }
 
     [Fact]
@@ -99,7 +136,7 @@ public class FavoritesControllerTests
     }
 
     [Fact]
-    public void GetIsFavorite_ReturnsBadRequest_IfTheContractIsNotMarkedAsFavoriteByTheUser()
+    public void GetIsFavorite_ReturnsNotFound_IfTheContractIsNotMarkedAsFavoriteByTheUser()
     {
         // Arrange
         string userName = "user";
@@ -110,6 +147,6 @@ public class FavoritesControllerTests
         IActionResult actual = _cut.GetIsFavorite(userName, contractId);
 
         // Assert
-        actual.Should().BeOfType<BadRequestResult>();
+        actual.Should().BeOfType<NotFoundResult>();
     }
 }
