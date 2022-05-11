@@ -12,7 +12,7 @@
         <div style="width: 90%; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed">
             <h4 class="card-title text-truncate m-0" id="contract-name">@Contract.Name</h4>
         </div>
-        <div style="width: 10%">
+        <div style="width: 10%;">
            <FavoriteButton @ref="_favoriteButton" Contract="@Contract" OnFavoriteChange="@FavoriteChange"></FavoriteButton>
         </div>
     </div>
