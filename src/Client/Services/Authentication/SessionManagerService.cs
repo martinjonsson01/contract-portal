@@ -77,6 +77,7 @@ internal class SessionManagerService : ISessionService
     {
         // Store token on http client so all future requests use the token.
         _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authentication.Token);
+        Console.WriteLine($"setting bearer to {_http.DefaultRequestHeaders.Authorization}");
         IsAuthenticated = true;
         Username = authentication.Username;
         AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = authentication, });

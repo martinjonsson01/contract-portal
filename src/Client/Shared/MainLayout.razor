@@ -1,9 +1,11 @@
-@using Application.Users
-@using Client.Services.Authentication
+@using System.Timers
 @inherits LayoutComponentBase
-@inject ISessionService _session
+@inject IJSRuntime Js
+@inject HttpClient Http
+@inject ISessionService Session
+@inject NavigationManager NavigationManager
 
-<CascadingValue Value="@_session" Name="Session">
+<CascadingValue Value="@Session" Name="Session">
     <ThemeProvider Theme="@_theme">
         <div class="page">
             <main>
@@ -35,9 +37,34 @@
         IsRounded = true,
     };
 
+        private const int InactivityLogoutMilliseconds = 1000 * 60 * 15; // 15 minutes
+
+    private readonly Timer _timer = new(InactivityLogoutMilliseconds);
+
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        await _session.TryResumeAsync();
+        await Session.TryResumeAsync();
+
+        _timer.Elapsed += LogOut;
+        _timer.AutoReset = false;
+
+        // Register JS-callbacks on the document that call ResetTimer when triggered.
+        await Js.InvokeVoidAsync("registerActivityCallback", DotNetObjectReference.Create(this));
+    }
+
+    /// <summary>
+    /// Resets the inactivity timer. Call when user has shown signs of activity.
+    /// </summary>
+    [JSInvokable]
+    public void ResetTimer()
+    {
+        _timer.Stop();
+        _timer.Start();
+    }
+
+    private void LogOut(object? sender, ElapsedEventArgs elapsedEventArgs)
+    {
+        InvokeAsync(async () => await Session.EndAsync());
     }
 }
