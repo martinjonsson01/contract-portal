@@ -1,22 +1,30 @@
 ﻿using System;
-using Application.FavoriteContracts;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+
+using Application.Configuration;
+using Application.Exceptions;
 using Application.Users;
 using Domain.Contracts;
 using Domain.Users;
 
-namespace Application.Tests.Favorites;
+using FluentAssertions.Execution;
 
-public class FavoriteContractServiceTests
+using Microsoft.Extensions.Configuration;
+
+namespace Application.Tests.Users;
+
+public class UserServiceFavoriteTests
 {
-    private readonly FavoriteContractService _cut;
-    private readonly Mock<IFavoriteContractRepository> _mockFavoriteRepo;
-    private readonly Mock<IUserRepository> _mockUserRepo;
+    private readonly UserService _cut;
+    private readonly Mock<IUserRepository> _mockRepo;
 
-    public FavoriteContractServiceTests()
+    public UserServiceFavoriteTests()
     {
-        _mockFavoriteRepo = new Mock<IFavoriteContractRepository>();
-        _mockUserRepo = new Mock<IUserRepository>();
-        _cut = new FavoriteContractService(_mockFavoriteRepo.Object, _mockUserRepo.Object);
+        _mockRepo = new Mock<IUserRepository>();
+        var mockEnvironment = new Mock<IConfiguration>();
+        mockEnvironment.Setup(env => env[ConfigurationKeys.JwtSecret]).Returns("test-json-web-token-secret");
+        _cut = new UserService(_mockRepo.Object, mockEnvironment.Object);
     }
 
     [Fact]
@@ -25,10 +33,10 @@ public class FavoriteContractServiceTests
         // Arrange
         List<Contract> contracts = new List<Contract>() { new Contract(), new Contract(), new Contract() };
         var user = new User() { Favorites = contracts };
-        _mockUserRepo.Setup(repo => repo.Fetch(user.Name)).Returns(user);
+        _mockRepo.Setup(repo => repo.Fetch(user.Name)).Returns(user);
 
         // Act
-        IEnumerable<Contract> fetchedContracts = _cut.FetchAll(user.Name);
+        IEnumerable<Contract> fetchedContracts = _cut.FetchAllFavorites(user.Name);
 
         // Assert
         fetchedContracts.Should().BeEquivalentTo(contracts);
@@ -42,10 +50,10 @@ public class FavoriteContractServiceTests
         var contract = new Contract();
 
         // Act
-        _cut.Add(user.Name, contract.Id);
+        _cut.AddFavorite(user.Name, contract.Id);
 
         // Assert
-        _mockFavoriteRepo.Verify(repo => repo.Add(user.Name, contract.Id), Times.Once);
+        _mockRepo.Verify(repo => repo.AddFavorite(user.Name, contract.Id), Times.Once);
     }
 
     [Fact]
@@ -55,7 +63,7 @@ public class FavoriteContractServiceTests
         Contract contract = new Contract();
         List<Contract> contracts = new List<Contract>() { contract, new Contract(), new Contract() };
         var user = new User() { Favorites = contracts };
-        _mockUserRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
+        _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
 
         // Act
         bool actual = _cut.IsFavorite(user.Name, contract.Id);
@@ -71,7 +79,7 @@ public class FavoriteContractServiceTests
         Contract contract = new Contract();
         List<Contract> contracts = new List<Contract>() { new Contract(), new Contract(), new Contract() };
         var user = new User() { Favorites = contracts };
-        _mockUserRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
+        _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
 
         // Act
         bool actual = _cut.IsFavorite(user.Name, contract.Id);
@@ -86,10 +94,10 @@ public class FavoriteContractServiceTests
         // Arrange
         List<Contract> mockFavoriteContracts = new Faker<Contract>().Generate(5);
         var user = new User() { Favorites = mockFavoriteContracts };
-        _mockUserRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
+        _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
 
         // Act
-        IEnumerable<Contract> favoriteContracts = _cut.FetchAll(user.Name);
+        IEnumerable<Contract> favoriteContracts = _cut.FetchAllFavorites(user.Name);
 
         // Assert
         favoriteContracts.Should().BeEquivalentTo(mockFavoriteContracts);
@@ -101,10 +109,10 @@ public class FavoriteContractServiceTests
         // Arrange
         List<Contract> mockFavoriteContracts = new Faker<Contract>().Generate(5);
         var user = new User() { Favorites = mockFavoriteContracts };
-        _mockUserRepo.Setup(repository => repository.Fetch(user.Name)).Returns<User?>(null);
+        _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns<User?>(null);
 
         // Act
-        Action add = () => _cut.FetchAll(user.Name);
+        Action add = () => _cut.FetchAllFavorites(user.Name);
 
         // Assert
         add.Should().Throw<UserDoesNotExistException>();
@@ -116,10 +124,10 @@ public class FavoriteContractServiceTests
         // Arrange
         var user = new User();
         var contract = new Contract();
-        _mockFavoriteRepo.Setup(repository => repository.Remove(user.Name, contract.Id)).Returns(true);
+        _mockRepo.Setup(repository => repository.RemoveFavorite(user.Name, contract.Id)).Returns(true);
 
         // Act
-        bool actual = _cut.Remove(user.Name, contract.Id);
+        bool actual = _cut.RemoveFavorite(user.Name, contract.Id);
 
         // Assert
         actual.Should().BeTrue();
@@ -131,10 +139,10 @@ public class FavoriteContractServiceTests
         // Arrange
         var user = new User();
         var contract = new Contract();
-        _mockFavoriteRepo.Setup(repository => repository.Remove(user.Name, contract.Id)).Returns(false);
+        _mockRepo.Setup(repository => repository.RemoveFavorite(user.Name, contract.Id)).Returns(false);
 
         // Act
-        bool actual = _cut.Remove(user.Name, contract.Id);
+        bool actual = _cut.RemoveFavorite(user.Name, contract.Id);
 
         // Assert
         actual.Should().BeFalse();

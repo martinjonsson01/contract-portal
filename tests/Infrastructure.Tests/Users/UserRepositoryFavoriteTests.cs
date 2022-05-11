@@ -1,27 +1,34 @@
 ﻿using System;
 using System.Linq;
+
+using Application.Configuration;
 using Application.Contracts;
-using Application.FavoriteContracts;
 using Application.Users;
 using Domain.Contracts;
 using Domain.Users;
 
 using Infrastructure.Databases;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Tests.Contracts;
+namespace Infrastructure.Tests.Users;
 
 [Collection("DatabaseTests")]
-public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposable
+public class UserRepositoryFavoriteTests : IClassFixture<TestDatabaseFixture>, IDisposable
 {
-    private readonly IFavoriteContractRepository _cut;
-    private EFDatabaseContext _context;
+    private readonly TestDatabaseFixture _fixture;
+    private readonly EFDatabaseContext _context;
+    private IUserRepository _cut;
 
-    public FavoriteRepositoryTests(TestDatabaseFixture fixture)
+    public UserRepositoryFavoriteTests(TestDatabaseFixture fixture)
     {
-        _context = fixture.CreateContext();
-        _cut = new EFFavoriteRepository(_context, Mock.Of<ILogger<EFFavoriteRepository>>());
+        _fixture = fixture;
+        _context = _fixture.CreateContext();
+        var mockEnvironment = new Mock<IConfiguration>();
+        mockEnvironment.Setup(env => env[ConfigurationKeys.AdminPassword]).Returns("test_password");
+        _cut = new EFUserRepository(_context, Mock.Of<ILogger<EFUserRepository>>(), mockEnvironment.Object);
+        _cut.EnsureAdminCreated();
     }
 
     public void Dispose()
@@ -44,7 +51,7 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisp
         _context.SaveChanges();
 
         // Act
-        _cut.Add(user.Name, contract.Id);
+        _cut.AddFavorite(user.Name, contract.Id);
 
         // Assert
         User databaseUser = _context.Users.Where(u => u.Id == user.Id).Include(u => u.Favorites).First();
@@ -62,7 +69,7 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisp
         _context.SaveChanges();
 
         // Act
-        Action fetch = () => _cut.Add(user.Name, fakeId);
+        Action fetch = () => _cut.AddFavorite(user.Name, fakeId);
 
         // Assert
         fetch.Should().Throw<ContractDoesNotExistException>();
@@ -79,7 +86,7 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisp
         _context.SaveChanges();
 
         // Act
-        Action fetch = () => _cut.Add(fakeUsername, contract.Id);
+        Action fetch = () => _cut.AddFavorite(fakeUsername, contract.Id);
 
         // Assert
         fetch.Should().Throw<UserDoesNotExistException>();
@@ -98,7 +105,7 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisp
         _context.SaveChanges();
 
         // Act
-        bool actual = _cut.Remove(user.Name, contract.Id);
+        bool actual = _cut.RemoveFavorite(user.Name, contract.Id);
 
         // Assert
         actual.Should().BeTrue();
@@ -116,7 +123,7 @@ public class FavoriteRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisp
         _context.SaveChanges();
 
         // Act
-        bool actual = _cut.Remove(user.Name, contract.Id);
+        bool actual = _cut.RemoveFavorite(user.Name, contract.Id);
 
         // Assert
         actual.Should().BeFalse();

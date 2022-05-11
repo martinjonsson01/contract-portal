@@ -1,10 +1,6 @@
-using Application.Exceptions;
-using Application.FavoriteContracts;
 using Application.MessagePassing;
 using Application.Users;
 using Domain.Contracts;
-using Domain.Users;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Tests.Controllers;
@@ -12,11 +8,11 @@ namespace Server.Tests.Controllers;
 public class FavoritesControllerTests
 {
     private readonly FavoritesController _cut;
-    private readonly Mock<IFavoriteContractService> _mockContracts;
+    private readonly Mock<IUserService> _mockContracts;
 
     public FavoritesControllerTests()
     {
-        _mockContracts = new Mock<IFavoriteContractService>();
+        _mockContracts = new Mock<IUserService>();
         _cut = new FavoritesController(Mock.Of<ILogger<FavoritesController>>(), _mockContracts.Object);
     }
 
@@ -26,7 +22,7 @@ public class FavoritesControllerTests
         // Arrange
         string userName = "user";
         List<Contract> fakeFavoriteContracts = new Faker<Contract>().Generate(10);
-        _mockContracts.Setup(service => service.FetchAll(userName)).Returns(fakeFavoriteContracts);
+        _mockContracts.Setup(service => service.FetchAllFavorites(userName)).Returns(fakeFavoriteContracts);
 
         // Act
         IEnumerable<Contract> favoriteContracts = _cut.GetAll(userName);
@@ -64,7 +60,7 @@ public class FavoritesControllerTests
         _cut.Change(setFavoriteContract);
 
         // Assert
-        _mockContracts.Verify(service => service.Add(setFavoriteContract.UserName, setFavoriteContract.ContractId), Times.Once);
+        _mockContracts.Verify(service => service.AddFavorite(setFavoriteContract.UserName, setFavoriteContract.ContractId), Times.Once);
     }
 
     [Fact]
@@ -80,7 +76,7 @@ public class FavoritesControllerTests
         _cut.Change(setFavoriteContract);
 
         // Assert
-        _mockContracts.Verify(service => service.Remove(setFavoriteContract.UserName, setFavoriteContract.ContractId), Times.Once);
+        _mockContracts.Verify(service => service.RemoveFavorite(setFavoriteContract.UserName, setFavoriteContract.ContractId), Times.Once);
     }
 
     [Fact]
