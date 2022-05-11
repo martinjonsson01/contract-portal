@@ -35,5 +35,5 @@ public class User
     /// <summary>
     /// Gets the most recently view contracts by the user.
     /// </summary>
-    public LinkedList<Contract> RecentlyViewContracts { get; } = new();
+    public IList<RecentlyViewedContract> RecentlyViewContracts { get; } = new List<RecentlyViewedContract>();
 }
