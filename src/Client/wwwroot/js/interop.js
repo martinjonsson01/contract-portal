@@ -17,3 +17,7 @@ function registerActivityCallback(dotNetHelper) {
         dotNetHelper.invokeMethodAsync("ResetTimer");
     }
 }
+
+function scrollToElement(selector) {
+    document.querySelector(selector).scrollIntoView({behavior: 'smooth', block: 'start'});
+}
