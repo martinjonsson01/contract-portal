@@ -2,6 +2,7 @@
 @using System.Net
 @typeparam TData
 @inject HttpClient _http;
+@inherits AuthenticatedView
 
 @if (_errorMessage is not null && ShouldShowErrors)
 {
@@ -51,9 +52,10 @@ else
     private string? _errorMessage;
 
     /// <inheritdoc />
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await Fetch(Url);
+        if (Data is null && _errorMessage is null)
+            await Fetch(Url);
     }
 
     /// <summary>
@@ -66,10 +68,13 @@ else
         if (!response.IsSuccessStatusCode)
         {
             _errorMessage = CreateErrorMessage(response.StatusCode);
+            StateHasChanged();
             return;
         }
 
         Data = await response.Content.ReadFromJsonAsync<TData>();
+        _errorMessage = null;
+        StateHasChanged();
     }
 
     private string CreateErrorMessage(HttpStatusCode statusCode)
