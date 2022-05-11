@@ -2,6 +2,7 @@
 using System.Linq;
 using Application.Contracts;
 using Domain.Contracts;
+using Domain.Users;
 using FluentAssertions.Execution;
 
 namespace Application.Tests.Contracts;
@@ -10,12 +11,14 @@ public class RecentContractServiceTests
 {
     private const string UserId = "123";
     private readonly IRecentContractService _cut;
-    private readonly Mock<IRecentContractRepository> _mockRepo;
+    private readonly Mock<IRecentContractRepository> _mockRecentRepo;
+    private readonly Mock<IContractRepository> _mockContractRepo;
 
     public RecentContractServiceTests()
     {
-        _mockRepo = new Mock<IRecentContractRepository>();
-        _cut = new RecentContractService(_mockRepo.Object);
+        _mockRecentRepo = new Mock<IRecentContractRepository>();
+        _mockContractRepo = new Mock<IContractRepository>();
+        _cut = new RecentContractService(_mockRecentRepo.Object, _mockContractRepo.Object);
     }
 
     [Fact]
@@ -23,9 +26,8 @@ public class RecentContractServiceTests
     {
         // Arrange
         var contract = new Contract();
-        var contracts = new LinkedList<Contract>();
-        contracts.AddFirst(contract);
-        _mockRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
+        var contracts = new List<RecentlyViewedContract> { new(contract.Id, new User().Id) };
+        _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
             .Returns(contracts);
 
         // Act
@@ -40,16 +42,15 @@ public class RecentContractServiceTests
     {
         // Arrange
         var contract = new Contract();
-        var contracts = new LinkedList<Contract>();
-        contracts.AddFirst(contract);
-        _mockRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
+        var contracts = new List<RecentlyViewedContract> { new RecentlyViewedContract() };
+        _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
             .Returns(contracts);
 
         // Act
         _cut.Add(UserId, contract);
 
         // Assert
-        _mockRepo.Verify(repo => repo.Add(UserId, contract), Times.Once);
+        _mockRecentRepo.Verify(repo => repo.AddRecent(UserId, contract), Times.Once);
     }
 
     [Fact]
@@ -60,18 +61,15 @@ public class RecentContractServiceTests
         var contract2 = new Contract();
         var contract3 = new Contract();
         var contract4 = new Contract();
-        var contracts = new LinkedList<Contract>();
+        var contracts = new List<RecentlyViewedContract> { new(contract1.Id, new User().Id), new(contract2.Id, new User().Id), new(contract3.Id, new User().Id) };
 
-        _mockRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
+        _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
             .Returns(contracts);
-        contracts.AddFirst(contract1);
-        contracts.AddFirst(contract2);
-        contracts.AddFirst(contract3);
 
         // Act
         _cut.Add(UserId, contract4);
 
         // Assert
-        _mockRepo.Verify(repo => repo.RemoveLast(UserId), Times.Once);
+        _mockRecentRepo.Verify(repo => repo.RemoveRecent(It.IsAny<RecentlyViewedContract>()), Times.Once);
     }
 }

@@ -16,19 +16,16 @@ public sealed class EFContractRepository : IContractRepository
 {
     private readonly EFDatabaseContext _context;
     private readonly ILogger<EFContractRepository> _logger;
-    private readonly IRecentContractService _recent;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EFContractRepository"/> class.
     /// </summary>
     /// <param name="context">The database context to manipulate data in.</param>
     /// <param name="logger">The logging service to use.</param>
-    /// <param name="recent">The recent contract service to use.</param>
-    public EFContractRepository(EFDatabaseContext context, ILogger<EFContractRepository> logger, IRecentContractService recent)
+    public EFContractRepository(EFDatabaseContext context, ILogger<EFContractRepository> logger)
     {
         _context = context;
         _logger = logger;
-        _recent = recent;
     }
 
     /// <inheritdoc />

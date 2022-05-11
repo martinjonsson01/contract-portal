@@ -100,21 +100,14 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposab
         // Arrange
         const string adminName = "admin";
         var contract1 = new Contract() { Name = "1" };
-        var contract2 = new Contract() { Name = "2" };
-        var contract3 = new Contract() { Name = "3" };
         _context.Contracts.Add(contract1);
-        _context.Contracts.Add(contract2);
-        _context.Contracts.Add(contract3);
 
         // Act
-        _cut.Add(adminName, contract1);
-        _cut.Add(adminName, contract2);
-        _cut.Add(adminName, contract3);
-        IEnumerable<Contract> contracts = _cut.Fetch(adminName) !.RecentlyViewContracts;
+        _cut.AddRecent(adminName, contract1);
+        IList<RecentlyViewedContract> contracts = _cut.FetchRecentContracts(adminName);
 
         // Assert
-        contracts.First().Should().BeEquivalentTo(contract3);
-        contracts.Last().Should().BeEquivalentTo(contract1);
+        contracts.First().ContractId.Should().Be(contract1.Id);
     }
 
     [Fact]
@@ -128,14 +121,14 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposab
         _context.Contracts.Add(contract2);
 
         // Act
-        _cut.Add(adminName, contract1);
-        _cut.Add(adminName, contract2);
-        _cut.Add(adminName, contract1);
-        IEnumerable<Contract> contracts = _cut.Fetch(adminName) !.RecentlyViewContracts;
+        _cut.AddRecent(adminName, contract1);
+        _cut.AddRecent(adminName, contract2);
+        _cut.AddRecent(adminName, contract1);
+        IList<RecentlyViewedContract> contracts = _cut.FetchRecentContracts(adminName);
 
         // Assert
-        contracts.First().Should().BeEquivalentTo(contract1);
-        contracts.Last().Should().BeEquivalentTo(contract2);
+        contracts.First().ContractId.Should().Be(contract1.Id);
+        contracts.Last().ContractId.Should().Be(contract2.Id);
     }
 
     [Fact]
@@ -147,15 +140,18 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposab
         var contract2 = new Contract();
         _context.Contracts.Add(contract1);
         _context.Contracts.Add(contract2);
-        _cut.Add(adminName, contract1);
-        _cut.Add(adminName, contract2);
+        _cut.AddRecent(adminName, contract1);
+        _cut.AddRecent(adminName, contract2);
+
+        RecentlyViewedContract toRemove = _cut.Fetch(adminName) !.RecentlyViewContracts
+            .First(recentContract => recentContract.ContractId == contract1.Id);
 
         // Act
-        _cut.RemoveLast(adminName);
-        IEnumerable<Contract> contracts = _cut.Fetch(adminName) !.RecentlyViewContracts;
+        _cut.RemoveRecent(toRemove);
+        IList<RecentlyViewedContract> contracts = _cut.FetchRecentContracts(adminName);
 
         // Assert
-        contracts.First().Should().BeEquivalentTo(contract2);
+        contracts.First().ContractId.Should().Be(contract2.Id);
         contracts.Should().ContainSingle();
     }
 
@@ -170,8 +166,9 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposab
         var contract1 = new Contract();
         _context.Contracts.Add(contract1);
         _context.SaveChanges();
-        _cut.Add(user1.Name, contract1);
-        _cut.Add(user2.Name, contract1);
+        _cut.AddRecent(user1.Name, contract1);
+        _cut.AddRecent(user2.Name, contract1);
+        _ = _context.RecentlyViewedContracts.Find(contract1.Id, user1.Id);
 
         // Act
         _context.Contracts.Remove(contract1);
@@ -193,7 +190,7 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposab
         _context.Contracts.Add(contract1);
         _context.Contracts.Add(contract2);
         _context.SaveChanges();
-        _cut.Add(user1.Name, contract1);
+        _cut.AddRecent(user1.Name, contract1);
 
         // Act
         _context.Contracts.Remove(contract2);

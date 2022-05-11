@@ -21,7 +21,7 @@ public class ContractRepositoryTests : IClassFixture<TestDatabaseFixture>
     public ContractRepositoryTests(TestDatabaseFixture fixture)
     {
         EFDatabaseContext context = fixture.CreateContext();
-        _cut = new EFContractRepository(context, Mock.Of<ILogger<EFContractRepository>>(), Mock.Of<IRecentContractService>());
+        _cut = new EFContractRepository(context, Mock.Of<ILogger<EFContractRepository>>());
     }
 
     [Fact]

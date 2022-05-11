@@ -40,6 +40,9 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
     /// </summary>
     public DbSet<User> Users { get; set; } = null!;
 
+    /// <inheritdoc />
+    public DbSet<RecentlyViewedContract> RecentlyViewedContracts { get; set; } = null!;
+
     /// <inheritdoc/>
     public new EntityEntry Entry<TEntity>(TEntity entity)
         where TEntity : class
@@ -50,8 +53,12 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        _ = modelBuilder.Entity<User>()
-            .HasMany(user => user.RecentlyViewContracts)
-            .WithMany("RecentOf");
+        _ = modelBuilder.Entity<User>().HasKey(user => user.Id);
+
+        _ = modelBuilder.Entity<Contract>().HasKey(contract => contract.Id);
+        _ = modelBuilder.Entity<Contract>().HasMany<RecentlyViewedContract>().WithOne().HasForeignKey(nameof(RecentlyViewedContract.ContractId));
+
+        _ = modelBuilder.Entity<RecentlyViewedContract>()
+            .HasKey(recentContract => new { recentContract.ContractId, recentContract.UserId });
     }
 }

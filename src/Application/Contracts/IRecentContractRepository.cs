@@ -12,18 +12,18 @@ public interface IRecentContractRepository
     /// </summary>
     /// <param name="id">The id of the user.</param>
     /// <returns>Top most recently viewed contracts.</returns>
-    LinkedList<Contract> FetchRecentContracts(string id);
+    IList<RecentlyViewedContract> FetchRecentContracts(string id);
 
     /// <summary>
     /// Adds a contract to recent for a user.
     /// </summary>
-    /// <param name="id">The id of the user.</param>
+    /// <param name="username">The id of the user.</param>
     /// <param name="contract">Possible new recent contract.</param>
-    void Add(string id, Contract contract);
+    void AddRecent(string username, Contract contract);
 
     /// <summary>
     /// Removes the last viewed contract for user.
     /// </summary>
-    /// <param name="id">The id of the user.</param>
-    void RemoveLast(string id);
+    /// <param name="contractToRemove">The contract to remove.</param>
+    void RemoveRecent(RecentlyViewedContract contractToRemove);
 }

@@ -43,15 +43,24 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     }
 
     /// <inheritdoc />
-    public void Add(string id, Contract contract)
+    public void AddRecent(string username, Contract contract)
     {
-        User user = GetUserByUserName(id);
-        if (user.RecentlyViewContracts.Any(other => other.Id == contract.Id))
+        User user = GetUserByUserName(username);
+
+        RecentlyViewedContract? recentlyViewedContract =
+            user.RecentlyViewContracts.SingleOrDefault(recentContract => recentContract.ContractId == contract.Id);
+
+        // Check whether to create a new recent contract or just update the viewed time.
+        if (recentlyViewedContract == null)
         {
-            user.RecentlyViewContracts.Remove(contract);
+            var recentContract = new RecentlyViewedContract(contract.Id, user.Id);
+            user.RecentlyViewContracts.Add(recentContract);
+        }
+        else
+        {
+            recentlyViewedContract.LastViewed = DateTime.Now;
         }
 
-        user.RecentlyViewContracts.AddFirst(contract);
         try
         {
             _context.SaveChanges();
@@ -63,12 +72,14 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     }
 
     /// <inheritdoc />
-    public void RemoveLast(string id)
+    public void RemoveRecent(RecentlyViewedContract contractToRemove)
     {
-        User user = GetUserByUserName(id);
-        user.RecentlyViewContracts.RemoveLast();
+        _context.RecentlyViewedContracts.Remove(contractToRemove);
         _ = _context.SaveChanges();
-        _logger.LogInformation("Removed last contract from user {UserName}'s recently viewed contracts", user.Name);
+        _logger.LogInformation(
+            "Removed contract with id {ContractId} from user with id {UserId}",
+            contractToRemove.ContractId,
+            contractToRemove.UserId);
     }
 
     /// <inheritdoc />
@@ -101,7 +112,7 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
     }
 
     /// <inheritdoc />
-    public LinkedList<Contract> FetchRecentContracts(string id)
+    public IList<RecentlyViewedContract> FetchRecentContracts(string id)
     {
         User user = GetUserByUserName(id);
         return user.RecentlyViewContracts;
@@ -136,6 +147,7 @@ public sealed class EFUserRepository : IUserRepository, IRecentContractRepositor
 
     private User GetUserByUserName(string username)
     {
-        return Users.Include(user => user.RecentlyViewContracts).First(user => user.Name == username);
+        User user = Users.Include(user => user.RecentlyViewContracts).First(user => user.Name == username);
+        return user;
     }
 }
