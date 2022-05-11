@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
-using Application.Users;
 using Domain.Contracts;
 using Domain.Users;
 using Infrastructure.Databases;
@@ -95,7 +93,7 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposab
     }
 
     [Fact]
-    public void AddRecent_ContractsAreInExpectedOrderAfterBeingAdded()
+    public void AddRecent_AddsTheContractCorrectly()
     {
         // Arrange
         const string adminName = "admin";
@@ -111,28 +109,27 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposab
     }
 
     [Fact]
-    public void AddRecent_ReAddingAnExistingContractPlacesItFirst()
+    public void AddRecent_ReAddingAnExistingContractUpdatesTheTimeCorrectly()
     {
         // Arrange
         const string adminName = "admin";
         var contract1 = new Contract();
-        var contract2 = new Contract();
         _context.Contracts.Add(contract1);
-        _context.Contracts.Add(contract2);
 
         // Act
         _cut.AddRecent(adminName, contract1);
-        _cut.AddRecent(adminName, contract2);
+        var time1 = _cut.Fetch(adminName) !.RecentlyViewContracts.First(recentContract => recentContract.ContractId == contract1.Id)
+            .LastViewed;
         _cut.AddRecent(adminName, contract1);
-        IList<RecentlyViewedContract> contracts = _cut.FetchRecentContracts(adminName);
+        var time2 = _cut.Fetch(adminName) !.RecentlyViewContracts.First(recentContract => recentContract.ContractId == contract1.Id)
+            .LastViewed;
 
         // Assert
-        contracts.First().ContractId.Should().Be(contract1.Id);
-        contracts.Last().ContractId.Should().Be(contract2.Id);
+        time1.Should().BeBefore(time2);
     }
 
     [Fact]
-    public void RemoveLast_RemovesTheLastAddedContract()
+    public void RemoveRecent_RemovesCorrectContract()
     {
         // Arrange
         const string adminName = "admin";
