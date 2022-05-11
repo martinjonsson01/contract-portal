@@ -37,7 +37,7 @@
         IsRounded = true,
     };
 
-        private const int InactivityLogoutMilliseconds = 3000; //  TODO: * 60 * 15; // 15 minutes
+        private const int InactivityLogoutMilliseconds = 1000 * 60 * 15; // 15 minutes
 
     private readonly Timer _timer = new(InactivityLogoutMilliseconds);
 
