@@ -54,6 +54,6 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
         _ = modelBuilder
         .Entity<User>()
         .HasMany(p => p.Favorites)
-        .WithMany("FavoriteUsers");
+        .WithMany("FavoritedBy");
     }
 }

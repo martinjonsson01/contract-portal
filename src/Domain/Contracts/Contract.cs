@@ -71,5 +71,5 @@ public class Contract
     // classes (User and Contract) when a many-to-many relation is to be genereated,
     // and exists only for this reason.
     // See the Entity Framework documentation for more information.
-    private ICollection<User> FavoriteUsers { get; } = new List<User>();
+    private ICollection<User> FavoritedBy { get; } = new List<User>();
 }
