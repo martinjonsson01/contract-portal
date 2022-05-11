@@ -1,11 +1,16 @@
 .text-block {
     position: absolute;
     text-align: center;
-    top: 300px;
-    left:15%;
+    top: 6rem;
+    left:8rem;
     justify-content:center;
     padding-left:10px;
     padding-right:10px;
+    max-width:80%;
+}
+.text-block h1
+{
+    color: #fbebac;
 }
 
 .container img{
@@ -15,7 +20,9 @@
     min-width:100%;
     min-height: 100%;
 }
+
 .container {
+
     padding-left:0;
     padding-right: 0;
     left:0;
@@ -24,6 +31,7 @@
     position: absolute;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y:hidden;
 }
 
