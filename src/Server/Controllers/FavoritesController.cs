@@ -51,11 +51,11 @@ public class FavoritesController : BaseApiController<FavoritesController>
         }
         catch (UserDoesNotExistException)
         {
-            return BadRequest();
+            return BadRequest("Unable to add/remove favorite because the user does not exist.");
         }
         catch (ContractDoesNotExistException)
         {
-            return BadRequest();
+            return BadRequest("Unable to add/remove favorite because the contract does not exist.");
         }
     }
 
@@ -68,7 +68,7 @@ public class FavoritesController : BaseApiController<FavoritesController>
     [HttpGet("/{contractId:guid}")]
     public IActionResult GetIsFavorite(string userName, Guid contractId)
     {
-        return _favorites.IsFavorite(userName, contractId) ? Ok() : BadRequest();
+        return _favorites.IsFavorite(userName, contractId) ? Ok() : NotFound();
     }
 
     /// <summary>
