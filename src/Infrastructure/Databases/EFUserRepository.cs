@@ -1,6 +1,7 @@
 using System.Data;
 using Application.Configuration;
 using Application.Users;
+using Domain.Contracts;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -81,6 +82,29 @@ public sealed class EFUserRepository : IUserRepository
     }
 
     /// <inheritdoc />
+    public void AddFavorite(string userName, Guid contractId)
+    {
+        User user = FetchUser(userName);
+        Contract contract = FetchContract(contractId);
+
+        user.Favorites.Add(contract);
+        _ = _context.SaveChanges();
+        _logger.LogInformation("Contract {ContractId} was added as favorite for user {UserName}", contractId, userName);
+    }
+
+    /// <inheritdoc />
+    public bool RemoveFavorite(string userName, Guid contractId)
+    {
+        User user = FetchUser(userName);
+        Contract contract = FetchContract(contractId);
+        bool result = user.Favorites.Remove(contract);
+        _context.SaveChanges();
+
+        _logger.LogInformation("Contract {ContractId} was removed as favorite from user {UserName}", contractId, userName);
+        return result;
+    }
+
+    /// <inheritdoc />
     public void EnsureAdminCreated()
     {
         if (!Users.Any(user => user.Name == AdminUserName))
@@ -100,6 +124,30 @@ public sealed class EFUserRepository : IUserRepository
         catch (DataException e)
         {
             _logger.LogError("Could not create admin: {Message}", e.Message);
+        }
+    }
+
+    private User FetchUser(string userName)
+    {
+        try
+        {
+            return _context.Users.Where(s => s.Name == userName).Include(s => s.Favorites).First();
+        }
+        catch (InvalidOperationException)
+        {
+            throw new UserDoesNotExistException();
+        }
+    }
+
+    private Contract FetchContract(Guid contractId)
+    {
+        try
+        {
+            return _context.Contracts.Where(s => s.Id == contractId).First();
+        }
+        catch (InvalidOperationException)
+        {
+            throw new ContractDoesNotExistException();
         }
     }
 }
