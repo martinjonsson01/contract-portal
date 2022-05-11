@@ -15,7 +15,6 @@
             "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
             "applicationUrl": "https://localhost:7223;http://localhost:5152",
             "environmentVariables": {
-                "prodigo_portal_jwt_secret":"secret",
                 "ASPNETCORE_ENVIRONMENT": "Development"
             }
         },
