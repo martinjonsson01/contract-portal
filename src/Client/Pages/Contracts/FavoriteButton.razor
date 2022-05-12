@@ -47,10 +47,10 @@
 
     protected override async void OnInitialized()
     {
-        HttpResponseMessage response = await _http.GetAsync($"/api/v1/users/{LoggedInUser}/favorites/{Contract.Id}");
-        if (response.IsSuccessStatusCode)
+        if (!string.IsNullOrEmpty(LoggedInUser))
         {
-            isFavorite = true;
+            HttpResponseMessage response = await _http.GetAsync($"/api/v1/users/{LoggedInUser}/favorites/{Contract.Id}");
+            isFavorite = response.IsSuccessStatusCode;
         }
         else
         {
@@ -62,7 +62,7 @@
 
     private async Task ChangeFavorite()
     {
-        if (LoggedInUser != null)
+        if (!string.IsNullOrEmpty(LoggedInUser))
         {
             FavoriteContractDto favoriteContract = new() { UserName = LoggedInUser, ContractId = Contract.Id, IsFavorite = !isFavorite };
 
