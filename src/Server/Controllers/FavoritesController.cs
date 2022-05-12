@@ -63,7 +63,7 @@ public class FavoritesController : BaseApiController<FavoritesController>
     /// <param name="userName">The name of the user.</param>
     /// <param name="contractId">The id of the contract.</param>
     /// <returns>Whether the contract is marked as favorite by the user.</returns>
-    [HttpGet("/{contractId:guid}")]
+    [HttpGet("{contractId:guid}")]
     public IActionResult GetIsFavorite(string userName, Guid contractId)
     {
         return _users.IsFavorite(userName, contractId) ? Ok() : NotFound();
