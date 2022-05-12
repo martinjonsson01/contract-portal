@@ -64,9 +64,9 @@
     {
         if (LoggedInUser != null)
         {
-            SetFavoriteContract setFavorite = new() { UserName = LoggedInUser, ContractId = Contract.Id, IsFavorite = !isFavorite };
+            FavoriteContractDto favoriteContract = new() { UserName = LoggedInUser, ContractId = Contract.Id, IsFavorite = !isFavorite };
 
-            HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{LoggedInUser}/favorites", setFavorite);
+            HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{LoggedInUser}/favorites", favoriteContract);
             if (response.IsSuccessStatusCode)
             {
                 isFavorite = !isFavorite;

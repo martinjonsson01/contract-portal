@@ -3,7 +3,7 @@
 /// <summary>
 /// Used to send information about making a Contract a users favorite.
 /// </summary>
-public class SetFavoriteContract
+public class FavoriteContractDto
 {
     /// <summary>
     ///     Gets the id of the user.

@@ -28,21 +28,21 @@ public class FavoritesController : BaseApiController<FavoritesController>
     /// <summary>
     /// Adds a favorite or removes it if it already exists.
     /// </summary>
-    /// <param name="setFavoriteContract">The favorite to add or remove.</param>
+    /// <param name="favoriteContract">The favorite to add or remove.</param>
     /// <returns>Whether the change succeeded.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Change(SetFavoriteContract setFavoriteContract)
+    public IActionResult Change(FavoriteContractDto favoriteContract)
     {
         try
         {
-            if (setFavoriteContract.IsFavorite)
+            if (favoriteContract.IsFavorite)
             {
-                _users.AddFavorite(setFavoriteContract.UserName, setFavoriteContract.ContractId);
+                _users.AddFavorite(favoriteContract.UserName, favoriteContract.ContractId);
             }
             else
             {
-                _ = _users.RemoveFavorite(setFavoriteContract.UserName, setFavoriteContract.ContractId);
+                _ = _users.RemoveFavorite(favoriteContract.UserName, favoriteContract.ContractId);
             }
 
             return Ok();
