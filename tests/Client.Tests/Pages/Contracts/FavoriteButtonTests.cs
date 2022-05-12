@@ -91,8 +91,8 @@ public class FavoriteButtonTests : UITestFixture
         string userName = "user";
         Contract contract = new();
 
-        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(HttpStatusCode.OK); // The contract is marked as favorite
-        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(HttpStatusCode.BadRequest); // The contract does not get unmarked
+        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(HttpStatusCode.OK); // Check whether the contract is marked as favorite and receive that it is
+        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(HttpStatusCode.BadRequest); // Post a request to unmark the contract as a favorite and receive that it was not unmarked
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
                       parameters.Add(property => property.Contract, contract)
@@ -121,8 +121,8 @@ public class FavoriteButtonTests : UITestFixture
         string userName = "user";
         Contract contract = new();
 
-        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK)); // The contract is marked as favorite
-        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(req => new HttpResponseMessage(HttpStatusCode.OK)); // The contract does get unmarked
+        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK)); // Check whether the contract is marked as favorite and receive that it is
+        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(req => new HttpResponseMessage(HttpStatusCode.OK)); // Post a request to unmark the contract as a favorite and receive that is was
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
                       parameters.Add(property => property.Contract, contract)
