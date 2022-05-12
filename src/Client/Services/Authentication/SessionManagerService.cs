@@ -66,7 +66,10 @@ internal class SessionManagerService : ISessionService
     {
         IsAuthenticated = await _storage.ContainKeyAsync("user").ConfigureAwait(true);
         if (!IsAuthenticated)
+        {
+            AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = null, });
             return false;
+        }
 
         AuthenticateResponse state = await _storage.GetItemAsync<AuthenticateResponse>("user").ConfigureAwait(true);
         Authenticate(state);
