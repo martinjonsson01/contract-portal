@@ -4,36 +4,43 @@
 
 <h2>Adminsida</h2>
 
-<Tabs SelectedTab="@_selectedTab"
-      SelectedTabChanged="@OnSelectedTabChanged"
-      Justified="true"
-      Pills="true">
-    <Items>
-        <Tab Name="contracts">Hantera kontrakt</Tab>
-        <Tab Name="users">Hantera användare</Tab>
-    </Items>
-    <Content>
-        <TabPanel Name="contracts">
-            <ContractForm OnContractUploaded="AddContractToTable"/>
-            <ContractTable @ref="@_contractTable"/>
-        </TabPanel>
-        <TabPanel Name="users">
-            <UserForm OnUserAdded="AddUserToTable"/>
-            <UserTable @ref="@_userTable"/>
-        </TabPanel>
-    </Content>
-</Tabs>
+<!-- Extra div needed to style the Blazorise-components (see https://github.com/Megabit/Blazorise/issues/1599) -->
+<div>
+    <Tabs SelectedTab="@_selectedTab"
+          SelectedTabChanged="@OnSelectedTabChanged"
+          Justified="true"
+          Pills="true"
+          TextColor="TextColor.Primary"
+          Class="tabs">
+        <Items>
+            <Tab Name="contracts">Hantera kontrakt</Tab>
+            <Tab Name="users">Hantera användare</Tab>
+        </Items>
+        <Content>
+            <TabPanel Name="contracts">
+                <ContractForm @ref="_contractForm" OnContractUploaded="AddContractToTable"/>
+                <ContractTable @ref="@_contractTable" ContractOpeningForEdit="@OnContractOpeningForEdit"/>
+            </TabPanel>
+            <TabPanel Name="users">
+                <UserForm OnUserAdded="AddUserToTable"/>
+                <UserTable @ref="@_userTable"/>
+            </TabPanel>
+        </Content>
+    </Tabs>
+</div>
 
 @code {
 
     private string _selectedTab = "contracts";
 
+    // Null-forgiving operator used because these fields are set by the Blazor runtime using @ref
     private ContractTable _contractTable = null!;
     private UserTable _userTable = null!;
+    private ContractForm _contractForm = null!;
 
     private void AddContractToTable(Contract contract)
     {
-        _contractTable.Add(contract);
+        _contractTable.AddOrUpdate(contract);
     }
 
     private void AddUserToTable(User user)
@@ -46,4 +53,10 @@
         _selectedTab = tabName;
         return Task.CompletedTask;
     }
+
+    private async Task OnContractOpeningForEdit(Contract contract)
+    {
+        await _contractForm.EditContractAsync(contract);
+    }
+
 }

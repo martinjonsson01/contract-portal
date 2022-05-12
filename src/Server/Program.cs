@@ -60,6 +60,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
        .AddNewtonsoftJson();
 
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.RequestHeaders.Add("authorization");
+    logging.ResponseHeaders.Add("WWW-Authenticate");
+});
+
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.

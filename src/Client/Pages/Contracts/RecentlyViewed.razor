@@ -2,11 +2,13 @@
 @using Application.Contracts
 @using System.Collections.ObjectModel
 @inject HttpClient _http
+@inject ISessionService _session
+@inherits AuthenticatedView
 
 <FetchData TData="Contract[]"
            Url="/api/v1/contracts/recent"
            Context="recents"
-           ShouldShowErrors="@false">
+           ShouldShowErrors="@_session.IsAuthenticated">
 
     <!-- No loading indicator. -->
     <LoadingIndicator></LoadingIndicator>
