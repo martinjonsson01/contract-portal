@@ -91,8 +91,8 @@ public class FavoriteButtonTests : UITestFixture
         string userName = "user";
         Contract contract = new();
 
-        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK)); // The contract is marked as favorite
-        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(req => new HttpResponseMessage(HttpStatusCode.BadRequest)); // The contract does not get unmarked
+        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(HttpStatusCode.OK); // The contract is marked as favorite
+        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(HttpStatusCode.BadRequest); // The contract does not get unmarked
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
                       parameters.Add(property => property.Contract, contract)
