@@ -1,3 +1,4 @@
+
 @using Domain.Users
 @inject HttpClient _http
 
@@ -9,9 +10,20 @@
 
     <td>@User.LatestPaymentDate.ToShortDateString()</td>
 
+    <td>
+        <button type="button"
+                class="btn btn-outline-primary m-0"
+                @onclick="@(async () => await UserOpeningForEdit.InvokeAsync(User))">
+            <span class="oi oi-pencil"></span>
+        </button>
+    </td>
+
     <!-- Button trigger modal -->
     <td>
-        <button type="button" class="btn btn-danger m-0" data-bs-toggle="modal" data-bs-target="#@($"modal_{User.Id}")">
+        <button type="button"
+                class="btn btn-danger m-0"
+                data-bs-toggle="modal"
+                data-bs-target="#@($"modal_{User.Id}")">
             <span class="oi oi-trash"></span>
         </button>
     </td>
@@ -30,6 +42,12 @@
     /// </summary>
     [Parameter]
     public EventCallback<User> OnUserRemoved { get; set; } = EventCallback<User>.Empty;
+
+    /// <summary>
+    /// Called when a <see cref="User"/> is being opened to be edited.
+    /// </summary>
+    [Parameter]
+    public EventCallback<User> UserOpeningForEdit { get; set; } = EventCallback<User>.Empty;
 
     /// <summary>
     /// The user.

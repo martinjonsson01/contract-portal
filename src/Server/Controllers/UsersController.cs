@@ -3,6 +3,7 @@ using Application.Users;
 using Domain.Users;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -31,24 +32,41 @@ public class UsersController : BaseApiController<UsersController>
     /// Creates a new user.
     /// </summary>
     /// <param name="user">The user to add.</param>
+    /// <param name="id">The identifier of the user to put.</param>
     /// <returns>If the user was successfully added.</returns>
     /// <response code="400">The ID of the user was already taken.</response>
-    [HttpPost]
+    [HttpPut("{id:guid}")]
     [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Create(User user)
+    public IActionResult Create([FromBody] User user, Guid id)
     {
         try
         {
             _users.Add(user);
         }
-        catch (IdentifierAlreadyTakenException e)
+        catch (IdentifierAlreadyTakenException)
         {
-            Logger.LogInformation("ID of user was already taken: {Error}", e.Message);
-            return BadRequest();
+            _users.UpdateUser(user);
         }
 
         return Ok();
+    }
+
+    /// <summary>
+    /// Updates the user.
+    /// </summary>
+    /// <param name="patchDocument">The patch to use to update the user.</param>
+    /// <param name="id">The id of the user to update.</param>
+    /// <returns>The updated user.</returns>
+    public IActionResult UpdateUser([FromBody] JsonPatchDocument<User> patchDocument, Guid id)
+    {
+        User user = _users.FetchUser(id);
+        patchDocument.ApplyTo(user, ModelState);
+        _users.UpdateUser(user);
+
+        // Can't place model in an invalid state at the moment, as all states are considered valid.
+        // In the future we might want to add model validation here.
+        return new ObjectResult(user);
     }
 
     /// <summary>

@@ -22,8 +22,8 @@
                 <ContractTable @ref="@_contractTable" ContractOpeningForEdit="@OnContractOpeningForEdit"/>
             </TabPanel>
             <TabPanel Name="users">
-                <UserForm OnUserAdded="AddUserToTable"/>
-                <UserTable @ref="@_userTable"/>
+                <UserForm @ref="_userForm" OnUserAdded="AddUserToTable"/>
+                <UserTable @ref="@_userTable" UserOpeningForEdit="@OnUserOpeningForEdit"/>
             </TabPanel>
         </Content>
     </Tabs>
@@ -37,6 +37,7 @@
     private ContractTable _contractTable = null!;
     private UserTable _userTable = null!;
     private ContractForm _contractForm = null!;
+    private UserForm _userForm = null!;
 
     private void AddContractToTable(Contract contract)
     {
@@ -45,7 +46,7 @@
 
     private void AddUserToTable(User user)
     {
-        _userTable.Add(user);
+        _userTable.AddOrUpdate(user);
     }
 
     private Task OnSelectedTabChanged(string tabName)
@@ -57,6 +58,11 @@
     private async Task OnContractOpeningForEdit(Contract contract)
     {
         await _contractForm.EditContractAsync(contract);
+    }
+
+    private async Task OnUserOpeningForEdit(User user)
+    {
+        await _userForm.EditUserAsync(user);
     }
 
 }

@@ -20,6 +20,19 @@ public interface IUserService
     void Add(User user);
 
     /// <summary>
+    /// Updates the user in the repository.
+    /// </summary>
+    /// <param name="user">The new user.</param>
+    void UpdateUser(User user);
+
+    /// <summary>
+    /// Gets the user.
+    /// </summary>
+    /// <param name="id">The id of the user to fetch.</param>
+    /// <returns>The fetched user.</returns>
+    User FetchUser(Guid id);
+
+    /// <summary>
     /// Removes a user.
     /// </summary>
     /// <param name="id">User to be removed.</param>

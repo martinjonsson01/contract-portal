@@ -71,6 +71,18 @@ public class UserService : IUserService
         return _repo.All;
     }
 
+    /// <inheritdoc />
+    public void UpdateUser(User user)
+    {
+        _repo.UpdateUser(user);
+    }
+
+    /// <inheritdoc />
+    public User FetchUser(Guid id)
+    {
+        return _repo.FetchUser(id) ?? throw new UserDoesNotExistException();
+    }
+
     private static IEnumerable<Claim> CreateClaims(User user)
     {
         var claims = new List<Claim> { new("id", user.Id.ToString()), };

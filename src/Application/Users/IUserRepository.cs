@@ -44,4 +44,11 @@ public interface IUserRepository
     /// Ensures that an admin user is created.
     /// </summary>
     void EnsureAdminCreated();
+
+    /// <summary>
+    /// Gets a user with the given id, if it exists.
+    /// </summary>
+    /// <param name="id">The id of the user.</param>
+    /// <returns>The user, if it exists.</returns>
+    User? FetchUser(Guid id);
 }

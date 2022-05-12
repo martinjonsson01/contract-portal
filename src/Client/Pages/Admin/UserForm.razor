@@ -1,8 +1,9 @@
 @using Domain.Users
 @using Microsoft.VisualBasic
 @inject HttpClient _http
+@inject IJSRuntime _js
 
-<h4>Skapa användare</h4>
+<h4 id="user-form-title">Skapa ny användare</h4>
 
 <EditForm Model="@_user" OnSubmit="AddUser">
     <div class="mb-3">
@@ -49,11 +50,16 @@
     {
         // Make sure date is in UTC.
         _user.LatestPaymentDate = _user.LatestPaymentDate.ToUniversalTime();
-        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users", _user);
+        HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{_user.Id}", _user);
         if (response.IsSuccessStatusCode)
         {
             await OnUserAdded.InvokeAsync(_user);
             _user = CreateUnspecifiedUser();
         }
+    }
+
+    private async Task EditUsersAsync(User user)
+    {
+        await _js.InvokeVoidAsync("scrollToElement", "#user-form-title");
     }
 }

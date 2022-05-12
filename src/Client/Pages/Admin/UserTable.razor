@@ -14,6 +14,7 @@
                 <th scope="col">Namn</th>
                 <th scope="col">Företag</th>
                 <th scope="col">Senaste betalning</th>
+                <th scope="col">Redigera</th>
                 <th scope="col">Ta bort</th>
             </tr>
         </thead>
@@ -21,6 +22,10 @@
         <tbody>
             @foreach (User user in users)
             {
+                <UserTableRow @key="@user.Id"
+                                  User=@user
+                                  OnUserRemoved=@Remove
+                                  UserOpeningForEdit="@(async () => await UserOpeningForEdit.InvokeAsync(user))"/>
                 <UserTableRow User=@user OnUserRemoved="@Remove"/>
             }
         </tbody>
@@ -30,17 +35,34 @@
 
 @code {
 
-    private FetchData<List<User>> _dataFetcher = null!;
+    /// <summary>
+    /// Called when a <see cref="User"/> is being opened to be edited.
+    /// </summary>
+    [Parameter]
+    public EventCallback<User> UserOpeningForEdit { get; set; } = EventCallback<User>.Empty;
 
     /// <summary>
     /// Adds a user to the list.
     /// </summary>
     /// <param name="user">The user to add.</param>
-    public void Add(User user)
+    public void AddOrUpdate(User user)
     {
-        _dataFetcher.Data?.Add(user);
+        if (_dataFetcher.Data is null)
+            return;
+
+        if (_dataFetcher.Data.Any(other => other.Id == user.Id))
+        {
+            _dataFetcher.Data.RemoveAll(toRemove => toRemove.Id == user.Id);
+            _dataFetcher.Data.Add(user);
+        }
+        else
+        {
+            _dataFetcher.Data.Add(user);
+        }
         InvokeAsync(StateHasChanged);
     }
+
+    private FetchData<List<User>> _dataFetcher = null!;
 
     /// <summary>
     /// Removes a user from the list.
@@ -58,4 +80,6 @@
         }
 
     }
+
+
 }
