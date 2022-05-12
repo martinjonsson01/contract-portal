@@ -58,7 +58,6 @@ internal class SessionManagerService : ISessionService
         Username = null;
 
         AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = null, });
-        _navigationManager.NavigateTo("/");
     }
 
     /// <inheritdoc/>

@@ -5,7 +5,10 @@
     /// <inheritdoc />
     protected override void OnInitialized()
     {
-        if (!Session.IsAuthenticated)
-            NavigationManager.NavigateTo("/");
+        Session.AuthenticationStateChanged += (_, _) =>
+        {
+            if (!Session.IsAuthenticated)
+                NavigationManager.NavigateTo("/");
+        };
     }
 }
