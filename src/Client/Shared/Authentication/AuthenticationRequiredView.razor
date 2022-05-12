@@ -1,0 +1,11 @@
+﻿@inject ISessionService Session
+@inject NavigationManager NavigationManager
+
+@code {
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        if (!Session.IsAuthenticated)
+            NavigationManager.NavigateTo("/");
+    }
+}
