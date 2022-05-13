@@ -18,3 +18,15 @@
 .pointer {
     cursor: pointer;
 }
+
+.width-100 {
+    width: 100%;
+}
+
+.width-10 {
+    width: 10%;
+}
+
+.height-35 {
+    height: 35%;
+}
