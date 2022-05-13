@@ -1,9 +1,6 @@
 ﻿using Application.Contracts;
-
 using Domain.Contracts;
-
 using FluentAssertions.Execution;
-
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +16,10 @@ public class ContractsControllerTests
     {
         _mockContracts = new Mock<IContractService>();
         _mockRecent = new Mock<IRecentContractService>();
-        _cut = new ContractsController(Mock.Of<ILogger<ContractsController>>(), _mockContracts.Object, _mockRecent.Object);
+        _cut = new ContractsController(
+            Mock.Of<ILogger<ContractsController>>(),
+            _mockContracts.Object,
+            _mockRecent.Object);
     }
 
     [Fact]
@@ -129,5 +129,42 @@ public class ContractsControllerTests
 
         // Assert
         contract.IsFavorite.Should().Be(false);
+    }
+
+    [Fact]
+    public void FetchRecent_ReturnsEmptyList_WhenUsernameIsEmpty()
+    {
+        // Act
+        IEnumerable<Contract> recentContracts = _cut.RecentContracts(string.Empty);
+
+        // Assert
+        recentContracts.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void FetchRecent_DelegatesToService_WhenUsernameIsNotEmpty()
+    {
+        // Arrange
+        const string username = "123";
+
+        // Act
+        _cut.RecentContracts(username);
+
+        // Assert
+        _mockRecent.Verify(recent => recent.FetchRecentContracts(It.IsAny<string>()), Times.Once);
+    }
+
+    [Fact]
+    public void AddRecent_DelegatesToService()
+    {
+        // Arrange
+        const string username = "123";
+        var contract = new Contract();
+
+        // Act
+        _cut.AddRecent(username, contract);
+
+        // Assert
+        _mockRecent.Verify(recent => recent.Add(username, contract), Times.Once);
     }
 }
