@@ -58,18 +58,74 @@ public class RecentContractServiceTests
     {
         // Arrange
         var contract1 = new Contract();
-        var contract2 = new Contract();
-        var contract3 = new Contract();
-        var contract4 = new Contract();
-        var contracts = new List<RecentlyViewedContract> { new(contract1.Id, new User().Id), new(contract2.Id, new User().Id), new(contract3.Id, new User().Id) };
+        var contracts = new List<RecentlyViewedContract>
+        {
+            new RecentlyViewedContract(),
+            new RecentlyViewedContract(),
+            new RecentlyViewedContract(),
+            new RecentlyViewedContract(),
+        };
 
         _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
             .Returns(contracts);
 
         // Act
-        _cut.Add(UserId, contract4);
+        _cut.Add(UserId, contract1);
 
         // Assert
         _mockRecentRepo.Verify(repo => repo.RemoveRecent(It.IsAny<RecentlyViewedContract>()), Times.Once);
+    }
+
+    [Fact]
+    public void AddRecent_ShouldNotDequeueTheOldestContract_WhenAddingAnAlreadyAddedContract()
+    {
+        // Arrange
+        var contract1 = new Contract();
+        var contract2 = new Contract();
+        var contract3 = new Contract();
+        var contracts = new List<RecentlyViewedContract>
+        {
+            new(contract1.Id, new User().Id), new(contract2.Id, new User().Id), new(contract3.Id, new User().Id),
+        };
+
+        _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
+            .Returns(contracts);
+
+        // Act
+        _cut.Add(UserId, contract1);
+
+        // Assert
+        _mockRecentRepo.Verify(repo => repo.RemoveRecent(It.IsAny<RecentlyViewedContract>()), Times.Never);
+    }
+
+    [Fact]
+    public void FetchRecentContracts_ShouldReturnSortedOrder_WhenGivenWrongOrder()
+    {
+        // Arrange
+        var contract1 = new Contract();
+        var contract2 = new Contract();
+        var contract3 = new Contract();
+
+        var recent1 = new RecentlyViewedContract(contract1.Id, new User().Id);
+        var recent2 = new RecentlyViewedContract(contract2.Id, new User().Id);
+        var recent3 = new RecentlyViewedContract(contract3.Id, new User().Id);
+
+        var contracts = new List<RecentlyViewedContract> { recent2, recent3, recent1, };
+
+        _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
+            .Returns(contracts);
+
+        _mockContractRepo.Setup(repo => repo.FetchContract(contract1.Id))
+            .Returns(contract1);
+        _mockContractRepo.Setup(repo => repo.FetchContract(contract2.Id))
+            .Returns(contract2);
+        _mockContractRepo.Setup(repo => repo.FetchContract(contract3.Id))
+            .Returns(contract3);
+
+        // Act
+        IEnumerable<Contract> recentContracts = _cut.FetchRecentContracts(UserId);
+
+        // Assert
+        recentContracts.SequenceEqual(new List<Contract>() { contract3, contract2, contract1 }).Should().BeTrue();
     }
 }
