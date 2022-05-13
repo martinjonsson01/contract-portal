@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Domain.Contracts;
 using Domain.Users;
 using Infrastructure.Databases;
 using Microsoft.Extensions.Logging;
@@ -8,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace Infrastructure.Tests.Users;
 
 [Collection("DatabaseTests")]
-public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposable
+public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
 {
     private readonly TestDatabaseFixture _fixture;
     private EFUserRepository _cut;
@@ -90,115 +89,5 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>, IDisposab
 
         // Assert
         admins.Should().ContainSingle();
-    }
-
-    [Fact]
-    public void AddRecent_AddsTheContractCorrectly()
-    {
-        // Arrange
-        const string adminName = "admin";
-        var contract1 = new Contract() { Name = "1" };
-        _context.Contracts.Add(contract1);
-
-        // Act
-        _cut.AddRecent(adminName, contract1);
-        IList<RecentlyViewedContract> contracts = _cut.FetchRecentContracts(adminName);
-
-        // Assert
-        contracts.First().ContractId.Should().Be(contract1.Id);
-    }
-
-    [Fact]
-    public void AddRecent_ReAddingAnExistingContractUpdatesTheTimeCorrectly()
-    {
-        // Arrange
-        const string adminName = "admin";
-        var contract1 = new Contract();
-        _context.Contracts.Add(contract1);
-
-        // Act
-        _cut.AddRecent(adminName, contract1);
-        var time1 = _cut.Fetch(adminName) !.RecentlyViewContracts.First(recentContract => recentContract.ContractId == contract1.Id)
-            .LastViewed;
-        _cut.AddRecent(adminName, contract1);
-        var time2 = _cut.Fetch(adminName) !.RecentlyViewContracts.First(recentContract => recentContract.ContractId == contract1.Id)
-            .LastViewed;
-
-        // Assert
-        time1.Should().BeBefore(time2);
-    }
-
-    [Fact]
-    public void RemoveRecent_RemovesCorrectContract()
-    {
-        // Arrange
-        const string adminName = "admin";
-        var contract1 = new Contract();
-        var contract2 = new Contract();
-        _context.Contracts.Add(contract1);
-        _context.Contracts.Add(contract2);
-        _cut.AddRecent(adminName, contract1);
-        _cut.AddRecent(adminName, contract2);
-
-        RecentlyViewedContract toRemove = _cut.Fetch(adminName) !.RecentlyViewContracts
-            .First(recentContract => recentContract.ContractId == contract1.Id);
-
-        // Act
-        _cut.RemoveRecent(toRemove);
-        IList<RecentlyViewedContract> contracts = _cut.FetchRecentContracts(adminName);
-
-        // Assert
-        contracts.First().ContractId.Should().Be(contract2.Id);
-        contracts.Should().ContainSingle();
-    }
-
-    [Fact]
-    public void RemoveContract_RemovesAllContractFromAllUser()
-    {
-        // Arrange
-        var user1 = new User() { Name = "User1" };
-        var user2 = new User() { Name = "User2" };
-        _cut.Add(user1);
-        _cut.Add(user2);
-        var contract1 = new Contract();
-        _context.Contracts.Add(contract1);
-        _context.SaveChanges();
-        _cut.AddRecent(user1.Name, contract1);
-        _cut.AddRecent(user2.Name, contract1);
-        _ = _context.RecentlyViewedContracts.Find(contract1.Id, user1.Id);
-
-        // Act
-        _context.Contracts.Remove(contract1);
-        _context.SaveChanges();
-
-        // Assert
-        _cut.Fetch(user1.Name) !.RecentlyViewContracts.Should().BeEmpty();
-        _cut.Fetch(user2.Name) !.RecentlyViewContracts.Should().BeEmpty();
-    }
-
-    [Fact]
-    public void RemoveContract_DoesNotChangeRecentlyViewedForUser_WhenRecentlyViewedDoesNotContainContract()
-    {
-        // Arrange
-        var user1 = new User() { Name = "User1" };
-        _cut.Add(user1);
-        var contract1 = new Contract();
-        var contract2 = new Contract();
-        _context.Contracts.Add(contract1);
-        _context.Contracts.Add(contract2);
-        _context.SaveChanges();
-        _cut.AddRecent(user1.Name, contract1);
-
-        // Act
-        _context.Contracts.Remove(contract2);
-        _context.SaveChanges();
-
-        _cut.Fetch(user1.Name) !.RecentlyViewContracts.Should().ContainSingle();
-    }
-
-    public void Dispose()
-    {
-        _context.ChangeTracker.Clear();
-        _context.Dispose();
     }
 }
