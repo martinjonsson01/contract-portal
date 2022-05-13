@@ -20,7 +20,7 @@ public interface IUserService
     void Add(User user);
 
     /// <summary>
-    /// Updates the user in the repository.
+    /// Updates the user with the new values.
     /// </summary>
     /// <param name="user">The new user.</param>
     void UpdateUser(User user);

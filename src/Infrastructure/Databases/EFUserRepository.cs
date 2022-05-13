@@ -86,7 +86,7 @@ public sealed class EFUserRepository : IUserRepository
     /// <summary>
     /// Updates user.
     /// </summary>
-    /// <param name="updatedUser">Documentation.</param>
+    /// <param name="updatedUser">Updates the values of an existing user.</param>
     public void UpdateUser(User updatedUser)
     {
         User? oldUser = FetchUser(updatedUser.Id);
@@ -105,11 +105,7 @@ public sealed class EFUserRepository : IUserRepository
         }
     }
 
-    /// <summary>
-    /// Summary.
-    /// </summary>
-    /// <param name="id">id.</param>
-    /// <returns>Returnable.</returns>
+    /// <inheritdoc />
     public User? FetchUser(Guid id)
     {
         return Users.Find(id);

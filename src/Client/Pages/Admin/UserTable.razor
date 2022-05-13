@@ -41,7 +41,7 @@
     public EventCallback<User> UserOpeningForEdit { get; set; } = EventCallback<User>.Empty;
 
     /// <summary>
-    /// Adds a user to the list.
+    /// Adds a user to the list, or updates an existing user.
     /// </summary>
     /// <param name="user">The user to add.</param>
     public void AddOrUpdate(User user)
@@ -71,8 +71,8 @@
         HttpResponseMessage response = await _http.DeleteAsync($"api/v1/users/{user.Id}");
         if (response.IsSuccessStatusCode)
         {
-    // Using null forgiving operator because because _users
-    // can not be null when remove button is pressed.
+            // Using null forgiving operator because because _users
+            // can not be null when remove button is pressed.
             _dataFetcher.Data!.Remove(user);
             await InvokeAsync(StateHasChanged);
         }

@@ -7,7 +7,7 @@
 
 <h4 id="user-form-title">Skapa ny användare</h4>
 
-<EditForm Model="@_user" OnSubmit="OnSubmit">
+<EditForm Model="@_user" OnSubmit="ConvertAndUploadUser">
 
     <div class="mb-3">
         <label for="user-name" class="form-label">Användarnamn</label>
@@ -37,25 +37,17 @@
     [Parameter]
     public EventCallback<User> OnUserAdded { get; set; } = EventCallback<User>.Empty;
 
-    private bool _shouldRender;
-
     private User _user = CreateUnspecifiedUser();
 
     /// <summary>
     /// Populates the form with the values of the given <see cref="User"/>.
     /// </summary>
     /// <param name="user">The data to edit.</param>
-    public async Task EditUsersAsync(User user)
+    public async Task EditUserAsync(User user)
     {
         await _js.InvokeVoidAsync("scrollToElement", "#user-form-title");
-        _shouldRender = true;
         _user = user;
-    }
-
-    /// <inheritdoc />
-    protected override bool ShouldRender()
-    {
-        return _shouldRender;
+        _user.Password = string.Empty;
     }
 
     private static User CreateUnspecifiedUser()
@@ -69,7 +61,7 @@
         };
     }
 
-    private async Task OnSubmit()
+    private async Task ConvertAndUploadUser()
     {
     // Make sure date is in UTC.
         _user.LatestPaymentDate = _user.LatestPaymentDate.ToUniversalTime();
