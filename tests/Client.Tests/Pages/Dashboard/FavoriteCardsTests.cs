@@ -14,12 +14,10 @@ public class FavoriteCardsTests : UITestFixture
         const string userName = "user";
         var contract = new Contract() { Name = name, };
         MockHttp.When($"/api/v1/users/{userName}/favorites").RespondJson(new[] { contract, });
-
-        static void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteCards> parameters) =>
-            parameters.Add(property => property.LoggedInUser, userName);
+        MockSession.Setup(session => session.Username).Returns(userName);
 
         // Act
-        IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>(ParameterBuilder);
+        IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();
         cut.WaitForElement("#favorite-cards-container");
 
         // Assert
@@ -31,12 +29,10 @@ public class FavoriteCardsTests : UITestFixture
     {
         const string userName = "user";
         MockHttp.When($"/api/v1/users/{userName}/favorites").RespondJson(Array.Empty<Contract>());
-
-        static void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteCards> parameters) =>
-            parameters.Add(property => property.LoggedInUser, userName);
+        MockSession.Setup(session => session.Username).Returns(userName);
 
         // Act
-        IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>(ParameterBuilder);
+        IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();
         cut.WaitForElement("#no-favorites");
 
         // Assert

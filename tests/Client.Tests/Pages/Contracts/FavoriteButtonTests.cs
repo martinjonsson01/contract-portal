@@ -20,10 +20,10 @@ public class FavoriteButtonTests : UITestFixture
         Contract contract = new();
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
-            parameters.Add(property => property.Contract, contract)
-                      .Add(property => property.LoggedInUser, userName);
+            parameters.Add(property => property.Contract, contract);
 
         MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
+        MockSession.Setup(session => session.Username).Returns(userName);
 
         // Act
         IRenderedComponent<FavoriteButton> cut =
@@ -42,10 +42,10 @@ public class FavoriteButtonTests : UITestFixture
         Contract contract = new();
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
-            parameters.Add(property => property.Contract, contract)
-                      .Add(property => property.LoggedInUser, userName);
+            parameters.Add(property => property.Contract, contract);
 
         MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.NotFound));
+        MockSession.Setup(session => session.Username).Returns(userName);
 
         // Act
         IRenderedComponent<FavoriteButton> cut =
@@ -67,10 +67,10 @@ public class FavoriteButtonTests : UITestFixture
         bool eventCalled = false;
 
         MockHttp.When($"/api/v1/users/{userName}/favorites").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
+        MockSession.Setup(session => session.Username).Returns(userName);
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
                       parameters.Add(property => property.Contract, contract)
-                                .Add(property => property.LoggedInUser, userName)
                                 .Add(property => property.OnFavoriteChange, () => { eventCalled = true; });
 
         IRenderedComponent<FavoriteButton> cut = Context.RenderComponent<FavoriteButton>(ParameterBuilder);
@@ -93,10 +93,10 @@ public class FavoriteButtonTests : UITestFixture
 
         MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(HttpStatusCode.OK); // Check whether the contract is marked as favorite and receive that it is
         MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(HttpStatusCode.BadRequest); // Post a request to unmark the contract as a favorite and receive that it was not unmarked
+        MockSession.Setup(session => session.Username).Returns(userName);
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
-                      parameters.Add(property => property.Contract, contract)
-                                .Add(property => property.LoggedInUser, userName);
+                      parameters.Add(property => property.Contract, contract);
 
         IRenderedComponent<FavoriteButton> cut = Context.RenderComponent<FavoriteButton>(ParameterBuilder);
 
@@ -123,10 +123,10 @@ public class FavoriteButtonTests : UITestFixture
 
         MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK)); // Check whether the contract is marked as favorite and receive that it is
         MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(req => new HttpResponseMessage(HttpStatusCode.OK)); // Post a request to unmark the contract as a favorite and receive that is was
+        MockSession.Setup(session => session.Username).Returns(userName);
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
-                      parameters.Add(property => property.Contract, contract)
-                                .Add(property => property.LoggedInUser, userName);
+            parameters.Add(property => property.Contract, contract);
 
         IRenderedComponent<FavoriteButton> cut = Context.RenderComponent<FavoriteButton>(ParameterBuilder);
 
