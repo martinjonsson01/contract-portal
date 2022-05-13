@@ -21,7 +21,7 @@ For local development, a database daemon needs to be running, and a database ins
    and [MacOS](https://phoenixnap.com/kb/set-environment-variable-mac)
 3. In your IDE terminal, Navigate to the `Infrastructure` project using `cd src/Infrastructure/`.
 4. Install the Entity Framework tools using `dotnet tool install --global dotnet-ef`
-5. Apply the database migrations for every context using (you have to run it once with each context as an argument) `dotnet ef database update --context {CONTEXT_NAME_HERE}`
+5. Apply the database migrations  using `dotnet ef database update`
 
 ### Local environment configuration
 There are some environment secrets that need to be configured:
