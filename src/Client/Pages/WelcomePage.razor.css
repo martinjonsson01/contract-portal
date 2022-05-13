@@ -32,3 +32,10 @@
     overflow-x: hidden;
     overflow-y: hidden;
 }
+
+.btn-primary {
+    top: 3rem;
+    position: relative;
+    width: 12.5rem;
+    height: 3.125rem;
+}
