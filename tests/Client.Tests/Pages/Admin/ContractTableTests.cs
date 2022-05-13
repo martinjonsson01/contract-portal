@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Client.Tests.Pages.Admin;
 
-public class ContractListTests : UITestFixture
+public class ContractTableTests : UITestFixture
 {
     [Fact]
     public void AddingContract_RendersTheNewContract()
@@ -30,7 +30,7 @@ public class ContractListTests : UITestFixture
         var newContract = new Contract { Name = newContractName, };
 
         // Act
-        cut.Instance.Add(newContract);
+        cut.Instance.AddOrUpdate(newContract);
         cut.WaitForState(() => cut.FindAll(itemSelector).Count == 3);
 
         // Assert
@@ -55,7 +55,7 @@ public class ContractListTests : UITestFixture
         var newContract = new Contract { Name = newContractName, };
 
         // Act
-        Action add = () => cut.Instance.Add(newContract);
+        Action add = () => cut.Instance.AddOrUpdate(newContract);
 
         // Assert
         add.Should().NotThrow();
@@ -68,7 +68,8 @@ public class ContractListTests : UITestFixture
         var firstContract = new Contract() { Name = "first", };
         Contract[] contracts = { firstContract, new Contract() { Name = "Second", }, };
         MockHttp.When("/api/v1/contracts").RespondJson(contracts);
-        MockHttp.When(HttpMethod.Delete, $"/api/v1/contracts/{firstContract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
+        MockHttp.When(HttpMethod.Delete, $"/api/v1/contracts/{firstContract.Id}")
+                .Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
 
         IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
         const string removeButton = "#confirm-remove";
@@ -82,5 +83,26 @@ public class ContractListTests : UITestFixture
         Expression<Func<IElement, bool>>
             elementWithNewName = contract => contract.TextContent.Contains(firstContract.Name);
         cut.FindAll(".contract-table-row").Should().NotContain(elementWithNewName);
+    }
+
+    [Fact]
+    public void UpdatingContract_RendersNewContent_WhenContractExists()
+    {
+        // Arrange
+        var contract = new Contract() { Name = "old name", };
+        Contract[] contracts = { contract, };
+        MockHttp.When("/api/v1/contracts").RespondJson(contracts);
+
+        IRenderedComponent<ContractTable> cut = Context.RenderComponent<ContractTable>();
+        cut.WaitForAssertion(() => cut.Markup.Should().Contain(contract.Name));
+
+        const string newName = "new name";
+
+        // Act
+        contract.Name = newName;
+        cut.Instance.AddOrUpdate(contract);
+
+        // Assert
+        cut.WaitForAssertion(() => cut.Markup.Should().Contain(newName));
     }
 }
