@@ -2,43 +2,45 @@
 @using Application.Contracts
 @using System.Collections.ObjectModel
 @inject HttpClient _http
-<FetchData
-    @ref="_dataFetcher"
-    TData="List<Contract>"
-    Url="@GetFetchUrl()"
-    Context="recents">
+@inject ISessionService _session
+@inherits AuthenticatedView
+
+<FetchData @ref="_dataFetcher"
+           TData="IEnumerable<Contract>"
+           Url="@GetFetchUrl()"
+           Context="recents"
+           ShouldShowErrors="@_session.IsAuthenticated">
 
     <!-- No loading indicator. -->
     <LoadingIndicator></LoadingIndicator>
 
-
     <ChildContent>
         @if (ShouldShowRecent)
         {
-            if (_dataFetcher.Data is {Count: > 0 })
+            if (_dataFetcher.Data != null && _dataFetcher.Data.Any())
             {
                 <h3>Senast besökta</h3>
 
-                <div class="d-flex flex-row justify-content-around flex-wrap">
-                    @foreach (var contract in _dataFetcher.Data)
-                    {
-                        <ContractCard Contract=@contract/>
-                    }
+                <div class="container-fluid">
+                        <div class="d-flex flex-wrap justify-content-center">
+                        @foreach (var contract in _dataFetcher.Data)
+                        {
+                            <div>
+                                <ContractCard Contract=@contract />
+                            </div>
+                        }
+                    </div>
                 </div>
                 <hr/>
             }
         }
-
     </ChildContent>
 </FetchData>
 
 @code {
         const string BaseUrl = "/api/v1/contracts/recent/";
 
-    private FetchData<List<Contract>> _dataFetcher = null!;
-
-    [CascadingParameter(Name = nameof(LoggedInUser))]
-    private string LoggedInUser { get; set; } = string.Empty;
+    private FetchData<IEnumerable<Contract>> _dataFetcher = null!;
 
     private bool ShouldShowRecent { get; set; } = true;
 
@@ -58,14 +60,14 @@
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
-        await _http.PostAsJsonAsync($"api/v1/contracts/recent/{LoggedInUser}", newRecent);
+        await _http.PostAsJsonAsync($"api/v1/contracts/recent/{_session.Username}", newRecent);
         await _dataFetcher.Fetch(GetFetchUrl());
         await InvokeAsync(StateHasChanged);
     }
 
     private string GetFetchUrl()
     {
-        return BaseUrl + LoggedInUser;
+        return BaseUrl + _session.Username;
     }
 
 }

@@ -1,7 +1,14 @@
 ﻿using System;
 using System.Linq;
+
+using Application.Configuration;
+using Application.Users;
+
 using Domain.Users;
+
 using Infrastructure.Databases;
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Tests.Users;
@@ -10,16 +17,17 @@ namespace Infrastructure.Tests.Users;
 public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
 {
     private readonly TestDatabaseFixture _fixture;
-    private EFUserRepository _cut;
-    private EFDatabaseContext _context;
+    private IUserRepository _cut;
 
     public UserRepositoryTests(TestDatabaseFixture fixture)
     {
         _fixture = fixture;
-        _context = _fixture.CreateContext();
-        _cut = new EFUserRepository(_context, Mock.Of<ILogger<EFUserRepository>>());
+        EFDatabaseContext context = _fixture.CreateContext();
+        var mockEnvironment = new Mock<IConfiguration>();
+        mockEnvironment.Setup(env => env[ConfigurationKeys.AdminPassword]).Returns("test_password");
+        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>(), mockEnvironment.Object);
         _cut.EnsureAdminCreated();
-        _context.Database.BeginTransaction();
+        context.Database.BeginTransaction();
     }
 
     [Fact]
@@ -60,7 +68,9 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
 
         // Re-create database.
         EFDatabaseContext context = _fixture.CreateContext();
-        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>());
+        var mockEnvironment = new Mock<IConfiguration>();
+        mockEnvironment.Setup(env => env[ConfigurationKeys.AdminPassword]).Returns("test_password");
+        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>(), mockEnvironment.Object);
         _cut.EnsureAdminCreated();
 
         // Act
@@ -77,12 +87,14 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
         const string adminName = "admin";
         User? admin = _cut.All.FirstOrDefault(user => user.Name == adminName);
 
-        if (admin is null) // Ensure admin exists.
-            _cut.Add(new User { Name = adminName, });
+        if (admin is null)
+            _cut.EnsureAdminCreated();
 
         // Re-create database.
         EFDatabaseContext context = _fixture.CreateContext();
-        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>());
+        var mockEnvironment = new Mock<IConfiguration>();
+        mockEnvironment.Setup(env => env[ConfigurationKeys.AdminPassword]).Returns("test_password");
+        _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>(), mockEnvironment.Object);
 
         // Act
         IEnumerable<User> admins = _cut.All.Where(user => user.Name == adminName);

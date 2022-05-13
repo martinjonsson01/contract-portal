@@ -2,8 +2,9 @@
 @using System.Net
 @typeparam TData
 @inject HttpClient _http;
+@inherits AuthenticatedView
 
-@if (_errorMessage is not null)
+@if (_errorMessage is not null && ShouldShowErrors)
 {
     <p id="error-message">@_errorMessage</p>
 }
@@ -38,6 +39,12 @@ else
     public RenderFragment LoadingIndicator { get; set; } = @<LoadingIndicator />;
 
     /// <summary>
+    /// Whether any errors that occur while fetching data should be shown to the user.
+    /// </summary>
+    [Parameter]
+    public bool ShouldShowErrors { get; set; } = true;
+
+    /// <summary>
     /// The data that has been fetched.
     /// </summary>
     public TData? Data { get; set; }
@@ -45,9 +52,10 @@ else
     private string? _errorMessage;
 
     /// <inheritdoc />
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await Fetch(Url);
+        if (Data is null && _errorMessage is null)
+            await Fetch(Url);
     }
 
     /// <summary>
@@ -55,15 +63,19 @@ else
     /// </summary>
     public async Task Fetch(string url)
     {
+        Console.WriteLine($"fetching with {_http.DefaultRequestHeaders.Authorization}");
         HttpResponseMessage response = await _http.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
         {
             _errorMessage = CreateErrorMessage(response.StatusCode);
+            StateHasChanged();
             return;
         }
 
         Data = await response.Content.ReadFromJsonAsync<TData>();
+        _errorMessage = null;
+        StateHasChanged();
     }
 
     private string CreateErrorMessage(HttpStatusCode statusCode)

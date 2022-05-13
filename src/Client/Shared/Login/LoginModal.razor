@@ -1,11 +1,15 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using System.Net.Http.Headers
 @using Application.Users
+@using Blazored.SessionStorage
 @using Blazorise.Extensions
+@using Client.Services.Authentication
 @using Domain.Users
+@inherits AuthenticatedView
 @inject HttpClient _http
 @inject IJSRuntime _js
 @inject NavigationManager _navigationManager
+@inject ISessionService _session
 
 <div class="modal" id="log-in">
     <div class="modal-dialog">
@@ -14,17 +18,18 @@
                 <EditForm Model="@_user" OnSubmit="ValidateUser">
                     <div class="mb-3">
                         <div class="d-flex justify-content-between">
-                            <label for="username" class="form-label">
-                                <h3>Användarnamn</h3>
+                            <label class="form-label">
+                                <h3>Logga in</h3>
                             </label>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                        <InputText id="username" class="form-control" placeholder="Användarnamn" @bind-Value="@_user.UserName"/>
+                        <InputText id="username" class="form-control" placeholder="Användarnamn" @bind-Value="@_user.Name"/>
+                        <InputText id="password" type="password" class="form-control mt-3" placeholder="Lösenord" @bind-Value="@_user.Password"/>
 
                         @if (_logInFailed)
                         {
-                            <p class="text-danger">Inloggningen misslyckades </p>
+                            <p class="text-danger">Inloggningen misslyckades</p>
                         }
                     </div>
                     <div class="login-footer">
@@ -38,33 +43,27 @@
 
 @code {
 
-    UserInputFields _user = new();
+    User _user = new (){ Name = "", Password = "", };
     bool _logInFailed = false;
-
-    private class UserInputFields
-    {
-        [Required]
-        public string UserName { get; set; } = string.Empty;
-    }
-    /// <summary>
-    /// Called when the username is changed.
-    /// </summary>
-    [Parameter]
-    public EventCallback<string> OnUserLogInChange { get; set; } = EventCallback<string>.Empty;
 
     private async Task ValidateUser()
     {
-        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users/authenticate", _user.UserName);
+        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users/authenticate", _user);
         if (response.IsSuccessStatusCode)
         {
             _logInFailed = false;
 
             var authResponse = await response.Content.ReadFromJsonAsync<AuthenticateResponse>();
-            // Store token on http client so all future requests use the token.
-            // TODO: When making the login-state persist then this auth token should be stored in a cookie.
-            _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse?.Token);
 
-            await OnUserLogInChange.InvokeAsync(_user.UserName);
+            if (authResponse is null)
+            {
+                _logInFailed = true;
+                return;
+            }
+
+            // Begin new session.
+            await _session.BeginAsync(authResponse);
+
             await _js.InvokeVoidAsync("closeModal", "#log-in");
             _navigationManager.NavigateTo("dashboard");
         }

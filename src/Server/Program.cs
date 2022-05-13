@@ -60,6 +60,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
        .AddNewtonsoftJson();
 
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.RequestHeaders.Add("authorization");
+    logging.ResponseHeaders.Add("WWW-Authenticate");
+});
+
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -81,15 +87,20 @@ app.UseHttpLogging();
 
 app.UseHttpsRedirection();
 
-string imagesDirectory = Path.Combine(
+string uploadsDirectory = Path.Combine(
     app.Environment.ContentRootPath,
     app.Environment.EnvironmentName,
     "unsafe_uploads");
-Directory.CreateDirectory(imagesDirectory);
+Directory.CreateDirectory(uploadsDirectory);
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(imagesDirectory),
+    FileProvider = new PhysicalFileProvider(uploadsDirectory),
     RequestPath = "/images",
+});
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsDirectory),
+    RequestPath = "/documents",
 });
 
 app.UseBlazorFrameworkFiles();

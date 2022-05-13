@@ -1,5 +1,6 @@
 ﻿using Application.Contracts;
 using Application.Exceptions;
+using Blazorise.Extensions;
 using Domain.Contracts;
 
 using Microsoft.AspNetCore.Authorization;
@@ -70,7 +71,7 @@ public class ContractsController : BaseApiController<ContractsController>
     [HttpGet("recent/{username}")]
     public IEnumerable<Contract> RecentContracts(string username)
     {
-        return _recent.FetchRecentContracts(username);
+        return username.IsNullOrEmpty() ? new List<Contract>() : _recent.FetchRecentContracts(username);
     }
 
     /// <summary>
@@ -89,22 +90,22 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <summary>
     /// Creates a new contract.
     /// </summary>
-    /// <param name="contract">The contract to add.</param>
+    /// <param name="contract">The contract to put.</param>
+    /// <param name="id">The identifier of the contract to put.</param>
     /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The ID of the contract was already taken.</response>
-    [HttpPost]
+    [HttpPut("{id:guid}")]
     [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult CreateContract(Contract contract)
+    public IActionResult CreateContract([FromBody] Contract contract, Guid id)
     {
         try
         {
             _contracts.Add(contract);
         }
-        catch (IdentifierAlreadyTakenException e)
+        catch (IdentifierAlreadyTakenException)
         {
-            Logger.LogInformation("ID of contract was already taken: {Error}", e.Message);
-            return BadRequest();
+            _contracts.UpdateContract(contract);
         }
 
         return Ok();
@@ -128,8 +129,14 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="query">The query to filter contracts by.</param>
     /// <returns>The contracts that match the search query.</returns>
     [HttpGet]
+    [AllowAnonymous]
     public ActionResult<IEnumerable<Contract>> Search(string? query)
     {
-        return Ok(_contracts.Search(query ?? string.Empty));
+        query ??= string.Empty;
+
+        if (User?.Identity?.IsAuthenticated ?? false)
+            return Ok(_contracts.Search(query));
+
+        return Ok(_contracts.SearchUnauthorized(query));
     }
 }

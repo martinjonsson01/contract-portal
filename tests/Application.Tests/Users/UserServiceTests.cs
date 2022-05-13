@@ -32,7 +32,7 @@ public class UserServiceTests
     {
         // Arrange
         var user = new User();
-        _mockRepo.Setup(repository => repository.All).Returns(new[] { user });
+        _mockRepo.Setup(repository => repository.All).Returns(new[] { user, });
 
         // Act
         Action add = () => _cut.Add(user);
@@ -52,6 +52,20 @@ public class UserServiceTests
 
         // Assert
         add.Should().NotThrow();
+    }
+
+    [Fact]
+    public void AddingUser_EncryptsPassword_IfPasswordHasValue()
+    {
+        // Arrange
+        const string rawPassword = "abc123";
+        var test = new User { Password = rawPassword, };
+
+        // Act
+        _cut.Add(test);
+
+        // Assert
+        _mockRepo.Verify(repo => repo.Add(It.Is<User>(usr => usr.Password != rawPassword)));
     }
 
     [Fact]
@@ -99,6 +113,39 @@ public class UserServiceTests
     }
 
     [Fact]
+    public void ValidatePassword_ShouldBeTrue_WhenPasswordIsUserPassword()
+    {
+        // Arrange
+        const string password = "UserPassword";
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        var user = new User() { Password = passwordHash, };
+        _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
+
+        // Act
+        AuthenticateResponse authResponse = _cut.Authenticate(user.Name, password);
+
+        // Assert
+        authResponse.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void ValidatePassword_ShouldBeFalse_WhenPasswordIsNotUserPassword()
+    {
+        // Arrange
+        const string correctPassword = "CorrectPassword";
+        const string incorrectPassword = "IncorrectPassword";
+        string passwordHash1 = BCrypt.Net.BCrypt.HashPassword(correctPassword);
+        var user = new User() { Name = "User1", Password = passwordHash1, };
+        _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
+
+        // Act
+        Action tryAuthenticate = () => _cut.Authenticate(user.Name, incorrectPassword);
+
+        // Assert
+        tryAuthenticate.Should().Throw<InvalidPasswordException>();
+    }
+
+    [Fact]
     public void UserExists_ReturnsTrue_IfUserExistsInRepository()
     {
         // Arrange
@@ -127,27 +174,44 @@ public class UserServiceTests
     }
 
     [Fact]
-    public void Authenticate_ReturnsAuthResponse_WhenUserExists()
+    public void DecryptedPassword_ReturnsTrue_IfCorrectPasswordIsEntered()
     {
         // Arrange
-        const string username = "user";
-        var user = new User { Name = username, };
-        _mockRepo.Setup(repository => repository.Fetch(username)).Returns(user);
+        const string rawPassword = "abc123";
+        var test = new User { Password = rawPassword, };
+        var encryptedUser = new User();
+        _mockRepo.Setup(repo => repo.Add(It.IsAny<User>())).Callback<User>(usr => encryptedUser = usr);
+        _cut.Add(test);
 
         // Act
-        AuthenticateResponse authResponse = _cut.Authenticate(username);
+        bool valid = BCrypt.Net.BCrypt.Verify("abc123", encryptedUser.Password);
 
         // Assert
-        authResponse.Should().NotBeNull();
+        valid.Should().BeTrue();
+    }
+
+    [Fact]
+    public void DecryptedPassword_ReturnsFalse_IfIncorrectPasswordIsEntered()
+    {
+        // Arrange
+        const string rawPassword = "abc123";
+        var test = new User { Password = rawPassword, };
+        var encryptedUser = new User();
+        _mockRepo.Setup(repo => repo.Add(It.IsAny<User>())).Callback<User>(usr => encryptedUser = usr);
+        _cut.Add(test);
+
+        // Act
+        bool valid = BCrypt.Net.BCrypt.Verify("wrongPassword", encryptedUser.Password);
+
+        // Assert
+        valid.Should().BeFalse();
     }
 
     [Fact]
     public void Authenticate_ThrowsException_WhenUserDoesNotExist()
     {
-        // Arrange
-
         // Act
-        Action tryAuthenticate = () => _cut.Authenticate("non-existent user");
+        Action tryAuthenticate = () => _cut.Authenticate("non-existent user", "randomPassword");
 
         // Assert
         tryAuthenticate.Should().Throw<UserDoesNotExistException>();
@@ -158,11 +222,13 @@ public class UserServiceTests
     {
         // Arrange
         const string username = "admin";
-        var user = new User { Name = username, };
+        const string password = "password";
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        var user = new User { Name = username, Password = passwordHash, };
         _mockRepo.Setup(repository => repository.Fetch(username)).Returns(user);
 
         // Act
-        AuthenticateResponse authResponse = _cut.Authenticate(username);
+        AuthenticateResponse authResponse = _cut.Authenticate(username, password);
 
         // Assert
         using (new AssertionScope())
