@@ -4,6 +4,7 @@
 @using System.Text
 @using Application.Users
 @inject HttpClient _http
+@inject ISessionService _session
 
 <button class="btn ms-auto p-2 flex-shrink-0" id="favorite-button" @onclick="ChangeFavorite">
     @if (isFavorite)
@@ -35,21 +36,15 @@
     public EventCallback<(Guid, bool)> OnFavoriteChange { get; set; } = EventCallback<(Guid, bool)>.Empty;
 
     /// <summary>
-    /// The name of the currently logged in user.
-    /// </summary>
-    [CascadingParameter(Name = nameof(LoggedInUser))]
-    public string? LoggedInUser { get; set; }
-
-    /// <summary>
     /// Whether the contract is marked as favorite.
     /// </summary>
     private bool isFavorite { get; set; }
 
     protected override async void OnInitialized()
     {
-        if (!string.IsNullOrEmpty(LoggedInUser))
+        if (!string.IsNullOrEmpty(_session.Username))
         {
-            HttpResponseMessage response = await _http.GetAsync($"/api/v1/users/{LoggedInUser}/favorites/{Contract.Id}");
+            HttpResponseMessage response = await _http.GetAsync($"/api/v1/users/{_session.Username}/favorites/{Contract.Id}");
             isFavorite = response.IsSuccessStatusCode;
         }
         else
@@ -62,11 +57,11 @@
 
     private async Task ChangeFavorite()
     {
-        if (!string.IsNullOrEmpty(LoggedInUser))
+        if (!string.IsNullOrEmpty(_session.Username))
         {
-            FavoriteContractDto favoriteContract = new() { UserName = LoggedInUser, ContractId = Contract.Id, IsFavorite = !isFavorite };
+            FavoriteContractDto favoriteContract = new() { UserName = _session.Username, ContractId = Contract.Id, IsFavorite = !isFavorite };
 
-            HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{LoggedInUser}/favorites", favoriteContract);
+            HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{_session.Username}/favorites", favoriteContract);
             if (response.IsSuccessStatusCode)
             {
                 isFavorite = !isFavorite;

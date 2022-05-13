@@ -1,12 +1,13 @@
 ﻿@using Domain.Contracts
 @using Newtonsoft.Json
 @inject HttpClient _http
+@inject ISessionService _session
 
 <div id="favorite-contracts" style="padding-top: 30px;">
     <h3>Favoriter</h3>
     <FetchData @ref="_dataFetcher"
                TData="List<Contract>"
-               Url=@($"/api/v1/users/{LoggedInUser}/favorites")
+               Url=@($"/api/v1/users/{_session.Username}/favorites")
                Context="contracts">
         @{
             var contractsList = contracts.ToList();
@@ -33,12 +34,6 @@
 
 @code {
     private FetchData<List<Contract>> _dataFetcher = null!;
-
-    /// <summary>
-    /// The name of the currently logged in user.
-    /// </summary>
-    [CascadingParameter(Name = nameof(LoggedInUser))]
-    public string? LoggedInUser { get; set; }
 
     private async Task OnFavoriteChange((Guid Id, bool IsFavorite)args)
     {
