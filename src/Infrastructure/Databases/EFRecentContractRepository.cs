@@ -69,9 +69,9 @@ public class EFRecentContractRepository : IRecentContractRepository
     }
 
     /// <inheritdoc />
-    public IList<RecentlyViewedContract> FetchRecentContracts(string id)
+    public IList<RecentlyViewedContract> FetchRecentContracts(string username)
     {
-        User user = GetUserByUserName(id);
+        User user = GetUserByUserName(username);
         return user.RecentlyViewContracts;
     }
 

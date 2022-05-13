@@ -20,17 +20,17 @@ public class RecentContractService : IRecentContractService
     }
 
     /// <inheritdoc />
-    public int Size(string id)
+    public int Size(string username)
     {
-        return _recent.FetchRecentContracts(id).Count;
+        return _recent.FetchRecentContracts(username).Count;
     }
 
-    /// <param name="id"></param>
+    /// <param name="username"></param>
     /// <inheritdoc />
-    public IEnumerable<Contract> FetchRecentContracts(string id)
+    public IEnumerable<Contract> FetchRecentContracts(string username)
     {
         var contracts = new List<Contract>();
-        foreach (RecentlyViewedContract recentContract in _recent.FetchRecentContracts(id)
+        foreach (RecentlyViewedContract recentContract in _recent.FetchRecentContracts(username)
                      .OrderByDescending(recentContract => recentContract.LastViewed))
         {
             contracts.Add(_contract.FetchContract(recentContract.ContractId) ??
@@ -41,16 +41,16 @@ public class RecentContractService : IRecentContractService
     }
 
     /// <inheritdoc />
-    public void Add(string id, Contract contract)
+    public void Add(string username, Contract contract)
     {
-        _recent.AddRecent(id, contract);
+        _recent.AddRecent(username, contract);
 
         const int recentAmountMax = 3;
-        if (Size(id) <= recentAmountMax)
+        if (Size(username) <= recentAmountMax)
             return;
 
         RecentlyViewedContract toRemove = _recent
-            .FetchRecentContracts(id)
+            .FetchRecentContracts(username)
             .OrderBy(recentContract => recentContract.LastViewed)
             .First();
         _recent.RemoveRecent(toRemove);

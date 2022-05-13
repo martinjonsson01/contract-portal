@@ -30,14 +30,10 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
         _logger.LogInformation("Established a new connection to the database");
     }
 
-    /// <summary>
-    /// Gets or sets the <see cref="Contract"/>s in the database.
-    /// </summary>
+    /// <inheritdoc />
     public DbSet<Contract> Contracts { get; set; } = null!;
 
-    /// <summary>
-    /// Gets or sets the <see cref="User"/>s in the database.
-    /// </summary>
+    /// <inheritdoc />
     public DbSet<User> Users { get; set; } = null!;
 
     /// <inheritdoc />
