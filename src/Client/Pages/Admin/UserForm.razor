@@ -27,6 +27,15 @@
 </EditForm>
 
 @code {
+
+    /// <summary>
+    /// Called when a user has been added successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<User> OnUserAdded { get; set; } = EventCallback<User>.Empty;
+
+    private bool _shouldRender;
+
     private User _user = CreateUnspecifiedUser();
 
     /// <summary>
@@ -36,6 +45,13 @@
     public async Task EditUsersAsync(User user)
     {
         await _js.InvokeVoidAsync("scrollToElement", "#user-form-title");
+        _shouldRender = true;
+        _user = user;
+    }
+
+    protected override bool ShouldRender()
+    {
+        return _shouldRender;
     }
 
     private static User CreateUnspecifiedUser()
@@ -49,15 +65,9 @@
         };
     }
 
-    /// <summary>
-    /// Called when a user has been added successfully.
-    /// </summary>
-    [Parameter]
-    public EventCallback<User> OnUserAdded { get; set; } = EventCallback<User>.Empty;
-
     private async Task AddUser()
     {
-        // Make sure date is in UTC.
+    // Make sure date is in UTC.
         _user.LatestPaymentDate = _user.LatestPaymentDate.ToUniversalTime();
         HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{_user.Id}", _user);
         if (response.IsSuccessStatusCode)
@@ -66,4 +76,5 @@
             _user = CreateUnspecifiedUser();
         }
     }
+
 }
