@@ -42,7 +42,7 @@
 
     protected override async void OnInitialized()
     {
-        if (!string.IsNullOrEmpty(_session.Username))
+        if (_session.IsAuthenticated)
         {
             HttpResponseMessage response = await _http.GetAsync($"/api/v1/users/{_session.Username}/favorites/{Contract.Id}");
             isFavorite = response.IsSuccessStatusCode;
