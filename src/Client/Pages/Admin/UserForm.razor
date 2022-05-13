@@ -1,11 +1,14 @@
 @using Domain.Users
 @using Microsoft.VisualBasic
+@using Newtonsoft.Json
+@using System.Text
 @inject HttpClient _http
 @inject IJSRuntime _js
 
 <h4 id="user-form-title">Skapa ny användare</h4>
 
-<EditForm Model="@_user" OnSubmit="AddUser">
+<EditForm Model="@_user" OnSubmit="OnSubmit">
+
     <div class="mb-3">
         <label for="user-name" class="form-label">Användarnamn</label>
         <InputText id="user-name" class="form-control" placeholder="Användarens namn" @bind-Value="@_user.Name"/>
@@ -23,7 +26,7 @@
         <InputDate id="user-latest-payment-date" class="form-control" @bind-Value="_user.LatestPaymentDate"/>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-3">Skapa användare</button>
+    <button type="submit" class="btn btn-primary mb-3">Spara</button>
 </EditForm>
 
 @code {
@@ -49,6 +52,7 @@
         _user = user;
     }
 
+    /// <inheritdoc />
     protected override bool ShouldRender()
     {
         return _shouldRender;
@@ -65,11 +69,19 @@
         };
     }
 
-    private async Task AddUser()
+    private async Task OnSubmit()
     {
     // Make sure date is in UTC.
         _user.LatestPaymentDate = _user.LatestPaymentDate.ToUniversalTime();
-        HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{_user.Id}", _user);
+
+        await UploadUser();
+    }
+
+    private async Task UploadUser()
+    {
+        string json = JsonConvert.SerializeObject(_user);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await _http.PutAsync($"/api/v1/users/{_user.Id}", content);
         if (response.IsSuccessStatusCode)
         {
             await OnUserAdded.InvokeAsync(_user);

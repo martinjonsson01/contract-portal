@@ -123,7 +123,6 @@
 
     private async Task DownloadContractFile(string path, Action<MultipartFormDataContent> setContent)
     {
-
         var fileUri = new Uri(Path.Join(_http.BaseAddress?.ToString(), path[1..]), UriKind.Absolute);
 
         HttpResponseMessage response = await _http.GetAsync(fileUri);
@@ -235,4 +234,5 @@
             _contract = CreateEmptyContract();
         }
     }
+
 }
