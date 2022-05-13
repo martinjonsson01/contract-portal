@@ -1,7 +1,10 @@
 using System.Data;
+
 using Application.Configuration;
 using Application.Users;
+
 using Domain.Users;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -80,6 +83,38 @@ public sealed class EFUserRepository : IUserRepository
         return Users.FirstOrDefault(user => user.Name == username);
     }
 
+    /// <summary>
+    /// Updates user.
+    /// </summary>
+    /// <param name="updatedUser">Documentation.</param>
+    public void UpdateUser(User updatedUser)
+    {
+        User? oldUser = FetchUser(updatedUser.Id);
+        if (oldUser is null)
+            _ = Users.Add(updatedUser);
+        else
+            _context.Entry(oldUser).CurrentValues.SetValues(updatedUser);
+
+        try
+        {
+            _ = _context.SaveChanges();
+        }
+        catch (DataException e)
+        {
+            _logger.LogError("Could not update user in database: {Message}", e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Summary.
+    /// </summary>
+    /// <param name="id">id.</param>
+    /// <returns>Returnable.</returns>
+    public User? FetchUser(Guid id)
+    {
+        return Users.Find(id);
+    }
+
     /// <inheritdoc />
     public void EnsureAdminCreated()
     {
@@ -91,7 +126,13 @@ public sealed class EFUserRepository : IUserRepository
     {
         string? adminPasswordSecret = _config[ConfigurationKeys.AdminPassword];
         adminPasswordSecret = BCrypt.Net.BCrypt.HashPassword(adminPasswordSecret);
-        var admin = new User { Name = AdminUserName, Password = adminPasswordSecret, Company = "Prodigo", LatestPaymentDate = DateTime.MaxValue, };
+        var admin = new User
+        {
+            Name = AdminUserName,
+            Password = adminPasswordSecret,
+            Company = "Prodigo",
+            LatestPaymentDate = DateTime.MaxValue,
+        };
         _ = Users.Add(admin);
         try
         {

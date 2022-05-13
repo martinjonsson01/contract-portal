@@ -29,6 +29,15 @@
 @code {
     private User _user = CreateUnspecifiedUser();
 
+    /// <summary>
+    /// Populates the form with the values of the given <see cref="User"/>.
+    /// </summary>
+    /// <param name="user">The data to edit.</param>
+    public async Task EditUsersAsync(User user)
+    {
+        await _js.InvokeVoidAsync("scrollToElement", "#user-form-title");
+    }
+
     private static User CreateUnspecifiedUser()
     {
         return new User
@@ -56,10 +65,5 @@
             await OnUserAdded.InvokeAsync(_user);
             _user = CreateUnspecifiedUser();
         }
-    }
-
-    private async Task EditUsersAsync(User user)
-    {
-        await _js.InvokeVoidAsync("scrollToElement", "#user-form-title");
     }
 }

@@ -34,6 +34,7 @@
 </FetchData>
 
 @code {
+    private FetchData<List<User>> _dataFetcher = null!;
 
     /// <summary>
     /// Called when a <see cref="User"/> is being opened to be edited.
@@ -62,7 +63,6 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private FetchData<List<User>> _dataFetcher = null!;
 
     /// <summary>
     /// Removes a user from the list.

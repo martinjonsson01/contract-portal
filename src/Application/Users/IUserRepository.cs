@@ -51,4 +51,10 @@ public interface IUserRepository
     /// <param name="id">The id of the user.</param>
     /// <returns>The user, if it exists.</returns>
     User? FetchUser(Guid id);
+
+    /// <summary>
+    /// Updates a user.
+    /// </summary>
+    /// <param name="updatedUser">The updated user.</param>
+    void UpdateUser(User updatedUser);
 }
