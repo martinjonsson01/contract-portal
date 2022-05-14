@@ -39,12 +39,6 @@ public interface IContractService
     bool Remove(Guid id);
 
     /// <summary>
-    /// Gets contracts marked as favorites.
-    /// </summary>
-    /// <returns>All favorite marked contracts.</returns>
-    IEnumerable<Contract> FetchFavorites();
-
-    /// <summary>
     /// Updates the contract in the repository.
     /// </summary>
     /// <param name="contract">The updated contract to store.</param>
