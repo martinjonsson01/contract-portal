@@ -22,7 +22,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("ContractUser", b =>
+            modelBuilder.Entity("UserFavoriteContracts", b =>
                 {
                     b.Property<Guid>("FavoritedById")
                         .HasColumnType("uniqueidentifier");
@@ -34,7 +34,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("FavoritesId");
 
-                    b.ToTable("ContractUser");
+                    b.ToTable("UserFavoriteContracts");
                 });
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
@@ -153,7 +153,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ContractUser", b =>
+            modelBuilder.Entity("UserFavoriteContracts", b =>
                 {
                     b.HasOne("Domain.Users.User", null)
                         .WithMany()
