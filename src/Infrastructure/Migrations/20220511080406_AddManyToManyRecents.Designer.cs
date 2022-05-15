@@ -24,7 +24,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("ContractUser", b =>
+            modelBuilder.Entity("UserRecentlyViewedContracts", b =>
                 {
                     b.Property<Guid>("RecentOfId")
                         .HasColumnType("uniqueidentifier");
@@ -36,7 +36,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RecentlyViewContractsId");
 
-                    b.ToTable("ContractUser");
+                    b.ToTable("UserRecentlyViewedContracts");
                 });
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
@@ -135,7 +135,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ContractUser", b =>
+            modelBuilder.Entity("UserRecentlyViewedContracts", b =>
                 {
                     b.HasOne("Domain.Users.User", null)
                         .WithMany()

@@ -10,7 +10,7 @@ namespace Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ContractUser");
+                name: "UserRecentlyViewedContracts");
 
             migrationBuilder.CreateTable(
                 name: "RecentlyViewedContracts",
@@ -49,7 +49,7 @@ namespace Infrastructure.Migrations
                 name: "RecentlyViewedContracts");
 
             migrationBuilder.CreateTable(
-                name: "ContractUser",
+                name: "UserRecentlyViewedContracts",
                 columns: table => new
                 {
                     RecentOfId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -57,15 +57,15 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContractUser", x => new { x.RecentOfId, x.RecentlyViewContractsId });
+                    table.PrimaryKey("PK_UserRecentlyViewedContracts", x => new { x.RecentOfId, x.RecentlyViewContractsId });
                     table.ForeignKey(
-                        name: "FK_ContractUser_Contracts_RecentlyViewContractsId",
+                        name: "FK_UserRecentlyViewedContracts_Contracts_RecentlyViewContractsId",
                         column: x => x.RecentlyViewContractsId,
                         principalTable: "Contracts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ContractUser_Users_RecentOfId",
+                        name: "FK_UserRecentlyViewedContracts_Users_RecentOfId",
                         column: x => x.RecentOfId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -73,8 +73,8 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContractUser_RecentlyViewContractsId",
-                table: "ContractUser",
+                name: "IX_UserRecentlyViewedContracts_RecentlyViewContractsId",
+                table: "UserRecentlyViewedContracts",
                 column: "RecentlyViewContractsId");
         }
     }
