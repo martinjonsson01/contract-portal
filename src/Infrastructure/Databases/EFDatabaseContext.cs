@@ -52,17 +52,22 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
     {
         _ = modelBuilder.Entity<User>()
                         .HasMany(p => p.Favorites)
-                        .WithMany("FavoritedBy");
+                        .WithMany("FavoritedBy")
+                        .UsingEntity(join => join.ToTable("UserFavoriteContracts"));
         _ = modelBuilder.Entity<User>()
                         .HasKey(user => user.Id);
         _ = modelBuilder.Entity<User>()
                         .Property(user => user.Name)
                         .UseCollation("Finnish_Swedish_CS_AS");
 
-        _ = modelBuilder.Entity<Contract>().HasKey(contract => contract.Id);
-        _ = modelBuilder.Entity<Contract>().HasMany<RecentlyViewedContract>().WithOne().HasForeignKey(nameof(RecentlyViewedContract.ContractId));
+        _ = modelBuilder.Entity<Contract>()
+                        .HasKey(contract => contract.Id);
+        _ = modelBuilder.Entity<Contract>()
+                        .HasMany<RecentlyViewedContract>()
+                        .WithOne()
+                        .HasForeignKey(nameof(RecentlyViewedContract.ContractId));
 
         _ = modelBuilder.Entity<RecentlyViewedContract>()
-            .HasKey(recentContract => new { recentContract.ContractId, recentContract.UserId });
+                        .HasKey(recentContract => new { recentContract.ContractId, recentContract.UserId, });
     }
 }
