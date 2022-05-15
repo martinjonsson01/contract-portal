@@ -65,7 +65,7 @@ jobs:
         continue-on-error: true
 
       - name: Update database
-        run: dotnet ef database update --no-build -p src/Infrastructure
+        run: dotnet ef database update -p src/Infrastructure
         env:
           ASPNETCORE_ENVIRONMENT: Development
 
