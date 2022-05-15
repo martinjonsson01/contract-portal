@@ -83,10 +83,11 @@ public class RecentContractServiceTests
         var contract1 = new Contract();
         var contract2 = new Contract();
         var contract3 = new Contract();
-        var contracts = new List<RecentlyViewedContract>
-        {
-            new(contract1.Id, new User().Id), new(contract2.Id, new User().Id), new(contract3.Id, new User().Id),
-        };
+        var recentContract1 = new RecentlyViewedContract(new User().Id, contract1.Id);
+        var recentContract2 = new RecentlyViewedContract(new User().Id, contract2.Id);
+        var recentContract3 = new RecentlyViewedContract(new User().Id, contract3.Id);
+
+        var contracts = new List<RecentlyViewedContract> { recentContract1, recentContract2, recentContract3, };
 
         _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<string>()))
             .Returns(contracts);
@@ -95,7 +96,7 @@ public class RecentContractServiceTests
         _cut.Add(UserName, contract1);
 
         // Assert
-        _mockRecentRepo.Verify(repo => repo.Remove(It.IsAny<RecentlyViewedContract>()), Times.Never);
+        _mockRecentRepo.Verify(repo => repo.Remove(recentContract1), Times.Never);
     }
 
     [Fact]
