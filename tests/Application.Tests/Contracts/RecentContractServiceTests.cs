@@ -22,7 +22,7 @@ public class RecentContractServiceTests
     }
 
     [Fact]
-    public void Size_ReturnsTheExpectedAmount()
+    public void Size_ReturnsOne_WhenThereIsOnlyOneRecentContract()
     {
         // Arrange
         var contract = new Contract();
@@ -77,7 +77,7 @@ public class RecentContractServiceTests
     }
 
     [Fact]
-    public void AddRecent_ShouldNotDequeueTheOldestContract_WhenAddingAnAlreadyAddedContract()
+    public void AddRecent_ShouldNotRemoveAnyRecentContract_WhenAddingAnAlreadyAddedContract()
     {
         // Arrange
         var contract1 = new Contract();
