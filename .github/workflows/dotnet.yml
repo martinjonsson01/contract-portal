@@ -22,11 +22,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: /home/runner/work
+          key: cache-build-${{ github.run_id }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
@@ -54,18 +54,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: /home/runner/work
+          key: cache-build-${{ github.run_id }}
 
       - name: Install dotnet-ef
         run: dotnet tool install --global dotnet-ef
         continue-on-error: true
 
       - name: Update database
-        run: dotnet ef database update -p src/Infrastructure
+        run: dotnet ef database update --no-build -p src/Infrastructure
         env:
           ASPNETCORE_ENVIRONMENT: Development
 
@@ -76,11 +76,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: /home/runner/work
+          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -100,11 +100,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: /home/runner/work
+          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -124,11 +124,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: /home/runner/work
+          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -148,11 +148,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: /home/runner/work
+          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -172,11 +172,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: /home/runner/work
+          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -196,11 +196,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: /home/runner/work
+          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
