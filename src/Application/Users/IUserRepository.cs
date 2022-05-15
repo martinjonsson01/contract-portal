@@ -46,6 +46,19 @@ public interface IUserRepository
     void EnsureAdminCreated();
 
     /// <summary>
+    /// Gets a user with the given id, if it exists.
+    /// </summary>
+    /// <param name="id">The id of the user.</param>
+    /// <returns>The user, if it exists.</returns>
+    User? FetchUser(Guid id);
+
+    /// <summary>
+    /// Updates a user.
+    /// </summary>
+    /// <param name="updatedUser">The updated user.</param>
+    void UpdateUser(User updatedUser);
+
+    /// <summary>
     /// Adds a favorite contract to store, for a certain user.
     /// </summary>
     /// <param name="userName">The name of the user.</param>

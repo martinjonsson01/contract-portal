@@ -10,7 +10,7 @@
 
 <h4 id="contract-form-title">Skapa nytt kontrakt</h4>
 
-<EditForm Model="@_contract" OnSubmit="OnSubmit">
+<EditForm Model="@_contract" OnSubmit="ConvertAndUploadContract">
 
     <div class="mb-3">
         <label for="contract-title" class="form-label">Titel</label>
@@ -123,7 +123,6 @@
 
     private async Task DownloadContractFile(string path, Action<MultipartFormDataContent> setContent)
     {
-
         var fileUri = new Uri(Path.Join(_http.BaseAddress?.ToString(), path[1..]), UriKind.Absolute);
 
         HttpResponseMessage response = await _http.GetAsync(fileUri);
@@ -192,7 +191,7 @@
         return content;
     }
 
-    private async Task OnSubmit()
+    private async Task ConvertAndUploadContract()
     {
         _contract.SupplierLogoImagePath = await UploadFile(_supplierLogoContent, "images");
 

@@ -3,6 +3,7 @@ using Application.Users;
 using Domain.Users;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -31,21 +32,21 @@ public class UsersController : BaseApiController<UsersController>
     /// Creates a new user.
     /// </summary>
     /// <param name="user">The user to add.</param>
+    /// <param name="id">The identifier of the user to put.</param>
     /// <returns>If the user was successfully added.</returns>
     /// <response code="400">The ID of the user was already taken.</response>
-    [HttpPost]
+    [HttpPut("{id:guid}")]
     [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Create(User user)
+    public IActionResult Create([FromBody] User user, Guid id)
     {
         try
         {
             _users.Add(user);
         }
-        catch (IdentifierAlreadyTakenException e)
+        catch (IdentifierAlreadyTakenException)
         {
-            Logger.LogInformation("ID of user was already taken: {Error}", e.Message);
-            return BadRequest();
+            _users.UpdateUser(user);
         }
 
         return Ok();
