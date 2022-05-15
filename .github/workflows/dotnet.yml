@@ -178,6 +178,7 @@ jobs:
           -p:Threshold=80
           -p:ThresholdType=branch
           -p:CoverletOutput=../../CoverageResults/
+          -p:MergeWith="../../CoverageResults/coverage.json"
           -p:ExcludeByFile=\"**/Program.cs\"
           -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
           -p:Include=\"[Server]*\"
