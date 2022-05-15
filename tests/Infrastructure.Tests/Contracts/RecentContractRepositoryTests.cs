@@ -100,7 +100,6 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
         AddContractToContext(contract1);
         _cut.Add(user1.Name, contract1);
         _cut.Add(user2.Name, contract1);
-        _ = _context.RecentlyViewedContracts.Find(contract1.Id, user1.Id);
 
         // Act
         _context.Contracts.Remove(contract1);
