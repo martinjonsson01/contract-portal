@@ -30,7 +30,7 @@ public class FavoriteButtonTests : UITestFixture
             Context.RenderComponent<FavoriteButton>(ParameterBuilder);
 
         // Assert
-        cut.Find(".bi-heart-fill").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find(".bi-heart-fill").Should().NotBeNull());
         Assert.Throws<ElementNotFoundException>(() => cut.Find(".bi-heart"));
     }
 
