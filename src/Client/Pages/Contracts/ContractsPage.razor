@@ -35,7 +35,7 @@
 
     private async Task OnQueryChanged(string query)
     {
-        _recentlyViewed.ShowRecentContracts(query.IsNullOrEmpty());
+        _recentlyViewed.ShouldShowRecent = query.IsNullOrEmpty();
         string urlSafeQuery = Uri.EscapeDataString(query);
         var fetchUrl = $"api/v1/contracts?query={urlSafeQuery}";
         await _dataFetcher.Fetch(fetchUrl);

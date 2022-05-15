@@ -22,11 +22,11 @@
                 <h3>Senast besökta</h3>
 
                 <div class="container-fluid">
-                        <div class="d-flex flex-wrap justify-content-center">
+                    <div class="d-flex flex-wrap justify-content-center">
                         @foreach (var contract in _dataFetcher.Data)
                         {
                             <div>
-                                <ContractCard Contract=@contract />
+                                <ContractCard Contract=@contract/>
                             </div>
                         }
                     </div>
@@ -43,19 +43,24 @@
 
     private FetchData<IEnumerable<Contract>> _dataFetcher = null!;
 
-    private bool ShouldShowRecent { get; set; } = true;
+
+    private bool _shouldShowRecent = true;
+
+    /// <summary>
+    /// Gets or sets whether recent contracts should be displayed or not.
+    /// </summary>
+    public bool ShouldShowRecent
+    {
+        get => _shouldShowRecent;
+        set
+        {
+            _shouldShowRecent = value;
+            StateHasChanged();
+        }
+    }
 
     private string FetchUrl => BaseUrl + _session.Username + UrlRecentSuffix;
 
-    /// <summary>
-    /// Change whether the recent contracts should be displayed or not.
-    /// </summary>
-    /// <param name="shouldShow">Whether or not the recent contracts should be shown or not</param>
-    public void ShowRecentContracts(bool shouldShow)
-    {
-        ShouldShowRecent = shouldShow;
-        StateHasChanged();
-    }
 
     /// <summary>
     /// Tells the component to render itself again.
@@ -66,4 +71,5 @@
         await _dataFetcher.Fetch(FetchUrl);
         await InvokeAsync(StateHasChanged);
     }
+
 }
