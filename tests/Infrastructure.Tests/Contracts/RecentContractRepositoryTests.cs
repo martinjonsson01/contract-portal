@@ -22,7 +22,7 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
     }
 
     [Fact]
-    public void AddRecent_AddsTheContractCorrectly()
+    public void FetchRecentContracts_KeepsIdIntact_WhenAddedWithId()
     {
         // Arrange
         var user1 = new User() { Name = "User1" };
@@ -30,9 +30,9 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
 
         var contract1 = new Contract() { Name = "1" };
         _context.Contracts.Add(contract1);
+        _cut.Add(user1.Name, contract1);
 
         // Act
-        _cut.Add(user1.Name, contract1);
         IList<RecentlyViewedContract> contracts = _cut.FetchRecentContracts(user1.Name);
 
         // Assert
