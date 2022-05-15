@@ -2,7 +2,7 @@
 @using System.Net
 @typeparam TData
 @inject HttpClient _http;
-@inherits AuthenticatedView
+@inherits UpdateOnAuthenticateView
 
 @if (_errorMessage is not null && ShouldShowErrors)
 {
@@ -63,7 +63,6 @@ else
     /// </summary>
     public async Task Fetch(string url)
     {
-        Console.WriteLine($"fetching with {_http.DefaultRequestHeaders.Authorization}");
         HttpResponseMessage response = await _http.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
