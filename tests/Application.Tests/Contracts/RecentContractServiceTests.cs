@@ -50,7 +50,7 @@ public class RecentContractServiceTests
         _cut.Add(UserId, contract);
 
         // Assert
-        _mockRecentRepo.Verify(repo => repo.AddRecent(UserId, contract), Times.Once);
+        _mockRecentRepo.Verify(repo => repo.Add(UserId, contract), Times.Once);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class RecentContractServiceTests
         _cut.Add(UserId, contract1);
 
         // Assert
-        _mockRecentRepo.Verify(repo => repo.RemoveRecent(It.IsAny<RecentlyViewedContract>()), Times.Once);
+        _mockRecentRepo.Verify(repo => repo.Remove(It.IsAny<RecentlyViewedContract>()), Times.Once);
     }
 
     [Fact]
@@ -95,7 +95,7 @@ public class RecentContractServiceTests
         _cut.Add(UserId, contract1);
 
         // Assert
-        _mockRecentRepo.Verify(repo => repo.RemoveRecent(It.IsAny<RecentlyViewedContract>()), Times.Never);
+        _mockRecentRepo.Verify(repo => repo.Remove(It.IsAny<RecentlyViewedContract>()), Times.Never);
     }
 
     [Fact]

@@ -19,11 +19,11 @@ public interface IRecentContractRepository
     /// </summary>
     /// <param name="username">The username of the user.</param>
     /// <param name="contract">The recent contract.</param>
-    void AddRecent(string username, Contract contract);
+    void Add(string username, Contract contract);
 
     /// <summary>
     /// Removes the last viewed contract for user.
     /// </summary>
     /// <param name="contractToRemove">The contract to remove.</param>
-    void RemoveRecent(RecentlyViewedContract contractToRemove);
+    void Remove(RecentlyViewedContract contractToRemove);
 }

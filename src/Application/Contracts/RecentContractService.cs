@@ -43,7 +43,7 @@ public class RecentContractService : IRecentContractService
     /// <inheritdoc />
     public void Add(string username, Contract contract)
     {
-        _recent.AddRecent(username, contract);
+        _recent.Add(username, contract);
 
         const int recentAmountMax = 3;
         if (Size(username) <= recentAmountMax)
@@ -53,6 +53,6 @@ public class RecentContractService : IRecentContractService
             .FetchRecentContracts(username)
             .OrderBy(recentContract => recentContract.LastViewed)
             .First();
-        _recent.RemoveRecent(toRemove);
+        _recent.Remove(toRemove);
     }
 }

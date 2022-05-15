@@ -29,7 +29,7 @@ public class EFRecentContractRepository : IRecentContractRepository
     private DbSet<User> Users => _context.Users;
 
     /// <inheritdoc />
-    public void AddRecent(string username, Contract contract)
+    public void Add(string username, Contract contract)
     {
         User user = GetUserByUserName(username);
 
@@ -58,7 +58,7 @@ public class EFRecentContractRepository : IRecentContractRepository
     }
 
     /// <inheritdoc />
-    public void RemoveRecent(RecentlyViewedContract contractToRemove)
+    public void Remove(RecentlyViewedContract contractToRemove)
     {
         _context.RecentlyViewedContracts.Remove(contractToRemove);
         _ = _context.SaveChanges();
