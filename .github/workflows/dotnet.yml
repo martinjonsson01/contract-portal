@@ -40,37 +40,6 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-  set-up-database:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs: [ build ]
-    services:
-      sql.data:
-        image: mcr.microsoft.com/mssql/server:2019-latest
-        env:
-          SA_PASSWORD: "ASDjk_shd$$jkASKJ19821"
-          ACCEPT_EULA: Y
-        ports:
-          - "1433:1433"
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Install dotnet-ef
-        run: dotnet tool install --global dotnet-ef
-        continue-on-error: true
-
-      - name: Update database
-        run: dotnet ef database update -p src/Infrastructure
-        env:
-          ASPNETCORE_ENVIRONMENT: Development
-
   application-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -149,7 +118,7 @@ jobs:
   infrastructure-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [ build, set-up-database ]
+    needs: [ build ]
 
     services:
       sql.data:
@@ -169,6 +138,15 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+
+      - name: Install dotnet-ef
+        run: dotnet tool install --global dotnet-ef
+        continue-on-error: true
+
+      - name: Update database
+        run: dotnet ef database update -p src/Infrastructure
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
 
       - name: Run tests and collect coverage
         run: >
@@ -214,7 +192,7 @@ jobs:
   server-integration-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [ build, set-up-database, server-tests ]
+    needs: [ build, server-tests ]
 
     services:
       sql.data:
@@ -234,6 +212,15 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+
+      - name: Install dotnet-ef
+        run: dotnet tool install --global dotnet-ef
+        continue-on-error: true
+
+      - name: Update database
+        run: dotnet ef database update -p src/Infrastructure
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
 
       - name: Cache server coverage
         uses: actions/cache@v3
