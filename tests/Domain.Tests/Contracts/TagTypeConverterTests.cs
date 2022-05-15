@@ -16,12 +16,6 @@ public class TagTypeConverterTests
     }
 
     [Fact]
-    public void Should_Fail()
-    {
-        false.Should().BeTrue();
-    }
-
-    [Fact]
     public void Converter_CanConvertFromString()
     {
         // Arrange

@@ -28,12 +28,6 @@ public class UserServiceFavoriteTests
     }
 
     [Fact]
-    public void Should_Fail()
-    {
-        false.Should().BeTrue();
-    }
-
-    [Fact]
     public void FetchAll_CallsFetchAllFavoritesFromRepoExactlyOnce()
     {
         // Arrange
