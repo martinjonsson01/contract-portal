@@ -3,7 +3,7 @@
 namespace Application.Contracts;
 
 /// <summary>
-/// Logic for fetching and storing recent contract.
+/// Logic for fetching and storing recent contracts.
 /// </summary>
 public interface IRecentContractRepository
 {
@@ -15,9 +15,9 @@ public interface IRecentContractRepository
     IList<RecentlyViewedContract> FetchRecentContracts(string username);
 
     /// <summary>
-    /// Adds a contract to recent for a user.
+    /// Marks a contract as recently viewed for a user.
     /// </summary>
-    /// <param name="username">The username of the user.</param>
+    /// <param name="username">The name of the user.</param>
     /// <param name="contract">Possible new recent contract.</param>
     void AddRecent(string username, Contract contract);
 
