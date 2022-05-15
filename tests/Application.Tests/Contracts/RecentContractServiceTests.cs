@@ -18,7 +18,7 @@ public class RecentContractServiceTests
     {
         _mockRecentRepo = new Mock<IRecentContractRepository>();
         _mockContractRepo = new Mock<IContractRepository>();
-        _cut = new RecentContractService(_mockRecentRepo.Object, _mockContractRepo.Object);
+        _cut = new LimitedRecentContractService(_mockRecentRepo.Object, _mockContractRepo.Object);
     }
 
     [Fact]

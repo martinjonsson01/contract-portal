@@ -3,7 +3,7 @@
 namespace Application.Contracts;
 
 /// <inheritdoc />
-public class RecentContractService : IRecentContractService
+public class LimitedRecentContractService : IRecentContractService
 {
     private readonly IRecentContractRepository _recent;
     private readonly IContractRepository _contract;
@@ -13,7 +13,7 @@ public class RecentContractService : IRecentContractService
     /// </summary>
     /// <param name="recent">The recent repository to fetch and update data from and to.</param>
     /// <param name="contract">The contract repository to fetch the contracts from.</param>
-    public RecentContractService(IRecentContractRepository recent, IContractRepository contract)
+    public LimitedRecentContractService(IRecentContractRepository recent, IContractRepository contract)
     {
         _recent = recent;
         _contract = contract;
