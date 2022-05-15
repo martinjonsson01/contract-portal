@@ -1,6 +1,4 @@
-﻿using Domain.Users;
-
-namespace Domain.Contracts;
+﻿namespace Domain.Contracts;
 
 /// <summary>
 ///     A document containing negotiated discounts and benefits.
