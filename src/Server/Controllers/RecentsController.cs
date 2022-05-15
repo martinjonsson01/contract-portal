@@ -41,11 +41,9 @@ public class RecentsController : BaseApiController<RecentsController>
     /// </summary>
     /// <param name="username">The logged in user.</param>
     /// <param name="contract">The contract to add.</param>
-    /// <returns>Returns success after it has added the contract to recently viewed.</returns>
     [HttpPost]
-    public IActionResult Add(string username, Contract contract)
+    public void Add(string username, Contract contract)
     {
         _recent.Add(username, contract);
-        return Ok();
     }
 }
