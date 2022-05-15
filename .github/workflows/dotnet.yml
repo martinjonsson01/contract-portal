@@ -22,12 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache build
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/work/contract-portal/**
-          key: cache-build-${{ github.run_id }}
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
@@ -76,18 +70,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache build
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/work/contract-portal/**
-          key: cache-build-${{ github.run_id }}
-
-      - name: Debug test print 1
-        run: ls tests
-
-      - name: Debug test print 2
-        run: ls tests/Application.Tests
-
       - name: Run tests and collect coverage
         run: >
           dotnet test tests/Application.Tests
@@ -105,12 +87,6 @@ jobs:
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
-
-      - name: Cache build
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/work/contract-portal/**
-          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -130,12 +106,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache build
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/work/contract-portal/**
-          key: cache-build-${{ github.run_id }}
-
       - name: Run tests and collect coverage
         run: >
           dotnet test tests/Client.Tests
@@ -153,12 +123,6 @@ jobs:
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
-
-      - name: Cache build
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/work/contract-portal/**
-          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -178,12 +142,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache build
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/work/contract-portal/**
-          key: cache-build-${{ github.run_id }}
-
       - name: Run tests and collect coverage
         run: >
           dotnet test tests/Infrastructure.Tests
@@ -201,12 +159,6 @@ jobs:
     needs: [ build, set-up-database ]
     steps:
       - uses: actions/checkout@v3
-
-      - name: Cache build
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/work/contract-portal/**
-          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
