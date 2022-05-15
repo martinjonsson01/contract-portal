@@ -1,0 +1,41 @@
+.text-block {
+    position: absolute;
+    text-align: center;
+    top: 6rem;
+    left: 8rem;
+    justify-content: center;
+    max-width: 80%;
+}
+
+.text-block h1 {
+    color: #fbebac;
+    text-shadow: 0 0 20px black;
+}
+
+.container img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.container {
+    padding-left: 0;
+    padding-right: 0;
+    left: 0;
+    height: auto;
+    max-width: 100%;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.btn-primary {
+    top: 3rem;
+    position: relative;
+    width: 12.5rem;
+    height: 3.125rem;
+}

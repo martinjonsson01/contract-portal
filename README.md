@@ -20,8 +20,8 @@ For local development, a database daemon needs to be running, and a database ins
    for [Windows](https://docs.oracle.com/en/database/oracle/machine-learning/oml4r/1.5.1/oread/creating-and-modifying-environment-variables-on-windows.html#GUID-DD6F9982-60D5-48F6-8270-A27EC53807D0)
    and [MacOS](https://phoenixnap.com/kb/set-environment-variable-mac)
 3. In your IDE terminal, Navigate to the `Infrastructure` project using `cd src/Infrastructure/`.
-4. Install the Entity Framework tools using `dotnet tool install --global dotnet-ef`
-5. Apply the database migrations for every context using (you have to run it once with each context as an argument) `dotnet ef database update --context {CONTEXT_NAME_HERE}`
+4. Install the Entity Framework tools using `dotnet tool install --global dotnet-ef`.
+5. Apply the database migrations using `dotnet ef database update`.
 
 ### Local environment configuration
 There are some environment secrets that need to be configured:

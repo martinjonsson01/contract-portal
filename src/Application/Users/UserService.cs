@@ -4,7 +4,7 @@ using System.Text;
 
 using Application.Configuration;
 using Application.Exceptions;
-
+using Domain.Contracts;
 using Domain.Users;
 
 using Microsoft.Extensions.Configuration;
@@ -71,6 +71,30 @@ public class UserService : IUserService
         return _repo.All;
     }
 
+    /// <inheritdoc />
+    public IEnumerable<Contract> FetchAllFavorites(string userName)
+    {
+        return FetchUser(userName).Favorites;
+    }
+
+    /// <inheritdoc />
+    public bool IsFavorite(string userName, Guid contractId)
+    {
+        return FetchUser(userName).Favorites.Any(c => c.Id == contractId);
+    }
+
+    /// <inheritdoc />
+    public void AddFavorite(string userName, Guid contractId)
+    {
+        _repo.AddFavorite(userName, contractId);
+    }
+
+    /// <inheritdoc />
+    public bool RemoveFavorite(string userName, Guid contractId)
+    {
+        return _repo.RemoveFavorite(userName, contractId);
+    }
+
     private static IEnumerable<Claim> CreateClaims(User user)
     {
         var claims = new List<Claim> { new("id", user.Id.ToString()), };
@@ -101,5 +125,15 @@ public class UserService : IUserService
         };
         SecurityToken? token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
+    }
+
+    private User FetchUser(string username)
+    {
+        User? user = _repo.Fetch(username);
+
+        if (user == null)
+            throw new UserDoesNotExistException(username);
+
+        return user;
     }
 }
