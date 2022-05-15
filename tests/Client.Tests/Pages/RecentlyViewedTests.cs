@@ -32,6 +32,6 @@ public class RecentlyViewedTests : UITestFixture
         cut.WaitForElement(".card");
 
         // Assert
-        cut.Find(".card").TextContent.Should().Contain(name);
+        cut.WaitForAssertion(() => cut.Find(".card").TextContent.Should().Contain(name));
     }
 }

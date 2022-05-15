@@ -33,7 +33,7 @@ public class UserListItemTests : IDisposable
             _context.RenderComponent<UserTableRow>(ParameterBuilder);
 
         // Assert
-        cut.Find($"#user_id_{user.Id}").TextContent.Should().Contain(name);
+        cut.WaitForAssertion(() => cut.Find($"#user_id_{user.Id}").TextContent.Should().Contain(name));
     }
 
     [Fact]
@@ -51,6 +51,7 @@ public class UserListItemTests : IDisposable
             _context.RenderComponent<UserTableRow>(ParameterBuilder);
 
         // Assert
-        cut.Find($"#user_id_{user.Id}").TextContent.Should().Contain(latestPaymentDate.ToShortDateString());
+        cut.WaitForAssertion(() =>
+            cut.Find($"#user_id_{user.Id}").TextContent.Should().Contain(latestPaymentDate.ToShortDateString()));
     }
 }
