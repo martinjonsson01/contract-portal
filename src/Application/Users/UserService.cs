@@ -4,6 +4,7 @@ using System.Text;
 
 using Application.Configuration;
 using Application.Exceptions;
+
 using Domain.Contracts;
 using Domain.Users;
 
@@ -69,6 +70,18 @@ public class UserService : IUserService
     public IEnumerable<User> FetchAllUsers()
     {
         return _repo.All;
+    }
+
+    /// <inheritdoc />
+    public void UpdateUser(User user)
+    {
+        _repo.UpdateUser(user);
+    }
+
+    /// <inheritdoc />
+    public User FetchUser(Guid id)
+    {
+        return _repo.FetchUser(id) ?? throw new UserDoesNotExistException();
     }
 
     /// <inheritdoc />

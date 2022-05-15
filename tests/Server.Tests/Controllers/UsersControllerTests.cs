@@ -4,6 +4,7 @@ using Application.Users;
 using Domain.Contracts;
 using Domain.Users;
 
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Tests.Controllers;
@@ -20,17 +21,17 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public void Create_ReturnsBadRequest_IfIDAlreadyTaken()
+    public void Create_ReturnsOkRequest_WhenUpdatingValues()
     {
         // Arrange
         var user = new User();
         _mockUsers.Setup(service => service.Add(user)).Throws<IdentifierAlreadyTakenException>();
 
         // Act
-        IActionResult actual = _cut.Create(user);
+        IActionResult actual = _cut.Create(user, user.Id);
 
         // Assert
-        actual.Should().BeOfType<BadRequestResult>();
+        actual.Should().BeOfType<OkResult>();
     }
 
     [Fact]
@@ -39,7 +40,7 @@ public class UsersControllerTests
         // Arrange
 
         // Act
-        IActionResult actual = _cut.Create(new User());
+        IActionResult actual = _cut.Create(new User(), Guid.NewGuid());
 
         // Assert
         actual.Should().BeOfType<OkResult>();

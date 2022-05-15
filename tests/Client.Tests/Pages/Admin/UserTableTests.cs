@@ -32,7 +32,7 @@ public class UserTableTests : UITestFixture
         var newUser = new User { Name = newUserName };
 
         // Act
-        cut.Instance.Add(newUser);
+        cut.Instance.AddOrUpdate(newUser);
         cut.WaitForState(() => cut.FindAll(itemSelector).Count == 3);
 
         // Assert

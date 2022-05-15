@@ -19,11 +19,19 @@ public class AuthIntegrationTests : IntegrationTest
     {
     }
 
-    public static IEnumerable<object[]> AdminPostApiEndpoints =>
-        new List<object[]>
+    public static IEnumerable<object[]> AdminPutApiEndpoints
+    {
+        get
         {
-            new object[] { "/api/v1/users", JsonContent.Create(new User()), },
-        };
+            var user = new User();
+            var contract = new Contract();
+            return new List<object[]>
+                {
+                    new object[] { $"/api/v1/users/{user.Id}", user, },
+                    new object[] { $"/api/v1/contracts/{contract.Id}", contract, },
+                };
+        }
+    }
 
     public static IEnumerable<object[]> AdminDeleteApiEndpoints
     {
@@ -34,14 +42,14 @@ public class AuthIntegrationTests : IntegrationTest
             Func<HttpClient, Task> createContract =
                 async client => await client.PutAsJsonAsync(contractEndpoint, contract);
 
-            const string usersEndpoint = "/api/v1/users";
             var user = new User();
-            Func<HttpClient, Task> createUser = async client => await client.PostAsJsonAsync(usersEndpoint, user);
+            string usersEndpoint = $"/api/v1/users/{user.Id}";
+            Func<HttpClient, Task> createUser = async client => await client.PutAsJsonAsync(usersEndpoint, user);
 
             return new List<object[]>
             {
                 new object[] { contractEndpoint, createContract, },
-                new object[] { usersEndpoint + $"/{user.Id}", createUser, },
+                new object[] { usersEndpoint, createUser, },
             };
         }
     }
@@ -60,47 +68,47 @@ public class AuthIntegrationTests : IntegrationTest
     }
 
     [Theory]
-    [MemberData(nameof(AdminPostApiEndpoints))]
-    public async Task SendToAdminPostApiEndpoints_ReturnsUnauthorized_WhenTokenIsNotSpecifiedAsync(
+    [MemberData(nameof(AdminPutApiEndpoints))]
+    public async Task SendToAdminPutApiEndpoints_ReturnsUnauthorized_WhenTokenIsNotSpecifiedAsync(
         string endpointUrl,
-        HttpContent content)
+        object content)
     {
         // Arrange
 
         // Act
-        HttpResponseMessage response = await Client.PostAsync(endpointUrl, content);
+        HttpResponseMessage response = await Client.PutAsJsonAsync(endpointUrl, content);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Theory]
-    [MemberData(nameof(AdminPostApiEndpoints))]
-    public async Task SendToAdminPostApiEndpoints_ReturnsForbidden_WhenUserTokenIsSpecifiedAsync(
+    [MemberData(nameof(AdminPutApiEndpoints))]
+    public async Task SendToAdminPutApiEndpoints_ReturnsForbidden_WhenUserTokenIsSpecifiedAsync(
         string endpointUrl,
-        HttpContent content)
+        object content)
     {
         // Arrange
         await ArrangeAuthenticatedUserAsync();
 
         // Act
-        HttpResponseMessage response = await Client.PostAsync(endpointUrl, content);
+        HttpResponseMessage response = await Client.PutAsJsonAsync(endpointUrl, content);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 
     [Theory]
-    [MemberData(nameof(AdminPostApiEndpoints))]
-    public async Task SendToAdminPostApiEndpoints_IsSuccessful_WhenAdminIsAuthenticatedAsync(
+    [MemberData(nameof(AdminPutApiEndpoints))]
+    public async Task SendToAdminPutApiEndpoints_IsSuccessful_WhenAdminIsAuthenticatedAsync(
         string endpointUrl,
-        HttpContent content)
+        object content)
     {
         // Arrange
         await ArrangeAuthenticatedAdminAsync();
 
         // Act
-        HttpResponseMessage response = await Client.PostAsync(endpointUrl, content);
+        HttpResponseMessage response = await Client.PutAsJsonAsync(endpointUrl, content);
 
         // Assert
         response.Should().BeSuccessful();

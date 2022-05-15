@@ -1,10 +1,14 @@
 @using Domain.Users
 @using Microsoft.VisualBasic
+@using Newtonsoft.Json
+@using System.Text
 @inject HttpClient _http
+@inject IJSRuntime _js
 
-<h4>Skapa användare</h4>
+<h4 id="user-form-title">Skapa ny användare</h4>
 
-<EditForm Model="@_user" OnSubmit="AddUser">
+<EditForm Model="@_user" OnSubmit="ConvertAndUploadUser">
+
     <div class="mb-3">
         <label for="user-name" class="form-label">Användarnamn</label>
         <InputText id="user-name" class="form-control" placeholder="Användarens namn" @bind-Value="@_user.Name"/>
@@ -22,11 +26,29 @@
         <InputDate id="user-latest-payment-date" class="form-control" @bind-Value="_user.LatestPaymentDate"/>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-3">Skapa användare</button>
+    <button type="submit" class="btn btn-primary mb-3">Spara</button>
 </EditForm>
 
 @code {
+
+    /// <summary>
+    /// Called when a user has been added successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<User> OnUserAdded { get; set; } = EventCallback<User>.Empty;
+
     private User _user = CreateUnspecifiedUser();
+
+    /// <summary>
+    /// Populates the form with the values of the given <see cref="User"/>.
+    /// </summary>
+    /// <param name="user">The data to edit.</param>
+    public async Task EditUserAsync(User user)
+    {
+        await _js.InvokeVoidAsync("scrollToElement", "#user-form-title");
+        _user = user;
+        _user.Password = string.Empty;
+    }
 
     private static User CreateUnspecifiedUser()
     {
@@ -39,21 +61,24 @@
         };
     }
 
-    /// <summary>
-    /// Called when a user has been added successfully.
-    /// </summary>
-    [Parameter]
-    public EventCallback<User> OnUserAdded { get; set; } = EventCallback<User>.Empty;
-
-    private async Task AddUser()
+    private async Task ConvertAndUploadUser()
     {
-        // Make sure date is in UTC.
+    // Make sure date is in UTC.
         _user.LatestPaymentDate = _user.LatestPaymentDate.ToUniversalTime();
-        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users", _user);
+
+        await UploadUser();
+    }
+
+    private async Task UploadUser()
+    {
+        string json = JsonConvert.SerializeObject(_user);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await _http.PutAsync($"/api/v1/users/{_user.Id}", content);
         if (response.IsSuccessStatusCode)
         {
             await OnUserAdded.InvokeAsync(_user);
             _user = CreateUnspecifiedUser();
         }
     }
+
 }
