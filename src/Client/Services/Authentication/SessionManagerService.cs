@@ -58,7 +58,6 @@ internal class SessionManagerService : ISessionService
         Username = null;
 
         AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = null, });
-        _navigationManager.NavigateTo("/");
     }
 
     /// <inheritdoc/>
@@ -66,7 +65,10 @@ internal class SessionManagerService : ISessionService
     {
         IsAuthenticated = await _storage.ContainKeyAsync("user").ConfigureAwait(true);
         if (!IsAuthenticated)
+        {
+            AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = null, });
             return false;
+        }
 
         AuthenticateResponse state = await _storage.GetItemAsync<AuthenticateResponse>("user").ConfigureAwait(true);
         Authenticate(state);
@@ -77,7 +79,6 @@ internal class SessionManagerService : ISessionService
     {
         // Store token on http client so all future requests use the token.
         _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authentication.Token);
-        Console.WriteLine($"setting bearer to {_http.DefaultRequestHeaders.Authorization}");
         IsAuthenticated = true;
         Username = authentication.Username;
         AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = authentication, });
