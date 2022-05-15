@@ -9,7 +9,7 @@ namespace Application.Tests.Contracts;
 
 public class RecentContractServiceTests
 {
-    private const string UserId = "123";
+    private const string UserName = "123";
     private readonly IRecentContractService _cut;
     private readonly Mock<IRecentContractRepository> _mockRecentRepo;
     private readonly Mock<IContractRepository> _mockContractRepo;
@@ -31,7 +31,7 @@ public class RecentContractServiceTests
             .Returns(contracts);
 
         // Act
-        int size = _cut.Size(UserId);
+        int size = _cut.Size(UserName);
 
         // Assert
         size.Should().Be(1);
@@ -47,10 +47,10 @@ public class RecentContractServiceTests
             .Returns(contracts);
 
         // Act
-        _cut.Add(UserId, contract);
+        _cut.Add(UserName, contract);
 
         // Assert
-        _mockRecentRepo.Verify(repo => repo.Add(UserId, contract), Times.Once);
+        _mockRecentRepo.Verify(repo => repo.Add(UserName, contract), Times.Once);
     }
 
     [Fact]
@@ -70,7 +70,7 @@ public class RecentContractServiceTests
             .Returns(contracts);
 
         // Act
-        _cut.Add(UserId, contract1);
+        _cut.Add(UserName, contract1);
 
         // Assert
         _mockRecentRepo.Verify(repo => repo.Remove(It.IsAny<RecentlyViewedContract>()), Times.Once);
@@ -92,7 +92,7 @@ public class RecentContractServiceTests
             .Returns(contracts);
 
         // Act
-        _cut.Add(UserId, contract1);
+        _cut.Add(UserName, contract1);
 
         // Assert
         _mockRecentRepo.Verify(repo => repo.Remove(It.IsAny<RecentlyViewedContract>()), Times.Never);
@@ -123,7 +123,7 @@ public class RecentContractServiceTests
             .Returns(contract3);
 
         // Act
-        IEnumerable<Contract> recentContracts = _cut.FetchRecentContracts(UserId);
+        IEnumerable<Contract> recentContracts = _cut.FetchRecentContracts(UserName);
 
         // Assert
         recentContracts.SequenceEqual(new List<Contract>() { contract3, contract2, contract1 }).Should().BeTrue();
