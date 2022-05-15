@@ -17,22 +17,18 @@ namespace Server.Controllers;
 public class ContractsController : BaseApiController<ContractsController>
 {
     private readonly IContractService _contracts;
-    private readonly IRecentContractService _recent;
 
     /// <summary>
     /// Constructs contract API.
     /// </summary>
     /// <param name="logger">The logging provider.</param>
     /// <param name="contracts">The contract logic.</param>
-    /// <param name="recent">The recent contract logic.</param>
     public ContractsController(
         ILogger<ContractsController> logger,
-        IContractService contracts,
-        IRecentContractService recent)
+        IContractService contracts)
         : base(logger)
     {
         _contracts = contracts;
-        _recent = recent;
     }
 
     /// <summary>
@@ -61,30 +57,6 @@ public class ContractsController : BaseApiController<ContractsController>
         // Can't place model in an invalid state at the moment, as all states are considered valid.
         // In the future we might want to add model validation here.
         return new ObjectResult(contract);
-    }
-
-    /// <summary>
-    /// Gets all recently viewed contracts.
-    /// </summary>
-    /// <param name="username">The logged in user.</param>
-    /// <returns>All recently viewed contracts.</returns>
-    [HttpGet("recent/{username}")]
-    public IEnumerable<Contract> RecentContracts(string username)
-    {
-        return username.IsNullOrEmpty() ? new List<Contract>() : _recent.FetchRecentContracts(username);
-    }
-
-    /// <summary>
-    /// Adds a contract as recently viewed.
-    /// </summary>
-    /// <param name="username">The logged in user.</param>
-    /// <param name="contract">The contract to add.</param>
-    /// <returns>Returns success after it has added the contract to recently viewed.</returns>
-    [HttpPost("recent/{username}")]
-    public IActionResult AddRecent(string username, Contract contract)
-    {
-        _recent.Add(username, contract);
-        return Ok();
     }
 
     /// <summary>

@@ -38,13 +38,14 @@
 </FetchData>
 
 @code {
-        const string BaseUrl = "/api/v1/contracts/recent/";
+        const string BaseUrl = "/api/v1/users/";
+        const string UrlRecentSuffix = "/recents";
 
     private FetchData<IEnumerable<Contract>> _dataFetcher = null!;
 
     private bool ShouldShowRecent { get; set; } = true;
 
-    private string FetchUrl => BaseUrl + _session.Username;
+    private string FetchUrl => BaseUrl + _session.Username + UrlRecentSuffix;
 
     /// <summary>
     /// Change whether the recent contracts should be displayed or not.
@@ -61,7 +62,7 @@
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
-        await _http.PostAsJsonAsync($"api/v1/contracts/recent/{_session.Username}", newRecent);
+        await _http.PostAsJsonAsync(FetchUrl, newRecent);
         await _dataFetcher.Fetch(FetchUrl);
         await InvokeAsync(StateHasChanged);
     }
