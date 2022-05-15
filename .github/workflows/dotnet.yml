@@ -124,11 +124,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache server coverage
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/contract-portal/CoverageResults
+          key: cache-server-coverage-${{ github.run_id }}
+
       - name: Run tests and collect coverage
         run: >
           dotnet test tests/Server.Tests
           -p:CollectCoverage=true
-          -p:Threshold=80
           -p:ThresholdType=branch
           -p:CoverletOutput=../../CoverageResults/
           -p:ExcludeByFile=\"**/Program.cs\"
@@ -159,6 +164,12 @@ jobs:
     needs: [ build, set-up-database ]
     steps:
       - uses: actions/checkout@v3
+
+      - name: Cache server coverage
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/contract-portal/CoverageResults
+          key: cache-server-coverage-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
