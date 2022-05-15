@@ -84,7 +84,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Application.Tests/bin/Debug/net6.0/Application.Tests.dll
+          dotnet test --no-build tests/Application.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -108,7 +108,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Domain.Tests/bin/Debug/net6.0/Domain.Tests.dll
+          dotnet test --no-build tests/Domain.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -132,7 +132,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Client.Tests/bin/Debug/net6.0/Client.Tests.dll
+          dotnet test --no-build tests/Client.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -156,7 +156,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Server.Tests/bin/Debug/net6.0/Server.Tests.dll
+          dotnet test --no-build tests/Server.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -180,7 +180,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Infrastructure.Tests/bin/Debug/net6.0/Infrastructure.Tests.dll
+          dotnet test --no-build tests/Infrastructure.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -204,7 +204,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Server.Tests.Integration/bin/Debug/net6.0/Server.Tests.Integration.dll
+          dotnet test --no-build tests/Server.Tests.Integration
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
