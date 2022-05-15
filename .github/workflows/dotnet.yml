@@ -175,6 +175,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: [ build ]
+
+    services:
+      sql.data:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          SA_PASSWORD: "ASDjk_shd$$jkASKJ19821"
+          ACCEPT_EULA: Y
+        ports:
+          - "1433:1433"
+
     steps:
       - uses: actions/checkout@v3
 
@@ -205,6 +215,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: [ build, set-up-database, server-tests ]
+
+    services:
+      sql.data:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          SA_PASSWORD: "ASDjk_shd$$jkASKJ19821"
+          ACCEPT_EULA: Y
+        ports:
+          - "1433:1433"
+
     steps:
       - uses: actions/checkout@v3
 
