@@ -31,6 +31,8 @@
 </FetchData>
 
 @code {
+    private FetchData<List<Contract>> _dataFetcher = null!;
+
 
     /// <summary>
     /// Called when a <see cref="Contract"/> is being opened to be edited.
@@ -58,8 +60,6 @@
         }
         InvokeAsync(StateHasChanged);
     }
-
-    private FetchData<List<Contract>> _dataFetcher = null!;
 
     /// <summary>
     /// Removes a contract from the list.
