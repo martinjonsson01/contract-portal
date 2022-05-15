@@ -30,6 +30,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
@@ -55,6 +61,12 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -82,6 +94,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
+
       - name: Run tests and collect coverage
         run: >
           dotnet test tests/Domain.Tests
@@ -107,6 +125,12 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -144,6 +168,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
+
       - name: Install dotnet-ef
         run: dotnet tool install --global dotnet-ef
         continue-on-error: true
@@ -178,6 +208,12 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
 
       - name: Cache server coverage
         uses: actions/cache@v3
@@ -219,6 +255,12 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
 
       - name: Install dotnet-ef
         run: dotnet tool install --global dotnet-ef
