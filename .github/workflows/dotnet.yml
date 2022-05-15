@@ -90,7 +90,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Application.Tests/Application.Tests.csproj
+          dotnet test --no-build tests/Application.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -114,7 +114,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Domain.Tests/Domain.Tests.csproj
+          dotnet test --no-build tests/Domain.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -138,7 +138,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Client.Tests/Client.Tests.csproj
+          dotnet test --no-build tests/Client.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -162,7 +162,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Server.Tests/Server.Tests.csproj
+          dotnet test --no-build tests/Server.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -186,7 +186,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Infrastructure.Tests/Infrastructure.Tests.csproj
+          dotnet test --no-build tests/Infrastructure.Tests
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -210,7 +210,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Server.Tests.Integration/Server.Tests.Integration.csproj
+          dotnet test --no-build tests/Server.Tests.Integration
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
