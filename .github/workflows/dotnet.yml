@@ -22,6 +22,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
@@ -48,11 +55,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache build
-        uses: actions/cache@v3
+      - uses: actions/cache@v3
         with:
-          path: /home/runner/work/contract-portal/**
-          key: cache-build-${{ github.run_id }}
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
       - name: Install dotnet-ef
         run: dotnet tool install --global dotnet-ef
@@ -69,6 +77,13 @@ jobs:
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
       - name: Run tests and collect coverage
         run: >
@@ -88,6 +103,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Run tests and collect coverage
         run: >
           dotnet test tests/Domain.Tests
@@ -106,6 +128,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Run tests and collect coverage
         run: >
           dotnet test tests/Client.Tests
@@ -117,12 +146,44 @@ jobs:
           -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
           -p:Include=\"[Client]*\"
 
+  infrastructure-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [ build, set-up-database ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Run tests and collect coverage
+        run: >
+          dotnet test tests/Infrastructure.Tests
+          -p:CollectCoverage=true
+          -p:Threshold=80
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Infrastructure]*\"
+
   server-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
       - name: Cache server coverage
         uses: actions/cache@v3
@@ -140,30 +201,19 @@ jobs:
           -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
           -p:Include=\"[Server]*\"
 
-  infrastructure-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs: [ build, set-up-database ]
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Run tests and collect coverage
-        run: >
-          dotnet test tests/Infrastructure.Tests
-          -p:CollectCoverage=true
-          -p:Threshold=80
-          -p:ThresholdType=branch
-          -p:CoverletOutput=../../CoverageResults/
-          -p:ExcludeByFile=\"**/Program.cs\"
-          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
-          -p:Include=\"[Infrastructure]*\"
-
   server-integration-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [ build, set-up-database ]
+    needs: [ build, set-up-database, server-tests ]
     steps:
       - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
       - name: Cache server coverage
         uses: actions/cache@v3
