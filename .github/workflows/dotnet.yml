@@ -25,7 +25,7 @@ jobs:
       - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/work/contract-portal/contract-portal
+          path: /home/runner/work/contract-portal/contract-portal/
           key: cache-build-${{ github.run_id }}
 
       - name: Setup .NET
@@ -57,7 +57,7 @@ jobs:
       - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/work/contract-portal/contract-portal
+          path: /home/runner/work/contract-portal/contract-portal/
           key: cache-build-${{ github.run_id }}
 
       - name: Install dotnet-ef
@@ -79,7 +79,7 @@ jobs:
       - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/work/contract-portal/contract-portal
+          path: /home/runner/work/contract-portal/contract-portal/
           key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
@@ -103,7 +103,7 @@ jobs:
       - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/work/contract-portal/contract-portal
+          path: /home/runner/work/contract-portal/contract-portal/
           key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
@@ -127,7 +127,7 @@ jobs:
       - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/work/contract-portal/contract-portal
+          path: /home/runner/work/contract-portal/contract-portal/
           key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
@@ -151,7 +151,7 @@ jobs:
       - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/work/contract-portal/contract-portal
+          path: /home/runner/work/contract-portal/contract-portal/
           key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
@@ -175,7 +175,7 @@ jobs:
       - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/work/contract-portal/contract-portal
+          path: /home/runner/work/contract-portal/contract-portal/
           key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
@@ -199,7 +199,7 @@ jobs:
       - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/work/contract-portal/contract-portal
+          path: /home/runner/work/contract-portal/contract-portal/
           key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
