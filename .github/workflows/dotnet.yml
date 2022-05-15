@@ -82,6 +82,12 @@ jobs:
           path: /home/runner/work/contract-portal/**
           key: cache-build-${{ github.run_id }}
 
+      - name: Debug test print 1
+        run: ls tests
+
+      - name: Debug test print 2
+        run: ls tests/Application.Tests
+
       - name: Run tests and collect coverage
         run: >
           dotnet test --no-build tests/Application.Tests
