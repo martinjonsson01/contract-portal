@@ -37,9 +37,6 @@ public sealed class EFContractRepository : IContractRepository
     /// <inheritdoc />
     public IEnumerable<Contract> Recent => _recent.FetchRecentContracts();
 
-    /// <inheritdoc />
-    public IEnumerable<Contract> Favorites => Contracts.Where(contract => contract.IsFavorite);
-
     private DbSet<Contract> Contracts => _context.Contracts;
 
     /// <inheritdoc />

@@ -4,6 +4,7 @@ using Infrastructure.Databases;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(EFDatabaseContext))]
-    partial class EFDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220509195800_HideUsers")]
+    partial class HideUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,13 +26,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("ContractUser", b =>
                 {
-                    b.Property<Guid>("FavoritedById")
+                    b.Property<Guid>("FavoriteUsersId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FavoritesId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("FavoritedById", "FavoritesId");
+                    b.HasKey("FavoriteUsersId", "FavoritesId");
 
                     b.HasIndex("FavoritesId");
 
@@ -123,8 +125,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .UseCollation("Finnish_Swedish_CS_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -139,7 +140,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Users.User", null)
                         .WithMany()
-                        .HasForeignKey("FavoritedById")
+                        .HasForeignKey("FavoriteUsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

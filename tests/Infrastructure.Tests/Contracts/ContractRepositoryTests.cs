@@ -17,11 +17,12 @@ namespace Infrastructure.Tests.Contracts;
 public class ContractRepositoryTests : IClassFixture<TestDatabaseFixture>
 {
     private readonly IContractRepository _cut;
+    private readonly EFDatabaseContext _context;
 
     public ContractRepositoryTests(TestDatabaseFixture fixture)
     {
-        EFDatabaseContext context = fixture.CreateContext();
-        _cut = new EFContractRepository(context, Mock.Of<ILogger<EFContractRepository>>());
+        _context = fixture.CreateContext();
+        _cut = new EFContractRepository(_context, Mock.Of<ILogger<EFContractRepository>>());
     }
 
     [Fact]
@@ -41,6 +42,9 @@ public class ContractRepositoryTests : IClassFixture<TestDatabaseFixture>
     public void RemoveContract_ReturnsTrue_WhenContractExists()
     {
         // Arrange
+        _context.Contracts.Add(new Contract()); // Add contract so one exists.
+        _context.SaveChanges();
+
         Guid id = _cut.All.First().Id;
 
         // Act

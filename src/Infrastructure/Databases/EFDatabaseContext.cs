@@ -52,6 +52,12 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         _ = modelBuilder.Entity<User>()
+                        .HasMany(p => p.Favorites)
+                        .WithMany("FavoritedBy");
+        _ = modelBuilder.Entity<User>()
                         .HasKey(user => user.Id);
+        _ = modelBuilder.Entity<User>()
+                        .Property(user => user.Name)
+                        .UseCollation("Finnish_Swedish_CS_AS");
     }
 }
