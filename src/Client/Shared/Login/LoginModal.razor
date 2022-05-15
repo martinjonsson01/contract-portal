@@ -48,7 +48,7 @@
 
     private async Task ValidateUser()
     {
-        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users/authenticate", _user);
+        HttpResponseMessage response = await _http.PostAsJsonAsync("api/v1/users/authenticate", _user);
         if (response.IsSuccessStatusCode)
         {
             _logInFailed = false;

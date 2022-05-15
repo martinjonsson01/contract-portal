@@ -49,7 +49,7 @@
     {
         // Make sure date is in UTC.
         _user.LatestPaymentDate = _user.LatestPaymentDate.ToUniversalTime();
-        HttpResponseMessage response = await _http.PostAsJsonAsync("/api/v1/users", _user);
+        HttpResponseMessage response = await _http.PostAsJsonAsync("api/v1/users", _user);
         if (response.IsSuccessStatusCode)
         {
             await OnUserAdded.InvokeAsync(_user);
