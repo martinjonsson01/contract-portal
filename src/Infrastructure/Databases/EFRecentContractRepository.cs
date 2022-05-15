@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Application.Contracts;
+using Application.Users;
 using Domain.Contracts;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +78,8 @@ public class EFRecentContractRepository : IRecentContractRepository
 
     private User GetUserByName(string username)
     {
-        User user = Users.Include(user => user.RecentlyViewContracts).First(user => user.Name == username);
+        User user = Users.Include(user => user.RecentlyViewContracts).FirstOrDefault(user => user.Name == username) ??
+                    throw new UserDoesNotExistException();
         return user;
     }
 }
