@@ -44,6 +44,14 @@
 * Team reflections
   * Lämnas in efter retrospective som preliminärt ligger på måndagar.
 
+## Prioriteringsordning när man lägger tid på projektarbete:
+1. Skriv daily scrum
+2. Individuell reflektion
+3. PR-review
+4. Backlog-grooming (om man är scrum-master eller PO)
+5. Arbeta på user story, om möjligt
+6. Arbeta på hotfix / buggar
+
 ## Följande personer är med i gruppen och har godkänt kontraktets innehåll:
 * Ella Sibbmark
 * Emil Nilsson
