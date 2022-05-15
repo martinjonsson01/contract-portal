@@ -53,23 +53,6 @@ public class UsersController : BaseApiController<UsersController>
     }
 
     /// <summary>
-    /// Updates the user.
-    /// </summary>
-    /// <param name="patchDocument">The patch to use to update the user.</param>
-    /// <param name="id">The id of the user to update.</param>
-    /// <returns>The updated user.</returns>
-    public IActionResult UpdateUser([FromBody] JsonPatchDocument<User> patchDocument, Guid id)
-    {
-        User user = _users.FetchUser(id);
-        patchDocument.ApplyTo(user, ModelState);
-        _users.UpdateUser(user);
-
-        // Can't place model in an invalid state at the moment, as all states are considered valid.
-        // In the future we might want to add model validation here.
-        return new ObjectResult(user);
-    }
-
-    /// <summary>
     /// Removes the specified user.
     /// </summary>
     /// <param name="id">Id of the user to be removed.</param>
