@@ -25,7 +25,6 @@ public class LimitedRecentContractService : IRecentContractService
         return _recent.FetchRecentContracts(username).Count;
     }
 
-    /// <param name="username"></param>
     /// <inheritdoc />
     public IEnumerable<Contract> FetchRecentContracts(string username)
     {

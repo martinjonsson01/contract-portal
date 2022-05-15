@@ -26,7 +26,7 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
     {
         // Arrange
         var user1 = new User() { Name = "User1" };
-        AddUserToContext(user1);
+        AddUsersToContext(user1);
 
         var contract1 = new Contract() { Name = "1" };
         _context.Contracts.Add(contract1);
@@ -40,14 +40,14 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
     }
 
     [Fact]
-    public void AddRecent_ReAddingAnExistingContractUpdatesTheTimeCorrectly()
+    public void AddingContract_UpdatesTheTime_WhenContractAlreadyExists()
     {
         // Arrange
         var user1 = new User() { Name = "User1" };
-        AddUserToContext(user1);
+        AddUsersToContext(user1);
 
         var contract1 = new Contract();
-        AddContractToContext(contract1);
+        AddContractsToContext(contract1);
 
         // Act
         _cut.Add(user1.Name, contract1);
@@ -64,15 +64,15 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
     }
 
     [Fact]
-    public void RemoveRecent_RemovesCorrectContract()
+    public void RemoveRecent_RemovesSpecifiedContract_WhenThereAreMultipleRecents()
     {
         // Arrange
         var user1 = new User() { Name = "User1" };
-        AddUserToContext(user1);
+        AddUsersToContext(user1);
 
         var contract1 = new Contract();
         var contract2 = new Contract();
-        AddContractToContext(contract1, contract2);
+        AddContractsToContext(contract1, contract2);
         _cut.Add(user1.Name, contract1);
         _cut.Add(user1.Name, contract2);
 
@@ -89,15 +89,15 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
     }
 
     [Fact]
-    public void RemoveContract_RemovesAllContractFromAllUser()
+    public void Removing_RemovesRecentContractFromMultipleUsers_WhenMultipleUsersHaveViewedItRecently()
     {
         // Arrange
         var user1 = new User() { Name = "User1" };
         var user2 = new User() { Name = "User2" };
-        AddUserToContext(user1, user2);
+        AddUsersToContext(user1, user2);
 
         var contract1 = new Contract();
-        AddContractToContext(contract1);
+        AddContractsToContext(contract1);
         _cut.Add(user1.Name, contract1);
         _cut.Add(user2.Name, contract1);
 
@@ -115,11 +115,11 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
     {
         // Arrange
         var user1 = new User() { Name = "User1" };
-        AddUserToContext(user1);
+        AddUsersToContext(user1);
         var contract1 = new Contract();
         var contract2 = new Contract();
-        AddContractToContext(contract1);
-        AddContractToContext(contract2);
+        AddContractsToContext(contract1);
+        AddContractsToContext(contract2);
         _cut.Add(user1.Name, contract1);
 
         // Act
@@ -135,7 +135,7 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
         _context.Dispose();
     }
 
-    private void AddUserToContext(params User[] users)
+    private void AddUsersToContext(params User[] users)
     {
         foreach (User user in users)
         {
@@ -145,7 +145,7 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
         _context.SaveChanges();
     }
 
-    private void AddContractToContext(params Contract[] contracts)
+    private void AddContractsToContext(params Contract[] contracts)
     {
         foreach (Contract contract in contracts)
         {

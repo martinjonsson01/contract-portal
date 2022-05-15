@@ -1,6 +1,4 @@
-﻿using Domain.Users;
-
-namespace Domain.Contracts;
+﻿namespace Domain.Contracts;
 
 /// <summary>
 ///     A container for a contract and when it was viewed.
@@ -8,7 +6,7 @@ namespace Domain.Contracts;
 public class RecentlyViewedContract
 {
     /// <summary>
-    /// Creates a instance of a recently viewed contract with the current time and contract id.
+    /// Creates an instance of a recently viewed contract with the current time and contract id.
     /// </summary>
     /// <param name="contractId">The viewed contract's id.</param>
     /// <param name="userId">The viewer's id.</param>
@@ -38,7 +36,7 @@ public class RecentlyViewedContract
     public Guid ContractId { get; }
 
     /// <summary>
-    /// Gets the viewers id.
+    /// Gets the viewer's id.
     /// </summary>
     public Guid UserId { get; }
 }
