@@ -31,7 +31,7 @@ public class EFRecentContractRepository : IRecentContractRepository
     /// <inheritdoc />
     public void Add(string username, Contract contract)
     {
-        User user = GetUserByUserName(username);
+        User user = GetUserByName(username);
 
         RecentlyViewedContract? recentlyViewedContract =
             user.RecentlyViewContracts.SingleOrDefault(recentContract => recentContract.ContractId == contract.Id);
@@ -71,11 +71,11 @@ public class EFRecentContractRepository : IRecentContractRepository
     /// <inheritdoc />
     public IList<RecentlyViewedContract> FetchRecentContracts(string username)
     {
-        User user = GetUserByUserName(username);
+        User user = GetUserByName(username);
         return user.RecentlyViewContracts;
     }
 
-    private User GetUserByUserName(string username)
+    private User GetUserByName(string username)
     {
         User user = Users.Include(user => user.RecentlyViewContracts).First(user => user.Name == username);
         return user;
