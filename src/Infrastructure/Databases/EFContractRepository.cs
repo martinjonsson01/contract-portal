@@ -31,9 +31,6 @@ public sealed class EFContractRepository : IContractRepository
     /// <inheritdoc />
     public IEnumerable<Contract> All => Contracts.Include(contract => contract.Tags).ToList();
 
-    /// <inheritdoc />
-    public IEnumerable<Contract> Favorites => Contracts.Where(contract => contract.IsFavorite);
-
     private DbSet<Contract> Contracts => _context.Contracts;
 
     /// <inheritdoc />

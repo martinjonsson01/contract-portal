@@ -38,6 +38,11 @@ public class User
     public DateTime LatestPaymentDate { get; set; } = DateTime.MinValue;
 
     /// <summary>
+    /// Gets favorite contracts.
+    /// </summary>
+    public ICollection<Contract> Favorites { get; init; } = new List<Contract>();
+
+    /// <summary>
     /// Gets the most recently viewed contracts.
     /// </summary>
     public IList<RecentlyViewedContract> RecentlyViewContracts { get; } = new List<RecentlyViewedContract>();

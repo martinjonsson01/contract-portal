@@ -117,16 +117,6 @@ public class ContractServiceTests
     }
 
     [Fact]
-    public void FetchFavorite_CallsFavoriteFromRepoExactlyOnce()
-    {
-        // Act
-        _cut.FetchFavorites();
-
-        // Assert
-        _mockRepo.Verify(repo => repo.Favorites, Times.Exactly(1));
-    }
-
-    [Fact]
     public void FetchingContract_ReturnsContractFromRepo_WhenContractExists()
     {
         // Arrange

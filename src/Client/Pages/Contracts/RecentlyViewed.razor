@@ -3,7 +3,7 @@
 @using System.Collections.ObjectModel
 @inject HttpClient _http
 @inject ISessionService _session
-@inherits AuthenticatedView
+@inherits UpdateOnAuthenticateView
 
 <FetchData @ref="_dataFetcher"
            TData="IEnumerable<Contract>"

@@ -4,6 +4,7 @@ using Infrastructure.Databases;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(EFDatabaseContext))]
-    partial class EFDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220512170930_MakeUsernameCaseSensitive")]
+    partial class MakeUsernameCaseSensitive
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("ContractUser", b =>
-                {
-                    b.Property<Guid>("FavoritedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FavoritesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FavoritedById", "FavoritesId");
-
-                    b.HasIndex("FavoritesId");
-
-                    b.ToTable("ContractUser");
-                });
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
                 {
@@ -63,6 +50,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsFavorite")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -86,24 +76,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contracts");
-                });
-
-            modelBuilder.Entity("Domain.Contracts.RecentlyViewedContract", b =>
-                {
-                    b.Property<Guid>("ContractId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("LastViewed")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ContractId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RecentlyViewedContracts");
                 });
 
             modelBuilder.Entity("Domain.Contracts.Tag", b =>
@@ -153,36 +125,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ContractUser", b =>
-                {
-                    b.HasOne("Domain.Users.User", null)
-                        .WithMany()
-                        .HasForeignKey("FavoritedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Contracts.Contract", null)
-                        .WithMany()
-                        .HasForeignKey("FavoritesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Contracts.RecentlyViewedContract", b =>
-                {
-                    b.HasOne("Domain.Contracts.Contract", null)
-                        .WithMany()
-                        .HasForeignKey("ContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Users.User", null)
-                        .WithMany("RecentlyViewContracts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Contracts.Tag", b =>
                 {
                     b.HasOne("Domain.Contracts.Contract", null)
@@ -195,11 +137,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
                 {
                     b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("Domain.Users.User", b =>
-                {
-                    b.Navigation("RecentlyViewContracts");
                 });
 #pragma warning restore 612, 618
         }

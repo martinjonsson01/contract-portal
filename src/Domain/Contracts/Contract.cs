@@ -1,4 +1,6 @@
-﻿namespace Domain.Contracts;
+﻿using Domain.Users;
+
+namespace Domain.Contracts;
 
 /// <summary>
 ///     A document containing negotiated discounts and benefits.
@@ -9,11 +11,6 @@ public class Contract
     /// Gets the unique identifier.
     /// </summary>
     public Guid Id { get; init; } = Guid.NewGuid();
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the contract is a favorite or not.
-    /// </summary>
-    public bool IsFavorite { get; set; }
 
     /// <summary>
     ///     Gets or sets the name of the contract.
@@ -69,4 +66,10 @@ public class Contract
     ///     Gets or sets the contact information for the supplier.
     /// </summary>
     public string SupplierContactInfo { get; set; } = "Kontaktinformation till leverantör saknas.";
+
+    // Entity Framework requires that a navigation property exists in both
+    // classes (User and Contract) when a many-to-many relation is to be genereated,
+    // and exists only for this reason.
+    // See the Entity Framework documentation for more information.
+    private ICollection<User> FavoritedBy { get; } = new List<User>();
 }

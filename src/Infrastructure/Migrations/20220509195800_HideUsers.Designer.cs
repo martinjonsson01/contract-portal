@@ -4,6 +4,7 @@ using Infrastructure.Databases;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(EFDatabaseContext))]
-    partial class EFDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220509195800_HideUsers")]
+    partial class HideUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,13 +26,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("ContractUser", b =>
                 {
-                    b.Property<Guid>("FavoritedById")
+                    b.Property<Guid>("FavoriteUsersId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FavoritesId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("FavoritedById", "FavoritesId");
+                    b.HasKey("FavoriteUsersId", "FavoritesId");
 
                     b.HasIndex("FavoritesId");
 
@@ -88,24 +90,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Contracts");
                 });
 
-            modelBuilder.Entity("Domain.Contracts.RecentlyViewedContract", b =>
-                {
-                    b.Property<Guid>("ContractId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("LastViewed")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ContractId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RecentlyViewedContracts");
-                });
-
             modelBuilder.Entity("Domain.Contracts.Tag", b =>
                 {
                     b.Property<Guid>("Id")
@@ -141,8 +125,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .UseCollation("Finnish_Swedish_CS_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -157,28 +140,13 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Users.User", null)
                         .WithMany()
-                        .HasForeignKey("FavoritedById")
+                        .HasForeignKey("FavoriteUsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Contracts.Contract", null)
                         .WithMany()
                         .HasForeignKey("FavoritesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Contracts.RecentlyViewedContract", b =>
-                {
-                    b.HasOne("Domain.Contracts.Contract", null)
-                        .WithMany()
-                        .HasForeignKey("ContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Users.User", null)
-                        .WithMany("RecentlyViewContracts")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -195,11 +163,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
                 {
                     b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("Domain.Users.User", b =>
-                {
-                    b.Navigation("RecentlyViewContracts");
                 });
 #pragma warning restore 612, 618
         }

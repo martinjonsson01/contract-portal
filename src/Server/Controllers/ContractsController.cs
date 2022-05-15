@@ -32,16 +32,6 @@ public class ContractsController : BaseApiController<ContractsController>
     }
 
     /// <summary>
-    /// Gets all favorite marked contracts.
-    /// </summary>
-    /// <returns>Favorite marked contracts.</returns>
-    [HttpGet("favorites")]
-    public IEnumerable<Contract> Favorites()
-    {
-        return _contracts.FetchFavorites();
-    }
-
-    /// <summary>
     /// Updates the contract.
     /// </summary>
     /// <param name="patchDocument">The patch to use to update the contract.</param>
