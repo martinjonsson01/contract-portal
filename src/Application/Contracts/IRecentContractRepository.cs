@@ -18,7 +18,7 @@ public interface IRecentContractRepository
     /// Adds a contract to recent for a user.
     /// </summary>
     /// <param name="username">The username of the user.</param>
-    /// <param name="contract">Possible new recent contract.</param>
+    /// <param name="contract">The recent contract.</param>
     void AddRecent(string username, Contract contract);
 
     /// <summary>
