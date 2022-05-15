@@ -1,3 +1,5 @@
+using Domain.Contracts;
+
 namespace Domain.Users;
 
 /// <summary>
@@ -34,4 +36,9 @@ public class User
     /// Gets or sets the date of the latest payment by the user. It is set to 1/1/0001 12:00:00 AM by default.
     /// </summary>
     public DateTime LatestPaymentDate { get; set; } = DateTime.MinValue;
+
+    /// <summary>
+    /// Gets favorite contracts.
+    /// </summary>
+    public ICollection<Contract> Favorites { get; init; } = new List<Contract>();
 }

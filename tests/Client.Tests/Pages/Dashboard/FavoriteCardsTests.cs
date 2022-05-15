@@ -11,8 +11,10 @@ public class FavoriteCardsTests : UITestFixture
     {
         // Arrange
         const string name = "SJ";
+        const string userName = "user";
         var contract = new Contract() { Name = name, };
-        MockHttp.When("/api/v1/Contracts/favorites").RespondJson(new[] { contract, });
+        MockHttp.When($"/api/v1/users/{userName}/favorites").RespondJson(new[] { contract, });
+        MockSession.Setup(session => session.Username).Returns(userName);
 
         // Act
         IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();
@@ -25,7 +27,9 @@ public class FavoriteCardsTests : UITestFixture
     [Fact]
     public void ShowNoFavoriteMessage_WhenThereAreNoFavorites()
     {
-        MockHttp.When("/api/v1/Contracts/favorites").RespondJson(Array.Empty<Contract>());
+        const string userName = "user";
+        MockHttp.When($"/api/v1/users/{userName}/favorites").RespondJson(Array.Empty<Contract>());
+        MockSession.Setup(session => session.Username).Returns(userName);
 
         // Act
         IRenderedComponent<FavoriteCards> cut = Context.RenderComponent<FavoriteCards>();

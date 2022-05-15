@@ -19,12 +19,6 @@ public interface IContractRepository
     IEnumerable<Contract> Recent { get; }
 
     /// <summary>
-    /// Gets all contracts marked as favorites.
-    /// </summary>
-    /// <returns>The contract with a favorite mark.</returns>
-    IEnumerable<Contract> Favorites { get; }
-
-    /// <summary>
     /// Adds a new contract to store.
     /// </summary>
     /// <param name="contract">The new contract instance.</param>
