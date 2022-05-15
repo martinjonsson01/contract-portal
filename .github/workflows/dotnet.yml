@@ -49,7 +49,7 @@ jobs:
 
   application-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 1
     needs: [ build ]
 
     steps:
@@ -82,7 +82,7 @@ jobs:
 
   domain-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 1
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
@@ -114,7 +114,7 @@ jobs:
 
   client-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 1
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
@@ -197,7 +197,7 @@ jobs:
 
   server-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 1
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
