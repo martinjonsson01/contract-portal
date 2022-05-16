@@ -10,6 +10,13 @@ function showModal(selector) {
     modal.show();
 }
 
+function registerModalCloseCallback(selector, dotNetHelper) {
+    const modalElement = document.querySelector(selector);
+    modalElement.addEventListener('hidden.bs.modal', function (event) {
+        dotNetHelper.invokeMethodAsync("OnModalClose");
+    });
+}
+
 function focusElement(selector) {
     const element = document.querySelector(selector);
     element.focus();
