@@ -11,7 +11,7 @@
     <img id="contract-thumbnail"
          src="@Contract.SupplierLogoImagePath"
          class="img-thumbnail img-fluid card-img-top rounded p-0 prodigo-card-img pointer"
-         data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)"
+         data-bs-toggle="modal" data-bs-target="#@("contract-details-" + Contract.Id)"
          @onclick="AddToRecentlyViewed"/>
 
     <div class="card-body d-flex align-items-center p-0 height-35">
@@ -20,7 +20,7 @@
 
             <div class="pt-4 pointer"
                  data-bs-toggle="modal"
-                 data-bs-target="#@("id_" + Contract.Id)"
+                 data-bs-target="#@("contract-details-" + Contract.Id)"
                  @onclick="AddToRecentlyViewed">
             </div>
 
@@ -28,13 +28,13 @@
 
                 <div class="ps-3 pointer"
                      data-bs-toggle="modal"
-                     data-bs-target="#@("id_" + Contract.Id)"
+                     data-bs-target="#@("contract-details-" + Contract.Id)"
                      @onclick="AddToRecentlyViewed">
                 </div>
 
                 <div class="text-truncate prodigo-card-title pointer"
                      data-bs-toggle="modal"
-                     data-bs-target="#@("id_" + Contract.Id)"
+                     data-bs-target="#@("contract-details-" + Contract.Id)"
                      @onclick="AddToRecentlyViewed">
 
                     <h4 class="card-title text-truncate m-0" id="contract-name">@Contract.Name</h4>
@@ -49,14 +49,14 @@
 
                 <div class="pe-3 pointer"
                      data-bs-toggle="modal"
-                     data-bs-target="#@("id_" + Contract.Id)"
+                     data-bs-target="#@("contract-details-" + Contract.Id)"
                      @onclick="AddToRecentlyViewed"></div>
 
             </div>
 
             <div class="pb-4 pointer"
                  data-bs-toggle="modal"
-                 data-bs-target="#@("id_" + Contract.Id)"
+                 data-bs-target="#@("contract-details-" + Contract.Id)"
                  @onclick="AddToRecentlyViewed">
             </div>
 
