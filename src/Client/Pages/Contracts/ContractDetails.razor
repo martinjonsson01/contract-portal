@@ -1,12 +1,13 @@
 ﻿@using Domain.Contracts
 @using System.Runtime.Serialization
+@implements IAsyncDisposable
 @inject ISessionService Session
 @inject IJSRuntime Js
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
 <!-- modal-dialog-scrollable -->
-<div class="modal w-100" id="@(("contract-details-" + Contract.Id).ToLowerInvariant())">
+<div class="modal w-100" id="@ModalId">
     <div class="modal-dialog modal-lg">
 
         <div class="modal-content @(ShouldHideDetails ? "blackout" : "")">
@@ -111,9 +112,8 @@
     {
         if (!firstRender) return;
 
-        string detailsViewSelector = $"#contract-details-{Contract.Id}".ToLowerInvariant();
         DotNetObjectReference<ContractDetails> dotNetHelper = DotNetObjectReference.Create(this);
-        await Js.InvokeVoidAsync("registerModalCloseCallback", detailsViewSelector, dotNetHelper);
+        await Js.InvokeVoidAsync("registerModalCloseCallback", $"#{ModalId}", dotNetHelper);
     }
 
     /// <summary>
@@ -124,5 +124,13 @@
     {
         NavigationManager.NavigateTo("contracts");
     }
+
+    /// <inheritdoc />
+    public async ValueTask DisposeAsync()
+    {
+        await Js.InvokeVoidAsync("closeModal", $"#{ModalId}");
+    }
+
+    private string ModalId => ("contract-details-" + Contract.Id).ToLowerInvariant();
 
 }
