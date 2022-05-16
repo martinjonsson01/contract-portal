@@ -3,7 +3,7 @@
 @inject ISessionService _session
 
 <!-- modal-dialog-scrollable -->
-<div class="modal w-100" id="@("contract-details-" + Contract.Id)">
+<div class="modal w-100" id="@(("contract-details-" + Contract.Id).ToLowerInvariant())">
     <div class="modal-dialog modal-lg">
 
         <div class="modal-content @(ShouldHideDetails ? "blackout" : "")">
