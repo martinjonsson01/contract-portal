@@ -5,6 +5,7 @@
 @using System.Security.AccessControl
 @using System.ComponentModel.DataAnnotations
 @using System.Net.Mail
+@using Application
 @inject HttpClient _http
 @inject IJSRuntime _js
 
@@ -71,30 +72,14 @@
 
     private async Task ConvertAndUploadUser()
     {
-    //Make sure email is valid
-        if (!IsValidEmail(_user.Email))
-        {
+        //Make sure email is valid
+        if (!EmailValidator.IsValidEmail(_user.Email))
             return;
-        }
 
-    // Make sure date is in UTC.
+        // Make sure date is in UTC.
         _user.LatestPaymentDate = _user.LatestPaymentDate.ToUniversalTime();
 
         await UploadUser();
-    }
-
-    private bool IsValidEmail(string email)
-    {
-        var trimmedEmail = email.Trim();
-        try
-        {
-            var addr = new MailAddress(email);
-            return addr.Address == trimmedEmail;
-        }
-        catch
-        {
-            return false;
-        }
     }
 
     private async Task UploadUser()
@@ -108,5 +93,4 @@
             _user = CreateUnspecifiedUser();
         }
     }
-
 }
