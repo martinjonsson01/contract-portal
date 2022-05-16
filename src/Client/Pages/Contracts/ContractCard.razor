@@ -57,8 +57,6 @@
 
 </div>
 
-<ContractDetails Contract="@Contract"/>
-
 @code {
 
     /// <summary>
@@ -80,25 +78,6 @@
     /// </summary>
     [Parameter]
     public EventCallback<(Guid, bool)> OnFavoriteChange { get; set; } = EventCallback<(Guid, bool)>.Empty;
-
-    /// <inheritdoc />
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender) return;
-
-        string detailsViewSelector = $"#contract-details-{Contract.Id}".ToLowerInvariant();
-        DotNetObjectReference<ContractCard> dotNetHelper = DotNetObjectReference.Create(this);
-        await Js.InvokeVoidAsync("registerModalCloseCallback", detailsViewSelector, dotNetHelper);
-    }
-
-    /// <summary>
-    /// Called when the details modal is closed.
-    /// </summary>
-    [JSInvokable]
-    public void OnModalClose()
-    {
-        NavigationManager.NavigateTo("contracts");
-    }
 
     private async Task AddToRecentlyViewed()
     {

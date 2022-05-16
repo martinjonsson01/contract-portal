@@ -18,6 +18,7 @@
             @foreach (Contract contract in contracts)
             {
                 <ContractCard Contract=@contract OnViewed="OnRecentContractAdded"/>
+                <ContractDetails Contract="@contract"/>
             }
         </div>
     </div>
