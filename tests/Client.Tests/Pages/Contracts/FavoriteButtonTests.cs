@@ -30,7 +30,7 @@ public class FavoriteButtonTests : UITestFixture
             Context.RenderComponent<FavoriteButton>(ParameterBuilder);
 
         // Assert
-        cut.Find(".bi-heart-fill").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find(".bi-heart-fill").Should().NotBeNull());
         Assert.Throws<ElementNotFoundException>(() => cut.Find(".bi-heart"));
     }
 
@@ -66,7 +66,8 @@ public class FavoriteButtonTests : UITestFixture
 
         bool eventCalled = false;
 
-        MockHttp.When($"/api/v1/users/{userName}/favorites").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
+        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
+        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(HttpStatusCode.OK);
         MockSession.Setup(session => session.Username).Returns(userName);
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>

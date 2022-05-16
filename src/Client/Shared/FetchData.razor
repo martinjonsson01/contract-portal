@@ -1,7 +1,9 @@
 ﻿@using Newtonsoft.Json
 @using System.Net
+@using JsonException = System.Text.Json.JsonException
 @typeparam TData
 @inject HttpClient _http;
+@inject ILogger<FetchData<TData>> _logger
 @inherits UpdateOnAuthenticateView
 
 @if (_errorMessage is not null && ShouldShowErrors)
@@ -80,7 +82,14 @@ else
             return;
         }
 
-        Data = await response.Content.ReadFromJsonAsync<TData>();
+        try
+        {
+            Data = await response.Content.ReadFromJsonAsync<TData>();
+        }
+        catch (JsonException exception)
+        {
+            _logger.LogError(exception, "Could not deserialize JSON");
+        }
         _errorMessage = null;
         StateHasChanged();
     }

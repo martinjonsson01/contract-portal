@@ -6,7 +6,8 @@
 @inject HttpClient Http
 @inject ISessionService Session
 
-<button class="btn p-0 white-text"
+<button id="favorite-button"
+        class="btn p-0 white-text"
         @onclick="ChangeFavorite"
         @onclick:stopPropagation="true"
         @onclick:preventDefault="true">
@@ -48,7 +49,7 @@
     {
         if (Session.IsAuthenticated)
         {
-            HttpResponseMessage response = await Http.GetAsync($"/api/v1/users/{Session.Username}/favorites/{Contract.Id}");
+            HttpResponseMessage response = await Http.GetAsync($"api/v1/users/{Session.Username}/favorites/{Contract.Id}");
             IsFavorite = response.IsSuccessStatusCode;
         }
         else
@@ -56,7 +57,6 @@
             IsFavorite = false;
         }
         await InvokeAsync(StateHasChanged);
-        base.OnInitialized();
     }
 
     private async Task ChangeFavorite()
@@ -65,7 +65,7 @@
         {
             FavoriteContractDto favoriteContract = new() { UserName = Session.Username, ContractId = Contract.Id, IsFavorite = !IsFavorite };
 
-            HttpResponseMessage response = await Http.PostAsJsonAsync($"/api/v1/users/{Session.Username}/favorites", favoriteContract);
+            HttpResponseMessage response = await Http.PostAsJsonAsync($"api/v1/users/{Session.Username}/favorites", favoriteContract);
             if (response.IsSuccessStatusCode)
             {
                 IsFavorite = !IsFavorite;
