@@ -3,11 +3,14 @@
 @using Domain.Contracts
 @using System.Text
 @using Application.Users
-@inject HttpClient _http
-@inject ISessionService _session
+@inject HttpClient Http
+@inject ISessionService Session
 
-<button class="btn p-0 white-text" @onclick="ChangeFavorite">
-    @if (isFavorite)
+<button class="btn p-0 white-text"
+        @onclick="ChangeFavorite"
+        @onclick:stopPropagation="true"
+        @onclick:preventDefault="true">
+    @if (IsFavorite)
     {
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
@@ -38,18 +41,19 @@
     /// <summary>
     /// Whether the contract is marked as favorite.
     /// </summary>
-    private bool isFavorite { get; set; }
+    private bool IsFavorite { get; set; }
 
+    /// <inheritdoc />
     protected override async void OnInitialized()
     {
-        if (_session.IsAuthenticated)
+        if (Session.IsAuthenticated)
         {
-            HttpResponseMessage response = await _http.GetAsync($"/api/v1/users/{_session.Username}/favorites/{Contract.Id}");
-            isFavorite = response.IsSuccessStatusCode;
+            HttpResponseMessage response = await Http.GetAsync($"/api/v1/users/{Session.Username}/favorites/{Contract.Id}");
+            IsFavorite = response.IsSuccessStatusCode;
         }
         else
         {
-            isFavorite = false;
+            IsFavorite = false;
         }
         await InvokeAsync(StateHasChanged);
         base.OnInitialized();
@@ -57,16 +61,16 @@
 
     private async Task ChangeFavorite()
     {
-        if (!string.IsNullOrEmpty(_session.Username))
+        if (!string.IsNullOrEmpty(Session.Username))
         {
-            FavoriteContractDto favoriteContract = new() { UserName = _session.Username, ContractId = Contract.Id, IsFavorite = !isFavorite };
+            FavoriteContractDto favoriteContract = new() { UserName = Session.Username, ContractId = Contract.Id, IsFavorite = !IsFavorite };
 
-            HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{_session.Username}/favorites", favoriteContract);
+            HttpResponseMessage response = await Http.PostAsJsonAsync($"/api/v1/users/{Session.Username}/favorites", favoriteContract);
             if (response.IsSuccessStatusCode)
             {
-                isFavorite = !isFavorite;
+                IsFavorite = !IsFavorite;
                 await InvokeAsync(StateHasChanged);
-                await OnFavoriteChange.InvokeAsync((Contract.Id, isFavorite));
+                await OnFavoriteChange.InvokeAsync((Contract.Id, IsFavorite));
             }
         }
     }
