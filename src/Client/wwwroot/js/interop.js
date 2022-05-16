@@ -21,3 +21,8 @@ function registerActivityCallback(dotNetHelper) {
 function scrollToElement(selector) {
     document.querySelector(selector).scrollIntoView({behavior: 'smooth', block: 'start'});
 }
+
+function showModal(selector) {
+    const modal = new bootstrap.Modal(document.querySelector(selector), {});
+    modal.show();
+}
