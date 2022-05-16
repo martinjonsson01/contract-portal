@@ -4,6 +4,12 @@
     modal.hide();
 }
 
+function showModal(selector) {
+    const modalElement = document.querySelector(selector);
+    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+    modal.show();
+}
+
 function focusElement(selector) {
     const element = document.querySelector(selector);
     element.focus();
@@ -20,9 +26,4 @@ function registerActivityCallback(dotNetHelper) {
 
 function scrollToElement(selector) {
     document.querySelector(selector).scrollIntoView({behavior: 'smooth', block: 'start'});
-}
-
-function showModal(selector) {
-    const modal = new bootstrap.Modal(document.querySelector(selector), {});
-    modal.show();
 }
