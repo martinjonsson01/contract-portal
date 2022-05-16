@@ -45,6 +45,12 @@ else
     public bool ShouldShowErrors { get; set; } = true;
 
     /// <summary>
+    /// Called after the component has been rendered with the fetched data.
+    /// </summary>
+    [Parameter]
+    public EventCallback AfterRenderedWithData { get; set; } = EventCallback.Empty;
+
+    /// <summary>
     /// The data that has been fetched.
     /// </summary>
     public TData? Data { get; set; }
@@ -56,6 +62,8 @@ else
     {
         if (Data is null && _errorMessage is null)
             await Fetch(Url);
+        if (Data is not null)
+            await AfterRenderedWithData.InvokeAsync();
     }
 
     /// <summary>
