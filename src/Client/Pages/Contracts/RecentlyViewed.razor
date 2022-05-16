@@ -6,7 +6,7 @@
 @inherits UpdateOnAuthenticateView
 
 <FetchData TData="Contract[]"
-           Url="/api/v1/contracts/recent"
+           Url="api/v1/contracts/recent"
            Context="recents"
            ShouldShowErrors="@_session.IsAuthenticated">
 
