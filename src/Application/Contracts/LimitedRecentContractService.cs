@@ -1,4 +1,5 @@
-﻿using Domain.Contracts;
+﻿using Application.Users;
+using Domain.Contracts;
 
 namespace Application.Contracts;
 
@@ -28,30 +29,43 @@ public class LimitedRecentContractService : IRecentContractService
     /// <inheritdoc />
     public IEnumerable<Contract> FetchRecentContracts(string username)
     {
-        var contracts = new List<Contract>();
-        foreach (RecentlyViewedContract recentContract in _recent.FetchRecentContracts(username)
-                     .OrderByDescending(recentContract => recentContract.LastViewed))
+        try
         {
-            contracts.Add(_contract.FetchContract(recentContract.ContractId) ??
-                          throw new ContractDoesNotExistException());
-        }
+            var contracts = new List<Contract>();
+            foreach (RecentlyViewedContract recentContract in _recent.FetchRecentContracts(username)
+                         .OrderByDescending(recentContract => recentContract.LastViewed))
+            {
+                contracts.Add(_contract.FetchContract(recentContract.ContractId) ??
+                              throw new ContractDoesNotExistException());
+            }
 
-        return contracts;
+            return contracts;
+        }
+        catch (UserDoesNotExistException)
+        {
+            return new List<Contract>();
+        }
     }
 
     /// <inheritdoc />
     public void Add(string username, Contract contract)
     {
-        _recent.Add(username, contract);
+        try
+        {
+            _recent.Add(username, contract);
 
-        const int recentAmountMax = 3;
-        if (Size(username) <= recentAmountMax)
-            return;
+            const int recentAmountMax = 3;
+            if (Size(username) <= recentAmountMax)
+                return;
 
-        RecentlyViewedContract toRemove = _recent
-            .FetchRecentContracts(username)
-            .OrderBy(recentContract => recentContract.LastViewed)
-            .First();
-        _recent.Remove(toRemove);
+            RecentlyViewedContract toRemove = _recent
+                .FetchRecentContracts(username)
+                .OrderBy(recentContract => recentContract.LastViewed)
+                .First();
+            _recent.Remove(toRemove);
+        }
+        catch (UserDoesNotExistException)
+        {
+        }
     }
 }
