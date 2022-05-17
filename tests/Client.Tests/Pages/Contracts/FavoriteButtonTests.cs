@@ -31,7 +31,8 @@ public class FavoriteButtonTests : UITestFixture
 
         // Assert
         cut.WaitForAssertion(() => cut.Find(".bi-heart-fill").Should().NotBeNull());
-        Assert.Throws<ElementNotFoundException>(() => cut.Find(".bi-heart"));
+        Action tryFind = () => cut.Find(".bi-heart");
+        cut.WaitForAssertion(() => tryFind.Should().Throw<ElementNotFoundException>());
     }
 
     [Fact]
@@ -53,8 +54,9 @@ public class FavoriteButtonTests : UITestFixture
         cut.WaitForElement(".bi-heart");
 
         // Assert
-        cut.Find(".bi-heart").Should().NotBeNull();
-        Assert.Throws<ElementNotFoundException>(() => cut.Find(".bi-heart-fill"));
+        cut.WaitForAssertion(() => cut.Find(".bi-heart").Should().NotBeNull());
+        Action tryFind = () => cut.Find(".bi-heart-fill");
+        cut.WaitForAssertion(() => tryFind.Should().Throw<ElementNotFoundException>());
     }
 
     [Fact]
@@ -82,7 +84,7 @@ public class FavoriteButtonTests : UITestFixture
         await cut.Find("#favorite-button").ClickAsync(new MouseEventArgs());
 
         // Assert
-        Assert.True(eventCalled);
+        eventCalled.Should().BeTrue();
     }
 
     [Fact]

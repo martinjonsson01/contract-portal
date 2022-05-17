@@ -21,8 +21,11 @@ public class ListInputTests : UITestFixture
 
         const string newValue = "new value";
 
+        string listItemInput = ".list-item-input";
+        cut.WaitForElement(listItemInput);
+
         // Act
-        cut.Find(".list-item-input").Change(new ChangeEventArgs { Value = newValue, });
+        cut.Find(listItemInput).Change(new ChangeEventArgs { Value = newValue, });
 
         // Assert
         items.Should().Contain(newValue);
