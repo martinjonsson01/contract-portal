@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(EFDatabaseContext))]
-    [Migration("20220509195800_HideUsers")]
-    partial class HideUsers
+    [Migration("20220511080406_AddManyToManyRecents")]
+    partial class AddManyToManyRecents
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,19 +24,19 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("UserFavoriteContracts", b =>
+            modelBuilder.Entity("UserRecentlyViewedContracts", b =>
                 {
-                    b.Property<Guid>("FavoriteUsersId")
+                    b.Property<Guid>("RecentOfId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FavoritesId")
+                    b.Property<Guid>("RecentlyViewContractsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("FavoriteUsersId", "FavoritesId");
+                    b.HasKey("RecentOfId", "RecentlyViewContractsId");
 
-                    b.HasIndex("FavoritesId");
+                    b.HasIndex("RecentlyViewContractsId");
 
-                    b.ToTable("UserFavoriteContracts");
+                    b.ToTable("UserRecentlyViewedContracts");
                 });
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
@@ -64,6 +64,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Instructions")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsFavorite")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -127,26 +130,22 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("UserFavoriteContracts", b =>
+            modelBuilder.Entity("UserRecentlyViewedContracts", b =>
                 {
                     b.HasOne("Domain.Users.User", null)
                         .WithMany()
-                        .HasForeignKey("FavoriteUsersId")
+                        .HasForeignKey("RecentOfId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Contracts.Contract", null)
                         .WithMany()
-                        .HasForeignKey("FavoritesId")
+                        .HasForeignKey("RecentlyViewContractsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

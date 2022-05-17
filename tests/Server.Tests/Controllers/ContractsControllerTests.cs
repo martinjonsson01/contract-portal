@@ -1,9 +1,6 @@
 ﻿using Application.Contracts;
-
 using Domain.Contracts;
-
 using FluentAssertions.Execution;
-
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +14,9 @@ public class ContractsControllerTests
     public ContractsControllerTests()
     {
         _mockContracts = new Mock<IContractService>();
-        _cut = new ContractsController(Mock.Of<ILogger<ContractsController>>(), _mockContracts.Object);
+        _cut = new ContractsController(
+            Mock.Of<ILogger<ContractsController>>(),
+            _mockContracts.Object);
     }
 
     [Fact]

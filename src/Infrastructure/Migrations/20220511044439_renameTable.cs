@@ -9,17 +9,17 @@ namespace Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ContractUser_Users_FavoriteUsersId",
-                table: "ContractUser");
+                name: "FK_UserFavoriteContracts_Users_FavoriteUsersId",
+                table: "UserFavoriteContracts");
 
             migrationBuilder.RenameColumn(
                 name: "FavoriteUsersId",
-                table: "ContractUser",
+                table: "UserFavoriteContracts",
                 newName: "FavoritedById");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ContractUser_Users_FavoritedById",
-                table: "ContractUser",
+                name: "FK_UserFavoriteContracts_Users_FavoritedById",
+                table: "UserFavoriteContracts",
                 column: "FavoritedById",
                 principalTable: "Users",
                 principalColumn: "Id",
@@ -29,17 +29,17 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ContractUser_Users_FavoritedById",
-                table: "ContractUser");
+                name: "FK_UserFavoriteContracts_Users_FavoritedById",
+                table: "UserFavoriteContracts");
 
             migrationBuilder.RenameColumn(
                 name: "FavoritedById",
-                table: "ContractUser",
+                table: "UserFavoriteContracts",
                 newName: "FavoriteUsersId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ContractUser_Users_FavoriteUsersId",
-                table: "ContractUser",
+                name: "FK_UserFavoriteContracts_Users_FavoriteUsersId",
+                table: "UserFavoriteContracts",
                 column: "FavoriteUsersId",
                 principalTable: "Users",
                 principalColumn: "Id",
