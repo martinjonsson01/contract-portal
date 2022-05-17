@@ -1,42 +1,44 @@
 ﻿@using Domain.Contracts
 @using Application.Contracts
 @using System.Collections.ObjectModel
+@using Blazorise.Extensions
 @inject HttpClient _http
 @inject ISessionService _session
 @inherits UpdateOnAuthenticateView
+@if (_session.Username is not (null or ""))
+{
+    <FetchData @ref="_dataFetcher"
+               TData="IEnumerable<Contract>"
+               Url="@FetchUrl"
+               Context="recents"
+               ShouldShowErrors="@_session.IsAuthenticated">
 
-<FetchData @ref="_dataFetcher"
-           TData="IEnumerable<Contract>"
-           Url="@FetchUrl"
-           Context="recents"
-           ShouldShowErrors="@_session.IsAuthenticated">
+        <!-- No loading indicator. -->
+        <LoadingIndicator></LoadingIndicator>
 
-    <!-- No loading indicator. -->
-    <LoadingIndicator></LoadingIndicator>
-
-    <ChildContent>
-        @if (ShouldShowRecent)
-        {
-            if (_dataFetcher.Data != null && _dataFetcher.Data.Any())
+        <ChildContent>
+            @if (ShouldShowRecent)
             {
-                <h3>Senast besökta</h3>
+                if (_dataFetcher.Data != null && _dataFetcher.Data.Any())
+                {
+                    <h3>Senast besökta</h3>
 
-                <div class="container-fluid">
-                    <div class="d-flex flex-wrap justify-content-center">
-                        @foreach (var contract in _dataFetcher.Data)
-                        {
-                            <div>
-                                <ContractCard Contract=@contract/>
-                            </div>
-                        }
+                    <div class="container-fluid">
+                        <div class="d-flex flex-wrap justify-content-center">
+                            @foreach (var contract in _dataFetcher.Data)
+                            {
+                                <div>
+                                    <ContractCard Contract=@contract/>
+                                </div>
+                            }
+                        </div>
                     </div>
-                </div>
-                <hr/>
+                    <hr/>
+                }
             }
-        }
-    </ChildContent>
-</FetchData>
-
+        </ChildContent>
+    </FetchData>
+}
 @code {
         const string BaseUrl = "/api/v1/users/";
         const string UrlRecentSuffix = "/recents";
@@ -67,6 +69,8 @@
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
+        if (_session.Username is null or "")
+            return;
         await _http.PostAsJsonAsync(FetchUrl, newRecent);
         await _dataFetcher.Fetch(FetchUrl);
         await InvokeAsync(StateHasChanged);
