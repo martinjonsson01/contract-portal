@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Application.Contracts;
+using Application.Users;
 using Domain.Contracts;
 using Domain.Users;
 using Infrastructure.Databases;
@@ -127,6 +128,19 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
         _context.SaveChanges();
 
         _context.Users.First(user => user.Name == user1.Name).RecentlyViewContracts.Should().ContainSingle();
+    }
+
+    [Fact]
+    public void FetchingRecent_ThrowUserDoesNotExist_WhenUserToFetchFromDoesNotExist()
+    {
+        // Arrange
+        var user1 = new User();
+
+        // Act
+        Action fetch = () => _cut.FetchRecentContracts(user1.Name);
+
+        // Assert
+        fetch.Should().Throw<UserDoesNotExistException>();
     }
 
     public void Dispose()
