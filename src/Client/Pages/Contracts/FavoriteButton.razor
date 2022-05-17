@@ -6,7 +6,7 @@
 @inject HttpClient _http
 @inject ISessionService _session
 
-<button class="btn p-0 white-text" @onclick="ChangeFavorite">
+<button id="favorite-button" class="btn p-0 white-text" @onclick="ChangeFavorite">
     @if (isFavorite)
     {
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
@@ -40,11 +40,12 @@
     /// </summary>
     private bool isFavorite { get; set; }
 
+    /// <inheritdoc />
     protected override async void OnInitialized()
     {
         if (_session.IsAuthenticated)
         {
-            HttpResponseMessage response = await _http.GetAsync($"/api/v1/users/{_session.Username}/favorites/{Contract.Id}");
+            HttpResponseMessage response = await _http.GetAsync($"api/v1/users/{_session.Username}/favorites/{Contract.Id}");
             isFavorite = response.IsSuccessStatusCode;
         }
         else
@@ -52,7 +53,6 @@
             isFavorite = false;
         }
         await InvokeAsync(StateHasChanged);
-        base.OnInitialized();
     }
 
     private async Task ChangeFavorite()
@@ -61,7 +61,7 @@
         {
             FavoriteContractDto favoriteContract = new() { UserName = _session.Username, ContractId = Contract.Id, IsFavorite = !isFavorite };
 
-            HttpResponseMessage response = await _http.PostAsJsonAsync($"/api/v1/users/{_session.Username}/favorites", favoriteContract);
+            HttpResponseMessage response = await _http.PostAsJsonAsync($"api/v1/users/{_session.Username}/favorites", favoriteContract);
             if (response.IsSuccessStatusCode)
             {
                 isFavorite = !isFavorite;

@@ -19,8 +19,11 @@ public class LoginTests : UITestFixture
 
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
 
+        string logoutButton = "#logout-button";
+        cut.WaitForElement(logoutButton);
+
         // Act
-        await cut.Find("#logout-button").ClickAsync(new MouseEventArgs());
+        await cut.Find(logoutButton).ClickAsync(new MouseEventArgs());
 
         // Assert
         MockSession.Verify(session => session.EndAsync(), Times.Once);

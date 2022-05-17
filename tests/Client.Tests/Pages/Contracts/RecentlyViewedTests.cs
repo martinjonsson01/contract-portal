@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using Blazorise;
 using Client.Pages.Contracts;
 using Domain.Contracts;
 
@@ -44,17 +45,17 @@ public class RecentlyViewedTests : UITestFixture
     public void RecentlyViewedComponent_ShouldShowContract_WhenThereAreAtLeastOneRecent()
     {
         // Arrange
-        const string username = "test";
+        const string userName = "user";
         const string name = "SJ";
-        MockSession.Setup(session => session.Username).Returns(username);
         var contract = new Contract() { Name = name };
-        MockHttp.When($"/api/v1/users/{username}/recents").RespondJson(new[] { contract, });
+        MockHttp.When($"/api/v1/users/{userName}/recents").RespondJson(new[] { contract });
+        MockSession.Setup(session => session.Username).Returns(userName);
 
         // Act
         IRenderedComponent<RecentlyViewed> cut = Context.RenderComponent<RecentlyViewed>();
-        cut.WaitForElement(".card");
+        cut.WaitForElement("#recently-viewed-container");
 
         // Assert
-        cut.Find(".card").TextContent.Should().Contain(name);
+        cut.WaitForAssertion(() => cut.Find(".card").TextContent.Should().Contain(name));
     }
 }

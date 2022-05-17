@@ -28,7 +28,7 @@ public class AdminPageTests : UITestFixture
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
 
         // Assert
-        cut.Find(".loading-indicator").TextContent.Should().BeEquivalentTo("Laddar...");
+        cut.WaitForAssertion(() => cut.Find(".loading-indicator").TextContent.Should().BeEquivalentTo("Laddar..."));
     }
 
     [Fact]

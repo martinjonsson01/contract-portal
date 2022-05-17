@@ -23,7 +23,7 @@
                 {
                     <h3>Senast besökta</h3>
 
-                    <div class="container-fluid">
+                    <div id="recently-viewed-container" class="container-fluid">
                         <div class="d-flex flex-wrap justify-content-center">
                             @foreach (var contract in _dataFetcher.Data)
                             {
@@ -39,8 +39,9 @@
         </ChildContent>
     </FetchData>
 }
+
 @code {
-        const string BaseUrl = "/api/v1/users/";
+        const string BaseUrl = "api/v1/users/";
         const string UrlRecentSuffix = "/recents";
 
     private FetchData<IEnumerable<Contract>> _dataFetcher = null!;

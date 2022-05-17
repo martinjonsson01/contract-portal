@@ -2,12 +2,13 @@
 @using Newtonsoft.Json
 @inject HttpClient _http
 @inject ISessionService _session
+@inherits UpdateOnAuthenticateView
 
 <div id="favorite-contracts" style="padding-top: 30px;">
     <h3>Favoriter</h3>
     <FetchData @ref="_dataFetcher"
                TData="List<Contract>"
-               Url=@($"/api/v1/users/{_session.Username}/favorites")
+               Url=@($"api/v1/users/{_session.Username}/favorites")
                Context="contracts">
         @{
             var contractsList = contracts.ToList();
