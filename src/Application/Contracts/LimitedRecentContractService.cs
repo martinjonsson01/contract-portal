@@ -50,22 +50,16 @@ public class LimitedRecentContractService : IRecentContractService
     /// <inheritdoc />
     public void Add(string username, Contract contract)
     {
-        try
-        {
-            _recent.Add(username, contract);
+        _recent.Add(username, contract);
 
-            const int recentAmountMax = 3;
-            if (Size(username) <= recentAmountMax)
-                return;
+        const int recentAmountMax = 3;
+        if (Size(username) <= recentAmountMax)
+            return;
 
-            RecentlyViewedContract toRemove = _recent
-                .FetchRecentContracts(username)
-                .OrderBy(recentContract => recentContract.LastViewed)
-                .First();
-            _recent.Remove(toRemove);
-        }
-        catch (UserDoesNotExistException)
-        {
-        }
+        RecentlyViewedContract toRemove = _recent
+            .FetchRecentContracts(username)
+            .OrderBy(recentContract => recentContract.LastViewed)
+            .First();
+        _recent.Remove(toRemove);
     }
 }

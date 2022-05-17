@@ -1,4 +1,5 @@
 ﻿using Application.Contracts;
+using Application.Users;
 using Blazorise.Extensions;
 using Domain.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,13 @@ public class RecentsController : BaseApiController<RecentsController>
     [HttpPost]
     public void Add(string username, Contract contract)
     {
-        _recent.Add(username, contract);
+        try
+        {
+            _recent.Add(username, contract);
+        }
+        catch (UserDoesNotExistException)
+        {
+            BadRequest();
+        }
     }
 }
