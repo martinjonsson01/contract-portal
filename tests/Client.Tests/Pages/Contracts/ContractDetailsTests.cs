@@ -158,7 +158,7 @@ public class ContractDetailsTests : UITestFixture
 
         // Assert
         Action findPrompt = () => cut.Find(".register-prompt");
-        findPrompt.Should().NotThrow();
+        cut.WaitForAssertion(() => findPrompt.Should().NotThrow());
     }
 
     [Fact]
@@ -175,7 +175,7 @@ public class ContractDetailsTests : UITestFixture
 
         // Assert
         Action findPrompt = () => cut.Find(".register-prompt");
-        findPrompt.Should().Throw<ElementNotFoundException>();
+        cut.WaitForAssertion(() => findPrompt.Should().Throw<ElementNotFoundException>());
     }
 
     [Fact]
@@ -193,7 +193,7 @@ public class ContractDetailsTests : UITestFixture
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
 
         // Assert
-        cut.Find("#additional-document").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find("#additional-document").Should().NotBeNull());
     }
 
     [Fact]
@@ -212,6 +212,6 @@ public class ContractDetailsTests : UITestFixture
         Action findLink = () => cut.Find("#additional-document");
 
         // Assert
-        findLink.Should().Throw<ElementNotFoundException>();
+        cut.WaitForAssertion(() => findLink.Should().Throw<ElementNotFoundException>());
     }
 }

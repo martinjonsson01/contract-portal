@@ -19,7 +19,7 @@ public class NavMenuTests : UITestFixture
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
 
         // Assert
-        cut.Find("#login-button").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find("#login-button").Should().NotBeNull());
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class NavMenuTests : UITestFixture
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
 
         // Assert
-        cut.Find("#logout-button").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find("#logout-button").Should().NotBeNull());
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public class NavMenuTests : UITestFixture
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
 
         // Assert
-        cut.Find("#logged-in").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find("#logged-in").Should().NotBeNull());
     }
 
     [Fact]
@@ -60,6 +60,6 @@ public class NavMenuTests : UITestFixture
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
 
         // Assert
-        cut.Find("#admin-nav-item").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find("#admin-nav-item").Should().NotBeNull());
     }
 }
