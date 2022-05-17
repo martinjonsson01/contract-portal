@@ -208,7 +208,7 @@
 
         try
         {
-            HttpResponseMessage response = await _http.PostAsync($"/api/v1/{endPoint}", content);
+            HttpResponseMessage response = await _http.PostAsync($"api/v1/{endPoint}", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -227,7 +227,7 @@
     {
         string json = JsonConvert.SerializeObject(_contract);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await _http.PutAsync($"/api/v1/contracts/{_contract.Id}", content);
+        HttpResponseMessage response = await _http.PutAsync($"api/v1/contracts/{_contract.Id}", content);
         if (response.IsSuccessStatusCode)
         {
             await OnContractUploaded.InvokeAsync(_contract);
