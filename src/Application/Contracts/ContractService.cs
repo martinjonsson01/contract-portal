@@ -35,24 +35,12 @@ public class ContractService : IContractService
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> FetchRecentContracts()
-    {
-        return _repo.Recent;
-    }
-
-    /// <inheritdoc />
     public void Add(Contract contract)
     {
         if (_repo.All.Any(otherContract => contract.Id.Equals(otherContract.Id)))
             throw new IdentifierAlreadyTakenException();
 
         _repo.Add(contract);
-    }
-
-    /// <inheritdoc />
-    public void AddRecent(Contract contract)
-    {
-        _repo.AddRecent(contract);
     }
 
     /// <inheritdoc />

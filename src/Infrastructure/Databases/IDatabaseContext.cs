@@ -22,6 +22,11 @@ internal interface IDatabaseContext
     DbSet<User> Users { get; set; }
 
     /// <summary>
+    /// Gets or sets the <see cref="RecentlyViewedContract"/>s in the database.
+    /// </summary>
+    DbSet<RecentlyViewedContract> RecentlyViewedContracts { get; set; }
+
+    /// <summary>
     /// Test.
     /// </summary>
     /// <returns>Testing.</returns>

@@ -41,4 +41,9 @@ public class User
     /// Gets favorite contracts.
     /// </summary>
     public ICollection<Contract> Favorites { get; init; } = new List<Contract>();
+
+    /// <summary>
+    /// Gets the most recently viewed contracts.
+    /// </summary>
+    public IList<RecentlyViewedContract> RecentlyViewContracts { get; } = new List<RecentlyViewedContract>();
 }

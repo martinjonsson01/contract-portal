@@ -40,6 +40,7 @@ public static class InjectionExtensions
                    ServiceLifetime.Transient)
                .AddScoped<IContractRepository, EFContractRepository>()
                .AddScoped<IUserRepository, EFUserRepository>()
+               .AddScoped<IRecentContractRepository, EFRecentContractRepository>()
                .AddSingleton<IStatusUpdateRepository, InMemoryStatusUpdateRepository>()
                .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
                {

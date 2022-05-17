@@ -1,9 +1,7 @@
 ﻿using System;
-
 using Application.Contracts;
 using Application.Exceptions;
 using Application.Search;
-
 using Domain.Contracts;
 
 namespace Application.Tests.Contracts;
@@ -32,21 +30,6 @@ public class ContractServiceTests
 
         // Assert
         contracts.Should().HaveCount(numberOfContracts);
-    }
-
-    [Fact]
-    public void FetchRecentContracts_ReturnsOnlyRecentContractsFromTheDatabase()
-    {
-        // Arrange
-        const int numberOfContracts = 3;
-        List<Contract> mockContracts = new Faker<Contract>().Generate(numberOfContracts);
-        _mockRepo.Setup(repository => repository.Recent).Returns(mockContracts);
-
-        // Act
-        IEnumerable<Contract> contracts = _cut.FetchRecentContracts();
-
-        // Assert
-        _mockRepo.Verify(repo => repo.Recent, Times.AtLeastOnce);
     }
 
     [Fact]
