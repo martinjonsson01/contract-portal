@@ -29,7 +29,9 @@ public sealed class EFContractRepository : IContractRepository
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> All => Contracts.Include(contract => contract.Tags).ToList();
+    public IEnumerable<Contract> All => Contracts.Include(contract => contract.Tags)
+                                                 .Include(contract => contract.AdditionalDocument)
+                                                 .ToList();
 
     private DbSet<Contract> Contracts => _context.Contracts;
 
