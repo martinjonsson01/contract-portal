@@ -1,5 +1,7 @@
 ﻿using Application.StatusUpdates;
 
+using Domain.StatusUpdates;
+
 namespace Application.Tests.StatusUpdates;
 
 public class NotificationServiceTests
@@ -11,5 +13,18 @@ public class NotificationServiceTests
     {
         _mockRepo = new Mock<IStatusUpdateRepository>();
         _cut = new NotificationService(_mockRepo.Object);
+    }
+
+    [Fact]
+    public void AddingNotificationCallsRepoOnce()
+    {
+        // Arrange
+        var statusUpdate = new StatusUpdate();
+
+        // Act
+        _cut.Add(statusUpdate);
+
+        // Assert
+        _mockRepo.Verify(repo => repo.Add(statusUpdate), Times.Once);
     }
 }
