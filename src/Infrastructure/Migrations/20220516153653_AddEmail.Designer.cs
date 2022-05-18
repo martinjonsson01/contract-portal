@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(EFDatabaseContext))]
-    [Migration("20220509195800_HideUsers")]
-    partial class HideUsers
+    [Migration("20220516153653_AddEmail")]
+    partial class AddEmail
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,19 +24,19 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("UserFavoriteContracts", b =>
+            modelBuilder.Entity("ContractUser", b =>
                 {
-                    b.Property<Guid>("FavoriteUsersId")
+                    b.Property<Guid>("FavoritedById")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FavoritesId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("FavoriteUsersId", "FavoritesId");
+                    b.HasKey("FavoritedById", "FavoritesId");
 
                     b.HasIndex("FavoritesId");
 
-                    b.ToTable("UserFavoriteContracts");
+                    b.ToTable("ContractUser");
                 });
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
@@ -120,12 +120,17 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("LatestPaymentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .UseCollation("Finnish_Swedish_CS_AS");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -136,11 +141,11 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("UserFavoriteContracts", b =>
+            modelBuilder.Entity("ContractUser", b =>
                 {
                     b.HasOne("Domain.Users.User", null)
                         .WithMany()
-                        .HasForeignKey("FavoriteUsersId")
+                        .HasForeignKey("FavoritedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

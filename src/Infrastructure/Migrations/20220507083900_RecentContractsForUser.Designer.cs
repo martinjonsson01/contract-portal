@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(EFDatabaseContext))]
-    [Migration("20220509195800_HideUsers")]
-    partial class HideUsers
+    [Migration("20220507083900_RecentContractsForUser")]
+    partial class RecentContractsForUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,21 +23,6 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("UserFavoriteContracts", b =>
-                {
-                    b.Property<Guid>("FavoriteUsersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FavoritesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FavoriteUsersId", "FavoritesId");
-
-                    b.HasIndex("FavoritesId");
-
-                    b.ToTable("UserFavoriteContracts");
-                });
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
                 {
@@ -65,6 +50,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsFavorite")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -85,7 +73,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Contracts");
                 });
@@ -127,28 +120,16 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("UserFavoriteContracts", b =>
+            modelBuilder.Entity("Domain.Contracts.Contract", b =>
                 {
                     b.HasOne("Domain.Users.User", null)
-                        .WithMany()
-                        .HasForeignKey("FavoriteUsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Contracts.Contract", null)
-                        .WithMany()
-                        .HasForeignKey("FavoritesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("RecentlyViewContracts")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Domain.Contracts.Tag", b =>
@@ -163,6 +144,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
                 {
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("Domain.Users.User", b =>
+                {
+                    b.Navigation("RecentlyViewContracts");
                 });
 #pragma warning restore 612, 618
         }

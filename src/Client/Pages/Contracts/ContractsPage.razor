@@ -1,6 +1,7 @@
 ﻿@page "/contracts"
 @page "/contracts/{ContractId}"
 @using Domain.Contracts
+@using Blazorise.Extensions
 @inject IJSRuntime Js
 
 <SearchBar OnQueryChange="OnQueryChanged"/>
@@ -17,7 +18,7 @@
         <div class="d-flex flex-wrap justify-content-center">
             @foreach (Contract contract in contracts)
             {
-                <ContractCard Contract=@contract OnViewed="OnRecentContractAdded"/>
+                <ContractCard Contract=@contract OnViewed="OnRecentlyViewed"/>
                 <ContractDetails Contract="@contract"/>
             }
         </div>
@@ -37,13 +38,14 @@
 
     private FetchData<IEnumerable<Contract>> _dataFetcher = null!;
 
-    private void OnRecentContractAdded(Contract viewedContract)
+    private void OnRecentlyViewed(Contract viewedContract)
     {
         _recentlyViewed.AddViewedContract(viewedContract);
     }
 
     private async Task OnQueryChanged(string query)
     {
+        _recentlyViewed.ShouldShowRecent = query.IsNullOrEmpty();
         string urlSafeQuery = Uri.EscapeDataString(query);
         var fetchUrl = $"api/v1/contracts?query={urlSafeQuery}";
         await _dataFetcher.Fetch(fetchUrl);
