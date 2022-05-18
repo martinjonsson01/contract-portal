@@ -4,17 +4,13 @@ using AngleSharp.Dom;
 
 using Application.Users;
 
-using Blazored.SessionStorage;
-
 using Client.Pages.Contracts;
-using Client.Services.Authentication;
 
 using Domain.Contracts;
-using Domain.Users;
 
 using FluentAssertions.Execution;
 
-using Microsoft.Extensions.DependencyInjection;
+using Document = Domain.Contracts.Document;
 
 namespace Client.Tests.Pages.Contracts;
 
@@ -184,7 +180,7 @@ public class ContractDetailsTests : UITestFixture
         // Arrange
         await SessionStorage.SetItemAsync("user", new AuthenticateResponse(LoggedInUser, FakeToken));
 
-        var contract = new Contract { AdditionalDocument = "/link/to/additional.document", };
+        var contract = new Contract { AdditionalDocument = new Document(), };
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
@@ -202,7 +198,7 @@ public class ContractDetailsTests : UITestFixture
         // Arrange
         await SessionStorage.SetItemAsync("user", new AuthenticateResponse(LoggedInUser, FakeToken));
 
-        var contract = new Contract { AdditionalDocument = string.Empty, };
+        var contract = new Contract { AdditionalDocument = null, };
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
