@@ -1,14 +1,17 @@
 @page "/dashboard"
 @inherits AuthenticationRequiredView
 
-<div class="container-fluid">
-    <div class="dashboard-item-box" style="padding: 10px">
+<div class="container-fluid " style="padding: 50px; margin: 0;">
+    <div style="padding: 10px;">
         <h2 class="text-center">Välkommen till Prodigo Portal!</h2>
     </div>
-    <div class="dashboard-item-box d-flex justify-content-center top-margin ">
-        <StatusUpdates/>
+    <div class="d-flex justify-content-center">
+        <div class="dashboard-item-box">
+            <FavoriteCards/>
+        </div>
+        <div class="dashboard-item-box d-flex justify-content-center">
+            <StatusUpdates/>
+        </div>
     </div>
-    <div class="dashboard-item-box">
-        <FavoriteCards/>
-    </div>
+
 </div>
