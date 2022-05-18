@@ -28,7 +28,7 @@ jobs:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget-1
+            force-new-${{ runner.os }}-nuget-
 
       - name: Cache build
         uses: actions/cache@v3
