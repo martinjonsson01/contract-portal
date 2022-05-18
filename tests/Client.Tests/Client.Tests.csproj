@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="Blazored.SessionStorage.TestExtensions" Version="2.2.0" />
     <PackageReference Include="Bogus" Version="34.0.2" />
-    <PackageReference Include="bunit" Version="1.6.4" />
+    <PackageReference Include="bunit" Version="1.7.7" />
     <PackageReference Include="coverlet.msbuild" Version="3.1.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
