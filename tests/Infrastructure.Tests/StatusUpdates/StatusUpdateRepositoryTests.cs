@@ -32,6 +32,6 @@ public class StatusUpdateRepositoryTests : IClassFixture<TestDatabaseFixture>
         IEnumerable<StatusUpdate> statusUpdates = _cut.All;
 
         // Assert
-        statusUpdate.Should().NotBeNull();
+        statusUpdates.Should().NotBeNull();
     }
 }
