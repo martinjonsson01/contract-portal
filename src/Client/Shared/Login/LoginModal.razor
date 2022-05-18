@@ -27,7 +27,11 @@
                         <InputText id="username" class="form-control" placeholder="Användarnamn" @bind-Value="@_user.Name"/>
                         <InputText id="password" type="password" class="form-control mt-3" placeholder="Lösenord" @bind-Value="@_user.Password"/>
 
-                        @if (_logInFailed)
+                        @if (_logInInProgress)
+                        {
+                            <LoadingIndicator/>
+                        }
+                        else if (_logInFailed)
                         {
                             <p class="text-danger">Inloggningen misslyckades</p>
                         }
@@ -45,10 +49,13 @@
 
     User _user = new (){ Name = "", Password = "", };
     bool _logInFailed = false;
+    bool _logInInProgress = false;
 
     private async Task ValidateUser()
     {
+        _logInInProgress = true;
         HttpResponseMessage response = await _http.PostAsJsonAsync("api/v1/users/authenticate", _user);
+        _logInInProgress = false;
         if (response.IsSuccessStatusCode)
         {
             _logInFailed = false;
