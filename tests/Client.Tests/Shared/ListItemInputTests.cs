@@ -9,6 +9,11 @@ namespace Client.Tests.Shared;
 
 public class ListItemInputTests : UITestFixture
 {
+    public ListItemInputTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public async Task Input_DoesNotTriggerValueChanged_WhenValueIsSameAsPreviousAsync()
     {

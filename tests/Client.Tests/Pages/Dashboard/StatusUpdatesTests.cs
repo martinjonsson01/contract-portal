@@ -6,6 +6,11 @@ namespace Client.Tests.Pages.Dashboard;
 
 public class StatusUpdatesTests : UITestFixture
 {
+    public StatusUpdatesTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void StatusUpdates_DisplaysFourNotifications_WhenServerReturnsFourStatusUpdates()
     {

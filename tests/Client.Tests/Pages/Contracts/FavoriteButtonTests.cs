@@ -12,6 +12,11 @@ namespace Client.Tests.Pages.Contracts;
 
 public class FavoriteButtonTests : UITestFixture
 {
+    public FavoriteButtonTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void ContractCard_ShowsFavoriteIcon_WhenContractIsFavoriteMarked()
     {

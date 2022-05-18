@@ -7,6 +7,11 @@ namespace Client.Tests.Shared;
 
 public class ListInputTests : UITestFixture
 {
+    public ListInputTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void InputTyped_UpdatesValueInList_WhenNewValueIsInput()
     {

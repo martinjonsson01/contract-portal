@@ -4,10 +4,17 @@ using Application.Users;
 
 using Client.Shared;
 
+using Xunit.Abstractions;
+
 namespace Client.Tests.Shared;
 
 public class NavMenuTests : UITestFixture
 {
+    public NavMenuTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public async Task NavMenu_DisplaysLoginButton_WhenUserNotLoggedIn()
     {

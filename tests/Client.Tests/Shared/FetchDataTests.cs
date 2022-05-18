@@ -6,6 +6,11 @@ namespace Client.Tests.Shared;
 
 public class FetchDataTests : UITestFixture
 {
+    public FetchDataTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Theory]
     [InlineData(HttpStatusCode.Unauthorized)]
     [InlineData(HttpStatusCode.Forbidden)]

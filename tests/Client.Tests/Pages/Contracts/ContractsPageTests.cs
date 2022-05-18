@@ -10,6 +10,11 @@ namespace Client.Tests.Pages.Contracts;
 
 public class ContractsPageTests : UITestFixture
 {
+    public ContractsPageTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void ContractPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
     {

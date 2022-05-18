@@ -12,6 +12,11 @@ namespace Client.Tests.Pages.Admin;
 
 public class AdminPageTests : UITestFixture
 {
+    public AdminPageTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void AdminPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
     {

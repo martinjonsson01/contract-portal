@@ -15,6 +15,11 @@ namespace Client.Tests.Pages.Admin;
 
 public class ContractTableTests : UITestFixture
 {
+    public ContractTableTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void AddingContract_RendersTheNewContract()
     {

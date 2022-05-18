@@ -10,6 +10,11 @@ namespace Client.Tests.Shared.Login;
 
 public class LoginTests : UITestFixture
 {
+    public LoginTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public async Task PressLogout_EndsSession_WhenUserWasAuthenticated()
     {

@@ -16,6 +16,11 @@ namespace Client.Tests.Pages.Contracts;
 
 public class ContractDetailsTests : UITestFixture
 {
+    public ContractDetailsTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public async Task InspirationalImage_IsShown_WhenItExists()
     {
