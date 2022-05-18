@@ -11,6 +11,12 @@
             }
         </InputSelect>
     </div>
+    <div class="mb-3">
+        <label for="text" class="form-label">Informations text</label>
+        <InputText id="text" class="form-control" placeholder="Notifikationens innehåll" @bind-Value="@_statusUpdate.Text"/>
+    </div>
+    <button type="submit" class="btn btn-primary mb-3">Skicka</button>
+
 </EditForm>
 
 
@@ -21,6 +27,7 @@
     /// </summary>
     [Parameter]
     public EventCallback<StatusUpdate> OnNotificationSent { get; set; } = EventCallback<StatusUpdate>.Empty;
+
     private StatusUpdate _statusUpdate = CreateEmptyStatusUpdate();
 
     private static StatusUpdate CreateEmptyStatusUpdate()
