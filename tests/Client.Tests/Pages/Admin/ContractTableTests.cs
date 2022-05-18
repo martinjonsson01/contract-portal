@@ -58,7 +58,7 @@ public class ContractTableTests : UITestFixture
         Action add = () => cut.Instance.AddOrUpdate(newContract);
 
         // Assert
-        add.Should().NotThrow();
+        cut.WaitForAssertion(() => add.Should().NotThrow());
     }
 
     [Fact]

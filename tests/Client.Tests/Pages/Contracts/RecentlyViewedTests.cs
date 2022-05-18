@@ -23,7 +23,7 @@ public class RecentlyViewedTests : UITestFixture
         IRenderedComponent<RecentlyViewed> cut = Context.RenderComponent<RecentlyViewed>();
 
         // Assert
-        cut.Markup.Should().Be(string.Empty);
+        cut.WaitForAssertion(() => cut.Markup.Should().Be(string.Empty));
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public class RecentlyViewedTests : UITestFixture
         IRenderedComponent<RecentlyViewed> cut = Context.RenderComponent<RecentlyViewed>();
 
         // Assert
-        cut.Markup.Should().Be(string.Empty);
+        cut.WaitForAssertion(() => cut.Markup.Should().Be(string.Empty));
     }
 
     [Fact]

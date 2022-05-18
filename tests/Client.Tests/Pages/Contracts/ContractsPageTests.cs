@@ -40,9 +40,8 @@ public class ContractsPageTests : UITestFixture
 
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
-        cut.WaitForElement(".card");
 
         // Assert
-        cut.Find(".card").TextContent.Should().Contain(name);
+        cut.WaitForAssertion(() => cut.Find(".card").TextContent.Should().Contain(name));
     }
 }

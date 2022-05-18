@@ -27,14 +27,14 @@ public class ListItemInputTests : UITestFixture
             cut = Context.RenderComponent<ListItemInput<string>>(ParameterBuilder);
         cut.Render();
 
-        string listItemInput = ".list-item-input";
+        const string listItemInput = ".list-item-input";
         cut.WaitForElement(listItemInput);
 
         // Act
         await cut.Find(listItemInput).ChangeAsync(new ChangeEventArgs { Value = item, }).ConfigureAwait(false);
 
         // Assert
-        called.Should().BeFalse();
+        cut.WaitForAssertion(() => called.Should().BeFalse());
     }
 
     [Fact]
@@ -52,6 +52,6 @@ public class ListItemInputTests : UITestFixture
         Action render = () => cut.Render();
 
         // Assert
-        render.Should().NotThrow();
+        cut.WaitForAssertion(() => render.Should().NotThrow());
     }
 }

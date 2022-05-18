@@ -26,7 +26,7 @@ public class StatusUpdatesTests : UITestFixture
         cut.WaitForElement(notification);
 
         // Assert
-        cut.FindAll(notification).Should().HaveCount(statusUpdates.Count);
+        cut.WaitForAssertion(() => cut.FindAll(notification).Should().HaveCount(statusUpdates.Count));
     }
 
     [Fact]

@@ -91,9 +91,12 @@ public class ContractDetailsTests : UITestFixture
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
+        const string accordionBody = ".accordion-body";
+
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
-        IElement? faqElement = cut.FindAll(".accordion-body").ToList()
+        cut.WaitForElement(accordionBody);
+        IElement? faqElement = cut.FindAll(accordionBody).ToList()
                                   .Find(p => p.InnerHtml.Contains(faqText, StringComparison.CurrentCulture));
 
         // Assert
@@ -111,9 +114,12 @@ public class ContractDetailsTests : UITestFixture
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
+        const string accordionItem = ".accordion-item";
+
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
-        IElement? titleElement = cut.FindAll(".accordion-item").ToList()
+        cut.WaitForElement(accordionItem);
+        IElement? titleElement = cut.FindAll(accordionItem).ToList()
                                     .Find(p => p.InnerHtml.Contains("faq-title", StringComparison.CurrentCulture));
 
         // Assert
@@ -131,9 +137,12 @@ public class ContractDetailsTests : UITestFixture
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
+        const string accordionItem = ".accordion-item";
+
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
-        IElement? titleElement = cut.FindAll(".accordion-item").ToList()
+        cut.WaitForElement(accordionItem);
+        IElement? titleElement = cut.FindAll(accordionItem).ToList()
                                     .Find(p => p.InnerHtml.Contains("faq-title", StringComparison.CurrentCulture));
 
         // Assert

@@ -25,9 +25,9 @@ public class ListInputTests : UITestFixture
         cut.WaitForElement(listItemInput);
 
         // Act
-        cut.Find(listItemInput).Change(new ChangeEventArgs { Value = newValue, });
+        cut.WaitForAssertion(() => cut.Find(listItemInput).Change(new ChangeEventArgs { Value = newValue, }));
 
         // Assert
-        items.Should().Contain(newValue);
+        cut.WaitForAssertion(() => items.Should().Contain(newValue));
     }
 }

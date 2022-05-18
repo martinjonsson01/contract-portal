@@ -26,6 +26,6 @@ public class LoginTests : UITestFixture
         await cut.Find(logoutButton).ClickAsync(new MouseEventArgs());
 
         // Assert
-        MockSession.Verify(session => session.EndAsync(), Times.Once);
+        cut.WaitForAssertion(() => MockSession.Verify(session => session.EndAsync(), Times.Once));
     }
 }
