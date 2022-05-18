@@ -35,7 +35,7 @@
         return new StatusUpdate
         {
             Alert = AlertLevel.Information,
-            Timestamp = DateTime.Now,
+            Timestamp = DateTime.UtcNow,
             Text = string.Empty,
         };
     }
