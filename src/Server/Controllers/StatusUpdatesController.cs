@@ -2,6 +2,7 @@
 
 using Domain.StatusUpdates;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -43,6 +44,9 @@ public class StatusUpdatesController : BaseApiController<StatusUpdatesController
     /// </summary>
     /// <param name="statusUpdate">The status update to add.</param>
     /// <returns>If the status update was successfully added.</returns>
+    [HttpPut]
+    [Authorize("AdminOnly")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Create([FromBody] StatusUpdate statusUpdate)
     {
         _statusUpdates.Add(statusUpdate);
