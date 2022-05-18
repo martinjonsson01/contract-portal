@@ -14,7 +14,10 @@
 
     <div class="mb-3">
         <label for="contract-title" class="form-label">Titel</label>
-        <InputText id="contract-title" class="form-control" placeholder="Kontraktets namn" @bind-Value="@_contract.Name"/>
+        <InputText id="contract-title"
+                   class="form-control"
+                   placeholder="Kontraktets namn"
+                   @bind-Value="@_contract.Name"/>
     </div>
     <div class="mb-3">
         <label for="contract-description" class="form-label">Beskrivning</label>
@@ -32,11 +35,17 @@
     </div>
     <div class="mb-3">
         <label for="contract-banner" class="form-label">Banderoll till kontrakt</label>
-        <InputFile id="contract-banner" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e => OnFileChosen(e, ref _inspirationalContent))"/>
+        <InputFile id="contract-banner"
+                   class="form-control"
+                   accept=".png, .jpg, .jpeg, .gif"
+                   OnChange="(e => OnFileChosen(e, ref _inspirationalContent))"/>
     </div>
     <div class="mb-3">
         <label for="document" class="form-label">Ytterligare dokument eller bild</label>
-        <InputFile id="document" class="form-control" accept=".pdf, .docx, .xlsx, .png, .jpg, .jpeg, .gif" OnChange="(e => OnFileChosen(e, ref _additionalDocumentContent))"/>
+        <InputFile id="document"
+                   class="form-control"
+                   accept=".pdf, .docx, .xlsx, .png, .jpg, .jpeg, .gif"
+                   OnChange="(e => OnFileChosen(e, ref _additionalDocumentContent))"/>
     </div>
     <div class="mb-3">
         <label for="contract-faq" class="form-label">Vanliga frågor</label>
@@ -57,11 +66,17 @@
 
     <div class="mb-3">
         <label for="supplier-name" class="form-label">Leverantörens namn</label>
-        <InputTextArea id="supplier-name" class="form-control" placeholder="T.ex. Prodigo" @bind-Value="@_contract.SupplierName"/>
+        <InputTextArea id="supplier-name"
+                       class="form-control"
+                       placeholder="T.ex. Prodigo"
+                       @bind-Value="@_contract.SupplierName"/>
     </div>
     <div class="mb-3">
         <label for="supplier-contact-info" class="form-label">Kontaktinformation för leverantören</label>
-        <InputTextArea id="supplier-contact-info" class="form-control" placeholder="T.ex. namn, e-mail eller telefonnummer" @bind-Value="@_contract.SupplierContactInfo"/>
+        <InputTextArea id="supplier-contact-info"
+                       class="form-control"
+                       placeholder="T.ex. namn, e-mail eller telefonnummer"
+                       @bind-Value="@_contract.SupplierContactInfo"/>
     </div>
     <div class="mb-3">
         <label for="supplier-description" class="form-label">Om leverantören</label>
@@ -72,7 +87,10 @@
     </div>
     <div class="mb-4">
         <label for="supplier-logo" class="form-label">Leverantörens logotyp</label>
-        <InputFile id="supplier-logo" class="form-control" accept=".png, .jpg, .jpeg, .gif" OnChange="(e => OnFileChosen(e, ref _supplierLogoContent))"/>
+        <InputFile id="supplier-logo"
+                   class="form-control"
+                   accept=".png, .jpg, .jpeg, .gif"
+                   OnChange="(e => OnFileChosen(e, ref _supplierLogoContent))"/>
     </div>
 
     <!-- Prevent implicit submission of the form -->
@@ -94,11 +112,11 @@
 
     private Contract _contract = CreateEmptyContract();
 
-    private MultipartFormDataContent _supplierLogoContent = new MultipartFormDataContent();
+    private MultipartFormDataContent _supplierLogoContent = new();
 
-    private MultipartFormDataContent _inspirationalContent = new MultipartFormDataContent();
+    private MultipartFormDataContent _inspirationalContent = new();
 
-    private MultipartFormDataContent _additionalDocumentContent = new MultipartFormDataContent();
+    private MultipartFormDataContent _additionalDocumentContent = new();
 
         private const string MinFormHeight = "5rem";
 
