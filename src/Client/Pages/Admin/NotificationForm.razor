@@ -1,10 +1,26 @@
 ﻿@using Domain.StatusUpdates
 
 <h4>Skicka ut ny notifikation</h4>
-<EditForm Model="@_statusUpdate"></EditForm>
+<EditForm Model="@_statusUpdate">
+    <div class="mb-3">
+        <label for="alert" class="form-label">Notifikations typ</label>
+        <InputSelect id="alert" class="form-control" @bind-Value="@_statusUpdate.Alert">
+            @foreach (var alertOption in  Enum.GetValues(typeof(AlertLevel)))
+            {
+                <option value="@alertOption">@alertOption</option>
+            }
+        </InputSelect>
+    </div>
+</EditForm>
 
 
 @code {
+
+    /// <summary>
+    /// Called when a StatusUpdate has been submitted successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<StatusUpdate> OnNotificationSent { get; set; } = EventCallback<StatusUpdate>.Empty;
     private StatusUpdate _statusUpdate = CreateEmptyStatusUpdate();
 
     private static StatusUpdate CreateEmptyStatusUpdate()

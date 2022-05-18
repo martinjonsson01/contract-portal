@@ -1,5 +1,6 @@
 @page "/admin"
 @using Domain.Contracts
+@using Domain.StatusUpdates
 @using Domain.Users
 @inherits AuthenticationRequiredView
 
@@ -69,6 +70,11 @@
     private async Task OnUserOpeningForEdit(User user)
     {
         await _userForm.EditUserAsync(user);
+    }
+
+    private void AddNotificationToTable(StatusUpdate obj)
+    {
+        Console.WriteLine("hlloe");
     }
 
 }
