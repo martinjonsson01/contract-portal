@@ -29,7 +29,7 @@
                 <UserTable @ref="@_userTable" UserOpeningForEdit="@OnUserOpeningForEdit"/>
             </TabPanel>
             <TabPanel Name="notifications">
-                <NotificationForm @ref="_notificationForm" OnNotificationSent="AddNotificationToTable"/>
+                <NotificationForm @ref="_notificationForm" />
             </TabPanel>
         </Content>
     </Tabs>
@@ -70,11 +70,6 @@
     private async Task OnUserOpeningForEdit(User user)
     {
         await _userForm.EditUserAsync(user);
-    }
-
-    private void AddNotificationToTable(StatusUpdate obj)
-    {
-        Console.WriteLine("hlloe");
     }
 
 }
