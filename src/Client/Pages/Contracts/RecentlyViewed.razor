@@ -5,7 +5,7 @@
 @inject HttpClient _http
 @inject ISessionService _session
 @inherits UpdateOnAuthenticateView
-@if (_session.Username is not (null or ""))
+@if (_session.IsAuthenticated)
 {
     <FetchData @ref="_dataFetcher"
                TData="IEnumerable<Contract>"
@@ -62,7 +62,7 @@
         }
     }
 
-    private string FetchUrl => BaseUrl + _session.Username + UrlRecentSuffix;
+    private string FetchUrl => BaseUrl + _session.UserId + UrlRecentSuffix;
 
 
     /// <summary>

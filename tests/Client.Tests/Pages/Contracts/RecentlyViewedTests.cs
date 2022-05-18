@@ -15,11 +15,11 @@ public class RecentlyViewedTests : UITestFixture
     public void RecentlyViewedComponent_ShouldSayNothing_WhenUserIsNotLoggedIn()
     {
         // Arrange
-        const string username = "";
+        var userId = Guid.Empty;
         const string name = "SJ";
         var contract = new Contract() { Name = name };
-        MockSession.Setup(session => session.Username).Returns(username);
-        MockHttp.When($"/api/v1/users/{username}/recents").RespondJson(new[] { contract });
+        MockSession.Setup(session => session.IsAuthenticated).Returns(false);
+        MockHttp.When($"/api/v1/users/{userId}/recents").RespondJson(new[] { contract });
 
         // Act
         IRenderedComponent<RecentlyViewed> cut = Context.RenderComponent<RecentlyViewed>();
@@ -32,9 +32,9 @@ public class RecentlyViewedTests : UITestFixture
     public void RecentlyViewedComponent_ShouldSayNothing_WhenThereAreNoRecentlyViewed()
     {
         // Arrange
-        const string username = "test";
-        MockSession.Setup(session => session.Username).Returns(username);
-        MockHttp.When($"/api/v1/users/{username}/recents").RespondJson(Array.Empty<object>());
+        var userId = Guid.NewGuid();
+        MockSession.Setup(session => session.UserId).Returns(userId);
+        MockHttp.When($"/api/v1/users/{userId}/recents").RespondJson(Array.Empty<object>());
 
         // Act
         IRenderedComponent<RecentlyViewed> cut = Context.RenderComponent<RecentlyViewed>();
@@ -44,14 +44,15 @@ public class RecentlyViewedTests : UITestFixture
     }
 
     [Fact]
-    public void RecentlyViewedComponent_ShouldShowContract_WhenThereAreAtLeastOneRecent()
+    public void RecentlyViewedComponent_ShouldShowContract_WhenThereIsAtLeastOneRecent()
     {
         // Arrange
-        const string userName = "user";
+        var userId = Guid.NewGuid();
         const string name = "SJ";
         var contract = new Contract() { Name = name };
-        MockHttp.When($"/api/v1/users/{userName}/recents").RespondJson(new[] { contract });
-        MockSession.Setup(session => session.Username).Returns(userName);
+        MockHttp.When($"/api/v1/users/{userId}/recents").RespondJson(new[] { contract });
+        MockSession.Setup(session => session.UserId).Returns(userId);
+        MockSession.Setup(session => session.IsAuthenticated).Returns(true);
 
         // Act
         IRenderedComponent<RecentlyViewed> cut = Context.RenderComponent<RecentlyViewed>();
