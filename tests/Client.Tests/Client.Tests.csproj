@@ -16,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazor-Analytics" Version="3.11.0" />
     <PackageReference Include="Blazored.SessionStorage.TestExtensions" Version="2.2.0" />
     <PackageReference Include="Bogus" Version="34.0.2" />
     <PackageReference Include="bunit" Version="1.7.7" />
