@@ -37,4 +37,15 @@ public class StatusUpdatesController : BaseApiController<StatusUpdatesController
     {
         return _statusUpdates.FetchAll();
     }
+
+    /// <summary>
+    /// Creates a new status update.
+    /// </summary>
+    /// <param name="statusUpdate">The status update to add.</param>
+    /// <returns>If the status update was successfully added.</returns>
+    public IActionResult Create([FromBody] StatusUpdate statusUpdate)
+    {
+        _statusUpdates.Add(statusUpdate);
+        return Ok();
+    }
 }
