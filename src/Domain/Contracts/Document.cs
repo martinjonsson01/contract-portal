@@ -11,6 +11,11 @@ public class Document
     public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
+    /// Gets or sets the identifier of the <see cref="Contract"/> this document belongs to.
+    /// </summary>
+    public Guid ContractId { get; set; } = Guid.NewGuid();
+
+    /// <summary>
     /// Gets or sets where to find the document.
     /// </summary>
     public string Path { get; set; } = string.Empty;
