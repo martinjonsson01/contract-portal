@@ -1,5 +1,7 @@
 ﻿using Application.Documents;
 
+using Domain.Contracts;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,14 +13,14 @@ namespace Server.Controllers;
 [Route("api/v1/[controller]")]
 public class DocumentsController : BaseApiController<DocumentsController>
 {
-    private readonly IDocumentRepository _documents;
+    private readonly IDocumentService _documents;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocumentsController"/> class.
     /// </summary>
     /// <param name="logger">The logging provider.</param>
-    /// <param name="documents">The place to store document.</param>
-    public DocumentsController(ILogger<DocumentsController> logger, IDocumentRepository documents)
+    /// <param name="documents">A way of handling documents.</param>
+    public DocumentsController(ILogger<DocumentsController> logger, IDocumentService documents)
         : base(logger)
     {
         _documents = documents;
@@ -27,23 +29,25 @@ public class DocumentsController : BaseApiController<DocumentsController>
     /// <summary>
     /// Uploads a new document.
     /// </summary>
-    /// <returns>The identifier of the stored document.</returns>
+    /// <returns>The stored document.</returns>
     /// <response code="400">The uploaded file is not a valid document.</response>
     [HttpPost]
-    [Produces("text/plain")]
     [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<string>> UploadDocumentAsync()
+    public async Task<ActionResult<Document>> UploadDocumentAsync()
     {
         IFormFile file = Request.Form.Files[0];
         if (file is null)
             throw new ArgumentNullException(nameof(file));
 
-        Logger.LogInformation("Trying to upload a document file: {Name}", file.Name);
+        Logger.LogInformation("Trying to upload a document file: {Name}", file.FileName);
         try
         {
-            string documentName = await _documents.StoreAsync(file.OpenReadStream()).ConfigureAwait(false);
-            return Ok($"/documents/{documentName}");
+            Document document = await _documents.StoreAsync(file.FileName, file.OpenReadStream()).ConfigureAwait(false);
+
+            // Update path to match controller API endpoint.
+            document.Path = $"/documents/{document.Path}";
+            return Ok(document);
         }
         catch (InvalidDocumentException e)
         {

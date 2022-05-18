@@ -4,6 +4,7 @@ using Infrastructure.Databases;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(EFDatabaseContext))]
-    partial class EFDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220518061114_CreateDocumentEntity")]
+    partial class CreateDocumentEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,6 +43,9 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AdditionalDocumentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -81,6 +86,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AdditionalDocumentId");
+
                     b.ToTable("Contracts");
                 });
 
@@ -88,9 +95,6 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ContractId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -102,9 +106,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ContractId")
-                        .IsUnique();
 
                     b.ToTable("Document");
                 });
@@ -193,13 +194,13 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Contracts.Document", b =>
+            modelBuilder.Entity("Domain.Contracts.Contract", b =>
                 {
-                    b.HasOne("Domain.Contracts.Contract", null)
-                        .WithOne("AdditionalDocument")
-                        .HasForeignKey("Domain.Contracts.Document", "ContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Domain.Contracts.Document", "AdditionalDocument")
+                        .WithMany()
+                        .HasForeignKey("AdditionalDocumentId");
+
+                    b.Navigation("AdditionalDocument");
                 });
 
             modelBuilder.Entity("Domain.Contracts.RecentlyViewedContract", b =>
@@ -228,8 +229,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
                 {
-                    b.Navigation("AdditionalDocument");
-
                     b.Navigation("Tags");
                 });
 

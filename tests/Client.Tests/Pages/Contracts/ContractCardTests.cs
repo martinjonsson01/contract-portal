@@ -6,6 +6,11 @@ namespace Client.Tests.Pages.Contracts;
 
 public class ContractCardTests : UITestFixture
 {
+    public ContractCardTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void ContractCard_ContainsGivenInformation()
     {

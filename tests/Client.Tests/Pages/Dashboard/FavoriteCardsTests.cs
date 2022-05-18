@@ -6,6 +6,11 @@ namespace Client.Tests.Pages.Dashboard;
 
 public class FavoriteCardsTests : UITestFixture
 {
+    public FavoriteCardsTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void ContainsCards_WhenThereAreFavoritesToShow()
     {
