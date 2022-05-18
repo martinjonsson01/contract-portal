@@ -36,6 +36,6 @@ public class EFStatusUpdatesRepository : IStatusUpdateRepository
     {
         _ = StatusUpdates.Add(statusUpdate);
         _ = _context.SaveChanges();
-        _logger.LogInformation("Added a new status update");
+        _logger.LogInformation("Added a new status update with alert-level {Level} and text {Text} to the database", statusUpdate.Alert, statusUpdate.Text);
     }
 }
