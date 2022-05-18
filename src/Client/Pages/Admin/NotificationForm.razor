@@ -1,0 +1,20 @@
+﻿@using Domain.StatusUpdates
+
+<h4>Skicka ut ny notifikation</h4>
+<EditForm Model="@_statusUpdate"></EditForm>
+
+
+@code {
+    private StatusUpdate _statusUpdate = CreateEmptyStatusUpdate();
+
+    private static StatusUpdate CreateEmptyStatusUpdate()
+    {
+        return new StatusUpdate
+        {
+            Alert = AlertLevel.Information,
+            Timestamp = DateTime.Now,
+            Text = string.Empty,
+        };
+    }
+
+}

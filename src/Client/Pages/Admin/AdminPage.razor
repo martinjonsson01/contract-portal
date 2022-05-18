@@ -28,7 +28,7 @@
                 <UserTable @ref="@_userTable" UserOpeningForEdit="@OnUserOpeningForEdit"/>
             </TabPanel>
             <TabPanel Name="notifications">
-              Hello
+                <NotificationForm @ref="_notificationForm" OnNotificationSent="AddNotificationToTable"/>
             </TabPanel>
         </Content>
     </Tabs>
@@ -43,6 +43,7 @@
     private UserTable _userTable = null!;
     private ContractForm _contractForm = null!;
     private UserForm _userForm = null!;
+    private NotificationForm _notificationForm = null!;
 
     private void AddContractToTable(Contract contract)
     {
