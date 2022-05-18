@@ -3,9 +3,9 @@
     <div class="d-flex w-100 justify-content-between">
         <div class="d-flex flex-row align-content-center">
             @GetIcon()
-            <p>@Status.Text</p>
+            <p>@Status?.Text</p>
         </div>
-        <small>@Status.Timestamp.ToRelativeDate()</small>
+        <small>@Status?.Timestamp.ToRelativeDate()</small>
     </div>
 </div>
 
@@ -15,7 +15,7 @@
     /// The status update to render.
     /// </summary>
     [Parameter, EditorRequired,]
-    public StatusUpdate Status { get; set; } = null!;
+    public StatusUpdate? Status { get; set; }
 
     private RenderFragment _infoIcon = @<span class="oi oi-info"></span>;
 
@@ -27,6 +27,9 @@
 
     private RenderFragment GetIcon()
     {
+        if (Status is null)
+            throw new ArgumentException("Parameter not specified", nameof(Status));
+
         return Status.Alert switch
         {
             AlertLevel.Information => _infoIcon,
@@ -39,6 +42,9 @@
 
     private string GetAlertClass()
     {
+        if (Status is null)
+            throw new ArgumentException("Parameter not specified", nameof(Status));
+
         return Status.Alert switch {
 
             AlertLevel.Information => "info",
