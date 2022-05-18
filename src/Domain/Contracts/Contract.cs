@@ -50,7 +50,7 @@ public class Contract
     /// <summary>
     ///     Gets or sets an additional document from the supplier.
     /// </summary>
-    public string AdditionalDocument { get; set; } = string.Empty;
+    public Document? AdditionalDocument { get; set; }
 
     /// <summary>
     ///     Gets or sets the supplier name.

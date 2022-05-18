@@ -1,14 +1,16 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Net.Http.Json;
-using Blazorise;
-using Client.Pages.Contracts;
+﻿using Client.Pages.Contracts;
+
 using Domain.Contracts;
 
-namespace Client.Tests.Pages;
+namespace Client.Tests.Pages.Contracts;
 
 public class RecentlyViewedTests : UITestFixture
 {
+    public RecentlyViewedTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void RecentlyViewedComponent_ShouldSayNothing_WhenUserIsNotLoggedIn()
     {
@@ -23,7 +25,7 @@ public class RecentlyViewedTests : UITestFixture
         IRenderedComponent<RecentlyViewed> cut = Context.RenderComponent<RecentlyViewed>();
 
         // Assert
-        cut.Markup.Should().Be(string.Empty);
+        cut.WaitForAssertion(() => cut.Markup.Should().Be(string.Empty));
     }
 
     [Fact]
@@ -38,7 +40,7 @@ public class RecentlyViewedTests : UITestFixture
         IRenderedComponent<RecentlyViewed> cut = Context.RenderComponent<RecentlyViewed>();
 
         // Assert
-        cut.Markup.Should().Be(string.Empty);
+        cut.WaitForAssertion(() => cut.Markup.Should().Be(string.Empty));
     }
 
     [Fact]
