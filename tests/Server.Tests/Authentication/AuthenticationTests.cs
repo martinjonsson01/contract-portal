@@ -32,7 +32,8 @@ public class AuthenticationTests
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
         var user = new User { Name = "user name", Password = passwordHash, };
         var userInfo = new User() { Name = "user name", Password = password, };
-        _mockRepo.Setup(repo => repo.Fetch(user.Name)).Returns(user);
+        _mockRepo.Setup(repo => repo.Fetch(user.Id)).Returns(user);
+        _mockRepo.Setup(repo => repo.FromName(user.Name)).Returns(user);
 
         // Act
         IActionResult result = _cut.Authenticate(userInfo);
