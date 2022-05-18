@@ -79,6 +79,10 @@ footer {
     max-width: 75%;
 }
 
+article {
+    min-height: 100vh;
+}
+
 .btn-primary {
     color: var(--prodigo-red);
     background-color: var(--prodigo-white);
