@@ -23,13 +23,13 @@ public class AuthIntegrationTests : IntegrationTest
     {
         get
         {
-            var user = new User();
+            var user = new User { Name = "Unique name", };
             var contract = new Contract();
             return new List<object[]>
-                {
-                    new object[] { $"/api/v1/users/{user.Id}", user, },
-                    new object[] { $"/api/v1/contracts/{contract.Id}", contract, },
-                };
+            {
+                new object[] { $"/api/v1/users/{user.Id}", user, },
+                new object[] { $"/api/v1/contracts/{contract.Id}", contract, },
+            };
         }
     }
 
@@ -48,8 +48,7 @@ public class AuthIntegrationTests : IntegrationTest
 
             return new List<object[]>
             {
-                new object[] { contractEndpoint, createContract, },
-                new object[] { usersEndpoint, createUser, },
+                new object[] { contractEndpoint, createContract, }, new object[] { usersEndpoint, createUser, },
             };
         }
     }
