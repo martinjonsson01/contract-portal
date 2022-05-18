@@ -48,7 +48,7 @@
     {
         string json = JsonConvert.SerializeObject(_statusUpdate);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await _http.PutAsync($"api/v1/status-updates/{_statusUpdate.Id}", content);
+        HttpResponseMessage response = await _http.PutAsync($"api/v1/status-updates", content);
         if (response.IsSuccessStatusCode)
         {
             await OnNotificationSent.InvokeAsync(_statusUpdate);

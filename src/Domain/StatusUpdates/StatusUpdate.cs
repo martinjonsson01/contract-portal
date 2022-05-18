@@ -6,11 +6,6 @@
 public class StatusUpdate
 {
     /// <summary>
-    /// Gets the unique identifier.
-    /// </summary>
-    public Guid Id { get; init; } = Guid.NewGuid();
-
-    /// <summary>
     /// Gets or sets at which level of urgency the information in this status update is.
     /// </summary>
     public AlertLevel Alert { get; set; } = AlertLevel.Information;
