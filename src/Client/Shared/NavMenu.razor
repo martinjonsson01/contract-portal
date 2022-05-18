@@ -5,8 +5,11 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #222939 ">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Prodigo Portal</a>
-        <button class="navbar-toggler" type="button"  data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand"
+           href="@LogoUrl">
+            Prodigo Portal
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -32,7 +35,6 @@
                 </li>
                 @if (_session.Username == "admin")
                 {
-
                     <li id="admin-nav-item" class="nav-item">
                         <NavLink class="nav-link" href="admin">
                             <span class="" aria-hidden="true"></span> Admin
@@ -40,7 +42,12 @@
                     </li>
                 }
             </ul>
-            <Login />
+            <Login/>
         </div>
     </div>
 </nav>
+
+@code
+{
+    private string LogoUrl => _session.IsAuthenticated ? "dashboard" : "";
+}
