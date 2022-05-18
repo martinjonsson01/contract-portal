@@ -127,7 +127,7 @@ jobs:
           /p:Include=\"[Client]*\"
           /p:CoverletOutput=../../CoverageResults/
           /p:ExcludeByFile=\"**/Program.cs\"
-          /p:ExcludeByAttribute=\"Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute%2cExcludeFromCodeCoverageAttribute\"
+          /p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
 
   infrastructure-tests:
     runs-on: ubuntu-latest
