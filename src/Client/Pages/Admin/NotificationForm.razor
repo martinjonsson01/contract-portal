@@ -1,7 +1,10 @@
 ﻿@using Domain.StatusUpdates
+@using Newtonsoft.Json
+@using System.Text
+@inject HttpClient _http
 
 <h4>Skicka ut ny notifikation</h4>
-<EditForm Model="@_statusUpdate">
+<EditForm Model="@_statusUpdate" OnSubmit="UploadStatusUpdate">
     <div class="mb-3">
         <label for="alert" class="form-label">Notifikations typ</label>
         <InputSelect id="alert" class="form-control form-select" @bind-Value="@_statusUpdate.Alert">
@@ -39,6 +42,18 @@
             Timestamp = DateTime.UtcNow,
             Text = string.Empty,
         };
+    }
+
+    private async Task UploadStatusUpdate()
+    {
+        string json = JsonConvert.SerializeObject(_statusUpdate);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await _http.PutAsync($"api/v1/status-updates/{_statusUpdate.Id}", content);
+        if (response.IsSuccessStatusCode)
+        {
+            await OnNotificationSent.InvokeAsync(_statusUpdate);
+            _statusUpdate = CreateEmptyStatusUpdate();
+        }
     }
 
 }
