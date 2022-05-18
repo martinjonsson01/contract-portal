@@ -10,7 +10,7 @@ namespace Server.Controllers;
 /// WebAPI for recent contracts.
 /// </summary>
 [ApiController]
-[Route("api/v1/users/{username}/[controller]")]
+[Route("api/v1/users/{userId:guid}/[controller]")]
 public class RecentsController : BaseApiController<RecentsController>
 {
     private readonly IRecentContractService _recent;

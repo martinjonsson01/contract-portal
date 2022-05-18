@@ -9,7 +9,7 @@ namespace Server.Controllers;
 /// WebAPI for favorites.
 /// </summary>
 [ApiController]
-[Route("api/v1/users/{username}/[controller]")]
+[Route("api/v1/users/{userId:guid}/[controller]")]
 public class FavoritesController : BaseApiController<FavoritesController>
 {
     private readonly IUserService _users;
