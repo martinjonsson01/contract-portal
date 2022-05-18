@@ -16,6 +16,7 @@
         <Items>
             <Tab Name="contracts">Hantera kontrakt</Tab>
             <Tab Name="users">Hantera användare</Tab>
+            <Tab Name="notifications">Hantera notifikationer</Tab>
         </Items>
         <Content>
             <TabPanel Name="contracts">
@@ -25,6 +26,9 @@
             <TabPanel Name="users">
                 <UserForm @ref="_userForm" OnUserAdded="AddUserToTable"/>
                 <UserTable @ref="@_userTable" UserOpeningForEdit="@OnUserOpeningForEdit"/>
+            </TabPanel>
+            <TabPanel Name="notifications">
+              Hello
             </TabPanel>
         </Content>
     </Tabs>
