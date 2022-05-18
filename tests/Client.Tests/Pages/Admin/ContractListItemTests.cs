@@ -33,6 +33,6 @@ public class ContractListItemTests : IDisposable
             _context.RenderComponent<ContractTableRow>(ParameterBuilder);
 
         // Assert
-        cut.Find($"#contract_id_{contract.Id}").TextContent.Should().Contain(name);
+        cut.WaitForAssertion(() => cut.Find($"#contract_id_{contract.Id}").TextContent.Should().Contain(name));
     }
 }

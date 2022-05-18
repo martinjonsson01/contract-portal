@@ -23,6 +23,11 @@ public class User
     public string Password { get; set; } = "Inget lösenord";
 
     /// <summary>
+    /// Gets or sets the email of the user.
+    /// </summary>
+    public string Email { get; set; } = "Ingen e-mail";
+
+    /// <summary>
     /// Gets or sets the name of the company.
     /// </summary>
     public string Company { get; set; } = "Inget företagsnamn";
@@ -41,4 +46,9 @@ public class User
     /// Gets favorite contracts.
     /// </summary>
     public ICollection<Contract> Favorites { get; init; } = new List<Contract>();
+
+    /// <summary>
+    /// Gets the most recently viewed contracts.
+    /// </summary>
+    public IList<RecentlyViewedContract> RecentlyViewContracts { get; } = new List<RecentlyViewedContract>();
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Data;
+﻿using System.Data;
 
 using Application.Contracts;
 
@@ -17,7 +16,6 @@ public sealed class EFContractRepository : IContractRepository
 {
     private readonly EFDatabaseContext _context;
     private readonly ILogger<EFContractRepository> _logger;
-    private readonly IRecentContractService _recent;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EFContractRepository"/> class.
@@ -28,14 +26,10 @@ public sealed class EFContractRepository : IContractRepository
     {
         _context = context;
         _logger = logger;
-        _recent = new RecentContractService(new Collection<Contract>());
     }
 
     /// <inheritdoc />
     public IEnumerable<Contract> All => Contracts.Include(contract => contract.Tags).ToList();
-
-    /// <inheritdoc />
-    public IEnumerable<Contract> Recent => _recent.FetchRecentContracts();
 
     private DbSet<Contract> Contracts => _context.Contracts;
 
@@ -51,15 +45,8 @@ public sealed class EFContractRepository : IContractRepository
     }
 
     /// <inheritdoc />
-    public void AddRecent(Contract contract)
-    {
-        _recent.Add(contract);
-    }
-
-    /// <inheritdoc />
     public bool Remove(Guid id)
     {
-        _recent.Remove(id); // This line should not exist when recents are included in the database
         Contract? toRemove = Contracts.Find(id);
         if (toRemove is null)
             return false;
