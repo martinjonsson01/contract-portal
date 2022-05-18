@@ -141,7 +141,7 @@ jobs:
           -p:ThresholdType=branch
           -p:CoverletOutput=../../CoverageResults/
           -p:ExcludeByFile=\"**/Program.cs\"
-          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:ExcludeByAttribute=\"Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute%2cExcludeFromCodeCoverageAttribute\"
           -p:Include=\"[Client]*\"
 
   infrastructure-tests:
