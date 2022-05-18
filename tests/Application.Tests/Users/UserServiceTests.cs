@@ -69,6 +69,20 @@ public class UserServiceTests
     }
 
     [Fact]
+    public void AddingUser_Throws_WhenUserWithNameAlreadyExists()
+    {
+        // Arrange
+        const string name = "A user's name";
+        _mockRepo.Setup(repository => repository.All).Returns(new[] { new User { Name = name, }, });
+
+        // Act
+        Action add = () => _cut.Add(new User { Name = name, });
+
+        // Assert
+        add.Should().Throw<UserNameTakenException>();
+    }
+
+    [Fact]
     public void RemovingUser_DoesReturnTrue_WhenAUserExists()
     {
         // Arrange

@@ -38,6 +38,9 @@ public class UserService : IUserService
         if (_repo.All.Any(otherUser => user.Id.Equals(otherUser.Id)))
             throw new IdentifierAlreadyTakenException();
 
+        if (_repo.All.Any(otherUser => user.Name.Equals(otherUser.Name, StringComparison.Ordinal)))
+            throw new UserNameTakenException();
+
         user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
         _repo.Add(user);
     }
