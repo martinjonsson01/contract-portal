@@ -75,6 +75,16 @@ footer {
     font-weight: 400;
 }
 
+footer a {
+    color: var(--prodigo-black);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--prodigo-black);
+    text-decoration: underline;
+}
+
 #prodigo-logo-footer {
     max-width: 75%;
 }
