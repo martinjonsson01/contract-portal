@@ -4,6 +4,7 @@ using Infrastructure.Databases;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(EFDatabaseContext))]
-    partial class EFDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220518061114_CreateDocumentEntity")]
+    partial class CreateDocumentEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +24,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("UserFavoriteContracts", b =>
+            modelBuilder.Entity("ContractUser", b =>
                 {
                     b.Property<Guid>("FavoritedById")
                         .HasColumnType("uniqueidentifier");
@@ -34,7 +36,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("FavoritesId");
 
-                    b.ToTable("UserFavoriteContracts");
+                    b.ToTable("UserFavoriteContracts", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
@@ -177,7 +179,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("UserFavoriteContracts", b =>
+            modelBuilder.Entity("ContractUser", b =>
                 {
                     b.HasOne("Domain.Users.User", null)
                         .WithMany()
