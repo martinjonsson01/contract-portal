@@ -40,7 +40,7 @@ public static class InjectionExtensions
                .AddScoped<IContractRepository, EFContractRepository>()
                .AddScoped<IUserRepository, EFUserRepository>()
                .AddScoped<IRecentContractRepository, EFRecentContractRepository>()
-               .AddSingleton<IStatusUpdateRepository, EFStatusUpdatesRepository>()
+               .AddScoped<IStatusUpdateRepository, EFStatusUpdatesRepository>()
                .AddSingleton<IImageRepository, LocalFileRepository>(provider =>
                {
                    IHostEnvironment host = provider.GetRequiredService<IHostEnvironment>();
