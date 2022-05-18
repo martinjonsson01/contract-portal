@@ -1,4 +1,5 @@
 ﻿using Domain.Contracts;
+using Domain.StatusUpdates;
 using Domain.Users;
 
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,11 @@ internal interface IDatabaseContext
     /// Gets or sets the <see cref="RecentlyViewedContract"/>s in the database.
     /// </summary>
     DbSet<RecentlyViewedContract> RecentlyViewedContracts { get; set; }
+
+    /// <summary>
+    /// Gets or sets the <see cref="StatusUpdate"/>s in the database.
+    /// </summary>
+    DbSet<StatusUpdate> StatusUpdates { get; set; }
 
     /// <summary>
     /// Test.
