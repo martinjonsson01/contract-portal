@@ -35,7 +35,7 @@ public class EFRecentContractRepository : IRecentContractRepository
     /// <inheritdoc />
     public void Add(Guid userId, Contract contract)
     {
-        User? user = Users.Find(userId);
+        User? user = Users.Include(user => user.RecentlyViewContracts).FirstOrDefault(user => user.Id == userId);
         if (user is null)
             throw new UserDoesNotExistException(userId);
 
@@ -77,7 +77,7 @@ public class EFRecentContractRepository : IRecentContractRepository
     /// <inheritdoc />
     public IList<RecentlyViewedContract> FetchRecentContracts(Guid userId)
     {
-        User? user = Users.Find(userId);
+        User? user = Users.Include(user => user.RecentlyViewContracts).FirstOrDefault(user => user.Id == userId);
         if (user is null)
             throw new UserDoesNotExistException(userId);
 
