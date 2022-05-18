@@ -7,20 +7,26 @@ namespace Application.StatusUpdates;
 /// </summary>
 public class NotificationService : IStatusUpdateService
 {
-    private readonly IStatusUpdateRepository _repository;
+    private readonly IStatusUpdateRepository _repo;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NotificationService"/> class.
     /// </summary>
-    /// <param name="repository">A way of storing and retrieving status updates.</param>
-    public NotificationService(IStatusUpdateRepository repository)
+    /// <param name="repo">A way of storing and retrieving status updates.</param>
+    public NotificationService(IStatusUpdateRepository repo)
     {
-        _repository = repository;
+        _repo = repo;
     }
 
     /// <inheritdoc />
     public IEnumerable<StatusUpdate> FetchAll()
     {
-        return _repository.All;
+        return _repo.All;
+    }
+
+    /// <inheritdoc />
+    public void Add(StatusUpdate statusUpdate)
+    {
+        _repo.Add(statusUpdate);
     }
 }
