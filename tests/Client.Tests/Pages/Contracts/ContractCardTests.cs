@@ -6,6 +6,11 @@ namespace Client.Tests.Pages.Contracts;
 
 public class ContractCardTests : UITestFixture
 {
+    public ContractCardTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void ContractCard_ContainsGivenInformation()
     {
@@ -22,7 +27,7 @@ public class ContractCardTests : UITestFixture
             Context.RenderComponent<ContractCard>(ParameterBuilder);
 
         // Assert
-        cut.Find("#contract-name").TextContent.Should().Contain(name);
-        cut.Find("#contract-thumbnail").OuterHtml.Should().Contain(path);
+        cut.WaitForAssertion(() => cut.Find("#contract-name").TextContent.Should().Contain(name));
+        cut.WaitForAssertion(() => cut.Find("#contract-thumbnail").OuterHtml.Should().Contain(path));
     }
 }

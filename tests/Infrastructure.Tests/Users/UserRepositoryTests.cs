@@ -27,6 +27,7 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
         mockEnvironment.Setup(env => env[ConfigurationKeys.AdminPassword]).Returns("test_password");
         _cut = new EFUserRepository(context, Mock.Of<ILogger<EFUserRepository>>(), mockEnvironment.Object);
         _cut.EnsureAdminCreated();
+        context.Database.BeginTransaction();
     }
 
     [Fact]

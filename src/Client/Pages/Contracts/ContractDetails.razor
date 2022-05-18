@@ -1,9 +1,13 @@
 ﻿@using Domain.Contracts
 @using System.Runtime.Serialization
-@inject ISessionService _session
+@implements IAsyncDisposable
+@inject ISessionService Session
+@inject IJSRuntime Js
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
 
 <!-- modal-dialog-scrollable -->
-<div class="modal w-100" id="@("id_" + Contract.Id)">
+<div class="modal w-100" id="@ModalId">
     <div class="modal-dialog modal-lg">
 
         <div class="modal-content @(ShouldHideDetails ? "blackout" : "")">
@@ -38,15 +42,17 @@
                         <MarkdownViewer Markdown="@Contract.SupplierDescription"/>
                         </Body>
                     </AccordionItem>
-                    @if (!string.IsNullOrEmpty(Contract.AdditionalDocument))
+                    @if (Contract.AdditionalDocument is not null)
                     {
                         <AccordionItem>
                             <Title>
                                 <h3>Övriga filer</h3>
                             </Title>
                             <Body>
-                            <a id="additional-document" href="@Contract.AdditionalDocument" download>
-                                Ladda ned fil
+                            <a id="additional-document"
+                               href="@Contract.AdditionalDocument.Path"
+                               download="@Contract.AdditionalDocument.Name">
+                                Ladda ned @Contract.AdditionalDocument.Name
                             </a>
                             </Body>
                         </AccordionItem>
@@ -97,10 +103,36 @@
     [Parameter, EditorRequired,]
     public Contract Contract { get; set; } = null!;
 
-    private bool ShouldHideDetails => !_session.IsAuthenticated;
+    private bool ShouldHideDetails => !Session.IsAuthenticated;
 
     private string ImagePath => string.IsNullOrEmpty(Contract.InspirationalImagePath) ?
         Contract.SupplierLogoImagePath :
         Contract.InspirationalImagePath;
+
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        DotNetObjectReference<ContractDetails> dotNetHelper = DotNetObjectReference.Create(this);
+        await Js.InvokeVoidAsync("registerModalCloseCallback", $"#{ModalId}", dotNetHelper);
+    }
+
+    /// <summary>
+    /// Called when the details modal is closed.
+    /// </summary>
+    [JSInvokable]
+    public void OnModalClose()
+    {
+        NavigationManager.NavigateTo("contracts");
+    }
+
+    /// <inheritdoc />
+    public async ValueTask DisposeAsync()
+    {
+        await Js.InvokeVoidAsync("closeModal", $"#{ModalId}");
+    }
+
+    private string ModalId => ("contract-details-" + Contract.Id).ToLowerInvariant();
 
 }

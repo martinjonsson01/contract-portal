@@ -1,61 +1,79 @@
 ﻿@using Domain.Contracts
 @using Application.Contracts
 @using System.Collections.ObjectModel
+@using Blazorise.Extensions
 @inject HttpClient _http
 @inject ISessionService _session
 @inherits UpdateOnAuthenticateView
+@if (_session.Username is not (null or ""))
+{
+    <FetchData @ref="_dataFetcher"
+               TData="IEnumerable<Contract>"
+               Url="@FetchUrl"
+               Context="recents"
+               ShouldShowErrors="@_session.IsAuthenticated">
 
-<FetchData TData="Contract[]"
-           Url="api/v1/contracts/recent"
-           Context="recents"
-           ShouldShowErrors="@_session.IsAuthenticated">
+        <!-- No loading indicator. -->
+        <LoadingIndicator></LoadingIndicator>
 
-    <!-- No loading indicator. -->
-    <LoadingIndicator></LoadingIndicator>
-
-    <ChildContent>
-        @{
-            AddRecents(recents);
-            if (_recent.Size() > 0)
+        <ChildContent>
+            @if (ShouldShowRecent)
             {
-                <h3>Senast besökta</h3>
+                if (_dataFetcher.Data != null && _dataFetcher.Data.Any())
+                {
+                    <h3>Senast besökta</h3>
 
-                <div class="container-fluid">
-                    <div class="row">
-                        @foreach (Contract contract in _recent.FetchRecentContracts().Reverse())
-                        {
-                            <div class="col-sm-4">
-                                <ContractCard Contract=@contract />
-                            </div>
-                        }
+                    <div id="recently-viewed-container" class="container-fluid">
+                        <div class="d-flex flex-wrap justify-content-center">
+                            @foreach (var contract in _dataFetcher.Data)
+                            {
+                                <div>
+                                    <ContractCard Contract=@contract/>
+                                </div>
+                            }
+                        </div>
                     </div>
-                </div>
-                <hr/>
+                    <hr/>
+                }
             }
-        }
-    </ChildContent>
-</FetchData>
+        </ChildContent>
+    </FetchData>
+}
 
 @code {
+        const string BaseUrl = "api/v1/users/";
+        const string UrlRecentSuffix = "/recents";
 
-    private IRecentContractService _recent = new RecentContractService(new Collection<Contract>());
+    private FetchData<IEnumerable<Contract>> _dataFetcher = null!;
 
-    private void AddRecents(Contract[]? recents)
+
+    private bool _shouldShowRecent = true;
+
+    /// <summary>
+    /// Gets or sets whether recent contracts should be displayed or not.
+    /// </summary>
+    public bool ShouldShowRecent
     {
-        if (recents is null) return;
-
-        foreach (Contract contract in recents)
+        get => _shouldShowRecent;
+        set
         {
-            _recent.Add(contract);
+            _shouldShowRecent = value;
+            StateHasChanged();
         }
     }
+
+    private string FetchUrl => BaseUrl + _session.Username + UrlRecentSuffix;
+
 
     /// <summary>
     /// Tells the component to render itself again.
     /// </summary>
     public async void AddViewedContract(Contract newRecent)
     {
-        _recent.Add(newRecent);
+        if (_session.Username is null or "")
+            return;
+        await _http.PostAsJsonAsync(FetchUrl, newRecent);
+        await _dataFetcher.Fetch(FetchUrl);
         await InvokeAsync(StateHasChanged);
     }
 

@@ -1,7 +1,22 @@
 ﻿function closeModal(id) {
     const modalElement = document.querySelector(id);
+    if (!modalElement) return;
     const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
     modal.hide();
+}
+
+function showModal(selector) {
+    const modalElement = document.querySelector(selector);
+    if (!modalElement) return;
+    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+    modal.show();
+}
+
+function registerModalCloseCallback(selector, dotNetHelper) {
+    const modalElement = document.querySelector(selector);
+    modalElement.addEventListener('hidden.bs.modal', function (event) {
+        dotNetHelper.invokeMethodAsync("OnModalClose");
+    });
 }
 
 function focusElement(selector) {

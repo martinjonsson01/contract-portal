@@ -12,6 +12,11 @@ namespace Client.Tests.Pages.Admin;
 
 public class AdminPageTests : UITestFixture
 {
+    public AdminPageTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void AdminPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
     {
@@ -28,7 +33,7 @@ public class AdminPageTests : UITestFixture
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
 
         // Assert
-        cut.Find("p").TextContent.Should().BeEquivalentTo("Laddar...");
+        cut.WaitForAssertion(() => cut.Find(".loading-indicator").TextContent.Should().BeEquivalentTo("Laddar..."));
     }
 
     [Fact]

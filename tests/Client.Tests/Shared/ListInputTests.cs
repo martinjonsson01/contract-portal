@@ -7,6 +7,11 @@ namespace Client.Tests.Shared;
 
 public class ListInputTests : UITestFixture
 {
+    public ListInputTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void InputTyped_UpdatesValueInList_WhenNewValueIsInput()
     {
@@ -21,10 +26,13 @@ public class ListInputTests : UITestFixture
 
         const string newValue = "new value";
 
+        string listItemInput = ".list-item-input";
+        cut.WaitForElement(listItemInput);
+
         // Act
-        cut.Find(".list-item-input").Change(new ChangeEventArgs { Value = newValue, });
+        cut.WaitForAssertion(() => cut.Find(listItemInput).Change(new ChangeEventArgs { Value = newValue, }));
 
         // Assert
-        items.Should().Contain(newValue);
+        cut.WaitForAssertion(() => items.Should().Contain(newValue));
     }
 }

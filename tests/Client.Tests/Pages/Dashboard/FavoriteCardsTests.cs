@@ -6,6 +6,11 @@ namespace Client.Tests.Pages.Dashboard;
 
 public class FavoriteCardsTests : UITestFixture
 {
+    public FavoriteCardsTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void ContainsCards_WhenThereAreFavoritesToShow()
     {
@@ -21,7 +26,7 @@ public class FavoriteCardsTests : UITestFixture
         cut.WaitForElement("#favorite-cards-container");
 
         // Assert
-        cut.Find(".card").TextContent.Should().Contain(name);
+        cut.WaitForAssertion(() => cut.Find(".card").TextContent.Should().Contain(name));
     }
 
     [Fact]
@@ -36,6 +41,6 @@ public class FavoriteCardsTests : UITestFixture
         cut.WaitForElement("#no-favorites");
 
         // Assert
-        cut.Find("#no-favorites").TextContent.Should().NotBeEmpty();
+        cut.WaitForAssertion(() => cut.Find("#no-favorites").TextContent.Should().NotBeEmpty());
     }
 }

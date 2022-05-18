@@ -10,13 +10,15 @@ using Domain.Users;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Xunit.Abstractions;
+
 namespace Client.Tests;
 
 public class UITestFixture : IDisposable
 {
     protected const string FakeToken = "fake-token";
 
-    protected UITestFixture()
+    protected UITestFixture(ITestOutputHelper outputHelper)
     {
         SessionStorage = Context.AddBlazoredSessionStorage();
         MockSession = new Mock<ISessionService>();
@@ -26,6 +28,7 @@ public class UITestFixture : IDisposable
         MockHttp = Context.Services.AddMockHttpClient();
         Context.JSInterop.Mode = JSRuntimeMode.Loose;
         Context.Services
+               .AddXunitLogger(outputHelper)
                .AddBlazorise(options => { options.Immediate = true; })
                .AddBootstrap5Providers()
                .AddFontAwesomeIcons();

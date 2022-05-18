@@ -22,11 +22,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache NuGet packages
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
@@ -39,48 +47,27 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-  set-up-database:
+  application-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: [ build ]
-    services:
-      sql.data:
-        image: mcr.microsoft.com/mssql/server:2019-latest
-        env:
-          SA_PASSWORD: "ASDjk_shd$$jkASKJ19821"
-          ACCEPT_EULA: Y
-        ports:
-          - "1433:1433"
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache NuGet packages
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
-      - name: Install dotnet-ef
-        run: dotnet tool install --global dotnet-ef
-        continue-on-error: true
-
-      - name: Update database
-        run: dotnet ef database update -p src/Infrastructure
-        env:
-          ASPNETCORE_ENVIRONMENT: Development
-
-  application-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 1
-    needs: [ build ]
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Cache dotnet
+      - name: Cache build
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -95,16 +82,24 @@ jobs:
 
   domain-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 5
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache NuGet packages
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -119,20 +114,28 @@ jobs:
 
   client-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 5
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache NuGet packages
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Client.Tests
+          dotnet test --no-build tests/Client.Tests --logger "console;verbosity=detailed"
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -141,42 +144,45 @@ jobs:
           -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
           -p:Include=\"[Client]*\"
 
-  server-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 1
-    needs: [ build ]
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Cache dotnet
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
-
-      - name: Run tests and collect coverage
-        run: >
-          dotnet test --no-build tests/Server.Tests
-          -p:CollectCoverage=true
-          -p:Threshold=80
-          -p:ThresholdType=branch
-          -p:CoverletOutput=../../CoverageResults/
-          -p:ExcludeByFile=\"**/Program.cs\"
-          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
-          -p:Include=\"[Server]*\"
-
   infrastructure-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 1
-    needs: [ build, set-up-database ]
+    timeout-minutes: 5
+    needs: [ build ]
+
+    services:
+      sql.data:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          SA_PASSWORD: "ASDjk_shd$$jkASKJ19821"
+          ACCEPT_EULA: Y
+        ports:
+          - "1433:1433"
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache NuGet packages
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
+
+      - name: Install dotnet-ef
+        run: dotnet tool install --global dotnet-ef
+        continue-on-error: true
+
+      - name: Update database
+        run: dotnet ef database update -p src/Infrastructure
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
 
       - name: Run tests and collect coverage
         run: >
@@ -189,18 +195,88 @@ jobs:
           -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
           -p:Include=\"[Infrastructure]*\"
 
-  server-integration-tests:
+  server-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 1
-    needs: [ build, set-up-database ]
+    timeout-minutes: 5
+    needs: [ build ]
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache dotnet
+      - name: Cache NuGet packages
         uses: actions/cache@v3
         with:
-          path: /home/runner/.dotnet
-          key: cache-dotnet
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
+
+      - name: Cache server coverage
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/contract-portal/CoverageResults
+          key: cache-server-coverage-${{ github.run_id }}
+
+      - name: Run tests and collect coverage
+        run: >
+          dotnet test --no-build tests/Server.Tests
+          -p:CollectCoverage=true
+          -p:ThresholdType=branch
+          -p:CoverletOutput=../../CoverageResults/
+          -p:ExcludeByFile=\"**/Program.cs\"
+          -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
+          -p:Include=\"[Server]*\"
+
+  server-integration-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [ build, server-tests ]
+
+    services:
+      sql.data:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          SA_PASSWORD: "ASDjk_shd$$jkASKJ19821"
+          ACCEPT_EULA: Y
+        ports:
+          - "1433:1433"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/**
+          key: cache-build-${{ github.run_id }}
+
+      - name: Install dotnet-ef
+        run: dotnet tool install --global dotnet-ef
+        continue-on-error: true
+
+      - name: Update database
+        run: dotnet ef database update -p src/Infrastructure
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
+
+      - name: Cache server coverage
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/contract-portal/contract-portal/CoverageResults
+          key: cache-server-coverage-${{ github.run_id }}
 
       - name: Run tests and collect coverage
         run: >
@@ -209,6 +285,7 @@ jobs:
           -p:Threshold=80
           -p:ThresholdType=branch
           -p:CoverletOutput=../../CoverageResults/
+          -p:MergeWith="../../CoverageResults/coverage.json"
           -p:ExcludeByFile=\"**/Program.cs\"
           -p:ExcludeByAttribute=\"Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute\"
           -p:Include=\"[Server]*\"

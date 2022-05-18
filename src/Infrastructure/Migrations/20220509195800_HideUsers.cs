@@ -22,39 +22,39 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.RenameTable(
                 name: "UserContracts",
-                newName: "ContractUser");
+                newName: "UserFavoriteContracts");
 
             migrationBuilder.RenameColumn(
                 name: "UsersId",
-                table: "ContractUser",
+                table: "UserFavoriteContracts",
                 newName: "FavoritesId");
 
             migrationBuilder.RenameColumn(
                 name: "ContractsId",
-                table: "ContractUser",
+                table: "UserFavoriteContracts",
                 newName: "FavoriteUsersId");
 
             migrationBuilder.RenameIndex(
                 name: "IX_UserContracts_UsersId",
-                table: "ContractUser",
-                newName: "IX_ContractUser_FavoritesId");
+                table: "UserFavoriteContracts",
+                newName: "IX_UserFavoriteContracts_FavoritesId");
 
             migrationBuilder.AddPrimaryKey(
-                name: "PK_ContractUser",
-                table: "ContractUser",
+                name: "PK_UserFavoriteContracts",
+                table: "UserFavoriteContracts",
                 columns: new[] { "FavoriteUsersId", "FavoritesId" });
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ContractUser_Contracts_FavoritesId",
-                table: "ContractUser",
+                name: "FK_UserFavoriteContracts_Contracts_FavoritesId",
+                table: "UserFavoriteContracts",
                 column: "FavoritesId",
                 principalTable: "Contracts",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ContractUser_Users_FavoriteUsersId",
-                table: "ContractUser",
+                name: "FK_UserFavoriteContracts_Users_FavoriteUsersId",
+                table: "UserFavoriteContracts",
                 column: "FavoriteUsersId",
                 principalTable: "Users",
                 principalColumn: "Id",
@@ -64,19 +64,19 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ContractUser_Contracts_FavoritesId",
-                table: "ContractUser");
+                name: "FK_UserFavoriteContracts_Contracts_FavoritesId",
+                table: "UserFavoriteContracts");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_ContractUser_Users_FavoriteUsersId",
-                table: "ContractUser");
+                name: "FK_UserFavoriteContracts_Users_FavoriteUsersId",
+                table: "UserFavoriteContracts");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_ContractUser",
-                table: "ContractUser");
+                name: "PK_UserFavoriteContracts",
+                table: "UserFavoriteContracts");
 
             migrationBuilder.RenameTable(
-                name: "ContractUser",
+                name: "UserFavoriteContracts",
                 newName: "UserContracts");
 
             migrationBuilder.RenameColumn(
@@ -90,7 +90,7 @@ namespace Infrastructure.Migrations
                 newName: "ContractsId");
 
             migrationBuilder.RenameIndex(
-                name: "IX_ContractUser_FavoritesId",
+                name: "IX_UserFavoriteContracts_FavoritesId",
                 table: "UserContracts",
                 newName: "IX_UserContracts_UsersId");
 

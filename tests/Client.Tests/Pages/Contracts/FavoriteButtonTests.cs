@@ -12,6 +12,11 @@ namespace Client.Tests.Pages.Contracts;
 
 public class FavoriteButtonTests : UITestFixture
 {
+    public FavoriteButtonTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void ContractCard_ShowsFavoriteIcon_WhenContractIsFavoriteMarked()
     {
@@ -31,7 +36,8 @@ public class FavoriteButtonTests : UITestFixture
 
         // Assert
         cut.WaitForAssertion(() => cut.Find(".bi-heart-fill").Should().NotBeNull());
-        Assert.Throws<ElementNotFoundException>(() => cut.Find(".bi-heart"));
+        Action tryFind = () => cut.Find(".bi-heart");
+        cut.WaitForAssertion(() => tryFind.Should().Throw<ElementNotFoundException>());
     }
 
     [Fact]
@@ -53,8 +59,9 @@ public class FavoriteButtonTests : UITestFixture
         cut.WaitForElement(".bi-heart");
 
         // Assert
-        cut.Find(".bi-heart").Should().NotBeNull();
-        Assert.Throws<ElementNotFoundException>(() => cut.Find(".bi-heart-fill"));
+        cut.WaitForAssertion(() => cut.Find(".bi-heart").Should().NotBeNull());
+        Action tryFind = () => cut.Find(".bi-heart-fill");
+        cut.WaitForAssertion(() => tryFind.Should().Throw<ElementNotFoundException>());
     }
 
     [Fact]
@@ -82,7 +89,7 @@ public class FavoriteButtonTests : UITestFixture
         await cut.Find("#favorite-button").ClickAsync(new MouseEventArgs());
 
         // Assert
-        Assert.True(eventCalled);
+        cut.WaitForAssertion(() => eventCalled.Should().BeTrue());
     }
 
     [Fact]
@@ -111,8 +118,8 @@ public class FavoriteButtonTests : UITestFixture
         IElement afterClicked = cut.Find(".bi-heart-fill");
 
         // Assert
-        beforeClicked.Should().NotBeNull();
-        afterClicked.Should().NotBeNull();
+        cut.WaitForAssertion(() => beforeClicked.Should().NotBeNull());
+        cut.WaitForAssertion(() => afterClicked.Should().NotBeNull());
     }
 
     [Fact]
@@ -141,7 +148,7 @@ public class FavoriteButtonTests : UITestFixture
         IElement afterClicked = cut.Find(".bi-heart");
 
         // Assert
-        beforeClicked.Should().NotBeNull();
-        afterClicked.Should().NotBeNull();
+        cut.WaitForAssertion(() => beforeClicked.Should().NotBeNull());
+        cut.WaitForAssertion(() => afterClicked.Should().NotBeNull());
     }
 }
