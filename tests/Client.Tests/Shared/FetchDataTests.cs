@@ -6,6 +6,11 @@ namespace Client.Tests.Shared;
 
 public class FetchDataTests : UITestFixture
 {
+    public FetchDataTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Theory]
     [InlineData(HttpStatusCode.Unauthorized)]
     [InlineData(HttpStatusCode.Forbidden)]
@@ -26,9 +31,8 @@ public class FetchDataTests : UITestFixture
 
         // Act
         IRenderedComponent<FetchData<int?>> cut = Context.RenderComponent<FetchData<int?>>(ParameterBuilder);
-        cut.WaitForElement("#error-message");
 
         // Assert
-        cut.Markup.Should().Contain("error-message");
+        cut.WaitForAssertion(() => cut.Markup.Should().Contain("error-message"));
     }
 }

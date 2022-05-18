@@ -4,6 +4,8 @@
 @using Blazorise.Extensions
 @inject IJSRuntime Js
 
+<PageTitle>Prodigo Portal - Kontrakt</PageTitle>
+
 <SearchBar OnQueryChange="OnQueryChanged"/>
 
 <RecentlyViewed @ref="_recentlyViewed"/>
@@ -14,8 +16,8 @@
            Context="contracts"
            AfterRenderedWithData="SimpleCallback.Create(OpenDetailsView)">
 
-    <div class="container-fluid">
-        <div class="d-flex flex-wrap justify-content-center">
+    <div class="d-flex flex-wrap justify-content-center pb-5">
+        <div class="prodigo-grid">
             @foreach (Contract contract in contracts)
             {
                 <ContractCard Contract=@contract OnViewed="OnRecentlyViewed"/>

@@ -10,6 +10,11 @@ namespace Client.Tests.Shared.Login;
 
 public class LoginTests : UITestFixture
 {
+    public LoginTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public async Task PressLogout_EndsSession_WhenUserWasAuthenticated()
     {
@@ -26,6 +31,6 @@ public class LoginTests : UITestFixture
         await cut.Find(logoutButton).ClickAsync(new MouseEventArgs());
 
         // Assert
-        MockSession.Verify(session => session.EndAsync(), Times.Once);
+        cut.WaitForAssertion(() => MockSession.Verify(session => session.EndAsync(), Times.Once));
     }
 }

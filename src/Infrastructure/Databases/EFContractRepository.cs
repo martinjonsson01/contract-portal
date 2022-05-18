@@ -29,7 +29,9 @@ public sealed class EFContractRepository : IContractRepository
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> All => Contracts.Include(contract => contract.Tags).ToList();
+    public IEnumerable<Contract> All => Contracts.Include(contract => contract.Tags)
+                                                 .Include(contract => contract.AdditionalDocument)
+                                                 .ToList();
 
     private DbSet<Contract> Contracts => _context.Contracts;
 
@@ -70,17 +72,19 @@ public sealed class EFContractRepository : IContractRepository
     /// <inheritdoc />
     public Contract? FetchContract(Guid id)
     {
-        return Contracts.Find(id);
+        return Contracts.Include(contract => contract.Tags)
+                        .Include(contract => contract.AdditionalDocument)
+                        .FirstOrDefault(contract => contract.Id == id);
     }
 
     /// <inheritdoc />
     public void UpdateContract(Contract updatedContract)
     {
         Contract? oldContract = FetchContract(updatedContract.Id);
-        if (oldContract is null)
-            _ = Contracts.Add(updatedContract);
-        else
-            _context.Entry(oldContract).CurrentValues.SetValues(updatedContract);
+        if (oldContract is not null)
+            Contracts.Remove(oldContract);
+
+        _ = Contracts.Add(updatedContract);
 
         try
         {

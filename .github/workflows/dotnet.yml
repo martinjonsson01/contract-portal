@@ -22,14 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
       - name: Cache build
         uses: actions/cache@v3
         with:
@@ -135,7 +127,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test --no-build tests/Client.Tests
+          dotnet test --no-build tests/Client.Tests --logger "console;verbosity=detailed"
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
@@ -248,14 +240,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
 
       - name: Cache build
         uses: actions/cache@v3

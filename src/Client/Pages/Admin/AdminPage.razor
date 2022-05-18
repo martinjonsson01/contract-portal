@@ -4,6 +4,8 @@
 @using Domain.Users
 @inherits AuthenticationRequiredView
 
+<PageTitle>Prodigo Portal - Admin</PageTitle>
+
 <h2>Adminsida</h2>
 
 <!-- Extra div needed to style the Blazorise-components (see https://github.com/Megabit/Blazorise/issues/1599) -->
@@ -18,6 +20,7 @@
             <Tab Name="contracts">Hantera kontrakt</Tab>
             <Tab Name="users">Hantera användare</Tab>
             <Tab Name="notifications">Hantera notifikationer</Tab>
+            <Tab Name="analytics">Användningsdata</Tab>
         </Items>
         <Content>
             <TabPanel Name="contracts">
@@ -27,6 +30,14 @@
             <TabPanel Name="users">
                 <UserForm @ref="_userForm" OnUserAdded="AddUserToTable"/>
                 <UserTable @ref="@_userTable" UserOpeningForEdit="@OnUserOpeningForEdit"/>
+            </TabPanel>
+            <TabPanel Name="analytics">
+                <div class="d-flex flex-column align-items-center mt-5">
+                    <p class="text-body">
+                        Användningsdata finns hos Google Analytics.
+                    </p>
+                    <a class="btn btn-primary" target="_blank" href="https://analytics.google.com/">Gå till Google Analytics</a>
+                </div>
             </TabPanel>
             <TabPanel Name="notifications">
                 <NotificationForm @ref="_notificationForm" />

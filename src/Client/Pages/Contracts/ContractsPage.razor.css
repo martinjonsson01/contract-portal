@@ -1,0 +1,10 @@
+﻿.prodigo-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px 20px;
+    max-width: 100em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
