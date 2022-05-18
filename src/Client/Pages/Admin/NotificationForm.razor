@@ -4,7 +4,8 @@
 <EditForm Model="@_statusUpdate">
     <div class="mb-3">
         <label for="alert" class="form-label">Notifikations typ</label>
-        <InputSelect id="alert" class="form-control" @bind-Value="@_statusUpdate.Alert">
+        <InputSelect id="alert" class="form-control form-select" @bind-Value="@_statusUpdate.Alert">
+             <option selected>Välj typ</option>
             @foreach (var alertOption in  Enum.GetValues(typeof(AlertLevel)))
             {
                 <option value="@alertOption">@alertOption</option>
