@@ -120,7 +120,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: >
-          dotnet test tests/Client.Tests
+          dotnet test tests/Client.Tests --logger "console;verbosity=detailed"
           -p:CollectCoverage=true
           -p:Threshold=80
           -p:ThresholdType=branch
