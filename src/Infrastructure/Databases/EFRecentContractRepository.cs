@@ -1,8 +1,11 @@
 ﻿using System.Data;
+
 using Application.Contracts;
 using Application.Users;
+
 using Domain.Contracts;
 using Domain.Users;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -30,9 +33,11 @@ public class EFRecentContractRepository : IRecentContractRepository
     private DbSet<User> Users => _context.Users;
 
     /// <inheritdoc />
-    public void Add(string username, Contract contract)
+    public void Add(Guid userId, Contract contract)
     {
-        User user = GetUserByName(username);
+        User? user = Users.Find(userId);
+        if (user is null)
+            throw new UserDoesNotExistException(userId);
 
         RecentlyViewedContract? recentlyViewedContract =
             user.RecentlyViewContracts.SingleOrDefault(recentContract => recentContract.ContractId == contract.Id);
@@ -70,16 +75,12 @@ public class EFRecentContractRepository : IRecentContractRepository
     }
 
     /// <inheritdoc />
-    public IList<RecentlyViewedContract> FetchRecentContracts(string username)
+    public IList<RecentlyViewedContract> FetchRecentContracts(Guid userId)
     {
-        User user = GetUserByName(username);
-        return user.RecentlyViewContracts;
-    }
+        User? user = Users.Find(userId);
+        if (user is null)
+            throw new UserDoesNotExistException(userId);
 
-    private User GetUserByName(string username)
-    {
-        User user = Users.Include(user => user.RecentlyViewContracts).FirstOrDefault(user => user.Name == username) ??
-                    throw new UserDoesNotExistException();
-        return user;
+        return user.RecentlyViewContracts;
     }
 }

@@ -29,25 +29,25 @@ public class RecentsController : BaseApiController<RecentsController>
     /// <summary>
     /// Gets all recently viewed contracts.
     /// </summary>
-    /// <param name="username">The logged in user.</param>
+    /// <param name="userId">The ID of the logged in user.</param>
     /// <returns>All recently viewed contracts.</returns>
     [HttpGet]
-    public IEnumerable<Contract> RecentContracts(string username)
+    public IEnumerable<Contract> RecentContracts(Guid? userId)
     {
-        return username.IsNullOrEmpty() ? new List<Contract>() : _recent.FetchRecentContracts(username);
+        return userId is null ? new List<Contract>() : _recent.FetchRecentContracts(userId.Value);
     }
 
     /// <summary>
     /// Adds a contract as recently viewed.
     /// </summary>
-    /// <param name="username">The logged in user.</param>
+    /// <param name="userId">The ID of the logged in user.</param>
     /// <param name="contract">The contract to add.</param>
     [HttpPost]
-    public void Add(string username, Contract contract)
+    public void Add(Guid userId, Contract contract)
     {
         try
         {
-            _recent.Add(username, contract);
+            _recent.Add(userId, contract);
         }
         catch (UserDoesNotExistException)
         {
