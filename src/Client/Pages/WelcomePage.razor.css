@@ -1,8 +1,8 @@
 .welcome-container {
     background-image: url("https://prodigo.se/wp-content/uploads/2021/06/iStock-951514270.jpg");
-    padding: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
     width: 100%;
     height: calc(100vh - 3.5rem);
     background-size: cover;
