@@ -1,26 +1,30 @@
-﻿.text-block  {
-    position: absolute;
-    text-align: center;
-    top: 6rem;
-    left: 20vw;
-    right: 8vw;
-    max-width: 60vw;
-    max-height: 85vh;
-    overflow: hidden;
-
+﻿.about-us-container {
+    background-image: url(images/pexels-fauxels-3184418.jpg);
+    padding: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+    width: 100%;
+    height: calc(100vh - 3.5rem);
+    background-size: cover;
+    align-items: center;
 }
 
-.text-block h1 {
+.about-us-container h1 {
     color: #fbebac;
     text-shadow: 0 0 1rem black;
+    text-align: center;
 }
 
-.text-block h4 {
+.about-us-container h4 {
     margin-top: 3rem;
+    margin-right: 0!important;
     color: #ffffff;
     background-color: rgba(62, 75, 101,0.75);
     padding: 2.5rem;
     border-radius: 2rem;
+    text-align: center;
+    max-width: 70%;
 }
 
 .aboutUsImage {
