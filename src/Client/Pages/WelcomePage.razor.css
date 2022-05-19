@@ -1,36 +1,19 @@
-.text-block {
-    position: absolute;
-    text-align: center;
-    top: 6rem;
-    left: 8rem;
-    justify-content: center;
-    max-width: 80%;
+.welcome-container {
+    background-image: url("https://prodigo.se/wp-content/uploads/2021/06/iStock-951514270.jpg");
+    padding: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100%;
+    height: calc(100vh - 3.5rem);
+    background-size: cover;
+    align-items: center;
 }
 
-.text-block h1 {
+.welcome-container h1 {
     color: #fbebac;
     text-shadow: 0 0 1rem black;
-}
-
-.welcomeImage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    min-width: 100vw;
-
-}
-
-.container {
-    padding-left: 0;
-    padding-right: 0;
-    left: 0;
-    height: auto;
-    max-width: 100vw;
-    justify-content: center;
-    align-items: center;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    text-align: center;
+    margin-top: 10vh;
 }
 
 .btn-primary {
