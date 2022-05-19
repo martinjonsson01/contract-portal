@@ -38,26 +38,23 @@ public class UserService : IUserService
         if (_repo.All.Any(otherUser => user.Id.Equals(otherUser.Id)))
             throw new IdentifierAlreadyTakenException();
 
+        if (_repo.All.Any(otherUser => user.Name.Equals(otherUser.Name, StringComparison.Ordinal)))
+            throw new UserNameTakenException();
+
         user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
         _repo.Add(user);
     }
 
     /// <inheritdoc />
-    public bool UserExists(string username)
-    {
-        return _repo.Exists(username);
-    }
-
-    /// <inheritdoc />
     public AuthenticateResponse Authenticate(string username, string password)
     {
-        User? user = _repo.Fetch(username);
+        User? user = _repo.FromName(username);
 
         return user is null
             ? throw new UserDoesNotExistException(username)
             : IsPasswordValid(user, password)
                 ? new AuthenticateResponse(user, GenerateJwtToken(user))
-                : throw new InvalidPasswordException("Wrong password.");
+                : throw new InvalidPasswordException();
     }
 
     /// <inheritdoc />
@@ -81,31 +78,31 @@ public class UserService : IUserService
     /// <inheritdoc />
     public User FetchUser(Guid id)
     {
-        return _repo.FetchUser(id) ?? throw new UserDoesNotExistException();
+        return _repo.Fetch(id) ?? throw new UserDoesNotExistException();
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> FetchAllFavorites(string userName)
+    public IEnumerable<Contract> FetchAllFavorites(Guid userId)
     {
-        return FetchUser(userName).Favorites;
+        return FetchUser(userId).Favorites;
     }
 
     /// <inheritdoc />
-    public bool IsFavorite(string userName, Guid contractId)
+    public bool IsFavorite(Guid userId, Guid contractId)
     {
-        return FetchUser(userName).Favorites.Any(c => c.Id == contractId);
+        return FetchUser(userId).Favorites.Any(c => c.Id == contractId);
     }
 
     /// <inheritdoc />
-    public void AddFavorite(string userName, Guid contractId)
+    public void AddFavorite(Guid userId, Guid contractId)
     {
-        _repo.AddFavorite(userName, contractId);
+        _repo.AddFavorite(userId, contractId);
     }
 
     /// <inheritdoc />
-    public bool RemoveFavorite(string userName, Guid contractId)
+    public bool RemoveFavorite(Guid userId, Guid contractId)
     {
-        return _repo.RemoveFavorite(userName, contractId);
+        return _repo.RemoveFavorite(userId, contractId);
     }
 
     private static IEnumerable<Claim> CreateClaims(User user)
@@ -138,15 +135,5 @@ public class UserService : IUserService
         };
         SecurityToken? token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
-    }
-
-    private User FetchUser(string username)
-    {
-        User? user = _repo.Fetch(username);
-
-        if (user == null)
-            throw new UserDoesNotExistException(username);
-
-        return user;
     }
 }
