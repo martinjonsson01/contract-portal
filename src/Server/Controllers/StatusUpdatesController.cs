@@ -46,7 +46,6 @@ public class StatusUpdatesController : BaseApiController<StatusUpdatesController
     /// <returns>If the status update was successfully added.</returns>
     [HttpPut]
     [Authorize("AdminOnly")]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Create([FromBody] StatusUpdate statusUpdate)
     {
         _statusUpdates.Add(statusUpdate);
