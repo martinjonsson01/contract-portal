@@ -40,6 +40,7 @@
             </TabPanel>
             <TabPanel Name="notifications">
                 <NotificationForm @ref="_notificationForm" />
+                <NotificationTable @ref="@_notificationTable"/>
             </TabPanel>
         </Content>
     </Tabs>
@@ -50,11 +51,14 @@
     private string _selectedTab = "contracts";
 
     // Null-forgiving operator used because these fields are set by the Blazor runtime using @ref
-    private ContractTable _contractTable = null!;
-    private UserTable _userTable = null!;
     private ContractForm _contractForm = null!;
+    private ContractTable _contractTable = null!;
+
     private UserForm _userForm = null!;
+    private UserTable _userTable = null!;
+
     private NotificationForm _notificationForm = null!;
+    private NotificationTable _notificationTable = null!;
 
     private void AddContractToTable(Contract contract)
     {
