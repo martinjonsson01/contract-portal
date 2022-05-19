@@ -20,7 +20,7 @@
 .about-us-container h4 {
     margin-top: 3rem;
     margin-bottom: 3rem;
-    color: #ffffff;
+    color: var(--prodigo-white);
     background-color: rgba(62, 75, 101, 0.75);
     padding: 2.5rem;
     border-radius: 2rem;
