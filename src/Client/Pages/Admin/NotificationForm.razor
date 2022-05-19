@@ -6,7 +6,7 @@
 <h4>Skicka ut ny notifikation</h4>
 <EditForm Model="@_statusUpdate" OnSubmit="UploadStatusUpdate">
     <div class="mb-3">
-        <label for="alert" class="form-label">Notifikations typ</label>
+        <label for="alert" class="form-label">Notifikationstyp</label>
         <InputSelect id="alert" class="form-control form-select" @bind-Value="@_statusUpdate.Alert">
              <option selected>Välj typ</option>
             @foreach (var alertOption in  Enum.GetValues(typeof(AlertLevel)))
@@ -16,7 +16,7 @@
         </InputSelect>
     </div>
     <div class="mb-3">
-        <label for="text" class="form-label">Informations text</label>
+        <label for="text" class="form-label">Informationstext</label>
         <InputText id="text" class="form-control" placeholder="Notifikationens innehåll" @bind-Value="@_statusUpdate.Text"/>
     </div>
     <button type="submit" class="btn btn-primary mb-3">Skicka</button>
