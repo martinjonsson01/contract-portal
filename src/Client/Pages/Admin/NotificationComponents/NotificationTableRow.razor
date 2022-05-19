@@ -1,5 +1,22 @@
-﻿<h3>NotificationTableRow</h3>
+﻿@using Domain.StatusUpdates
+@inject HttpClient _http
+
+<tr class="notification-table-row" id=@($"statsUpdate_id_{StatusUpdate.Id}")>
+
+    <td>@StatusUpdate.Text</td>
+
+    <td>@StatusUpdate.Alert</td>
+
+    <td>@StatusUpdate.Timestamp.ToShortDateString()</td>
+
+</tr>
 
 @code {
-    
+
+    /// <summary>
+    /// The status update.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public StatusUpdate StatusUpdate { get; set; } = new();
+
 }
