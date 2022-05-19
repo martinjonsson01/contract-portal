@@ -4,8 +4,10 @@
     top: 6rem;
     left: 20vw;
     right: 8vw;
-    justify-content: center;
-    max-width: 60%;
+    max-width: 60vw;
+    max-height: 85vh;
+    overflow: hidden;
+
 }
 
 .text-block h1 {
