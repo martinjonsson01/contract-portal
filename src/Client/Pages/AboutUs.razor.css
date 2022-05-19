@@ -1,0 +1,39 @@
+﻿.text-block  {
+    position: absolute;
+    text-align: center;
+    top: 6rem;
+    left: 30vw;
+    right: 8vw;
+    justify-content: center;
+    max-width: 40%;
+}
+
+.text-block h1 {
+    color: #fbebac;
+    text-shadow: 0 0 20px black;
+
+}
+
+.text-block p {
+    color: #ffffff;
+    background: rgba(175,175,175,1);
+    padding: 3rem;
+}
+
+.aboutUsImage {
+
+    height: 100vw;
+    width: 100vw;
+    object-fit: cover;
+}
+
+.container {
+    padding: 0 !important;
+    margin: 0 !important;
+
+
+
+}
+
+
+
