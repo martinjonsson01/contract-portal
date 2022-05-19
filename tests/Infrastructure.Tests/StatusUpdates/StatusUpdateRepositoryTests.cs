@@ -26,9 +26,9 @@ public class StatusUpdateRepositoryTests : IClassFixture<TestDatabaseFixture>
     {
         // Arrange
         var statusUpdate = new StatusUpdate();
+        _cut.Add(statusUpdate);
 
         // Act
-        _cut.Add(statusUpdate);
         IEnumerable<StatusUpdate> statusUpdates = _cut.All;
 
         // Assert
