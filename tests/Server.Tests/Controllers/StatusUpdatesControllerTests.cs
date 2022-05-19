@@ -1,7 +1,6 @@
 ﻿using Application.StatusUpdates;
 
 using Domain.StatusUpdates;
-using Domain.Users;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,14 +20,15 @@ public class StatusUpdatesControllerTests
     }
 
     [Fact]
-    public void Create_ReturnsOk()
+    public void CreateCallsNotificationServiceOnce()
     {
         // Arrange
+        var statusUpdate = new StatusUpdate();
 
         // Act
-        IActionResult actual = _cut.Create(new StatusUpdate());
+        _cut.Create(statusUpdate);
 
         // Assert
-        actual.Should().BeOfType<OkResult>();
+        _mockStatusUpdates.Verify(service => service.Add(statusUpdate), Times.Once);
     }
 }
