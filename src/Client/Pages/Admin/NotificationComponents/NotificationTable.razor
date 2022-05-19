@@ -16,7 +16,7 @@
         </thead>
 
         <tbody>
-        @foreach (StatusUpdate statusUpdate in statusUpdates)
+        @foreach (StatusUpdate statusUpdate in statusUpdates.OrderByDescending(status => status.Timestamp))
         {
             <NotificationTableRow @key="@statusUpdate.Id"
                               StatusUpdate=@statusUpdate />
