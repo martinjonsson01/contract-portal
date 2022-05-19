@@ -28,12 +28,6 @@
     max-width: 70%;
 }
 
-.aboutUsImage {
-    height: 100vh;
-    width: 100vw;
-    object-fit: cover;
-}
-
 .container {
     padding: 0 !important;
     margin: 0 !important;
