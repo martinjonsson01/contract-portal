@@ -3,6 +3,6 @@
     display: flex;
     flex-direction: column;
     height: fit-content; /*The list won't be longer than necessary*/
-    max-height: 10em; /*This value determines the height of the list*/
+    max-height: 10rem; /*This value determines the height of the list*/
     width: fit-content;
 }
