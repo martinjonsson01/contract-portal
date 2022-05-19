@@ -2,22 +2,25 @@
     position: absolute;
     text-align: center;
     top: 6rem;
-    left: 30vw;
+    left: 20vw;
     right: 8vw;
     justify-content: center;
-    max-width: 40%;
+    max-width: 60%;
 }
 
 .text-block h1 {
     color: #fbebac;
     text-shadow: 0 0 20px black;
-
 }
 
-.text-block p {
+
+
+.text-block h4 {
+    margin-top: 3rem;
     color: #ffffff;
-    background: rgba(175,175,175,1);
-    padding: 3rem;
+    background-color: rgba(62, 75, 101,0.75);
+    padding: 2.5rem;
+    border-radius: 2rem;
 }
 
 .aboutUsImage {
@@ -30,9 +33,6 @@
 .container {
     padding: 0 !important;
     margin: 0 !important;
-
-
-
 }
 
 
