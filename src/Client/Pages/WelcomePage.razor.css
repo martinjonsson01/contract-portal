@@ -17,8 +17,9 @@
 }
 
 .btn-primary {
-    top: 3rem;
+    top: 5rem;
     position: relative;
-    width: 12.5rem;
-    height: 3.125rem;
+    width: 25rem;
+    height: 6.25rem;
+    font-size: 2.3rem;
 }
