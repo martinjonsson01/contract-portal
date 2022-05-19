@@ -1,4 +1,5 @@
 ﻿using Client.Pages.Admin;
+using Client.Pages.Admin.ContractComponents;
 
 using Domain.Contracts;
 
