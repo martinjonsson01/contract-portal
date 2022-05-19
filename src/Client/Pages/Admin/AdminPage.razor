@@ -42,7 +42,7 @@
                 </div>
             </TabPanel>
             <TabPanel Name="notifications">
-                <NotificationForm @ref="_notificationForm" />
+                <NotificationForm OnNotificationSent="AddStatusUpdateToTable"/>
                 <NotificationTable @ref="@_notificationTable"/>
             </TabPanel>
         </Content>
@@ -60,7 +60,6 @@
     private UserForm _userForm = null!;
     private UserTable _userTable = null!;
 
-    private NotificationForm _notificationForm = null!;
     private NotificationTable _notificationTable = null!;
 
     private void AddContractToTable(Contract contract)
@@ -71,6 +70,11 @@
     private void AddUserToTable(User user)
     {
         _userTable.AddOrUpdate(user);
+    }
+
+    private void AddStatusUpdateToTable(StatusUpdate statusUpdate)
+    {
+        _notificationTable.Add(statusUpdate);
     }
 
     private Task OnSelectedTabChanged(string tabName)

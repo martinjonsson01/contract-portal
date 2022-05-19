@@ -1,7 +1,8 @@
 ﻿@using Domain.StatusUpdates
 @inject HttpClient _http;
 
-<FetchData TData="StatusUpdate[]"
+<FetchData @ref="_dataFetcher"
+           TData="List<StatusUpdate>"
            Url="api/v1/status-updates"
            Context="statusUpdates">
 
@@ -38,15 +39,7 @@
         if (_dataFetcher.Data is null)
             return;
 
-        if (_dataFetcher.Data.Any(other => other.Id == statusUpdate.Id))
-        {
-            _dataFetcher.Data.RemoveAll(toRemove => toRemove.Id == statusUpdate.Id);
-            _dataFetcher.Data.Add(statusUpdate);
-        }
-        else
-        {
-            _dataFetcher.Data.Add(statusUpdate);
-        }
+        _dataFetcher.Data.Add(statusUpdate);
         InvokeAsync(StateHasChanged);
     }
 
