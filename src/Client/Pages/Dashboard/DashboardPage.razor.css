@@ -1,4 +1,4 @@
-﻿/*The different lists such as waring or news notifications should have their own container*/
+﻿/*The different lists such as warning or news notifications should have their own container*/
 .status-update-container {
     display: flex;
     flex-direction: column;
