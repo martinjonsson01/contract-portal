@@ -10,7 +10,7 @@
 }
 
 .welcome-container h1 {
-    color: #fbebac;
+    color: var(--prodigo-yellow);
     text-shadow: 0 0 1rem black;
     text-align: center;
     margin-top: 10vh;
