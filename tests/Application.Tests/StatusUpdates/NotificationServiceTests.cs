@@ -16,7 +16,7 @@ public class NotificationServiceTests
     }
 
     [Fact]
-    public void AddingNotificationCallsRepoOnce()
+    public void AddingNotification_CallsRepoOnce()
     {
         // Arrange
         var statusUpdate = new StatusUpdate();
