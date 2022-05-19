@@ -22,7 +22,7 @@ public class StatusUpdateRepositoryTests : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public void AddStatusUpdateStoresTheStatusUpdate()
+    public void AllStatusUpdates_ReturnsStatusUpdate_WhenItHasBeenAdded()
     {
         // Arrange
         var statusUpdate = new StatusUpdate();
