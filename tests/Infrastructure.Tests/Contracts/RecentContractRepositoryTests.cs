@@ -31,10 +31,10 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
 
         var contract1 = new Contract() { Name = "1" };
         _context.Contracts.Add(contract1);
-        _cut.Add(user1.Name, contract1);
+        _cut.Add(user1.Id, contract1);
 
         // Act
-        IList<RecentlyViewedContract> contracts = _cut.FetchRecentContracts(user1.Name);
+        IList<RecentlyViewedContract> contracts = _cut.FetchRecentContracts(user1.Id);
 
         // Assert
         contracts.First().ContractId.Should().Be(contract1.Id);
@@ -51,12 +51,12 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
         AddContractsToContext(contract1);
 
         // Act
-        _cut.Add(user1.Name, contract1);
-        var timeBeforeReAdd = _context.Users.First(user => user.Name == user1.Name).RecentlyViewContracts
+        _cut.Add(user1.Id, contract1);
+        var timeBeforeReAdd = _context.Users.First(user => user.Id == user1.Id).RecentlyViewContracts
             .First(recentContract => recentContract.ContractId == contract1.Id)
             .LastViewed;
-        _cut.Add(user1.Name, contract1);
-        var timeAfterReAdd = _context.Users.First(user => user.Name == user1.Name).RecentlyViewContracts
+        _cut.Add(user1.Id, contract1);
+        var timeAfterReAdd = _context.Users.First(user => user.Id == user1.Id).RecentlyViewContracts
             .First(recentContract => recentContract.ContractId == contract1.Id)
             .LastViewed;
 
@@ -74,15 +74,15 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
         var contract1 = new Contract();
         var contract2 = new Contract();
         AddContractsToContext(contract1, contract2);
-        _cut.Add(user1.Name, contract1);
-        _cut.Add(user1.Name, contract2);
+        _cut.Add(user1.Id, contract1);
+        _cut.Add(user1.Id, contract2);
 
-        RecentlyViewedContract toRemove = _context.Users.First(user => user.Name == user1.Name).RecentlyViewContracts
+        RecentlyViewedContract toRemove = _context.Users.First(user => user.Id == user1.Id).RecentlyViewContracts
             .First(recentContract => recentContract.ContractId == contract1.Id);
 
         // Act
         _cut.Remove(toRemove);
-        IList<RecentlyViewedContract> contracts = _cut.FetchRecentContracts(user1.Name);
+        IList<RecentlyViewedContract> contracts = _cut.FetchRecentContracts(user1.Id);
 
         // Assert
         contracts.First().ContractId.Should().Be(contract2.Id);
@@ -99,16 +99,16 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
 
         var contract1 = new Contract();
         AddContractsToContext(contract1);
-        _cut.Add(user1.Name, contract1);
-        _cut.Add(user2.Name, contract1);
+        _cut.Add(user1.Id, contract1);
+        _cut.Add(user2.Id, contract1);
 
         // Act
         _context.Contracts.Remove(contract1);
         _context.SaveChanges();
 
         // Assert
-        _context.Users.First(user => user.Name == user1.Name).RecentlyViewContracts.Should().BeEmpty();
-        _context.Users.First(user => user.Name == user2.Name).RecentlyViewContracts.Should().BeEmpty();
+        _context.Users.First(user => user.Id == user1.Id).RecentlyViewContracts.Should().BeEmpty();
+        _context.Users.First(user => user.Id == user2.Id).RecentlyViewContracts.Should().BeEmpty();
     }
 
     [Fact]
@@ -121,13 +121,13 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
         var contract2 = new Contract();
         AddContractsToContext(contract1);
         AddContractsToContext(contract2);
-        _cut.Add(user1.Name, contract1);
+        _cut.Add(user1.Id, contract1);
 
         // Act
         _context.Contracts.Remove(contract2);
         _context.SaveChanges();
 
-        _context.Users.First(user => user.Name == user1.Name).RecentlyViewContracts.Should().ContainSingle();
+        _context.Users.First(user => user.Id == user1.Id).RecentlyViewContracts.Should().ContainSingle();
     }
 
     [Fact]
@@ -137,7 +137,7 @@ public class RecentContractRepositoryTests : IClassFixture<TestDatabaseFixture>,
         var user1 = new User();
 
         // Act
-        Action fetch = () => _cut.FetchRecentContracts(user1.Name);
+        Action fetch = () => _cut.FetchRecentContracts(user1.Id);
 
         // Assert
         fetch.Should().Throw<UserDoesNotExistException>();

@@ -69,6 +69,20 @@ public class UserServiceTests
     }
 
     [Fact]
+    public void AddingUser_Throws_WhenUserWithNameAlreadyExists()
+    {
+        // Arrange
+        const string name = "A user's name";
+        _mockRepo.Setup(repository => repository.All).Returns(new[] { new User { Name = name, }, });
+
+        // Act
+        Action add = () => _cut.Add(new User { Name = name, });
+
+        // Assert
+        add.Should().Throw<UserNameTakenException>();
+    }
+
+    [Fact]
     public void RemovingUser_DoesReturnTrue_WhenAUserExists()
     {
         // Arrange
@@ -119,7 +133,8 @@ public class UserServiceTests
         const string password = "UserPassword";
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
         var user = new User() { Password = passwordHash, };
-        _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
+        _mockRepo.Setup(repository => repository.Fetch(user.Id)).Returns(user);
+        _mockRepo.Setup(repository => repository.FromName(user.Name)).Returns(user);
 
         // Act
         AuthenticateResponse authResponse = _cut.Authenticate(user.Name, password);
@@ -135,42 +150,15 @@ public class UserServiceTests
         const string correctPassword = "CorrectPassword";
         const string incorrectPassword = "IncorrectPassword";
         string passwordHash1 = BCrypt.Net.BCrypt.HashPassword(correctPassword);
-        var user = new User() { Name = "User1", Password = passwordHash1, };
-        _mockRepo.Setup(repository => repository.Fetch(user.Name)).Returns(user);
+        var user = new User { Name = "User1", Password = passwordHash1, };
+        _mockRepo.Setup(repository => repository.Fetch(user.Id)).Returns(user);
+        _mockRepo.Setup(repository => repository.FromName(user.Name)).Returns(user);
 
         // Act
         Action tryAuthenticate = () => _cut.Authenticate(user.Name, incorrectPassword);
 
         // Assert
         tryAuthenticate.Should().Throw<InvalidPasswordException>();
-    }
-
-    [Fact]
-    public void UserExists_ReturnsTrue_IfUserExistsInRepository()
-    {
-        // Arrange
-        string username = "user";
-        _mockRepo.Setup(repository => repository.Exists(username)).Returns(true);
-
-        // Act
-        bool actual = _cut.UserExists(username);
-
-        // Assert
-        actual.Should().BeTrue();
-    }
-
-    [Fact]
-    public void UserExists_ReturnsFalse_IfUserDoesNotExistInRepository()
-    {
-        // Arrange
-        string username = "user";
-        _mockRepo.Setup(repository => repository.Exists(username)).Returns(false);
-
-        // Act
-        bool actual = _cut.UserExists(username);
-
-        // Assert
-        actual.Should().BeFalse();
     }
 
     [Fact]
@@ -225,7 +213,8 @@ public class UserServiceTests
         const string password = "password";
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
         var user = new User { Name = username, Password = passwordHash, };
-        _mockRepo.Setup(repository => repository.Fetch(username)).Returns(user);
+        _mockRepo.Setup(repository => repository.Fetch(user.Id)).Returns(user);
+        _mockRepo.Setup(repository => repository.FromName(user.Name)).Returns(user);
 
         // Act
         AuthenticateResponse authResponse = _cut.Authenticate(username, password);

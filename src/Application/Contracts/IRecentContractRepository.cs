@@ -10,16 +10,16 @@ public interface IRecentContractRepository
     /// <summary>
     /// Gets the most recent contracts that the user has viewed.
     /// </summary>
-    /// <param name="username">The username of the user.</param>
+    /// <param name="userId">The ID of the user.</param>
     /// <returns>Top most recently viewed contracts.</returns>
-    IList<RecentlyViewedContract> FetchRecentContracts(string username);
+    IList<RecentlyViewedContract> FetchRecentContracts(Guid userId);
 
     /// <summary>
     /// Marks a contract as recently viewed for a user.
     /// </summary>
-    /// <param name="username">The name of the user.</param>
+    /// <param name="userId">The ID of the user.</param>
     /// <param name="contract">Possible new recent contract.</param>
-    void Add(string username, Contract contract);
+    void Add(Guid userId, Contract contract);
 
     /// <summary>
     /// Removes the last viewed contract for user.

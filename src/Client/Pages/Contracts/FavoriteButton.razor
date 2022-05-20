@@ -44,12 +44,14 @@
     /// </summary>
     private bool IsFavorite { get; set; }
 
+    private string BaseUrl => $"api/v1/users/{Session.UserId}/favorites";
+
     /// <inheritdoc />
     protected override async void OnInitialized()
     {
         if (Session.IsAuthenticated)
         {
-            HttpResponseMessage response = await Http.GetAsync($"api/v1/users/{Session.Username}/favorites/{Contract.Id}");
+            HttpResponseMessage response = await Http.GetAsync($"{BaseUrl}/{Contract.Id}");
             IsFavorite = response.IsSuccessStatusCode;
         }
         else
@@ -61,11 +63,11 @@
 
     private async Task ChangeFavorite()
     {
-        if (!string.IsNullOrEmpty(Session.Username))
+        if (Session.UserId is not null)
         {
-            FavoriteContractDto favoriteContract = new() { UserName = Session.Username, ContractId = Contract.Id, IsFavorite = !IsFavorite };
+            FavoriteContractDto favoriteContract = new() { UserId = Session.UserId.Value, ContractId = Contract.Id, IsFavorite = !IsFavorite };
 
-            HttpResponseMessage response = await Http.PostAsJsonAsync($"api/v1/users/{Session.Username}/favorites", favoriteContract);
+            HttpResponseMessage response = await Http.PostAsJsonAsync(BaseUrl, favoriteContract);
             if (response.IsSuccessStatusCode)
             {
                 IsFavorite = !IsFavorite;
