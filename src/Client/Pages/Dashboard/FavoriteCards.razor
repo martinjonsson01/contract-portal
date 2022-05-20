@@ -15,7 +15,7 @@
         }
         @if (contractsList.Any())
         {
-            <div id="favorite-cards-container" class="d-flex flex-row justify-content-center flex-wrap">
+            <div id="favorite-cards-container" class="favorite-grid">
                 @foreach (var contract in contractsList)
                 {
                     <ContractCard Contract=@contract OnFavoriteChange="@OnFavoriteChange"/>
