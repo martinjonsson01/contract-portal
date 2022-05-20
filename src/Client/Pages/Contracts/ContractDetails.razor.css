@@ -15,10 +15,16 @@ img#contract-thumbnail {
 .modal-content {
     border-radius: 1rem;
     border: none;
+    overflow-wrap: break-word;
+
 }
 
 h1 {
     font-size: 3rem !important;
+    text-align: center;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0.5rem;
 }
 
 h2 {
