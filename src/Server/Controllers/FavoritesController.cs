@@ -9,7 +9,7 @@ namespace Server.Controllers;
 /// WebAPI for favorites.
 /// </summary>
 [ApiController]
-[Route("api/v1/users/{username}/[controller]")]
+[Route("api/v1/users/{userId:guid}/[controller]")]
 public class FavoritesController : BaseApiController<FavoritesController>
 {
     private readonly IUserService _users;
@@ -38,11 +38,11 @@ public class FavoritesController : BaseApiController<FavoritesController>
         {
             if (favoriteContract.IsFavorite)
             {
-                _users.AddFavorite(favoriteContract.UserName, favoriteContract.ContractId);
+                _users.AddFavorite(favoriteContract.UserId, favoriteContract.ContractId);
             }
             else
             {
-                _ = _users.RemoveFavorite(favoriteContract.UserName, favoriteContract.ContractId);
+                _ = _users.RemoveFavorite(favoriteContract.UserId, favoriteContract.ContractId);
             }
 
             return Ok();
@@ -60,23 +60,23 @@ public class FavoritesController : BaseApiController<FavoritesController>
     /// <summary>
     /// Checks if a certain contract is marked as favorite by a certain user.
     /// </summary>
-    /// <param name="userName">The name of the user.</param>
-    /// <param name="contractId">The id of the contract.</param>
+    /// <param name="userId">The ID of the user.</param>
+    /// <param name="contractId">The ID of the contract.</param>
     /// <returns>Whether the contract is marked as favorite by the user.</returns>
     [HttpGet("{contractId:guid}")]
-    public IActionResult GetIsFavorite(string userName, Guid contractId)
+    public IActionResult GetIsFavorite(Guid userId, Guid contractId)
     {
-        return _users.IsFavorite(userName, contractId) ? Ok() : NotFound();
+        return _users.IsFavorite(userId, contractId) ? Ok() : NotFound();
     }
 
     /// <summary>
     /// Gets all contracts marked as favorite by a certain user.
     /// </summary>
-    /// <param name="userName">The name of the user.</param>
+    /// <param name="userId">The ID of the user.</param>
     /// <returns>All contracts marked as favorite by the user.</returns>
     [HttpGet]
-    public IEnumerable<Contract> GetAll(string userName)
+    public IEnumerable<Contract> GetAll(Guid userId)
     {
-        return _users.FetchAllFavorites(userName);
+        return _users.FetchAllFavorites(userId);
     }
 }

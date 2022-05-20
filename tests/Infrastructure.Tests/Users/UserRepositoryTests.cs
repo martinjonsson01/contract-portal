@@ -74,7 +74,7 @@ public class UserRepositoryTests : IClassFixture<TestDatabaseFixture>
         _cut.EnsureAdminCreated();
 
         // Act
-        bool exists = _cut.Exists(adminName);
+        bool exists = _cut.FromName(adminName) is not null;
 
         // Assert
         exists.Should().BeTrue();
