@@ -1,7 +1,4 @@
 ﻿.favorite-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     gap: 1.5625rem 1.25rem;
     max-width: 70rem;
     padding-top: 1rem;
