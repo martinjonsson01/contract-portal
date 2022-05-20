@@ -1,6 +1,7 @@
 using Application.Contracts;
 using Application.Exceptions;
 using Application.Users;
+
 using Domain.Contracts;
 using Domain.Users;
 
@@ -47,11 +48,26 @@ public class UsersControllerTests
     }
 
     [Fact]
+    public void Create_ReturnsBadRequest_WhenNameIsTaken()
+    {
+        // Arrange
+        var user = new User();
+        _mockUsers.Setup(service => service.Add(user)).Throws<UserNameTakenException>();
+
+        // Act
+        IActionResult actual = _cut.Create(user, user.Id);
+
+        // Assert
+        actual.Should().BeOfType<BadRequestObjectResult>();
+    }
+
+    [Fact]
     public void Authenticate_ReturnsOk_IfUserExistsAndPasswordIsCorrect()
     {
         // Arrange
         var user = new User() { Name = "user", Password = "password", };
-        _mockUsers.Setup(service => service.Authenticate(user.Name, user.Password)).Returns(new AuthenticateResponse(user, "token"));
+        _mockUsers.Setup(service => service.Authenticate(user.Name, user.Password))
+                  .Returns(new AuthenticateResponse(user, "token"));
 
         // Act
         IActionResult actual = _cut.Authenticate(user);

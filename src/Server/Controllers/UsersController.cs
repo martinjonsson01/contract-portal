@@ -51,6 +51,10 @@ public class UsersController : BaseApiController<UsersController>
         {
             _users.UpdateUser(user);
         }
+        catch (UserNameTakenException)
+        {
+            return BadRequest($"Name {user.Name} is already taken");
+        }
 
         return Ok();
     }

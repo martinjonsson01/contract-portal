@@ -8,7 +8,7 @@ public class FavoriteContractDto
     /// <summary>
     ///     Gets the id of the user.
     /// </summary>
-    public string UserName { get; init; } = string.Empty;
+    public Guid UserId { get; init; } = Guid.Empty;
 
     /// <summary>
     ///     Gets the id of the contract.

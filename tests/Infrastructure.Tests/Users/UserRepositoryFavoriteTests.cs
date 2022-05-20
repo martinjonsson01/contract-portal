@@ -17,14 +17,12 @@ namespace Infrastructure.Tests.Users;
 [Collection("DatabaseTests")]
 public class UserRepositoryFavoriteTests : IClassFixture<TestDatabaseFixture>, IDisposable
 {
-    private readonly TestDatabaseFixture _fixture;
     private readonly EFDatabaseContext _context;
     private IUserRepository _cut;
 
     public UserRepositoryFavoriteTests(TestDatabaseFixture fixture)
     {
-        _fixture = fixture;
-        _context = _fixture.CreateContext();
+        _context = fixture.CreateContext();
         var mockEnvironment = new Mock<IConfiguration>();
         mockEnvironment.Setup(env => env[ConfigurationKeys.AdminPassword]).Returns("test_password");
         _cut = new EFUserRepository(_context, Mock.Of<ILogger<EFUserRepository>>(), mockEnvironment.Object);
@@ -43,7 +41,7 @@ public class UserRepositoryFavoriteTests : IClassFixture<TestDatabaseFixture>, I
     public void Add_MarksContractAsFavorite_WhenUserAndContractExist()
     {
         // Arrange
-        User user = new() { Name = "user" };
+        User user = new() { Name = "user", };
         Contract contract = new();
 
         _context.Users.Add(user);
@@ -51,7 +49,7 @@ public class UserRepositoryFavoriteTests : IClassFixture<TestDatabaseFixture>, I
         _context.SaveChanges();
 
         // Act
-        _cut.AddFavorite(user.Name, contract.Id);
+        _cut.AddFavorite(user.Id, contract.Id);
 
         // Assert
         User databaseUser = _context.Users.Where(u => u.Id == user.Id).Include(u => u.Favorites).First();
@@ -62,14 +60,14 @@ public class UserRepositoryFavoriteTests : IClassFixture<TestDatabaseFixture>, I
     public void Add_Throws_WhenContractDoesNotExist()
     {
         // Arrange
-        User user = new() { Name = "user" };
+        User user = new() { Name = "user", };
         Guid fakeId = Guid.NewGuid();
 
         _context.Users.Add(user);
         _context.SaveChanges();
 
         // Act
-        Action fetch = () => _cut.AddFavorite(user.Name, fakeId);
+        Action fetch = () => _cut.AddFavorite(user.Id, fakeId);
 
         // Assert
         fetch.Should().Throw<ContractDoesNotExistException>();
@@ -79,14 +77,14 @@ public class UserRepositoryFavoriteTests : IClassFixture<TestDatabaseFixture>, I
     public void Add_Throws_WhenUserDoesNotExist()
     {
         // Arrange
-        string fakeUsername = "fakeUsername";
+        var nonexistentUserId = Guid.NewGuid();
         Contract contract = new();
 
         _context.Contracts.Add(contract);
         _context.SaveChanges();
 
         // Act
-        Action fetch = () => _cut.AddFavorite(fakeUsername, contract.Id);
+        Action fetch = () => _cut.AddFavorite(nonexistentUserId, contract.Id);
 
         // Assert
         fetch.Should().Throw<UserDoesNotExistException>();
@@ -96,7 +94,7 @@ public class UserRepositoryFavoriteTests : IClassFixture<TestDatabaseFixture>, I
     public void Remove_ReturnsTrue_WhenContractIsAFavorite()
     {
         // Arrange
-        User user = new() { Name = "user" };
+        User user = new() { Name = "user", };
         Contract contract = new();
 
         user.Favorites.Add(contract);
@@ -105,7 +103,7 @@ public class UserRepositoryFavoriteTests : IClassFixture<TestDatabaseFixture>, I
         _context.SaveChanges();
 
         // Act
-        bool actual = _cut.RemoveFavorite(user.Name, contract.Id);
+        bool actual = _cut.RemoveFavorite(user.Id, contract.Id);
 
         // Assert
         actual.Should().BeTrue();
@@ -115,7 +113,7 @@ public class UserRepositoryFavoriteTests : IClassFixture<TestDatabaseFixture>, I
     public void Remove_ReturnsFalse_WhenContractIsNotAFavorite()
     {
         // Arrange
-        User user = new() { Name = "user" };
+        User user = new() { Name = "user", };
         Contract contract = new();
 
         _context.Contracts.Add(contract);
@@ -123,7 +121,7 @@ public class UserRepositoryFavoriteTests : IClassFixture<TestDatabaseFixture>, I
         _context.SaveChanges();
 
         // Act
-        bool actual = _cut.RemoveFavorite(user.Name, contract.Id);
+        bool actual = _cut.RemoveFavorite(user.Id, contract.Id);
 
         // Assert
         actual.Should().BeFalse();

@@ -12,4 +12,10 @@ public interface IStatusUpdateService
     /// </summary>
     /// <returns>All status updates.</returns>
     IEnumerable<StatusUpdate> FetchAll();
+
+    /// <summary>
+    /// Adds a new status update.
+    /// </summary>
+    /// <param name="statusUpdate">The new status update.</param>
+    void Add(StatusUpdate statusUpdate);
 }
