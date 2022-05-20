@@ -1,8 +1,9 @@
 @page "/dashboard"
 @inherits AuthenticationRequiredView
+@inject ISessionService _session
 
 <div class="dashboard-background container-fluid p-5 m-0">
-    <h2 class="text-center pb-3 title">Välkommen till Prodigo Portal!</h2>
+    <h2 class="text-center pb-3 title"> @WelcomeMessage</h2>
     <div class="d-flex justify-content-center flex-wrap">
         <div class="dashboard-item-box d-flex justify-content-center">
             <StatusUpdates/>
@@ -12,3 +13,9 @@
         </div>
     </div>
 </div>
+
+@code
+{
+    string WelcomeMessage => "Hej, " + _session.Username + "!";
+
+}
