@@ -1,8 +1,8 @@
 ﻿.dashboard-item-box{
     background-color: var(--prodigo-light-blue);
-    border-radius: 20px;
-    padding: 20px;
-    margin: 10px;
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    margin: 0.625rem;
 }
 
 .dashboard-background{

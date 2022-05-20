@@ -2,8 +2,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 25px 20px;
-    max-width: 70em;
-    padding-top: 1em;
-    padding-bottom: 2em;
+    gap: 1.5625rem 1.25rem;
+    max-width: 70rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
 }
