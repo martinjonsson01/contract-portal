@@ -1,5 +1,6 @@
 @page "/admin"
 @using Domain.Contracts
+@using Domain.StatusUpdates
 @using Domain.Users
 @inherits AuthenticationRequiredView
 
@@ -17,6 +18,7 @@
         <Items>
             <Tab Name="contracts">Hantera kontrakt</Tab>
             <Tab Name="users">Hantera användare</Tab>
+            <Tab Name="notifications">Hantera notifikationer</Tab>
             <Tab Name="analytics">Användningsdata</Tab>
         </Items>
         <Content>
@@ -36,6 +38,10 @@
                     <a class="btn btn-primary" target="_blank" href="https://analytics.google.com/">Gå till Google Analytics</a>
                 </div>
             </TabPanel>
+            <TabPanel Name="notifications">
+                <NotificationForm OnNotificationSent="AddStatusUpdateToTable"/>
+                <NotificationTable @ref="@_notificationTable"/>
+            </TabPanel>
         </Content>
     </Tabs>
 </div>
@@ -45,10 +51,13 @@
     private string _selectedTab = "contracts";
 
     // Null-forgiving operator used because these fields are set by the Blazor runtime using @ref
-    private ContractTable _contractTable = null!;
-    private UserTable _userTable = null!;
     private ContractForm _contractForm = null!;
+    private ContractTable _contractTable = null!;
+
     private UserForm _userForm = null!;
+    private UserTable _userTable = null!;
+
+    private NotificationTable _notificationTable = null!;
 
     private void AddContractToTable(Contract contract)
     {
@@ -58,6 +67,11 @@
     private void AddUserToTable(User user)
     {
         _userTable.AddOrUpdate(user);
+    }
+
+    private void AddStatusUpdateToTable(StatusUpdate statusUpdate)
+    {
+        _notificationTable.Add(statusUpdate);
     }
 
     private Task OnSelectedTabChanged(string tabName)
