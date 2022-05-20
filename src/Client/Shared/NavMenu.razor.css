@@ -1,5 +1,7 @@
 .navbar-toggler {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--prodigo-dark-blue);
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
 }
 
 .navbar-brand {
