@@ -10,7 +10,7 @@
         <p id="logged-in" class="text-center m-0">
             <i>Inloggad som <b>@Session.Username</b></i>
         </p>
-        <button id="logout-button" class="btn btn-link" @onclick="@(async () => await Session.EndAsync())">Logga ut</button>
+        <button id="logout-button" class="btn btn-primary" @onclick="@(async () => await Session.EndAsync())">Logga ut</button>
     </div>
 }
 else

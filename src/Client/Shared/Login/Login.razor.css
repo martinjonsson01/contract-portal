@@ -7,10 +7,6 @@ button {
     color: var(--prodigo-white);
 }
 
-#logout-button:hover {
-    color: var(--prodigo-light-blue);
-}
-
 p {
     padding-left: 1.25rem;
 }
