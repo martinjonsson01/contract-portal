@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AngleSharp.Dom;
 
 using Client.Pages.Admin;
+using Client.Pages.Admin.ContractComponents;
 
 using Domain.Contracts;
 
