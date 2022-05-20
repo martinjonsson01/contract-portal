@@ -1,5 +1,5 @@
 ﻿.dashboard-item-box{
-    background-color: #dadee8;
+    background-color: var(--prodigo-light-blue);
     border-radius: 20px;
     padding: 20px;
     margin: 10px;
