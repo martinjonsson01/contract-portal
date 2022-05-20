@@ -1,4 +1,4 @@
-using Client.Pages.Admin;
+using Client.Pages.Admin.UserComponents;
 
 using Domain.Users;
 

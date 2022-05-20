@@ -2,6 +2,7 @@
 
 using Domain.StatusUpdates;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -36,5 +37,16 @@ public class StatusUpdatesController : BaseApiController<StatusUpdatesController
     public IEnumerable<StatusUpdate> All()
     {
         return _statusUpdates.FetchAll();
+    }
+
+    /// <summary>
+    /// Creates a new status update.
+    /// </summary>
+    /// <param name="statusUpdate">The status update to add.</param>
+    [HttpPut]
+    [Authorize("AdminOnly")]
+    public void Create([FromBody] StatusUpdate statusUpdate)
+    {
+        _statusUpdates.Add(statusUpdate);
     }
 }
