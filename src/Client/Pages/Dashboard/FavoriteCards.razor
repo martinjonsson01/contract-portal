@@ -8,7 +8,7 @@
     <h3 class="fw-bold">Favoriter</h3>
     <FetchData @ref="_dataFetcher"
                TData="List<Contract>"
-               Url=@($"api/v1/users/{_session.Username}/favorites")
+               Url=@($"api/v1/users/{_session.UserId}/favorites")
                Context="contracts">
         @{
             var contractsList = contracts.ToList();
@@ -18,7 +18,7 @@
             <div id="favorite-cards-container" class="d-flex flex-row justify-content-center flex-wrap">
                 @foreach (var contract in contractsList)
                 {
-                    <ContractCard Contract=@contract OnFavoriteChange="@((args)=> OnFavoriteChange(((Guid, bool))args))"/>
+                    <ContractCard Contract=@contract OnFavoriteChange="@OnFavoriteChange"/>
                 }
             </div>
         }

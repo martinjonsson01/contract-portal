@@ -15,6 +15,11 @@ namespace Client.Tests.Pages.Admin;
 
 public class UserTableTests : UITestFixture
 {
+    public UserTableTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void AddingUser_RendersTheNewUser()
     {

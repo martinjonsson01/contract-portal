@@ -21,18 +21,18 @@ public class LimitedRecentContractService : IRecentContractService
     }
 
     /// <inheritdoc />
-    public int Size(string username)
+    public int Size(Guid userId)
     {
-        return _recent.FetchRecentContracts(username).Count;
+        return _recent.FetchRecentContracts(userId).Count;
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> FetchRecentContracts(string username)
+    public IEnumerable<Contract> FetchRecentContracts(Guid userId)
     {
         try
         {
             var contracts = new List<Contract>();
-            foreach (RecentlyViewedContract recentContract in _recent.FetchRecentContracts(username)
+            foreach (RecentlyViewedContract recentContract in _recent.FetchRecentContracts(userId)
                          .OrderByDescending(recentContract => recentContract.LastViewed))
             {
                 contracts.Add(_contract.FetchContract(recentContract.ContractId) ??
@@ -48,16 +48,16 @@ public class LimitedRecentContractService : IRecentContractService
     }
 
     /// <inheritdoc />
-    public void Add(string username, Contract contract)
+    public void Add(Guid userId, Contract contract)
     {
-        _recent.Add(username, contract);
+        _recent.Add(userId, contract);
 
         const int recentAmountMax = 3;
-        if (Size(username) <= recentAmountMax)
+        if (Size(userId) <= recentAmountMax)
             return;
 
         RecentlyViewedContract toRemove = _recent
-            .FetchRecentContracts(username)
+            .FetchRecentContracts(userId)
             .OrderBy(recentContract => recentContract.LastViewed)
             .First();
         _recent.Remove(toRemove);

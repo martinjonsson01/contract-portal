@@ -40,6 +40,9 @@ internal class SessionManagerService : ISessionService
     public string? Username { get; private set; }
 
     /// <inheritdoc/>
+    public Guid? UserId { get; private set; }
+
+    /// <inheritdoc/>
     public async Task BeginAsync(AuthenticateResponse authentication)
     {
         await _storage.SetItemAsync("user", authentication).ConfigureAwait(true);
@@ -56,6 +59,7 @@ internal class SessionManagerService : ISessionService
 
         IsAuthenticated = false;
         Username = null;
+        UserId = null;
 
         AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = null, });
     }
@@ -81,6 +85,7 @@ internal class SessionManagerService : ISessionService
         _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authentication.Token);
         IsAuthenticated = true;
         Username = authentication.Username;
+        UserId = authentication.Id;
         AuthenticationStateChanged?.Invoke(this, new AuthenticationEventArgs { State = authentication, });
     }
 }

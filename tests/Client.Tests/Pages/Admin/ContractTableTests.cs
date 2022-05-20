@@ -15,6 +15,11 @@ namespace Client.Tests.Pages.Admin;
 
 public class ContractTableTests : UITestFixture
 {
+    public ContractTableTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void AddingContract_RendersTheNewContract()
     {
@@ -58,7 +63,7 @@ public class ContractTableTests : UITestFixture
         Action add = () => cut.Instance.AddOrUpdate(newContract);
 
         // Assert
-        add.Should().NotThrow();
+        cut.WaitForAssertion(() => add.Should().NotThrow());
     }
 
     [Fact]

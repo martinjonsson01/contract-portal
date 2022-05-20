@@ -1,3 +1,5 @@
+using Blazor.Analytics;
+
 using Blazored.SessionStorage;
 
 using Blazorise;
@@ -17,6 +19,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress), });
 
 builder.Services
+       .AddGoogleAnalytics("G-01KVKPEFVQ")
        .AddBlazorise(options => { options.Immediate = true; })
        .AddBootstrap5Providers()
        .AddFontAwesomeIcons()

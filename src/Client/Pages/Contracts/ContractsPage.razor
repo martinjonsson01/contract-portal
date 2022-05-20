@@ -4,27 +4,31 @@
 @using Blazorise.Extensions
 @inject IJSRuntime Js
 
-<SearchBar OnQueryChange="OnQueryChanged"/>
+<PageTitle>Prodigo Portal - Kontrakt</PageTitle>
 
-<RecentlyViewed @ref="_recentlyViewed"/>
+<div class="container">
+    <SearchBar OnQueryChange="OnQueryChanged"/>
 
-<FetchData @ref="_dataFetcher"
-           TData="IEnumerable<Contract>"
-           Url="api/v1/contracts"
-           Context="contracts"
-           AfterRenderedWithData="SimpleCallback.Create(OpenDetailsView)">
+    <RecentlyViewed @ref="_recentlyViewed"/>
 
-    <div class="container-fluid">
-        <div class="d-flex flex-wrap justify-content-center">
-            @foreach (Contract contract in contracts)
-            {
-                <ContractCard Contract=@contract OnViewed="OnRecentlyViewed"/>
-                <ContractDetails Contract="@contract"/>
-            }
+    <FetchData @ref="_dataFetcher"
+               TData="IEnumerable<Contract>"
+               Url="api/v1/contracts"
+               Context="contracts"
+               AfterRenderedWithData="SimpleCallback.Create(OpenDetailsView)">
+
+        <div class="d-flex flex-wrap justify-content-center pb-5">
+            <div class="prodigo-grid">
+                @foreach (Contract contract in contracts)
+                {
+                    <ContractCard Contract=@contract OnViewed="OnRecentlyViewed"/>
+                    <ContractDetails Contract="@contract"/>
+                }
+            </div>
         </div>
-    </div>
 
-</FetchData>
+    </FetchData>
+</div>
 
 @code {
 

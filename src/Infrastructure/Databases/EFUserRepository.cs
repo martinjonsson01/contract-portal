@@ -74,37 +74,49 @@ public sealed class EFUserRepository : IUserRepository
     }
 
     /// <inheritdoc />
-    public bool Exists(string username)
+    public User? Fetch(Guid id)
     {
-        return Users.Any(user => user.Name == username);
+        return Users.Include(user => user.Favorites).FirstOrDefault(user => user.Id == id);
     }
 
     /// <inheritdoc />
-    public User? Fetch(string username)
+    public User? FromName(string username)
     {
-        return Users.Where(user => user.Name == username).Include(c => c.Favorites).First();
+        return Users.Include(user => user.Favorites).FirstOrDefault(user => user.Name == username);
     }
 
     /// <inheritdoc />
-    public void AddFavorite(string userName, Guid contractId)
+    public void AddFavorite(Guid userId, Guid contractId)
     {
-        User user = FetchUser(userName);
+        User? user = Fetch(userId);
+        if (user is null)
+            throw new UserDoesNotExistException(userId);
+
         Contract contract = FetchContract(contractId);
 
         user.Favorites.Add(contract);
         _ = _context.SaveChanges();
-        _logger.LogInformation("Contract {ContractId} was added as favorite for user {UserName}", contractId, userName);
+        _logger.LogInformation(
+            "Contract {ContractId} was added as favorite for user with ID {UserId}",
+            contractId,
+            userId);
     }
 
     /// <inheritdoc />
-    public bool RemoveFavorite(string userName, Guid contractId)
+    public bool RemoveFavorite(Guid userId, Guid contractId)
     {
-        User user = FetchUser(userName);
+        User? user = Fetch(userId);
+        if (user is null)
+            throw new UserDoesNotExistException(userId);
+
         Contract contract = FetchContract(contractId);
         bool result = user.Favorites.Remove(contract);
         _context.SaveChanges();
 
-        _logger.LogInformation("Contract {ContractId} was removed as favorite from user {UserName}", contractId, userName);
+        _logger.LogInformation(
+            "Contract {ContractId} was removed as favorite from user with ID {UserId}",
+            contractId,
+            userId);
         return result;
     }
 
@@ -114,7 +126,7 @@ public sealed class EFUserRepository : IUserRepository
     /// <param name="updatedUser">Updates the values of an existing user.</param>
     public void UpdateUser(User updatedUser)
     {
-        User? oldUser = FetchUser(updatedUser.Id);
+        User? oldUser = Fetch(updatedUser.Id);
         if (oldUser is null)
             _ = Users.Add(updatedUser);
         else
@@ -128,12 +140,6 @@ public sealed class EFUserRepository : IUserRepository
         {
             _logger.LogError("Could not update user in database: {Message}", e.Message);
         }
-    }
-
-    /// <inheritdoc />
-    public User? FetchUser(Guid id)
-    {
-        return Users.Find(id);
     }
 
     /// <inheritdoc />
@@ -165,23 +171,11 @@ public sealed class EFUserRepository : IUserRepository
         }
     }
 
-    private User FetchUser(string userName)
-    {
-        try
-        {
-            return _context.Users.Where(s => s.Name == userName).Include(s => s.Favorites).First();
-        }
-        catch (InvalidOperationException)
-        {
-            throw new UserDoesNotExistException();
-        }
-    }
-
     private Contract FetchContract(Guid contractId)
     {
         try
         {
-            return _context.Contracts.Where(s => s.Id == contractId).First();
+            return _context.Contracts.First(s => s.Id == contractId);
         }
         catch (InvalidOperationException)
         {

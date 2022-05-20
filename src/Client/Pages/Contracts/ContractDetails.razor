@@ -42,15 +42,17 @@
                         <MarkdownViewer Markdown="@Contract.SupplierDescription"/>
                         </Body>
                     </AccordionItem>
-                    @if (!string.IsNullOrEmpty(Contract.AdditionalDocument))
+                    @if (Contract.AdditionalDocument is not null)
                     {
                         <AccordionItem>
                             <Title>
                                 <h3>Övriga filer</h3>
                             </Title>
                             <Body>
-                            <a id="additional-document" href="@Contract.AdditionalDocument" download>
-                                Ladda ned fil
+                            <a id="additional-document"
+                               href="@Contract.AdditionalDocument.Path"
+                               download="@Contract.AdditionalDocument.Name">
+                                Ladda ned @Contract.AdditionalDocument.Name
                             </a>
                             </Body>
                         </AccordionItem>
