@@ -7,10 +7,6 @@
 
 .dashboard-background{
     background-image: url("https://prodigo.se/wp-content/uploads/2021/05/cowomen-ZKHksse8tUU-unsplash-scaled.jpg");
-    padding: 0;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
     min-width: 100%;
     min-height: 100vh;
     background-size: cover;
