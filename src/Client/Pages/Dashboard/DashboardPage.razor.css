@@ -1,6 +1,22 @@
 ﻿.dashboard-item-box{
-    background-color: #dadee899;
+    background-color: #dadee8;
     border-radius: 20px;
     padding: 20px;
     margin: 10px;
+}
+
+.dashboard-background{
+    background-image: url("https://prodigo.se/wp-content/uploads/2021/05/cowomen-ZKHksse8tUU-unsplash-scaled.jpg");
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    min-width: 100%;
+    min-height: 100vh;
+    background-size: cover;
+}
+
+.title{
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    color: var(--prodigo-white);
 }
