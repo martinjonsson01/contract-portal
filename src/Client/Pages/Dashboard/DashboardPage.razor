@@ -1,17 +1,27 @@
 @page "/dashboard"
 @inherits AuthenticationRequiredView
 
-<div class="container-fluid " style="padding: 50px; margin: 0;">
-    <div style="padding: 10px;">
-        <h2 class="text-center">Välkommen till Prodigo Portal!</h2>
-    </div>
-    <div class="d-flex justify-content-center">
-        <div class="dashboard-item-box">
-            <FavoriteCards/>
+<div style=" background-image: url(https://prodigo.se/wp-content/uploads/2021/06/iStock-951514270.jpg);
+                padding: 0;
+                margin-left: 0;
+                margin-right: 0;
+                margin-top: 0;
+                min-width: 100%;
+                min-height: calc(100vh - 3.5rem);
+                background-size: cover;
+">
+    <div class="container-fluid " style="padding: 50px; margin: 0;">
+        <div style="padding: 10px;">
+            <h2 class="text-center dashboard-item-box">Välkommen till Prodigo Portal!</h2>
         </div>
-        <div class="dashboard-item-box d-flex justify-content-center">
-            <StatusUpdates/>
+        <div class="d-flex justify-content-center">
+            <div class="dashboard-item-box">
+                <FavoriteCards/>
+            </div>
+            <div class="dashboard-item-box d-flex justify-content-center">
+                <StatusUpdates/>
+            </div>
         </div>
-    </div>
 
+    </div>
 </div>
