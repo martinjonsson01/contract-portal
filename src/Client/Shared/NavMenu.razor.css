@@ -12,3 +12,14 @@
 .navbar {
     padding: 0.15625rem 0;
 }
+
+::deep .navbar-nav .nav-link {
+    font-size: 1.0625rem;
+    color: var(--prodigo-white);
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+}
+
+::deep .navbar-nav .nav-link:hover {
+    color: var(--prodigo-light-blue);
+}
