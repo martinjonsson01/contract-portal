@@ -8,7 +8,7 @@
 {
     <div class="d-flex flex-row align-items-center">
         <p id="logged-in" class="text-center m-0">
-            Inloggad som: @Session.Username
+            <i>Inloggad som <b>@Session.Username</b></i>
         </p>
         <button id="logout-button" class="btn btn-link" @onclick="@(async () => await Session.EndAsync())">Logga ut</button>
     </div>
