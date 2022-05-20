@@ -3,9 +3,12 @@
 }
 
 .navbar-brand {
-    font-size: 1.1rem;
+    font-family: 'Merriweather', sans-serif;
+    font-size: 1.875rem;
+    margin-left: 1.25rem;
+    margin-right: 1.875rem;
 }
 
 .navbar {
-    padding: 1rem 0;
+    padding: 0.15625rem 0;
 }
