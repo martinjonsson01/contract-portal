@@ -23,11 +23,10 @@ public class AuthIntegrationTests : IntegrationTest
     {
         get
         {
-            var user = new User { Name = "Unique name", };
             var contract = new Contract();
             return new List<object[]>
             {
-                new object[] { $"/api/v1/users/{user.Id}", user, },
+                new object[] { $"/api/v1/users", new User { Name = "Unique name", }, },
                 new object[] { $"/api/v1/contracts/{contract.Id}", contract, },
             };
         }
@@ -42,13 +41,13 @@ public class AuthIntegrationTests : IntegrationTest
             Func<HttpClient, Task> createContract =
                 async client => await client.PutAsJsonAsync(contractEndpoint, contract);
 
-            var user = new User();
-            string usersEndpoint = $"/api/v1/users/{user.Id}";
-            Func<HttpClient, Task> createUser = async client => await client.PutAsJsonAsync(usersEndpoint, user);
+            var user = new User { Name = "User Usersson", };
+            Func<HttpClient, Task> createUser = async client => await client.PutAsJsonAsync("/api/v1/users", user);
 
             return new List<object[]>
             {
-                new object[] { contractEndpoint, createContract, }, new object[] { usersEndpoint, createUser, },
+                new object[] { contractEndpoint, createContract, },
+                new object[] { $"/api/v1/users/{user.Id}", createUser, },
             };
         }
     }

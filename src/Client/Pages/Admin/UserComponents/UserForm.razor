@@ -86,7 +86,7 @@
     {
         string json = JsonConvert.SerializeObject(_user);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await _http.PutAsync($"api/v1/users/{_user.Id}", content);
+        HttpResponseMessage response = await _http.PutAsync($"api/v1/users", content);
         if (response.IsSuccessStatusCode)
         {
             await OnUserAdded.InvokeAsync(_user);
