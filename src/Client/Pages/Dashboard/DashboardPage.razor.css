@@ -24,7 +24,7 @@
     width: fit-content;
 }
 
-@media screen and (max-width: 1800px){
+@media screen and (max-width: 1711px){
     .status-update-container{
         max-height: 20rem; /*This value determines the height of the list*/
     }
