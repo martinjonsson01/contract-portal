@@ -3,6 +3,7 @@
 @using Domain.Contracts
 @using Blazorise.Extensions
 @inject IJSRuntime Js
+@inject IAnalytics Analytics
 
 <PageTitle>Prodigo Portal - Kontrakt</PageTitle>
 
@@ -53,6 +54,7 @@
         string urlSafeQuery = Uri.EscapeDataString(query);
         var fetchUrl = $"api/v1/contracts?query={urlSafeQuery}";
         await _dataFetcher.Fetch(fetchUrl);
+        await Analytics.TrackEvent("contract_query", new { query, });
     }
 
     private async Task OpenDetailsView()
