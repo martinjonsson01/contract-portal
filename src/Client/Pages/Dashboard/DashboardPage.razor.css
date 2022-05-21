@@ -1,8 +1,31 @@
-﻿/*The different lists such as warning or news notifications should have their own container*/
+.dashboard-item-box{
+    background-color: var(--prodigo-light-blue);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    margin: 0.625rem;
+}
+
+.dashboard-background{
+    background-image: url("https://prodigo.se/wp-content/uploads/2021/05/cowomen-ZKHksse8tUU-unsplash-scaled.jpg");
+    min-width: 100%;
+    min-height: 100vh;
+    background-size: cover;
+}
+
+.title {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    color: var(--prodigo-white);
+}
+/*The different lists such as warning or news notifications should have their own container*/
 .status-update-container {
     display: flex;
     flex-direction: column;
     height: fit-content; /*The list won't be longer than necessary*/
-    max-height: 10rem; /*This value determines the height of the list*/
     width: fit-content;
+}
+
+@media screen and (max-width: 1711px){
+    .status-update-container{
+        max-height: 20rem; /*This value determines the height of the list*/
+    }
 }
