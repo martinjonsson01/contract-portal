@@ -1,13 +1,17 @@
-﻿@using Domain.Contracts
+﻿@using System.Timers
+@using Domain.Contracts
 @using System.Runtime.Serialization
 @implements IAsyncDisposable
 @inject ISessionService Session
 @inject IJSRuntime Js
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject IAnalytics Analytics
 
 <!-- modal-dialog-scrollable -->
-<div class="modal w-100" id="@ModalId">
+<div class="modal w-100"
+     id="@ModalId"
+     @key="@ModalId">
     <div class="modal-dialog modal-lg">
 
         <div class="modal-content @(ShouldHideDetails ? "blackout" : "")">
@@ -109,6 +113,17 @@
         Contract.SupplierLogoImagePath :
         Contract.InspirationalImagePath;
 
+        private const int CountAsViewedAfterMilliseconds = 1000;
+
+    private readonly Timer _analyticsTimer = new(CountAsViewedAfterMilliseconds);
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        _analyticsTimer.Elapsed += SendAnalytics;
+        _analyticsTimer.AutoReset = false;
+    }
+
     /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -116,6 +131,33 @@
 
         DotNetObjectReference<ContractDetails> dotNetHelper = DotNetObjectReference.Create(this);
         await Js.InvokeVoidAsync("registerModalCloseCallback", $"#{ModalId}", dotNetHelper);
+
+        if (IsNavigatedToThisView(NavigationManager.Uri))
+            RestartAnalyticsTimer();
+
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs args)
+    {
+        if (IsNavigatedToThisView(args.Location))
+            RestartAnalyticsTimer();
+    }
+
+    private void RestartAnalyticsTimer()
+    {
+        _analyticsTimer.Stop();
+        _analyticsTimer.Start();
+    }
+
+    private void SendAnalytics(object? sender, ElapsedEventArgs e)
+    {
+        Analytics.TrackEvent("contract_viewed", Contract);
+    }
+
+    private bool IsNavigatedToThisView(string url)
+    {
+        return url.Contains(Contract.Id.ToString().ToLowerInvariant());
     }
 
     /// <summary>
@@ -131,6 +173,7 @@
     public async ValueTask DisposeAsync()
     {
         await Js.InvokeVoidAsync("closeModal", $"#{ModalId}");
+        NavigationManager.LocationChanged -= OnLocationChanged;
     }
 
     private string ModalId => ("contract-details-" + Contract.Id).ToLowerInvariant();
