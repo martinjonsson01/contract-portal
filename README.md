@@ -5,6 +5,8 @@
 A website for working with a contract portfolio that can be bought into by other corporations. The central function of
 the portal allows for viewing these contracts and using them to receive discounts on purchases.
 
+The project work is done through Scrum, and the Scrum-board can be found [here](https://github.com/users/martinjonsson01/projects/2/views/1).
+
 ## Getting started
 
 For details about any of the technologies or frameworks used, see the [technical guide](documents/technical-guide.md).
