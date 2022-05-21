@@ -29,4 +29,10 @@ public class NotificationService : IStatusUpdateService
     {
         _repo.Add(statusUpdate);
     }
+
+    /// <inheritdoc />
+    public bool Remove(Guid id)
+    {
+        return _repo.Remove(id);
+    }
 }
