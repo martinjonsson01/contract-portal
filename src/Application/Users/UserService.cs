@@ -41,7 +41,7 @@ public class UserService : IUserService
         if (_repo.All.Any(otherUser => user.Name.Equals(otherUser.Name, StringComparison.Ordinal)))
             throw new UserNameTakenException();
 
-        user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+        EncryptPasswordOf(user);
         _repo.Add(user);
     }
 
@@ -72,6 +72,7 @@ public class UserService : IUserService
     /// <inheritdoc />
     public void UpdateUser(User user)
     {
+        EncryptPasswordOf(user);
         _repo.UpdateUser(user);
     }
 
@@ -113,6 +114,11 @@ public class UserService : IUserService
             claims.Add(new Claim("IsAdmin", "true"));
 
         return claims;
+    }
+
+    private static void EncryptPasswordOf(User user)
+    {
+        user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
     }
 
     private static bool IsPasswordValid(User user, string password)

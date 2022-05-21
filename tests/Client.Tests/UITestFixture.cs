@@ -12,8 +12,6 @@ using Domain.Users;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using Xunit.Abstractions;
-
 namespace Client.Tests;
 
 public class UITestFixture : IDisposable
