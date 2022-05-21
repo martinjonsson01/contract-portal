@@ -22,8 +22,7 @@
             Id=@StatusUpdate.Id
             Title="Ta bort notifikationen"
             Message="@($"Vill du ta bort notifikationen {StatusUpdate.Text}?")"
-            RemovalConfirmed="@(async () => await OnStatusUpdateRemoved.InvokeAsync(StatusUpdate))"
-        />
+            RemovalConfirmed="@(async () => await OnStatusUpdateRemoved.InvokeAsync(StatusUpdate))"/>
 </tr>
 
 @code {
