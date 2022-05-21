@@ -62,7 +62,7 @@ public class IntegrationTest : IClassFixture<TestWebApplicationFactory>
 
         // Arrange - create normal user.
         var user = new User();
-        await Client.PutAsJsonAsync($"/api/v1/users/{user.Id}", user);
+        await Client.PutAsJsonAsync($"/api/v1/users", user);
 
         // Arrange - authenticate as normal user.
         HttpResponseMessage authResponseMessage =

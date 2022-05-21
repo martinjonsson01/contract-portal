@@ -257,7 +257,7 @@
     {
         string json = JsonConvert.SerializeObject(_contract);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await _http.PutAsync($"api/v1/contracts/{_contract.Id}", content);
+        HttpResponseMessage response = await _http.PutAsync("api/v1/contracts", content);
         if (response.IsSuccessStatusCode)
         {
             await OnContractUploaded.InvokeAsync(_contract);
