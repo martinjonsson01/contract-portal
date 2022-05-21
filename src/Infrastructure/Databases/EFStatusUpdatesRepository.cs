@@ -1,8 +1,12 @@
-﻿using Application.StatusUpdates;
+﻿using System.Data;
+
+using Application.Configuration;
+using Application.StatusUpdates;
 
 using Domain.StatusUpdates;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Databases;
@@ -37,5 +41,28 @@ public class EFStatusUpdatesRepository : IStatusUpdateRepository
         _ = StatusUpdates.Add(statusUpdate);
         _ = _context.SaveChanges();
         _logger.LogInformation("Added a new status update with alert-level {Level} and text {Text} to the database", statusUpdate.Alert, statusUpdate.Text);
+    }
+
+    /// <inheritdoc />
+    public bool Remove(Guid id)
+    {
+        StatusUpdate? toRemove = StatusUpdates.Find(id);
+        if (toRemove is null)
+            return false;
+
+        _ = StatusUpdates.Remove(toRemove);
+
+        int changes = 0;
+        try
+        {
+            changes = _context.SaveChanges();
+        }
+        catch (DataException e)
+        {
+            _logger.LogError("Could not remove notification from database: {Message}", e.Message);
+        }
+
+        // If any changes were made, then the remove operation succeeded.
+        return changes > 0;
     }
 }
