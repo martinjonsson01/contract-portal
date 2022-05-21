@@ -90,7 +90,7 @@ footer a:hover {
 }
 
 article {
-    min-height: calc(100vh - 3.5rem);
+    min-height: calc(100vh - 4.5rem);
 }
 
 .btn-primary {
@@ -158,4 +158,8 @@ td {
 thead {
     background-color: var(--prodigo-black);
     color: var(--prodigo-white);
+}
+
+.minimum-height {
+    min-height: calc(100vh - 4.5rem);
 }
