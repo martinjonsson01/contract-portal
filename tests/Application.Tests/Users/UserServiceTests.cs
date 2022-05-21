@@ -83,6 +83,23 @@ public class UserServiceTests
     }
 
     [Fact]
+    public void UpdatingPassword_ObfuscatesPassword_WhenUserAlreadyExists()
+    {
+        // Arrange
+        const string plainTextPassword = "plaintext-password";
+        var user = new User { Password = plainTextPassword, };
+        _mockRepo.Setup(repository => repository.All).Returns(new[] { user, });
+        _mockRepo.Setup(repository => repository.Fetch(user.Id)).Returns(user);
+
+        // Act
+        _cut.UpdateUser(user);
+
+        // Assert
+        _mockRepo.Verify(repo =>
+            repo.UpdateUser(It.Is<User>(updatedUser => updatedUser.Password != plainTextPassword)));
+    }
+
+    [Fact]
     public void RemovingUser_DoesReturnTrue_WhenAUserExists()
     {
         // Arrange
