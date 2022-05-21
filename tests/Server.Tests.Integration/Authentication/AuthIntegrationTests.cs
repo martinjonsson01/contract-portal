@@ -23,11 +23,10 @@ public class AuthIntegrationTests : IntegrationTest
     {
         get
         {
-            var contract = new Contract();
             return new List<object[]>
             {
-                new object[] { $"/api/v1/users", new User { Name = "Unique name", }, },
-                new object[] { $"/api/v1/contracts/{contract.Id}", contract, },
+                new object[] { "/api/v1/users", new User { Name = "Unique name", }, },
+                new object[] { "/api/v1/contracts", new Contract(), },
             };
         }
     }
@@ -37,16 +36,15 @@ public class AuthIntegrationTests : IntegrationTest
         get
         {
             var contract = new Contract();
-            string contractEndpoint = $"/api/v1/contracts/{contract.Id}";
             Func<HttpClient, Task> createContract =
-                async client => await client.PutAsJsonAsync(contractEndpoint, contract);
+                async client => await client.PutAsJsonAsync("/api/v1/contracts", contract);
 
             var user = new User { Name = "User Usersson", };
             Func<HttpClient, Task> createUser = async client => await client.PutAsJsonAsync("/api/v1/users", user);
 
             return new List<object[]>
             {
-                new object[] { contractEndpoint, createContract, },
+                new object[] { $"/api/v1/contracts/{contract.Id}", createContract, },
                 new object[] { $"/api/v1/users/{user.Id}", createUser, },
             };
         }
@@ -151,7 +149,7 @@ public class AuthIntegrationTests : IntegrationTest
     {
         // Arrange
         var contract = new Contract();
-        await PutResourceAsync($"/api/v1/contracts/{contract.Id}", contract);
+        await PutResourceAsync($"/api/v1/contracts", contract);
 
         // Act
         HttpResponseMessage response = await Client.GetAsync("/api/v1/contracts");
@@ -195,7 +193,7 @@ public class AuthIntegrationTests : IntegrationTest
     {
         // Arrange
         var contract = new Contract();
-        await PutResourceAsync($"/api/v1/contracts/{contract.Id}", contract);
+        await PutResourceAsync($"/api/v1/contracts", contract);
 
         await ArrangeAuthenticatedUserAsync();
 
