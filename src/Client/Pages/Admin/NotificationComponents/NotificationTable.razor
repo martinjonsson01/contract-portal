@@ -13,6 +13,7 @@
             <th scope="col">Notifikationstext</th>
             <th scope="col">Notifikationstyp</th>
             <th scope="col">Skickad</th>
+            <th scope="col">Ta bort</th>
         </tr>
         </thead>
 
@@ -20,7 +21,8 @@
         @foreach (StatusUpdate statusUpdate in statusUpdates.OrderByDescending(status => status.Timestamp))
         {
             <NotificationTableRow @key="@statusUpdate.Id"
-                              StatusUpdate=@statusUpdate />
+                                  StatusUpdate=@statusUpdate
+                                  OnStatusUpdateRemoved=@Remove/>
         }
         </tbody>
     </table>
@@ -41,6 +43,22 @@
 
         _dataFetcher.Data.Add(statusUpdate);
         InvokeAsync(StateHasChanged);
+    }
+
+    /// <summary>
+    /// Removes a status update from the list.
+    /// </summary>
+    /// <param name="statusUpdate">The status update to remove.</param>
+    private async Task Remove(StatusUpdate statusUpdate)
+    {
+        HttpResponseMessage response = await _http.DeleteAsync($"api/v1/status-updates/{statusUpdate.Id}");
+        if (response.IsSuccessStatusCode)
+        {
+    // Using null forgiving operator because _statusUpdate
+    // can not be null when remove button is pressed.
+            _dataFetcher.Data!.Remove(statusUpdate);
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
 }
