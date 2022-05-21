@@ -1,4 +1,6 @@
-﻿using Blazored.SessionStorage;
+﻿using Blazor.Analytics;
+
+using Blazored.SessionStorage;
 
 using Blazorise;
 using Blazorise.Bootstrap5;
@@ -24,6 +26,8 @@ public class UITestFixture : IDisposable
         MockSession = new Mock<ISessionService>();
         MockSession.Setup(session => session.IsAuthenticated).Returns(true);
         Context.Services.AddScoped(_ => MockSession.Object);
+
+        Context.Services.AddScoped(_ => Mock.Of<IAnalytics>());
 
         MockHttp = Context.Services.AddMockHttpClient();
         Context.JSInterop.Mode = JSRuntimeMode.Loose;
