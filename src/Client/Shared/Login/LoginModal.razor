@@ -6,16 +6,16 @@
 @using Client.Services.Authentication
 @using Domain.Users
 @inherits UpdateOnAuthenticateView
-@inject HttpClient _http
-@inject IJSRuntime _js
-@inject NavigationManager _navigationManager
-@inject ISessionService _session
+@inject HttpClient Http
+@inject IJSRuntime Js
+@inject NavigationManager NavigationManager
+@inject ISessionService Session
 
 <div class="modal" id="log-in">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <EditForm Model="@_user" OnSubmit="ValidateUser">
+                <EditForm Model="@_user" OnSubmit="LogInUser">
                     <div class="mb-3">
                         <div class="d-flex justify-content-between">
                             <label class="form-label">
@@ -27,7 +27,7 @@
                         <InputText id="username" class="form-control" placeholder="Användarnamn" @bind-Value="@_user.Name"/>
                         <InputText id="password" type="password" class="form-control mt-3" placeholder="Lösenord" @bind-Value="@_user.Password"/>
 
-                        @if (_logInInProgress)
+                        @if (_loggingIn)
                         {
                             <LoadingIndicator/>
                         }
@@ -47,15 +47,15 @@
 
 @code {
 
-    User _user = new (){ Name = "", Password = "", };
-    bool _logInFailed = false;
-    bool _logInInProgress = false;
+    private User _user = new (){ Name = "", Password = "", };
+    private bool _logInFailed = false;
+    private bool _loggingIn = false;
 
-    private async Task ValidateUser()
+    private async Task LogInUser()
     {
-        _logInInProgress = true;
-        HttpResponseMessage response = await _http.PostAsJsonAsync("api/v1/users/authenticate", _user);
-        _logInInProgress = false;
+        _loggingIn = true;
+        HttpResponseMessage response = await Http.PostAsJsonAsync("api/v1/users/authenticate", _user);
+        _loggingIn = false;
         if (response.IsSuccessStatusCode)
         {
             _logInFailed = false;
@@ -69,10 +69,10 @@
             }
 
             // Begin new session.
-            await _session.BeginAsync(authResponse);
+            await Session.BeginAsync(authResponse);
 
-            await _js.InvokeVoidAsync("closeModal", "#log-in");
-            _navigationManager.NavigateTo("dashboard");
+            await Js.InvokeVoidAsync("closeModal", "#log-in");
+            NavigationManager.NavigateTo("dashboard");
         }
         else
         {
