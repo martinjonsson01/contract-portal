@@ -62,7 +62,6 @@
         if (_latestQuery is null)
             return;
         Analytics.TrackEvent("contract_query", new { query = _latestQuery, });
-        Console.WriteLine("sending analytics: " + _latestQuery);
     }
 
     private void OnRecentlyViewed(Contract viewedContract)
