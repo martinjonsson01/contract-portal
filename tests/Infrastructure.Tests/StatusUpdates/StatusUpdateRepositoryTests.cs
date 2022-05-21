@@ -1,4 +1,6 @@
-﻿using Application.StatusUpdates;
+﻿using System;
+
+using Application.StatusUpdates;
 
 using Domain.StatusUpdates;
 
@@ -33,5 +35,32 @@ public class StatusUpdateRepositoryTests : IClassFixture<TestDatabaseFixture>
 
         // Assert
         statusUpdates.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void RemoveNotification_ReturnsFalse_WhenNotificationDoesNotExist()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+
+        // Act
+        bool actual = _cut.Remove(id);
+
+        // Assert
+        actual.Should().BeFalse();
+    }
+
+    [Fact]
+    public void RemoveNotification_ReturnsTrue_WhenNotificationDoesExist()
+    {
+        // Arrange
+        StatusUpdate statusUpdate = new();
+        _cut.Add(statusUpdate);
+
+        // Act
+        bool actual = _cut.Remove(statusUpdate.Id);
+
+        // Assert
+        actual.Should().BeTrue();
     }
 }
