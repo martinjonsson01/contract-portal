@@ -1,4 +1,4 @@
-﻿.dashboard-item-box{
+.dashboard-item-box{
     background-color: var(--prodigo-light-blue);
     border-radius: 1.25rem;
     padding: 1.25rem;
@@ -12,7 +12,20 @@
     background-size: cover;
 }
 
-.title{
+.title {
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     color: var(--prodigo-white);
+}
+/*The different lists such as warning or news notifications should have their own container*/
+.status-update-container {
+    display: flex;
+    flex-direction: column;
+    height: fit-content; /*The list won't be longer than necessary*/
+    width: fit-content;
+}
+
+@media screen and (max-width: 1800px){
+    .status-update-container{
+        max-height: 20rem; /*This value determines the height of the list*/
+    }
 }
