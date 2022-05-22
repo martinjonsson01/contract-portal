@@ -26,8 +26,11 @@ public class StatusUpdatesTests : UITestFixture
 
         const string notification = ".list-group-item";
 
+        static void ParameterBuilder(ComponentParameterCollectionBuilder<StatusUpdates> parameters) =>
+            parameters.Add(property => property.AlertLevels, Enum.GetValues(typeof(AlertLevel)).Cast<AlertLevel>());
+
         // Act
-        IRenderedComponent<StatusUpdates> cut = Context.RenderComponent<StatusUpdates>();
+        IRenderedComponent<StatusUpdates> cut = Context.RenderComponent<StatusUpdates>(ParameterBuilder);
         cut.WaitForElement(notification);
 
         // Assert
@@ -38,16 +41,16 @@ public class StatusUpdatesTests : UITestFixture
     public void StatusUpdates_ThrowsArgumentOutOfRange_WhenAlertLevelIsNotDefined()
     {
         // Arrange
-        var statusUpdates = new List<StatusUpdate>
-        {
-            new() { Alert = (AlertLevel)42, },
-        };
+        var statusUpdates = new List<StatusUpdate> { new() { Alert = (AlertLevel)42, }, };
         MockHttp.When("/api/v1/status-updates").RespondJson(statusUpdates);
 
         const string notification = ".list-group-item";
 
+        static void ParameterBuilder(ComponentParameterCollectionBuilder<StatusUpdates> parameters) =>
+            parameters.Add(property => property.AlertLevels, new[] { (AlertLevel)42, });
+
         // Act
-        IRenderedComponent<StatusUpdates> cut = Context.RenderComponent<StatusUpdates>();
+        IRenderedComponent<StatusUpdates> cut = Context.RenderComponent<StatusUpdates>(ParameterBuilder);
         Action waitForRender = () => cut.WaitForElement(notification);
 
         // Assert
