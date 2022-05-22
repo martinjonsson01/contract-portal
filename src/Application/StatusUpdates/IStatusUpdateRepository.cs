@@ -17,4 +17,11 @@ public interface IStatusUpdateRepository
     /// </summary>
     /// <param name="statusUpdate">The new status update instance.</param>
     void Add(StatusUpdate statusUpdate);
+
+    /// <summary>
+    /// Removes a status with the given ID.
+    /// </summary>
+    /// <param name="id">The id of the status to be removed.</param>
+    /// <returns>If the removal was successful.</returns>
+    bool Remove(Guid id);
 }
