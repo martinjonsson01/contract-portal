@@ -1,9 +1,9 @@
 ﻿namespace Client.Pages.Dashboard;
 
 /// <summary>
-/// Extensions for <see cref="DateTime"/> to format it in different ways.
+/// Extensions for <see cref="DateTimeOffset"/> to format it in different ways.
 /// </summary>
-internal static class DateTimeFormattingExtensions
+internal static class DateTimeOffsetFormattingExtensions
 {
     private static readonly SortedList<double, Func<TimeSpan, string>> _offsets = new()
     {
@@ -27,7 +27,7 @@ internal static class DateTimeFormattingExtensions
     /// </summary>
     /// <param name="input">The date and time to convert.</param>
     /// <returns>A formatted relative date and time.</returns>
-    public static string ToRelativeDate(this DateTime input)
+    public static string ToRelativeDate(this DateTimeOffset input)
     {
         TimeSpan difference = DateTime.Now - input;
         const string suffix = " sedan";
