@@ -8,7 +8,7 @@
     <h3 class="text-center fw-bold">@Title</h3>
     @if (statusUpdates.IsNullOrEmpty())
     {
-        <p>Det finns inga nyheter för tillfället.</p>
+        <p>Det finns inga @Title.ToLowerInvariant() för tillfället.</p>
     }
     else
     {
