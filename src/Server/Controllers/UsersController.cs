@@ -77,6 +77,7 @@ public class UsersController : BaseApiController<UsersController>
     /// </summary>
     /// <returns>All the stored users.</returns>
     [HttpGet]
+    [Authorize("AdminOnly")]
     public IEnumerable<User> GetAll()
     {
         return _users.FetchAllUsers();

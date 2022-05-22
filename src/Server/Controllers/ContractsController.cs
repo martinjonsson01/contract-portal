@@ -38,6 +38,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="id">The id of the contract to update.</param>
     /// <returns>The updated contract.</returns>
     [HttpPatch("{id:guid}")]
+    [Authorize("AdminOnly")]
     public IActionResult UpdateContract([FromBody] JsonPatchDocument<Contract> patchDocument, Guid id)
     {
         Contract contract = _contracts.FetchContract(id);
