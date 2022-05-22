@@ -13,10 +13,25 @@
     else
     {
         <div class="prodigo-status-list shadow">
-            @foreach (StatusUpdate statusUpdate in statusUpdates.OrderByDescending(status => status.Timestamp))
+            @foreach (StatusUpdate statusUpdate in FilterAlertLevels(statusUpdates))
             {
                 <StatusUpdateItem Status="@statusUpdate"/>
             }
         </div>
     }
 </FetchData>
+
+@code
+{
+    /// <summary>
+    /// Gets or sets which severities of status updates that should be shown.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<AlertLevel> AlertLevels { get; set; } = new[] { AlertLevel.Information, };
+
+    private IEnumerable<StatusUpdate> FilterAlertLevels(IEnumerable<StatusUpdate> statusUpdates)
+    {
+        return statusUpdates.Where(update => AlertLevels.Contains(update.Alert))
+                            .OrderByDescending(status => status.Timestamp);
+    }
+}
