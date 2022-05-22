@@ -1,0 +1,5 @@
+﻿.prodigo-status-list {
+    height: 100%;
+    width: fit-content;
+    overflow-y: auto; /*Adds scrolling to the list when content overflow*/
+}
