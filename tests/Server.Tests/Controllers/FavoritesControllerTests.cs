@@ -1,6 +1,8 @@
 using Application.Contracts;
 using Application.Users;
 using Domain.Contracts;
+using Domain.Users;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Tests.Controllers;
@@ -20,12 +22,12 @@ public class FavoritesControllerTests
     public void GetAll_ReturnsAllFavoriteContracts()
     {
         // Arrange
-        string userName = "user";
+        var user = new User();
         List<Contract> fakeFavoriteContracts = new Faker<Contract>().Generate(10);
-        _mockContracts.Setup(service => service.FetchAllFavorites(userName)).Returns(fakeFavoriteContracts);
+        _mockContracts.Setup(service => service.FetchAllFavorites(user.Id)).Returns(fakeFavoriteContracts);
 
         // Act
-        IEnumerable<Contract> favoriteContracts = _cut.GetAll(userName);
+        IEnumerable<Contract> favoriteContracts = _cut.GetAll(user.Id);
 
         // Assert
         favoriteContracts.Should().BeEquivalentTo(fakeFavoriteContracts);
@@ -37,7 +39,7 @@ public class FavoritesControllerTests
         // Arrange
         var favoriteContractDto = new FavoriteContractDto()
         {
-            UserName = "user", ContractId = Guid.NewGuid(), IsFavorite = true,
+            UserId = Guid.NewGuid(), ContractId = Guid.NewGuid(), IsFavorite = true,
         };
 
         // Act
@@ -53,9 +55,9 @@ public class FavoritesControllerTests
         // Arrange
         var favoriteContractDto = new FavoriteContractDto()
         {
-            UserName = "user", ContractId = Guid.NewGuid(), IsFavorite = true,
+            UserId = Guid.NewGuid(), ContractId = Guid.NewGuid(), IsFavorite = true,
         };
-        _mockContracts.Setup(service => service.AddFavorite(favoriteContractDto.UserName, favoriteContractDto.ContractId))
+        _mockContracts.Setup(service => service.AddFavorite(favoriteContractDto.UserId, favoriteContractDto.ContractId))
             .Throws<UserDoesNotExistException>();
 
         // Act
@@ -71,9 +73,9 @@ public class FavoritesControllerTests
         // Arrange
         var favoriteContractDto = new FavoriteContractDto()
         {
-            UserName = "user", ContractId = Guid.NewGuid(), IsFavorite = true,
+            UserId = Guid.NewGuid(), ContractId = Guid.NewGuid(), IsFavorite = true,
         };
-        _mockContracts.Setup(service => service.AddFavorite(favoriteContractDto.UserName, favoriteContractDto.ContractId))
+        _mockContracts.Setup(service => service.AddFavorite(favoriteContractDto.UserId, favoriteContractDto.ContractId))
             .Throws<ContractDoesNotExistException>();
 
         // Act
@@ -89,14 +91,14 @@ public class FavoritesControllerTests
         // Arrange
         var favoriteContractDto = new FavoriteContractDto()
         {
-            UserName = "user", ContractId = Guid.NewGuid(), IsFavorite = true,
+            UserId = Guid.NewGuid(), ContractId = Guid.NewGuid(), IsFavorite = true,
         };
 
         // Act
         _cut.Change(favoriteContractDto);
 
         // Assert
-        _mockContracts.Verify(service => service.AddFavorite(favoriteContractDto.UserName, favoriteContractDto.ContractId), Times.Once);
+        _mockContracts.Verify(service => service.AddFavorite(favoriteContractDto.UserId, favoriteContractDto.ContractId), Times.Once);
     }
 
     [Fact]
@@ -105,26 +107,26 @@ public class FavoritesControllerTests
         // Arrange
         var favoriteContractDto = new FavoriteContractDto()
         {
-            UserName = "user", ContractId = Guid.NewGuid(), IsFavorite = false,
+            UserId = Guid.NewGuid(), ContractId = Guid.NewGuid(), IsFavorite = false,
         };
 
         // Act
         _cut.Change(favoriteContractDto);
 
         // Assert
-        _mockContracts.Verify(service => service.RemoveFavorite(favoriteContractDto.UserName, favoriteContractDto.ContractId), Times.Once);
+        _mockContracts.Verify(service => service.RemoveFavorite(favoriteContractDto.UserId, favoriteContractDto.ContractId), Times.Once);
     }
 
     [Fact]
     public void GetIsFavorite_ReturnsOk_IfTheContractIsMarkedAsFavoriteByTheUser()
     {
         // Arrange
-        string userName = "user";
-        Guid contractId = Guid.NewGuid();
-        _mockContracts.Setup(service => service.IsFavorite(userName, contractId)).Returns(true);
+        var user = new User();
+        var contractId = Guid.NewGuid();
+        _mockContracts.Setup(service => service.IsFavorite(user.Id, contractId)).Returns(true);
 
         // Act
-        IActionResult actual = _cut.GetIsFavorite(userName, contractId);
+        IActionResult actual = _cut.GetIsFavorite(user.Id, contractId);
 
         // Assert
         actual.Should().BeOfType<OkResult>();
@@ -134,12 +136,12 @@ public class FavoritesControllerTests
     public void GetIsFavorite_ReturnsNotFound_IfTheContractIsNotMarkedAsFavoriteByTheUser()
     {
         // Arrange
-        string userName = "user";
-        Guid contractId = Guid.NewGuid();
-        _mockContracts.Setup(service => service.IsFavorite(userName, contractId)).Returns(false);
+        var user = new User();
+        var contractId = Guid.NewGuid();
+        _mockContracts.Setup(service => service.IsFavorite(user.Id, contractId)).Returns(false);
 
         // Act
-        IActionResult actual = _cut.GetIsFavorite(userName, contractId);
+        IActionResult actual = _cut.GetIsFavorite(user.Id, contractId);
 
         // Assert
         actual.Should().BeOfType<NotFoundResult>();
@@ -149,12 +151,12 @@ public class FavoritesControllerTests
     public void GetIsFavorite_ReturnsNotFound_IfTheContractIsNotMarkedAsFavorite()
     {
         // Arrange
-        string userName = string.Empty;
-        Guid contractId = Guid.NewGuid();
-        _mockContracts.Setup(service => service.IsFavorite(userName, contractId)).Returns(false);
+        var user = new User();
+        var contractId = Guid.NewGuid();
+        _mockContracts.Setup(service => service.IsFavorite(user.Id, contractId)).Returns(false);
 
         // Act
-        IActionResult actual = _cut.GetIsFavorite(userName, contractId);
+        IActionResult actual = _cut.GetIsFavorite(user.Id, contractId);
 
         // Assert
         actual.Should().BeOfType<NotFoundResult>();

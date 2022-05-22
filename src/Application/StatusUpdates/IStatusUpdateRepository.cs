@@ -11,4 +11,10 @@ public interface IStatusUpdateRepository
     /// Gets all status updates.
     /// </summary>
     IEnumerable<StatusUpdate> All { get; }
+
+    /// <summary>
+    /// Adds a new status update to store.
+    /// </summary>
+    /// <param name="statusUpdate">The new status update instance.</param>
+    void Add(StatusUpdate statusUpdate);
 }

@@ -12,18 +12,23 @@ namespace Client.Tests.Pages.Contracts;
 
 public class FavoriteButtonTests : UITestFixture
 {
+    public FavoriteButtonTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void ContractCard_ShowsFavoriteIcon_WhenContractIsFavoriteMarked()
     {
         // Arrange
-        string userName = "user";
+        var userId = Guid.NewGuid();
         Contract contract = new();
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
-        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
-        MockSession.Setup(session => session.Username).Returns(userName);
+        MockHttp.When($"/api/v1/users/{userId}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
+        MockSession.Setup(session => session.UserId).Returns(userId);
 
         // Act
         IRenderedComponent<FavoriteButton> cut =
@@ -39,14 +44,14 @@ public class FavoriteButtonTests : UITestFixture
     public void ContractCard_ShowsNonFavoriteIcon_WhenContractIsNotFavoriteMarked()
     {
         // Arrange
-        string userName = "user";
+        var userId = Guid.NewGuid();
         Contract contract = new();
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
-        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.NotFound));
-        MockSession.Setup(session => session.Username).Returns(userName);
+        MockHttp.When($"/api/v1/users/{userId}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.NotFound));
+        MockSession.Setup(session => session.UserId).Returns(userId);
 
         // Act
         IRenderedComponent<FavoriteButton> cut =
@@ -63,14 +68,14 @@ public class FavoriteButtonTests : UITestFixture
     public async Task FavoriteButton_CallsOnFavoriteChange_WhenClickedAsync()
     {
         // Arrange
-        string userName = "user";
+        var userId = Guid.NewGuid();
         Contract contract = new();
 
         bool eventCalled = false;
 
-        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
-        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(HttpStatusCode.OK);
-        MockSession.Setup(session => session.Username).Returns(userName);
+        MockHttp.When($"/api/v1/users/{userId}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK));
+        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userId}/favorites").Respond(HttpStatusCode.OK);
+        MockSession.Setup(session => session.UserId).Returns(userId);
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
                       parameters.Add(property => property.Contract, contract)
@@ -84,19 +89,19 @@ public class FavoriteButtonTests : UITestFixture
         await cut.Find("#favorite-button").ClickAsync(new MouseEventArgs());
 
         // Assert
-        eventCalled.Should().BeTrue();
+        cut.WaitForAssertion(() => eventCalled.Should().BeTrue());
     }
 
     [Fact]
     public void FavoriteButton_DoesNotChangeAppearance_WhenRequestFailed()
     {
         // Arrange
-        string userName = "user";
+        var userId = Guid.NewGuid();
         Contract contract = new();
 
-        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(HttpStatusCode.OK); // Check whether the contract is marked as favorite and receive that it is
-        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(HttpStatusCode.BadRequest); // Post a request to unmark the contract as a favorite and receive that it was not unmarked
-        MockSession.Setup(session => session.Username).Returns(userName);
+        MockHttp.When($"/api/v1/users/{userId}/favorites/{contract.Id}").Respond(HttpStatusCode.OK); // Check whether the contract is marked as favorite and receive that it is
+        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userId}/favorites").Respond(HttpStatusCode.BadRequest); // Post a request to unmark the contract as a favorite and receive that it was not unmarked
+        MockSession.Setup(session => session.UserId).Returns(userId);
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
                       parameters.Add(property => property.Contract, contract);
@@ -113,20 +118,20 @@ public class FavoriteButtonTests : UITestFixture
         IElement afterClicked = cut.Find(".bi-heart-fill");
 
         // Assert
-        beforeClicked.Should().NotBeNull();
-        afterClicked.Should().NotBeNull();
+        cut.WaitForAssertion(() => beforeClicked.Should().NotBeNull());
+        cut.WaitForAssertion(() => afterClicked.Should().NotBeNull());
     }
 
     [Fact]
     public void FavoriteButton_ChangesAppearance_WhenRequestSucceeds()
     {
         // Arrange
-        string userName = "user";
+        var userId = Guid.NewGuid();
         Contract contract = new();
 
-        MockHttp.When($"/api/v1/users/{userName}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK)); // Check whether the contract is marked as favorite and receive that it is
-        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userName}/favorites").Respond(req => new HttpResponseMessage(HttpStatusCode.OK)); // Post a request to unmark the contract as a favorite and receive that is was
-        MockSession.Setup(session => session.Username).Returns(userName);
+        MockHttp.When($"/api/v1/users/{userId}/favorites/{contract.Id}").Respond(req => new HttpResponseMessage(HttpStatusCode.OK)); // Check whether the contract is marked as favorite and receive that it is
+        MockHttp.When(HttpMethod.Post, $"/api/v1/users/{userId}/favorites").Respond(req => new HttpResponseMessage(HttpStatusCode.OK)); // Post a request to unmark the contract as a favorite and receive that is was
+        MockSession.Setup(session => session.UserId).Returns(userId);
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<FavoriteButton> parameters) =>
             parameters.Add(property => property.Contract, contract);
@@ -143,7 +148,7 @@ public class FavoriteButtonTests : UITestFixture
         IElement afterClicked = cut.Find(".bi-heart");
 
         // Assert
-        beforeClicked.Should().NotBeNull();
-        afterClicked.Should().NotBeNull();
+        cut.WaitForAssertion(() => beforeClicked.Should().NotBeNull());
+        cut.WaitForAssertion(() => afterClicked.Should().NotBeNull());
     }
 }

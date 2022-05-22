@@ -23,6 +23,11 @@ public interface ISessionService
     string? Username { get; }
 
     /// <summary>
+    /// Gets the ID of the currently authenticated user, if authenticated.
+    /// </summary>
+    Guid? UserId { get; }
+
+    /// <summary>
     /// Begins a new authenticated user session.
     /// </summary>
     /// <param name="authentication">The authentication used to identify the user.</param>

@@ -2,30 +2,33 @@
 
 using Domain.StatusUpdates;
 
-using Infrastructure.StatusUpdates;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Tests.Controllers;
 
 public class StatusUpdatesControllerTests
 {
     private readonly StatusUpdatesController _cut;
-    private readonly InMemoryStatusUpdateRepository _repository;
+    private readonly Mock<IStatusUpdateService> _mockStatusUpdates;
 
     public StatusUpdatesControllerTests()
     {
-        _repository = new InMemoryStatusUpdateRepository();
+        _mockStatusUpdates = new Mock<IStatusUpdateService>();
         _cut = new StatusUpdatesController(
             Mock.Of<ILogger<StatusUpdatesController>>(),
-            new NotificationService(_repository));
+            _mockStatusUpdates.Object);
     }
 
     [Fact]
-    public void Resources_AreReturned()
+    public void CreateCallsNotificationServiceOnce()
     {
+        // Arrange
+        var statusUpdate = new StatusUpdate();
+
         // Act
-        IEnumerable<StatusUpdate> actual = _cut.All();
+        _cut.Create(statusUpdate);
 
         // Assert
-        actual.Should().NotBeEmpty();
+        _mockStatusUpdates.Verify(service => service.Add(statusUpdate), Times.Once);
     }
 }

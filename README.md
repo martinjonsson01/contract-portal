@@ -5,6 +5,8 @@
 A website for working with a contract portfolio that can be bought into by other corporations. The central function of
 the portal allows for viewing these contracts and using them to receive discounts on purchases.
 
+The project work is done through Scrum, and the Scrum-board can be found [here](https://github.com/users/martinjonsson01/projects/2/views/1).
+
 ## Getting started
 
 For details about any of the technologies or frameworks used, see the [technical guide](documents/technical-guide.md).
@@ -16,7 +18,7 @@ Clone the repository: `git clone https://github.com/martinjonsson01/contract-por
 For local development, a database daemon needs to be running, and a database instance needs to be created.
 
 1. [Download and install Microsoft SQL Server (developer version)](https://www.microsoft.com/sv-se/sql-server/sql-server-downloads)
-2. Add an environment variable with key `prodigo_portal_db_connectionstring` and value `Server=localhost;Database=master;Trusted_Connection=True;` (guide
+2. Add an environment variable with key `prodigo_portal_db_connectionstring` and value `Server=localhost;Database=ProdigoPortal;Trusted_Connection=True;` (guide
    for [Windows](https://docs.oracle.com/en/database/oracle/machine-learning/oml4r/1.5.1/oread/creating-and-modifying-environment-variables-on-windows.html#GUID-DD6F9982-60D5-48F6-8270-A27EC53807D0)
    and [MacOS](https://phoenixnap.com/kb/set-environment-variable-mac)
 3. In your IDE terminal, Navigate to the `Infrastructure` project using `cd src/Infrastructure/`.

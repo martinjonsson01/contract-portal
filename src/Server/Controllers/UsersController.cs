@@ -35,13 +35,12 @@ public class UsersController : BaseApiController<UsersController>
     /// Creates a new user.
     /// </summary>
     /// <param name="user">The user to add.</param>
-    /// <param name="id">The identifier of the user to put.</param>
     /// <returns>If the user was successfully added.</returns>
     /// <response code="400">The ID of the user was already taken.</response>
-    [HttpPut("{id:guid}")]
+    [HttpPut]
     [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Create([FromBody] User user, Guid id)
+    public IActionResult Create([FromBody] User user)
     {
         try
         {
@@ -50,6 +49,10 @@ public class UsersController : BaseApiController<UsersController>
         catch (IdentifierAlreadyTakenException)
         {
             _users.UpdateUser(user);
+        }
+        catch (UserNameTakenException)
+        {
+            return BadRequest($"Name {user.Name} is already taken");
         }
 
         return Ok();

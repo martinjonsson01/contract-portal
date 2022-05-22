@@ -41,13 +41,6 @@ public interface IUserService
     bool Remove(Guid id);
 
     /// <summary>
-    /// Checks whether a user exists or not.
-    /// </summary>
-    /// <param name="username">The username to look for.</param>
-    /// <returns>Whether the user exits or not.</returns>
-    bool UserExists(string username);
-
-    /// <summary>
     /// Generates an authentication token for a given user, if valid.
     /// </summary>
     /// <param name="username">The name of the <see cref="User"/> to authenticate.</param>
@@ -58,30 +51,30 @@ public interface IUserService
     /// <summary>
     /// Gets all contracts marked as favorite by a certain user.
     /// </summary>
-    /// <param name="userName">The name of the user.</param>
+    /// <param name="userId">The ID of the user.</param>
     /// <returns>All contracts marked as favorite by the user.</returns>
-    IEnumerable<Contract> FetchAllFavorites(string userName);
+    IEnumerable<Contract> FetchAllFavorites(Guid userId);
 
     /// <summary>
     /// Checks if the contract is marked as favorite by the user.
     /// </summary>
-    /// <param name="userName">The name of the user.</param>
-    /// <param name="contractId">The id of the contract.</param>
+    /// <param name="userId">The ID of the user.</param>
+    /// <param name="contractId">The ID of the contract.</param>
     /// <returns>Whether the contract was marked as favorite.</returns>
-    bool IsFavorite(string userName, Guid contractId);
+    bool IsFavorite(Guid userId, Guid contractId);
 
     /// <summary>
     /// Adds a favorite contract for a certain user.
     /// </summary>
-    /// <param name="userName">The name of the user.</param>
-    /// <param name="contractId">The id of the contract.</param>
-    void AddFavorite(string userName, Guid contractId);
+    /// <param name="userId">The ID of the user.</param>
+    /// <param name="contractId">The ID of the contract.</param>
+    void AddFavorite(Guid userId, Guid contractId);
 
     /// <summary>
     /// Removes a favorite contract for a certain user.
     /// </summary>
-    /// <param name="userName">The name of the user.</param>
-    /// <param name="contractId">The id of the contract.</param>
+    /// <param name="userId">The ID of the user.</param>
+    /// <param name="contractId">The ID of the contract.</param>
     /// <returns>Whether the removal was successful.</returns>
-    bool RemoveFavorite(string userName, Guid contractId);
+    bool RemoveFavorite(Guid userId, Guid contractId);
 }

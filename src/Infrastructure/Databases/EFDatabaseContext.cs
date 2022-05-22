@@ -1,4 +1,5 @@
 ﻿using Domain.Contracts;
+using Domain.StatusUpdates;
 using Domain.Users;
 
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +40,9 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
 
     /// <inheritdoc />
     public DbSet<RecentlyViewedContract> RecentlyViewedContracts { get; set; } = null!;
+
+    /// <inheritdoc />
+    public DbSet<StatusUpdate> StatusUpdates { get; set; } = null!;
 
     /// <inheritdoc/>
     public new EntityEntry Entry<TEntity>(TEntity entity)

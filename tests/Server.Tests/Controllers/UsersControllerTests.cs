@@ -1,6 +1,7 @@
 using Application.Contracts;
 using Application.Exceptions;
 using Application.Users;
+
 using Domain.Contracts;
 using Domain.Users;
 
@@ -28,7 +29,7 @@ public class UsersControllerTests
         _mockUsers.Setup(service => service.Add(user)).Throws<IdentifierAlreadyTakenException>();
 
         // Act
-        IActionResult actual = _cut.Create(user, user.Id);
+        IActionResult actual = _cut.Create(user);
 
         // Assert
         actual.Should().BeOfType<OkResult>();
@@ -40,10 +41,24 @@ public class UsersControllerTests
         // Arrange
 
         // Act
-        IActionResult actual = _cut.Create(new User(), Guid.NewGuid());
+        IActionResult actual = _cut.Create(new User());
 
         // Assert
         actual.Should().BeOfType<OkResult>();
+    }
+
+    [Fact]
+    public void Create_ReturnsBadRequest_WhenNameIsTaken()
+    {
+        // Arrange
+        var user = new User();
+        _mockUsers.Setup(service => service.Add(user)).Throws<UserNameTakenException>();
+
+        // Act
+        IActionResult actual = _cut.Create(user);
+
+        // Assert
+        actual.Should().BeOfType<BadRequestObjectResult>();
     }
 
     [Fact]
@@ -51,7 +66,8 @@ public class UsersControllerTests
     {
         // Arrange
         var user = new User() { Name = "user", Password = "password", };
-        _mockUsers.Setup(service => service.Authenticate(user.Name, user.Password)).Returns(new AuthenticateResponse(user, "token"));
+        _mockUsers.Setup(service => service.Authenticate(user.Name, user.Password))
+                  .Returns(new AuthenticateResponse(user, "token"));
 
         // Act
         IActionResult actual = _cut.Authenticate(user);

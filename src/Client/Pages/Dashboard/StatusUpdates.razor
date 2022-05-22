@@ -1,15 +1,22 @@
 ﻿@using Domain.StatusUpdates
+@using Blazorise.Extensions
 @inject HttpClient _http;
 
 <FetchData TData="StatusUpdate[]"
            Url="api/v1/status-updates"
            Context="statusUpdates">
-
-    <div class="list-group list-group-flush shadow w-40">
-        @foreach (StatusUpdate statusUpdate in statusUpdates.OrderByDescending(status => status.Timestamp))
-        {
-            <StatusUpdateItem Status="@statusUpdate"/>
-        }
-    </div>
-
+    <h3 class="text-center fw-bold">Nyheter</h3>
+    @if (statusUpdates.IsNullOrEmpty())
+    {
+        <p>Det finns inga nyheter för tillfället.</p>
+    }
+    else
+    {
+        <div class="prodigo-status-list shadow">
+            @foreach (StatusUpdate statusUpdate in statusUpdates.OrderByDescending(status => status.Timestamp))
+            {
+                <StatusUpdateItem Status="@statusUpdate"/>
+            }
+        </div>
+    }
 </FetchData>

@@ -24,10 +24,20 @@
     <script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
     <script src="_content/Blazorise.Markdown/markdown.js" type="module"></script>
 
+    <link rel="shortcut icon" href="https://prodigo.se/wp-content/uploads/2021/05/Favicon-prodigo.png"
+          type="image/x-icon">
 </head>
 
 <body>
-<div id="app">Loading...</div>
+<div id="app">
+    <!-- Loading indicator shown during Blazor initialization. -->
+    <div class="d-flex flex-column justify-content-center align-items-center vh-100">
+        <h1 class="h3">Prodigo Portal laddas in...</h1>
+        <div class="spinner-border loading-indicator m-3" role="status">
+            <span class="visually-hidden">Laddar...</span>
+        </div>
+    </div>
+</div>
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
@@ -35,6 +45,7 @@
     <a class="dismiss">🗙</a>
 </div>
 <script src="_framework/blazor.webassembly.js"></script>
+<script src="_content/Blazor-Analytics/blazor-analytics.js"></script>
 <script src="/js/interop.js"></script>
 </body>
 

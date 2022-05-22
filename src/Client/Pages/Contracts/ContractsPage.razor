@@ -1,32 +1,68 @@
 ﻿@page "/contracts"
+@page "/contracts/{ContractId}"
+@using System.Timers
 @using Domain.Contracts
 @using Blazorise.Extensions
-@inject HttpClient _http
+@inject IJSRuntime Js
+@inject IAnalytics Analytics
 
-<SearchBar OnQueryChange="OnQueryChanged"/>
+<PageTitle>Prodigo Portal - Kontrakt</PageTitle>
 
-<RecentlyViewed @ref="_recentlyViewed"/>
+<div class="container minimum-height d-flex flex-column">
+    <SearchBar OnQueryChange="OnQueryChanged"/>
 
-<FetchData @ref="_dataFetcher"
-           TData="IEnumerable<Contract>"
-           Url="api/v1/contracts"
-           Context="contracts">
+    <RecentlyViewed @ref="_recentlyViewed"/>
 
-    <div class="container-fluid">
-        <div class="d-flex flex-wrap justify-content-center">
-            @foreach (Contract contract in contracts)
-            {
-                <ContractCard Contract=@contract OnViewed="OnRecentlyViewed"/>
-            }
+    <FetchData @ref="_dataFetcher"
+               TData="IEnumerable<Contract>"
+               Url="api/v1/contracts"
+               Context="contracts"
+               AfterRenderedWithData="SimpleCallback.Create(OpenDetailsView)">
+
+        <div class="d-flex flex-wrap justify-content-center pb-5">
+            <div class="prodigo-grid">
+                @foreach (Contract contract in contracts)
+                {
+                    <ContractCard Contract=@contract OnViewed="OnRecentlyViewed"/>
+                    <ContractDetails Contract="@contract"/>
+                }
+            </div>
         </div>
-    </div>
 
-</FetchData>
+    </FetchData>
+</div>
 
 @code {
+
+    /// <summary>
+    /// The identifier of the currently open contract.
+    /// </summary>
+    [Parameter]
+    public string? ContractId { get; set; }
+
     private RecentlyViewed _recentlyViewed = null!;
 
     private FetchData<IEnumerable<Contract>> _dataFetcher = null!;
+
+        private const int TrackQueryAfterMilliseconds = 1000;
+
+    private readonly Timer _analyticsTimer = new(TrackQueryAfterMilliseconds);
+
+    private string? _latestQuery;
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        _analyticsTimer.Elapsed += SendAnalytics;
+        _analyticsTimer.AutoReset = false;
+    }
+
+    private void SendAnalytics(object? sender, ElapsedEventArgs e)
+    {
+        if (_latestQuery is null)
+            return;
+        Analytics.TrackEvent("contract_query", new { query = _latestQuery, });
+    }
 
     private void OnRecentlyViewed(Contract viewedContract)
     {
@@ -39,5 +75,43 @@
         string urlSafeQuery = Uri.EscapeDataString(query);
         var fetchUrl = $"api/v1/contracts?query={urlSafeQuery}";
         await _dataFetcher.Fetch(fetchUrl);
+
+        _latestQuery = query;
+        _analyticsTimer.Stop();
+        _analyticsTimer.Start();
     }
+
+    private async Task OpenDetailsView()
+    {
+        if (ContractId is null) return;
+
+        var detailsViewSelector = $"#contract-details-{ContractId.ToLowerInvariant()}";
+        await Js.InvokeVoidAsync("showModal", detailsViewSelector);
+    }
+
+    /**
+     * These callback classes that allows a callback to not trigger a re-render of the entire component.
+     * This prevents infinite re-render cycles due to having an event handler
+     * that is called after the rendering of a child component.
+     *
+     * (the child component renders, triggering the event callback,
+     * which causes this component to re-render,
+     * which causes the child to re-render,
+     * which calls the callback, and so on).
+     */
+    private record SimpleCallback(Action Callback) : IHandleEvent
+    {
+        public static Action Create(Action callback) => new SimpleCallback(callback).Invoke;
+        public static Func<Task> Create(Func<Task> callback) => new SimpleAsyncCallback(callback).Invoke;
+
+        public void Invoke() => Callback();
+        public Task HandleEventAsync(EventCallbackWorkItem item, object? arg) => item.InvokeAsync(arg);
+    }
+
+    private record SimpleAsyncCallback(Func<Task> Callback) : IHandleEvent
+    {
+        public Task Invoke() => Callback();
+        public Task HandleEventAsync(EventCallbackWorkItem item, object? arg) => item.InvokeAsync(arg);
+    }
+
 }

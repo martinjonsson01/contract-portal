@@ -12,8 +12,13 @@ namespace Client.Tests.Pages.Admin;
 
 public class AdminPageTests : UITestFixture
 {
+    public AdminPageTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
-    public void AdminPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
+    public void AdminPage_ShouldShowLoadingIndicator_WhenThereAreNoContractsFetched()
     {
         // Arrange
         MockHttp.When("/api/v1/contracts").Respond(async () =>
@@ -28,7 +33,7 @@ public class AdminPageTests : UITestFixture
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
 
         // Assert
-        cut.WaitForAssertion(() => cut.Find(".loading-indicator").TextContent.Should().BeEquivalentTo("Laddar..."));
+        cut.WaitForElement(".loading-indicator");
     }
 
     [Fact]
