@@ -11,3 +11,7 @@ p {
     margin: 0 1rem;
     align-self: baseline;
 }
+
+.list-group-item{
+    width: 400px;
+}

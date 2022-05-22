@@ -1,12 +1,14 @@
 ﻿@page "/contracts"
 @page "/contracts/{ContractId}"
+@using System.Timers
 @using Domain.Contracts
 @using Blazorise.Extensions
 @inject IJSRuntime Js
+@inject IAnalytics Analytics
 
 <PageTitle>Prodigo Portal - Kontrakt</PageTitle>
 
-<div class="container">
+<div class="container minimum-height d-flex flex-column">
     <SearchBar OnQueryChange="OnQueryChanged"/>
 
     <RecentlyViewed @ref="_recentlyViewed"/>
@@ -42,6 +44,26 @@
 
     private FetchData<IEnumerable<Contract>> _dataFetcher = null!;
 
+        private const int TrackQueryAfterMilliseconds = 1000;
+
+    private readonly Timer _analyticsTimer = new(TrackQueryAfterMilliseconds);
+
+    private string? _latestQuery;
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        _analyticsTimer.Elapsed += SendAnalytics;
+        _analyticsTimer.AutoReset = false;
+    }
+
+    private void SendAnalytics(object? sender, ElapsedEventArgs e)
+    {
+        if (_latestQuery is null)
+            return;
+        Analytics.TrackEvent("contract_query", new { query = _latestQuery, });
+    }
+
     private void OnRecentlyViewed(Contract viewedContract)
     {
         _recentlyViewed.AddViewedContract(viewedContract);
@@ -53,6 +75,10 @@
         string urlSafeQuery = Uri.EscapeDataString(query);
         var fetchUrl = $"api/v1/contracts?query={urlSafeQuery}";
         await _dataFetcher.Fetch(fetchUrl);
+
+        _latestQuery = query;
+        _analyticsTimer.Stop();
+        _analyticsTimer.Start();
     }
 
     private async Task OpenDetailsView()

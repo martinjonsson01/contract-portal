@@ -21,7 +21,7 @@ public class ContractApiIntegrationTests : IntegrationTest
         var newContract = new Contract();
 
         // Act
-        HttpResponseMessage response = await Client.PutAsJsonAsync($"api/v1/contracts/{newContract.Id}", newContract);
+        HttpResponseMessage response = await Client.PutAsJsonAsync("api/v1/contracts", newContract);
 
         // Assert
         response.Should().BeSuccessful();
@@ -34,7 +34,7 @@ public class ContractApiIntegrationTests : IntegrationTest
     {
         // Arrange
         var contract = new Contract();
-        string endpointUrl = $"api/v1/contracts/{contract.Id}";
+        const string endpointUrl = $"api/v1/contracts";
         await PutResourceAsync(endpointUrl, contract);
         await ArrangeAuthenticatedAdminAsync();
         contract.Name = "Modified name";

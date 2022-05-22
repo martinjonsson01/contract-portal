@@ -54,8 +54,8 @@
         HttpResponseMessage response = await _http.DeleteAsync($"api/v1/status-updates/{statusUpdate.Id}");
         if (response.IsSuccessStatusCode)
         {
-    // Using null forgiving operator because _statusUpdate
-    // can not be null when remove button is pressed.
+            // Using null forgiving operator because _statusUpdate
+            // can not be null when remove button is pressed.
             _dataFetcher.Data!.Remove(statusUpdate);
             await InvokeAsync(StateHasChanged);
         }

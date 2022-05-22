@@ -9,21 +9,20 @@
 
     <td>@StatusUpdate.Timestamp.ToShortDateString()</td>
 
-   <!-- Button trigger modal -->
+    <!-- Button trigger modal -->
     <td>
-            <button type="button"
-                    class="btn btn-danger m-0"
-                    data-bs-toggle="modal"
-                    data-bs-target="#@($"modal_{StatusUpdate.Id}")">
-                <span class="oi oi-trash"></span>
-            </button>
-        </td>
-        <RemoveModal
-            Id=@StatusUpdate.Id
-            Title="Ta bort notifikationen"
-            Message="@($"Vill du ta bort notifikationen {StatusUpdate.Text}?")"
-            RemovalConfirmed="@(async () => await OnStatusUpdateRemoved.InvokeAsync(StatusUpdate))"
-        />
+        <button type="button"
+                class="btn btn-danger m-0"
+                data-bs-toggle="modal"
+                data-bs-target="#@($"modal_{StatusUpdate.Id}")">
+            <span class="oi oi-trash"></span>
+        </button>
+    </td>
+    <RemoveModal
+        Id=@StatusUpdate.Id
+        Title="Ta bort notifikationen"
+        Message="@($"Vill du ta bort notifikationen {StatusUpdate.Text}?")"
+        RemovalConfirmed="@(async () => await OnStatusUpdateRemoved.InvokeAsync(StatusUpdate))"/>
 </tr>
 
 @code {
@@ -39,4 +38,5 @@
     /// </summary>
     [Parameter]
     public EventCallback<StatusUpdate> OnStatusUpdateRemoved { get; set; } = EventCallback<StatusUpdate>.Empty;
+
 }

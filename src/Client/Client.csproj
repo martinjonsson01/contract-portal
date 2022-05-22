@@ -42,7 +42,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\images" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <None Include="wwwroot\js\interop.js" />
   </ItemGroup>
