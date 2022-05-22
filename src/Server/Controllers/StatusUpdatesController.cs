@@ -49,4 +49,16 @@ public class StatusUpdatesController : BaseApiController<StatusUpdatesController
     {
         _statusUpdates.Add(statusUpdate);
     }
+
+    /// <summary>
+    /// Removes the specified status update.
+    /// </summary>
+    /// <param name="id">Id of the status update to be removed.</param>
+    /// <returns>If the status update was successfully removed.</returns>
+    [HttpDelete("{id:guid}")]
+    [Authorize("AdminOnly")]
+    public IActionResult Remove(Guid id)
+    {
+        return _statusUpdates.Remove(id) ? Ok() : NotFound();
+    }
 }

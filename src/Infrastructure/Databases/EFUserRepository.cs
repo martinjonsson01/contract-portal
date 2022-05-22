@@ -66,7 +66,7 @@ public sealed class EFUserRepository : IUserRepository
         }
         catch (DataException e)
         {
-            _logger.LogError("Could not remove contract from database: {Message}", e.Message);
+            _logger.LogError("Could not remove user from database: {Message}", e.Message);
         }
 
         // If any changes were made, then the remove operation succeeded.
