@@ -90,7 +90,7 @@ footer a:hover {
 }
 
 article {
-    min-height: calc(100vh - 4.5rem);
+    min-height: calc(100vh - 3.75rem);
 }
 
 .btn-primary {
@@ -161,5 +161,5 @@ thead {
 }
 
 .minimum-height {
-    min-height: calc(100vh - 4.5rem);
+    min-height: calc(100vh - 3.75rem);
 }
