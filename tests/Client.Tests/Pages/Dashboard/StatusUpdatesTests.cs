@@ -38,6 +38,32 @@ public class StatusUpdatesTests : UITestFixture
     }
 
     [Fact]
+    public void FilteredStatusUpdates_DisplaysOneNotification_WhenServerReturnsFourStatusUpdates()
+    {
+        // Arrange
+        var statusUpdates = new List<StatusUpdate>
+        {
+            new() { Alert = AlertLevel.Information, },
+            new() { Alert = AlertLevel.Warning, },
+            new() { Alert = AlertLevel.Urgent, },
+            new() { Alert = AlertLevel.Critical, },
+        };
+        MockHttp.When("/api/v1/status-updates").RespondJson(statusUpdates);
+
+        const string notification = ".list-group-item";
+
+        static void ParameterBuilder(ComponentParameterCollectionBuilder<StatusUpdates> parameters) =>
+            parameters.Add(property => property.AlertLevels, new[] { AlertLevel.Information, });
+
+        // Act
+        IRenderedComponent<StatusUpdates> cut = Context.RenderComponent<StatusUpdates>(ParameterBuilder);
+        cut.WaitForElement(notification);
+
+        // Assert
+        cut.WaitForAssertion(() => cut.FindAll(notification).Should().HaveCount(1));
+    }
+
+    [Fact]
     public void StatusUpdates_ThrowsArgumentOutOfRange_WhenAlertLevelIsNotDefined()
     {
         // Arrange
