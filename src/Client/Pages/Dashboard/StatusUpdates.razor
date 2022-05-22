@@ -5,18 +5,39 @@
 <FetchData TData="StatusUpdate[]"
            Url="api/v1/status-updates"
            Context="statusUpdates">
-    <h3 class="text-center fw-bold">Nyheter</h3>
+    <h3 class="text-center fw-bold">@Title</h3>
     @if (statusUpdates.IsNullOrEmpty())
     {
-        <p>Det finns inga nyheter för tillfället.</p>
+        <p>Det finns inga @Title.ToLowerInvariant() för tillfället.</p>
     }
     else
     {
         <div class="prodigo-status-list shadow">
-            @foreach (StatusUpdate statusUpdate in statusUpdates.OrderByDescending(status => status.Timestamp))
+            @foreach (StatusUpdate statusUpdate in FilterAlertLevels(statusUpdates))
             {
                 <StatusUpdateItem Status="@statusUpdate"/>
             }
         </div>
     }
 </FetchData>
+
+@code
+{
+    /// <summary>
+    /// The rubric to put above the <see cref="StatusUpdate"/>s.
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "Nyheter";
+
+    /// <summary>
+    /// Gets or sets which severities of s<see cref="StatusUpdate"/>s that should be shown.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<AlertLevel> AlertLevels { get; set; } = new[] { AlertLevel.Information, };
+
+    private IEnumerable<StatusUpdate> FilterAlertLevels(IEnumerable<StatusUpdate> statusUpdates)
+    {
+        return statusUpdates.Where(update => AlertLevels.Contains(update.Alert))
+                            .OrderByDescending(status => status.Timestamp);
+    }
+}

@@ -14,6 +14,7 @@
 
 .navbar {
     padding: 0.15625rem 0;
+    height: 3.75rem;
 }
 
 ::deep .navbar-nav .nav-link {

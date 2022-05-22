@@ -1,4 +1,5 @@
 @page "/dashboard"
+@using Domain.StatusUpdates
 @inherits AuthenticationRequiredView
 @inject ISessionService _session
 
@@ -7,7 +8,14 @@
     <div class="d-flex justify-content-center flex-wrap">
         <div class="dashboard-item-box">
             <div class="status-update-container">
-                <StatusUpdates/>
+                <StatusUpdates Title="Varningar"
+                               AlertLevels="new[] { AlertLevel.Warning, AlertLevel.Urgent, AlertLevel.Critical, }"/>
+            </div>
+        </div>
+        <div class="dashboard-item-box">
+            <div class="status-update-container">
+                <StatusUpdates Title="Nyheter"
+                               AlertLevels="new[] { AlertLevel.Information, }"/>
             </div>
         </div>
         <div class="dashboard-item-box px-2">
