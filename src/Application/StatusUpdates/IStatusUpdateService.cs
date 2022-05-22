@@ -18,4 +18,11 @@ public interface IStatusUpdateService
     /// </summary>
     /// <param name="statusUpdate">The new status update.</param>
     void Add(StatusUpdate statusUpdate);
+
+    /// <summary>
+    /// Removes a notification.
+    /// </summary>
+    /// <param name="id">Notification to be removed.</param>
+    /// <returns>Whether the removal was successful.</returns>
+    bool Remove(Guid id);
 }
