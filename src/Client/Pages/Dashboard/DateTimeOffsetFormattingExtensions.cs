@@ -1,7 +1,7 @@
 ﻿namespace Client.Pages.Dashboard;
 
 /// <summary>
-/// Extensions for <see cref="DateTime"/> to format it in different ways.
+/// Extensions for <see cref="DateTimeOffset"/> to format it in different ways.
 /// </summary>
 internal static class DateTimeOffsetFormattingExtensions
 {
