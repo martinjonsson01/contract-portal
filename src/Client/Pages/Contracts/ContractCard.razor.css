@@ -6,6 +6,7 @@
     height: 16rem;
     overflow: hidden;
     background-color: #222939;
+    text-align: start !important;
 }
 
 .prodigo-card-img {
@@ -36,3 +37,4 @@
 .height-35 {
     height: 35%;
 }
+
