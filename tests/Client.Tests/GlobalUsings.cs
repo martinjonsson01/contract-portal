@@ -8,6 +8,8 @@ global using System;
 
 global using System.Linq;
 
+global using Xunit.Abstractions;
+
 global using Client.Pages;
 
 global using Bogus;

@@ -6,6 +6,11 @@
 public class StatusUpdate
 {
     /// <summary>
+    /// Gets the unique identifier.
+    /// </summary>
+    public Guid Id { get; init; } = Guid.NewGuid();
+
+    /// <summary>
     /// Gets or sets at which level of urgency the information in this status update is.
     /// </summary>
     public AlertLevel Alert { get; set; } = AlertLevel.Information;
@@ -13,7 +18,7 @@ public class StatusUpdate
     /// <summary>
     /// Gets or sets when this status update was generated.
     /// </summary>
-    public DateTime Timestamp { get; set; } = DateTime.Now;
+    public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.Now;
 
     /// <summary>
     /// Gets or sets the text describing the event.

@@ -3,32 +3,59 @@
 @using System.Text
 @using Microsoft.AspNetCore.JsonPatch
 @using Newtonsoft.Json
-@inject IJSRuntime _js
-@inject HttpClient _http
+@inject IJSRuntime Js
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
 
-<div class="card ms-2 me-2 prodigo-card">
-    <img id="contract-thumbnail" src="@Contract.SupplierLogoImagePath" class="img-thumbnail img-fluid card-img-top rounded p-0 prodigo-card-img pointer" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"/>
+<div class="card ms-2 me-2 shadow prodigo-card"
+     @onclick="OpenDetailsView">
+
+    <img id="contract-thumbnail"
+         src="@Contract.SupplierLogoImagePath"
+         class="img-thumbnail img-fluid card-img-top rounded p-0 prodigo-card-img pointer"
+         @onclick="AddToRecentlyViewed"/>
+
     <div class="card-body d-flex align-items-center p-0 height-35">
 
         <div class="d-flex flex-column width-100">
-            <div class="pt-4 pointer" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"></div>
-            <div class="d-flex flex-row">
-                <div class="ps-3 pointer" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"></div>
-                <div class="text-truncate prodigo-card-title pointer" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed">
-                    <h4 class="card-title text-truncate m-0" id="contract-name">@Contract.Name</h4>
-                </div>
-                <div class="d-flex justify-content-end width-10">
-                    <FavoriteButton @ref="_favoriteButton" Contract="@Contract" OnFavoriteChange="@((args)=> ChangeFavorite(((Guid, bool))args))"></FavoriteButton>
-                </div>
-                <div class="pe-3 pointer" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"></div>
+
+            <div class="pt-4 pointer"
+                 @onclick="AddToRecentlyViewed">
             </div>
-            <div class="pb-4 pointer" data-bs-toggle="modal" data-bs-target="#@("id_" + Contract.Id)" @onclick="AddToRecentlyViewed"></div>
+
+            <div class="d-flex flex-row">
+
+                <div class="ps-3 pointer"
+                     @onclick="AddToRecentlyViewed">
+                </div>
+
+                <div class="text-truncate prodigo-card-title pointer"
+                     @onclick="AddToRecentlyViewed">
+
+                    <h4 class="card-title text-truncate m-0" id="contract-name">@Contract.Name</h4>
+
+                </div>
+
+                <div class="d-flex justify-content-end width-10">
+                    <FavoriteButton @ref="_favoriteButton"
+                                    Contract="@Contract"
+                                    OnFavoriteChange="@(ChangeFavorite)"/>
+                </div>
+
+                <div class="pe-3 pointer"
+                     @onclick="AddToRecentlyViewed"></div>
+
+            </div>
+
+            <div class="pb-4 pointer"
+                 @onclick="AddToRecentlyViewed">
+            </div>
+
         </div>
 
     </div>
-</div>
 
-<ContractDetails Contract="@Contract"/>
+</div>
 
 @code {
 
@@ -54,16 +81,17 @@
 
     private async Task AddToRecentlyViewed()
     {
-        HttpResponseMessage response = await _http.PostAsJsonAsync("api/v1/contracts/recent", Contract);
-        if (response.IsSuccessStatusCode)
-        {
-            await OnViewed.InvokeAsync(Contract);
-        }
+        await OnViewed.InvokeAsync(Contract);
     }
 
-    private async Task ChangeFavorite((Guid Id, bool IsFavorite)args)
+    private async Task ChangeFavorite((Guid Id, bool IsFavorite) args)
     {
         await OnFavoriteChange.InvokeAsync(args);
+    }
+
+    private void OpenDetailsView()
+    {
+        NavigationManager.NavigateTo($"contracts/{Contract.Id}");
     }
 
 }

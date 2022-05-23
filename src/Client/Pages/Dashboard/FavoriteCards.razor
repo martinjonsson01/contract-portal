@@ -4,21 +4,21 @@
 @inject ISessionService _session
 @inherits UpdateOnAuthenticateView
 
-<div id="favorite-contracts" style="padding-top: 30px;">
-    <h3>Favoriter</h3>
+<div id="favorite-contracts" class="text-center">
+    <h3 class="fw-bold">Favoriter</h3>
     <FetchData @ref="_dataFetcher"
                TData="List<Contract>"
-               Url=@($"api/v1/users/{_session.Username}/favorites")
+               Url=@($"api/v1/users/{_session.UserId}/favorites")
                Context="contracts">
         @{
             var contractsList = contracts.ToList();
         }
         @if (contractsList.Any())
         {
-            <div id="favorite-cards-container" class="d-flex flex-row justify-content-around flex-wrap">
+            <div id="favorite-cards-container" class="favorite-grid d-flex flex-wrap justify-content-center">
                 @foreach (var contract in contractsList)
                 {
-                    <ContractCard Contract=@contract OnFavoriteChange="@((args)=> OnFavoriteChange(((Guid, bool))args))"/>
+                    <ContractCard Contract=@contract OnFavoriteChange="@OnFavoriteChange"/>
                 }
             </div>
         }

@@ -1,49 +1,56 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
-
 using Application.Contracts;
-
 using Domain.Contracts;
-
+using Domain.Users;
 using FluentAssertions.Execution;
 
 namespace Application.Tests.Contracts;
 
 public class RecentContractServiceTests
 {
+    private readonly Guid _userId = Guid.NewGuid();
     private readonly IRecentContractService _cut;
+    private readonly Mock<IRecentContractRepository> _mockRecentRepo;
+    private readonly Mock<IContractRepository> _mockContractRepo;
 
     public RecentContractServiceTests()
     {
-        _cut = new RecentContractService(new Collection<Contract>());
+        _mockRecentRepo = new Mock<IRecentContractRepository>();
+        _mockContractRepo = new Mock<IContractRepository>();
+        _cut = new LimitedRecentContractService(_mockRecentRepo.Object, _mockContractRepo.Object);
     }
 
     [Fact]
-    public void AddRecent_AddsContractToQueue_WhenContractNotAlreadyInQueue()
+    public void Size_ReturnsOne_WhenThereIsOnlyOneRecentContract()
     {
         // Arrange
         var contract = new Contract();
+        var contracts = new List<RecentlyViewedContract> { new(contract.Id, new User().Id) };
+        _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<Guid>()))
+            .Returns(contracts);
 
         // Act
-        _cut.Add(contract);
+        int size = _cut.Size(_userId);
 
         // Assert
-        _cut.Size().Should().Be(1);
+        size.Should().Be(1);
     }
 
     [Fact]
-    public void AddRecent_DoesNotAddContractToQueue_WhenContractAlreadyInQueue()
+    public void AddRecent_DelegatesCorrectlyToRepository()
     {
         // Arrange
         var contract = new Contract();
+        var contracts = new List<RecentlyViewedContract> { new RecentlyViewedContract() };
+        _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<Guid>()))
+            .Returns(contracts);
 
         // Act
-        _cut.Add(contract);
-        _cut.Add(contract);
+        _cut.Add(_userId, contract);
 
         // Assert
-        _cut.Size().Should().Be(1);
+        _mockRecentRepo.Verify(repo => repo.Add(_userId, contract), Times.Once);
     }
 
     [Fact]
@@ -51,44 +58,75 @@ public class RecentContractServiceTests
     {
         // Arrange
         var contract1 = new Contract();
-        var contract2 = new Contract();
-        var contract3 = new Contract();
-        var contract4 = new Contract();
+        var contracts = new List<RecentlyViewedContract>
+        {
+            new RecentlyViewedContract(),
+            new RecentlyViewedContract(),
+            new RecentlyViewedContract(),
+            new RecentlyViewedContract(),
+        };
+
+        _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<Guid>()))
+            .Returns(contracts);
 
         // Act
-        _cut.Add(contract1);
-        _cut.Add(contract2);
-        _cut.Add(contract3);
-        _cut.Add(contract4);
+        _cut.Add(_userId, contract1);
 
         // Assert
-        using (new AssertionScope())
-        {
-            _cut.Size().Should().Be(3);
-            ICollection<Contract> recentContracts = _cut.FetchRecentContracts().ToList();
-            recentContracts.Should().NotContain(contract1);
-            recentContracts.Should().Contain(contract2);
-            recentContracts.Should().Contain(contract3);
-            recentContracts.Should().Contain(contract4);
-        }
+        _mockRecentRepo.Verify(repo => repo.Remove(It.IsAny<RecentlyViewedContract>()), Times.Once);
     }
 
     [Fact]
-    public void RemoveContract_ShouldRemoveFromRecentlyViewed_WhenContractHasBeenViewed()
+    public void AddRecent_ShouldNotRemoveAnyRecentContract_WhenAddingAnAlreadyAddedContract()
     {
         // Arrange
         var contract1 = new Contract();
-        var contract2 = new Contract() { Name = "contract 2", };
-        _cut.Add(contract1);
-        _cut.Add(contract2);
-        Guid id = contract2.Id;
+        var contract2 = new Contract();
+        var contract3 = new Contract();
+        var recentContract1 = new RecentlyViewedContract(new User().Id, contract1.Id);
+        var recentContract2 = new RecentlyViewedContract(new User().Id, contract2.Id);
+        var recentContract3 = new RecentlyViewedContract(new User().Id, contract3.Id);
+
+        var contracts = new List<RecentlyViewedContract> { recentContract1, recentContract2, recentContract3, };
+
+        _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<Guid>()))
+            .Returns(contracts);
 
         // Act
-        _cut.Add(contract1);
-        _cut.Add(contract2);
-        _cut.Remove(id);
+        _cut.Add(_userId, contract1);
 
         // Assert
-        _cut.FetchRecentContracts().Count().Should().Be(1);
+        _mockRecentRepo.Verify(repo => repo.Remove(recentContract1), Times.Never);
+    }
+
+    [Fact]
+    public void FetchRecentContracts_ShouldReturnSortedOrder_WhenGivenWrongOrder()
+    {
+        // Arrange
+        var contract1 = new Contract();
+        var contract2 = new Contract();
+        var contract3 = new Contract();
+
+        var recent1 = new RecentlyViewedContract(contract1.Id, new User().Id);
+        var recent2 = new RecentlyViewedContract(contract2.Id, new User().Id);
+        var recent3 = new RecentlyViewedContract(contract3.Id, new User().Id);
+
+        var contracts = new List<RecentlyViewedContract> { recent2, recent3, recent1, };
+
+        _mockRecentRepo.Setup(repo => repo.FetchRecentContracts(It.IsAny<Guid>()))
+            .Returns(contracts);
+
+        _mockContractRepo.Setup(repo => repo.FetchContract(contract1.Id))
+            .Returns(contract1);
+        _mockContractRepo.Setup(repo => repo.FetchContract(contract2.Id))
+            .Returns(contract2);
+        _mockContractRepo.Setup(repo => repo.FetchContract(contract3.Id))
+            .Returns(contract3);
+
+        // Act
+        IEnumerable<Contract> recentContracts = _cut.FetchRecentContracts(_userId);
+
+        // Assert
+        recentContracts.SequenceEqual(new List<Contract>() { contract3, contract2, contract1 }).Should().BeTrue();
     }
 }

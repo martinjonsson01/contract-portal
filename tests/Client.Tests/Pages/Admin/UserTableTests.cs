@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AngleSharp.Dom;
 
 using Client.Pages.Admin;
+using Client.Pages.Admin.UserComponents;
 
 using Domain.Users;
 
@@ -15,6 +16,11 @@ namespace Client.Tests.Pages.Admin;
 
 public class UserTableTests : UITestFixture
 {
+    public UserTableTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public void AddingUser_RendersTheNewUser()
     {

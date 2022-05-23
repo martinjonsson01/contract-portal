@@ -9,6 +9,11 @@ namespace Client.Tests.Shared;
 
 public class ListItemInputTests : UITestFixture
 {
+    public ListItemInputTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public async Task Input_DoesNotTriggerValueChanged_WhenValueIsSameAsPreviousAsync()
     {
@@ -27,11 +32,14 @@ public class ListItemInputTests : UITestFixture
             cut = Context.RenderComponent<ListItemInput<string>>(ParameterBuilder);
         cut.Render();
 
+        const string listItemInput = ".list-item-input";
+        cut.WaitForElement(listItemInput);
+
         // Act
-        await cut.Find(".list-item-input").ChangeAsync(new ChangeEventArgs { Value = item, }).ConfigureAwait(false);
+        await cut.Find(listItemInput).ChangeAsync(new ChangeEventArgs { Value = item, }).ConfigureAwait(false);
 
         // Assert
-        called.Should().BeFalse();
+        cut.WaitForAssertion(() => called.Should().BeFalse());
     }
 
     [Fact]
@@ -49,6 +57,6 @@ public class ListItemInputTests : UITestFixture
         Action render = () => cut.Render();
 
         // Assert
-        render.Should().NotThrow();
+        cut.WaitForAssertion(() => render.Should().NotThrow());
     }
 }

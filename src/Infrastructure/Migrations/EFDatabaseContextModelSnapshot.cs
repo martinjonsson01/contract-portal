@@ -34,7 +34,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("FavoritesId");
 
-                    b.ToTable("ContractUser");
+                    b.ToTable("UserFavoriteContracts", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
@@ -42,10 +42,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AdditionalDocument")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -88,6 +84,49 @@ namespace Infrastructure.Migrations
                     b.ToTable("Contracts");
                 });
 
+            modelBuilder.Entity("Domain.Contracts.Document", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ContractId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractId")
+                        .IsUnique();
+
+                    b.ToTable("Document");
+                });
+
+            modelBuilder.Entity("Domain.Contracts.RecentlyViewedContract", b =>
+                {
+                    b.Property<Guid>("ContractId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastViewed")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ContractId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RecentlyViewedContracts");
+                });
+
             modelBuilder.Entity("Domain.Contracts.Tag", b =>
                 {
                     b.Property<Guid>("Id")
@@ -108,6 +147,27 @@ namespace Infrastructure.Migrations
                     b.ToTable("Tag");
                 });
 
+            modelBuilder.Entity("Domain.StatusUpdates.StatusUpdate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Alert")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StatusUpdates");
+                });
+
             modelBuilder.Entity("Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -115,6 +175,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Company")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -150,6 +214,30 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Contracts.Document", b =>
+                {
+                    b.HasOne("Domain.Contracts.Contract", null)
+                        .WithOne("AdditionalDocument")
+                        .HasForeignKey("Domain.Contracts.Document", "ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Contracts.RecentlyViewedContract", b =>
+                {
+                    b.HasOne("Domain.Contracts.Contract", null)
+                        .WithMany()
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Users.User", null)
+                        .WithMany("RecentlyViewContracts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Contracts.Tag", b =>
                 {
                     b.HasOne("Domain.Contracts.Contract", null)
@@ -161,7 +249,14 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Contracts.Contract", b =>
                 {
+                    b.Navigation("AdditionalDocument");
+
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("Domain.Users.User", b =>
+                {
+                    b.Navigation("RecentlyViewContracts");
                 });
 #pragma warning restore 612, 618
         }

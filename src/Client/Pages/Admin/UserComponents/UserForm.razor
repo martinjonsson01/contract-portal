@@ -2,6 +2,10 @@
 @using Microsoft.VisualBasic
 @using Newtonsoft.Json
 @using System.Text
+@using System.Security.AccessControl
+@using System.ComponentModel.DataAnnotations
+@using System.Net.Mail
+@using Application
 @inject HttpClient _http
 @inject IJSRuntime _js
 
@@ -16,6 +20,10 @@
     <div class="mb-3">
         <label for="user-password" class="form-label">Lösenord</label>
         <InputText id="user-password" class="form-control" placeholder="Användarens lösenord" @bind-Value="@_user.Password"/>
+    </div>
+    <div class="mb-3">
+        <label for="user-email" class="form-label">Email</label>
+        <InputText id="user-email" class="form-control" placeholder="Användarens e-mailadress" @bind-Value="@_user.Email"/>
     </div>
     <div class="mb-3">
         <label for="user-company" class="form-label">Företag</label>
@@ -56,6 +64,7 @@
         {
             Name = string.Empty,
             Password = string.Empty,
+            Email = string.Empty,
             Company = string.Empty,
             LatestPaymentDate = DateTime.UtcNow,
         };
@@ -63,7 +72,11 @@
 
     private async Task ConvertAndUploadUser()
     {
-    // Make sure date is in UTC.
+        //Make sure email is valid
+        if (!EmailValidator.IsValidEmail(_user.Email))
+            return;
+
+        // Make sure date is in UTC.
         _user.LatestPaymentDate = _user.LatestPaymentDate.ToUniversalTime();
 
         await UploadUser();
@@ -73,12 +86,11 @@
     {
         string json = JsonConvert.SerializeObject(_user);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await _http.PutAsync($"api/v1/users/{_user.Id}", content);
+        HttpResponseMessage response = await _http.PutAsync($"api/v1/users", content);
         if (response.IsSuccessStatusCode)
         {
             await OnUserAdded.InvokeAsync(_user);
             _user = CreateUnspecifiedUser();
         }
     }
-
 }

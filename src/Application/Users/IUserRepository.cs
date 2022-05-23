@@ -1,3 +1,4 @@
+using Domain.Contracts;
 using Domain.Users;
 
 namespace Application.Users;
@@ -14,62 +15,55 @@ public interface IUserRepository
     IEnumerable<User> All { get; }
 
     /// <summary>
-    /// Adds a new user to store.
+    /// Adds a new <see cref="User"/> to store.
     /// </summary>
-    /// <param name="user">The new user instance.</param>
+    /// <param name="user">The new <see cref="User"/> instance.</param>
     void Add(User user);
 
     /// <summary>
-    /// Removes the user with the given ID.
+    /// Removes the <see cref="User"/> with the given ID.
     /// </summary>
-    /// <param name="id">The id of the user to be removed.</param>
+    /// <param name="id">The id of the <see cref="User"/> to be removed.</param>
     /// <returns>If the removal was successful.</returns>
     bool Remove(Guid id);
 
     /// <summary>
-    /// Gets the user with the given username if it exists.
+    /// Gets a <see cref="User"/> with the given ID, if it exists.
     /// </summary>
-    /// <param name="username">The name of the user to get.</param>
-    /// <returns>The user, if it exists.</returns>
-    User? Fetch(string username);
+    /// <param name="id">The ID of the <see cref="User"/> to get.</param>
+    /// <returns>The <see cref="User"/>, if it exists.</returns>
+    User? Fetch(Guid id);
 
     /// <summary>
-    /// Checks whether a user exists or not.
+    /// Gets a <see cref="User"/> with the given name, if it exists.
     /// </summary>
-    /// <param name="username">The username to look for.</param>
-    /// <returns>Whether the user exits or not.</returns>
-    bool Exists(string username);
+    /// <param name="username">The name of the <see cref="User"/> to get.</param>
+    /// <returns>The <see cref="User"/>, if it exists.</returns>
+    User? FromName(string username);
 
     /// <summary>
-    /// Ensures that an admin user is created.
+    /// Ensures that an admin <see cref="User"/> is created.
     /// </summary>
     void EnsureAdminCreated();
 
     /// <summary>
-    /// Gets a user with the given id, if it exists.
+    /// Updates a <see cref="User"/>.
     /// </summary>
-    /// <param name="id">The id of the user.</param>
-    /// <returns>The user, if it exists.</returns>
-    User? FetchUser(Guid id);
-
-    /// <summary>
-    /// Updates a user.
-    /// </summary>
-    /// <param name="updatedUser">The updated user.</param>
+    /// <param name="updatedUser">The updated <see cref="User"/>.</param>
     void UpdateUser(User updatedUser);
 
     /// <summary>
-    /// Adds a favorite contract to store, for a certain user.
+    /// Adds a favorite contract to store, for a certain <see cref="User"/>.
     /// </summary>
-    /// <param name="userName">The name of the user.</param>
-    /// <param name="contractId">The id of the contract.</param>
-    void AddFavorite(string userName, Guid contractId);
+    /// <param name="userId">The id of the <see cref="User"/>.</param>
+    /// <param name="contractId">The id of the <see cref="Contract"/>.</param>
+    void AddFavorite(Guid userId, Guid contractId);
 
     /// <summary>
-    /// Removes a stored favorite contract, for a certain user.
+    /// Removes a stored favorite contract, for a certain <see cref="User"/>.
     /// </summary>
-    /// <param name="userName">The name of the user.</param>
+    /// <param name="userId">The id of the <see cref="User"/>.</param>
     /// <param name="contractId">The id of the contract.</param>
     /// <returns>If the removal was successful.</returns>
-    bool RemoveFavorite(string userName, Guid contractId);
+    bool RemoveFavorite(Guid userId, Guid contractId);
 }

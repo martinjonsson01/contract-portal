@@ -4,10 +4,17 @@ using Application.Users;
 
 using Client.Shared;
 
+using Xunit.Abstractions;
+
 namespace Client.Tests.Shared;
 
 public class NavMenuTests : UITestFixture
 {
+    public NavMenuTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public async Task NavMenu_DisplaysLoginButton_WhenUserNotLoggedIn()
     {
@@ -19,7 +26,7 @@ public class NavMenuTests : UITestFixture
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
 
         // Assert
-        cut.Find("#login-button").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find("#login-button").Should().NotBeNull());
     }
 
     [Fact]
@@ -33,7 +40,7 @@ public class NavMenuTests : UITestFixture
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
 
         // Assert
-        cut.Find("#logout-button").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find("#logout-button").Should().NotBeNull());
     }
 
     [Fact]
@@ -46,7 +53,7 @@ public class NavMenuTests : UITestFixture
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
 
         // Assert
-        cut.Find("#logged-in").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find("#logged-in").Should().NotBeNull());
     }
 
     [Fact]
@@ -60,6 +67,6 @@ public class NavMenuTests : UITestFixture
         IRenderedComponent<NavMenu> cut = Context.RenderComponent<NavMenu>();
 
         // Assert
-        cut.Find("#admin-nav-item").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find("#admin-nav-item").Should().NotBeNull());
     }
 }

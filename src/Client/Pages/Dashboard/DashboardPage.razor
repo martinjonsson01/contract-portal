@@ -1,10 +1,30 @@
 @page "/dashboard"
+@using Domain.StatusUpdates
 @inherits AuthenticationRequiredView
+@inject ISessionService _session
 
-<h2>Välkommen till Prodigo Portal!</h2>
-
-<div class="d-flex justify-content-center w-100">
-    <StatusUpdates />
+<div class="dashboard-background container-fluid p-5 m-0">
+    <h2 class="text-center pb-3 title">@WelcomeMessage</h2>
+    <div class="d-flex justify-content-center flex-wrap">
+        <div class="dashboard-item-box">
+            <div class="status-update-container">
+                <StatusUpdates Title="Varningar"
+                               AlertLevels="new[] { AlertLevel.Warning, AlertLevel.Urgent, AlertLevel.Critical, }"/>
+            </div>
+        </div>
+        <div class="dashboard-item-box">
+            <div class="status-update-container">
+                <StatusUpdates Title="Nyheter"
+                               AlertLevels="new[] { AlertLevel.Information, }"/>
+            </div>
+        </div>
+        <div class="dashboard-item-box px-2">
+            <FavoriteCards/>
+        </div>
+    </div>
 </div>
 
-<FavoriteCards />
+@code
+{
+    private string WelcomeMessage => "Hej, " + _session.Username + "!";
+}

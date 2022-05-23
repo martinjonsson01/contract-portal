@@ -1,4 +1,5 @@
 ﻿using Domain.Contracts;
+using Domain.StatusUpdates;
 using Domain.Users;
 
 using Microsoft.EntityFrameworkCore;
@@ -31,15 +32,17 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
         _logger.LogInformation("Established a new connection to the database");
     }
 
-    /// <summary>
-    /// Gets or sets the <see cref="Contract"/>s in the database.
-    /// </summary>
+    /// <inheritdoc />
     public DbSet<Contract> Contracts { get; set; } = null!;
 
-    /// <summary>
-    /// Gets or sets the <see cref="User"/>s in the database.
-    /// </summary>
+    /// <inheritdoc />
     public DbSet<User> Users { get; set; } = null!;
+
+    /// <inheritdoc />
+    public DbSet<RecentlyViewedContract> RecentlyViewedContracts { get; set; } = null!;
+
+    /// <inheritdoc />
+    public DbSet<StatusUpdate> StatusUpdates { get; set; } = null!;
 
     /// <inheritdoc/>
     public new EntityEntry Entry<TEntity>(TEntity entity)
@@ -53,11 +56,22 @@ public sealed class EFDatabaseContext : DbContext, IDatabaseContext
     {
         _ = modelBuilder.Entity<User>()
                         .HasMany(p => p.Favorites)
-                        .WithMany("FavoritedBy");
+                        .WithMany("FavoritedBy")
+                        .UsingEntity(join => join.ToTable("UserFavoriteContracts"));
         _ = modelBuilder.Entity<User>()
                         .HasKey(user => user.Id);
         _ = modelBuilder.Entity<User>()
                         .Property(user => user.Name)
                         .UseCollation("Finnish_Swedish_CS_AS");
+
+        _ = modelBuilder.Entity<Contract>()
+                        .HasKey(contract => contract.Id);
+        _ = modelBuilder.Entity<Contract>()
+                        .HasMany<RecentlyViewedContract>()
+                        .WithOne()
+                        .HasForeignKey(nameof(RecentlyViewedContract.ContractId));
+
+        _ = modelBuilder.Entity<RecentlyViewedContract>()
+                        .HasKey(recentContract => new { recentContract.ContractId, recentContract.UserId, });
     }
 }

@@ -4,22 +4,23 @@ using AngleSharp.Dom;
 
 using Application.Users;
 
-using Blazored.SessionStorage;
-
 using Client.Pages.Contracts;
-using Client.Services.Authentication;
 
 using Domain.Contracts;
-using Domain.Users;
 
 using FluentAssertions.Execution;
 
-using Microsoft.Extensions.DependencyInjection;
+using Document = Domain.Contracts.Document;
 
 namespace Client.Tests.Pages.Contracts;
 
 public class ContractDetailsTests : UITestFixture
 {
+    public ContractDetailsTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
     public async Task InspirationalImage_IsShown_WhenItExists()
     {
@@ -95,9 +96,12 @@ public class ContractDetailsTests : UITestFixture
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
+        const string accordionBody = ".accordion-body";
+
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
-        IElement? faqElement = cut.FindAll(".accordion-body").ToList()
+        cut.WaitForElement(accordionBody);
+        IElement? faqElement = cut.FindAll(accordionBody).ToList()
                                   .Find(p => p.InnerHtml.Contains(faqText, StringComparison.CurrentCulture));
 
         // Assert
@@ -115,9 +119,12 @@ public class ContractDetailsTests : UITestFixture
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
+        const string accordionItem = ".accordion-item";
+
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
-        IElement? titleElement = cut.FindAll(".accordion-item").ToList()
+        cut.WaitForElement(accordionItem);
+        IElement? titleElement = cut.FindAll(accordionItem).ToList()
                                     .Find(p => p.InnerHtml.Contains("faq-title", StringComparison.CurrentCulture));
 
         // Assert
@@ -135,9 +142,12 @@ public class ContractDetailsTests : UITestFixture
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
 
+        const string accordionItem = ".accordion-item";
+
         // Act
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
-        IElement? titleElement = cut.FindAll(".accordion-item").ToList()
+        cut.WaitForElement(accordionItem);
+        IElement? titleElement = cut.FindAll(accordionItem).ToList()
                                     .Find(p => p.InnerHtml.Contains("faq-title", StringComparison.CurrentCulture));
 
         // Assert
@@ -158,7 +168,7 @@ public class ContractDetailsTests : UITestFixture
 
         // Assert
         Action findPrompt = () => cut.Find(".register-prompt");
-        findPrompt.Should().NotThrow();
+        cut.WaitForAssertion(() => findPrompt.Should().NotThrow());
     }
 
     [Fact]
@@ -175,7 +185,7 @@ public class ContractDetailsTests : UITestFixture
 
         // Assert
         Action findPrompt = () => cut.Find(".register-prompt");
-        findPrompt.Should().Throw<ElementNotFoundException>();
+        cut.WaitForAssertion(() => findPrompt.Should().Throw<ElementNotFoundException>());
     }
 
     [Fact]
@@ -184,7 +194,7 @@ public class ContractDetailsTests : UITestFixture
         // Arrange
         await SessionStorage.SetItemAsync("user", new AuthenticateResponse(LoggedInUser, FakeToken));
 
-        var contract = new Contract { AdditionalDocument = "/link/to/additional.document", };
+        var contract = new Contract { AdditionalDocument = new Document(), };
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
@@ -193,7 +203,7 @@ public class ContractDetailsTests : UITestFixture
         IRenderedComponent<ContractDetails> cut = Context.RenderComponent<ContractDetails>(ParameterBuilder);
 
         // Assert
-        cut.Find("#additional-document").Should().NotBeNull();
+        cut.WaitForAssertion(() => cut.Find("#additional-document").Should().NotBeNull());
     }
 
     [Fact]
@@ -202,7 +212,7 @@ public class ContractDetailsTests : UITestFixture
         // Arrange
         await SessionStorage.SetItemAsync("user", new AuthenticateResponse(LoggedInUser, FakeToken));
 
-        var contract = new Contract { AdditionalDocument = string.Empty, };
+        var contract = new Contract { AdditionalDocument = null, };
 
         void ParameterBuilder(ComponentParameterCollectionBuilder<ContractDetails> parameters) =>
             parameters.Add(property => property.Contract, contract);
@@ -212,6 +222,6 @@ public class ContractDetailsTests : UITestFixture
         Action findLink = () => cut.Find("#additional-document");
 
         // Assert
-        findLink.Should().Throw<ElementNotFoundException>();
+        cut.WaitForAssertion(() => findLink.Should().Throw<ElementNotFoundException>());
     }
 }

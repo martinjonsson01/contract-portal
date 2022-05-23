@@ -1,6 +1,6 @@
 ﻿using Application.Contracts;
 using Application.Exceptions;
-
+using Blazorise.Extensions;
 using Domain.Contracts;
 
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +23,9 @@ public class ContractsController : BaseApiController<ContractsController>
     /// </summary>
     /// <param name="logger">The logging provider.</param>
     /// <param name="contracts">The contract logic.</param>
-    public ContractsController(ILogger<ContractsController> logger, IContractService contracts)
+    public ContractsController(
+        ILogger<ContractsController> logger,
+        IContractService contracts)
         : base(logger)
     {
         _contracts = contracts;
@@ -36,6 +38,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="id">The id of the contract to update.</param>
     /// <returns>The updated contract.</returns>
     [HttpPatch("{id:guid}")]
+    [Authorize("AdminOnly")]
     public IActionResult UpdateContract([FromBody] JsonPatchDocument<Contract> patchDocument, Guid id)
     {
         Contract contract = _contracts.FetchContract(id);
@@ -48,38 +51,15 @@ public class ContractsController : BaseApiController<ContractsController>
     }
 
     /// <summary>
-    /// Gets all recently viewed contracts.
-    /// </summary>
-    /// <returns>All recently viewed contracts.</returns>
-    [HttpGet("recent")]
-    public IEnumerable<Contract> RecentContracts()
-    {
-        return _contracts.FetchRecentContracts();
-    }
-
-    /// <summary>
-    /// Adds a contract as recently viewed.
-    /// </summary>
-    /// <param name="contract">The contract to add.</param>
-    /// <returns>Returns success after it has added the contract to recently viewed.</returns>
-    [HttpPost("recent")]
-    public IActionResult AddRecent(Contract contract)
-    {
-        _contracts.AddRecent(contract);
-        return Ok();
-    }
-
-    /// <summary>
     /// Creates a new contract.
     /// </summary>
     /// <param name="contract">The contract to put.</param>
-    /// <param name="id">The identifier of the contract to put.</param>
     /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The ID of the contract was already taken.</response>
-    [HttpPut("{id:guid}")]
+    [HttpPut]
     [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult CreateContract([FromBody] Contract contract, Guid id)
+    public IActionResult CreateContract([FromBody] Contract contract)
     {
         try
         {

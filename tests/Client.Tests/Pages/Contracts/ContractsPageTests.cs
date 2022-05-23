@@ -10,8 +10,13 @@ namespace Client.Tests.Pages.Contracts;
 
 public class ContractsPageTests : UITestFixture
 {
+    public ContractsPageTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
+    {
+    }
+
     [Fact]
-    public void ContractPage_ShouldSayLoading_WhenThereAreNoContractsFetched()
+    public void ContractPage_ShouldShowLoadingIndicator_WhenThereAreNoContractsFetched()
     {
         // Arrange
         MockHttp.When("/api/v1/contracts").Respond(async () =>
@@ -26,7 +31,7 @@ public class ContractsPageTests : UITestFixture
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
 
         // Assert
-        cut.Find("p").TextContent.Should().BeEquivalentTo("Laddar...");
+        cut.WaitForElement(".loading-indicator");
     }
 
     [Fact]
@@ -40,9 +45,8 @@ public class ContractsPageTests : UITestFixture
 
         // Act
         IRenderedComponent<ContractsPage> cut = Context.RenderComponent<ContractsPage>();
-        cut.WaitForElement(".card");
 
         // Assert
-        cut.Find(".card").TextContent.Should().Contain(name);
+        cut.WaitForAssertion(() => cut.Find(".card").TextContent.Should().Contain(name));
     }
 }
