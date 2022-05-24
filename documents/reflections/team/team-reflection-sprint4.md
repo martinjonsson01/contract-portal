@@ -1,4 +1,4 @@
-# Team Reflection Sprint 3
+# Team Reflection Sprint 4
 * Närvarande: Ella, Emil, Tamás, Mathias, Pawel, Martin, Jacob, Jonathan.
 ## Customer Value and Scope
 
