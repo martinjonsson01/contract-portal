@@ -5,6 +5,8 @@
 A website for working with a contract portfolio that can be bought into by other corporations. The central function of
 the portal allows for viewing these contracts and using them to receive discounts on purchases.
 
+The project work is done through Scrum, and the Scrum-board can be found [here](https://github.com/users/martinjonsson01/projects/2/views/1).
+
 ## Getting started
 
 For details about any of the technologies or frameworks used, see the [technical guide](documents/technical-guide.md).
@@ -13,7 +15,7 @@ Clone the repository: `git clone https://github.com/martinjonsson01/contract-por
 
 ### Setting up a local database (only needs to be done once)
 
-For local development, a Postgres daemon needs to be running, and a database instance needs to be created.
+For local development, a database daemon needs to be running, and a database instance needs to be created.
 
 1. [Download and install Microsoft SQL Server (developer version)](https://www.microsoft.com/sv-se/sql-server/sql-server-downloads)
 2. Add an environment variable with key `prodigo_portal_db_connectionstring` and value `Server=localhost;Database=ProdigoPortal;Trusted_Connection=True;` (guide
@@ -21,6 +23,10 @@ For local development, a Postgres daemon needs to be running, and a database ins
    and [MacOS](https://phoenixnap.com/kb/set-environment-variable-mac)
 3. Install the Entity Framework tools using `dotnet tool install --global dotnet-ef`
 4. Apply the database migrations: `dotnet ef database update -p src/Infrastructure/`
+
+### Local environment configuration
+There are some environment secrets that need to be configured:
+1. Add an environment variable with key `prodigo_portal_jwt_secret` and the secret value.
 
 ### Building and running
 

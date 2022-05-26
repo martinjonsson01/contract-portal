@@ -1,29 +1,93 @@
 @page "/admin"
 @using Domain.Contracts
+@using Domain.StatusUpdates
 @using Domain.Users
+@inherits AuthenticationRequiredView
 
-<h2>Adminsida</h2>
+<PageTitle>Prodigo Portal - Admin</PageTitle>
 
-<ContractForm OnContractUploaded="AddContractToTable"/>
-<hr/>
-<ContractTable @ref="@_contractTable"/>
-<hr/>
-<UserForm OnUserAdded="AddUserToTable"/>
-<hr/>
-<UserTable @ref="@_userTable"/>
+<!-- Extra div needed to style the Blazorise-components (see https://github.com/Megabit/Blazorise/issues/1599) -->
+<div class="container">
+    <h2>Adminsida</h2>
+    <Tabs SelectedTab="@_selectedTab"
+          SelectedTabChanged="@OnSelectedTabChanged"
+          Justified="true"
+          Pills="true"
+          TextColor="TextColor.Primary"
+          Class="tabs">
+        <Items>
+            <Tab Name="contracts">Hantera kontrakt</Tab>
+            <Tab Name="users">Hantera användare</Tab>
+            <Tab Name="notifications">Hantera notifikationer</Tab>
+            <Tab Name="analytics">Användningsdata</Tab>
+        </Items>
+        <Content>
+            <TabPanel Name="contracts">
+                <ContractForm @ref="_contractForm" OnContractUploaded="AddContractToTable"/>
+                <ContractTable @ref="@_contractTable" ContractOpeningForEdit="@OnContractOpeningForEdit"/>
+            </TabPanel>
+            <TabPanel Name="users">
+                <UserForm @ref="_userForm" OnUserAdded="AddUserToTable"/>
+                <UserTable @ref="@_userTable" UserOpeningForEdit="@OnUserOpeningForEdit"/>
+            </TabPanel>
+            <TabPanel Name="analytics">
+                <div class="d-flex flex-column align-items-center mt-5">
+                    <p class="text-body">
+                        Användningsdata finns hos Google Analytics.
+                    </p>
+                    <a class="btn btn-primary" target="_blank" href="https://analytics.google.com/">Gå till Google Analytics</a>
+                </div>
+            </TabPanel>
+            <TabPanel Name="notifications">
+                <NotificationForm OnNotificationSent="AddStatusUpdateToTable"/>
+                <NotificationTable @ref="@_notificationTable"/>
+            </TabPanel>
+        </Content>
+    </Tabs>
+</div>
 
 @code {
 
+    private string _selectedTab = "contracts";
+
+    // Null-forgiving operator used because these fields are set by the Blazor runtime using @ref
+    private ContractForm _contractForm = null!;
     private ContractTable _contractTable = null!;
+
+    private UserForm _userForm = null!;
     private UserTable _userTable = null!;
+
+    private NotificationTable _notificationTable = null!;
 
     private void AddContractToTable(Contract contract)
     {
-        _contractTable.Add(contract);
+        _contractTable.AddOrUpdate(contract);
     }
 
     private void AddUserToTable(User user)
     {
-        _userTable.Add(user);
+        _userTable.AddOrUpdate(user);
     }
+
+    private void AddStatusUpdateToTable(StatusUpdate statusUpdate)
+    {
+        _notificationTable.Add(statusUpdate);
+    }
+
+    private Task OnSelectedTabChanged(string tabName)
+    {
+        _selectedTab = tabName;
+        return Task.CompletedTask;
+    }
+
+    private async Task OnContractOpeningForEdit(Contract contract)
+    {
+        await _contractForm.EditContractAsync(contract);
+    }
+
+    private async Task OnUserOpeningForEdit(User user)
+    {
+        await _userForm.EditUserAsync(user);
+    }
+
 }

@@ -1,7 +1,9 @@
 ﻿using Application.Contracts;
 using Application.Exceptions;
-
+using Blazorise.Extensions;
 using Domain.Contracts;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,20 +23,12 @@ public class ContractsController : BaseApiController<ContractsController>
     /// </summary>
     /// <param name="logger">The logging provider.</param>
     /// <param name="contracts">The contract logic.</param>
-    public ContractsController(ILogger<ContractsController> logger, IContractService contracts)
+    public ContractsController(
+        ILogger<ContractsController> logger,
+        IContractService contracts)
         : base(logger)
     {
         _contracts = contracts;
-    }
-
-    /// <summary>
-    /// Gets all favorite marked contracts.
-    /// </summary>
-    /// <returns>Favorite marked contracts.</returns>
-    [HttpGet("favorites")]
-    public IEnumerable<Contract> Favorites()
-    {
-        return _contracts.FetchFavorites();
     }
 
     /// <summary>
@@ -44,6 +38,7 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="id">The id of the contract to update.</param>
     /// <returns>The updated contract.</returns>
     [HttpPatch("{id:guid}")]
+    [Authorize("AdminOnly")]
     public IActionResult UpdateContract([FromBody] JsonPatchDocument<Contract> patchDocument, Guid id)
     {
         Contract contract = _contracts.FetchContract(id);
@@ -56,45 +51,23 @@ public class ContractsController : BaseApiController<ContractsController>
     }
 
     /// <summary>
-    /// Gets all recently viewed contracts.
-    /// </summary>
-    /// <returns>All recently viewed contracts.</returns>
-    [HttpGet("recent")]
-    public IEnumerable<Contract> RecentContracts()
-    {
-        return _contracts.FetchRecentContracts();
-    }
-
-    /// <summary>
-    /// Adds a contract as recently viewed.
-    /// </summary>
-    /// <param name="contract">The contract to add.</param>
-    /// <returns>Returns success after it has added the contract to recently viewed.</returns>
-    [HttpPost("recent")]
-    public IActionResult AddRecent(Contract contract)
-    {
-        _contracts.AddRecent(contract);
-        return Ok();
-    }
-
-    /// <summary>
     /// Creates a new contract.
     /// </summary>
-    /// <param name="contract">The contract to add.</param>
+    /// <param name="contract">The contract to put.</param>
     /// <returns>The identifier of the stored image.</returns>
     /// <response code="400">The ID of the contract was already taken.</response>
-    [HttpPost]
+    [HttpPut]
+    [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult CreateContract(Contract contract)
+    public IActionResult CreateContract([FromBody] Contract contract)
     {
         try
         {
             _contracts.Add(contract);
         }
-        catch (IdentifierAlreadyTakenException e)
+        catch (IdentifierAlreadyTakenException)
         {
-            Logger.LogInformation("ID of contract was already taken: {Error}", e.Message);
-            return BadRequest();
+            _contracts.UpdateContract(contract);
         }
 
         return Ok();
@@ -106,11 +79,10 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="id">Id of the contract to be removed.</param>
     /// <returns>If the contract was successfully removed.</returns>
     [HttpDelete("{id:guid}")]
+    [Authorize("AdminOnly")]
     public IActionResult Remove(Guid id)
     {
-        return _contracts.Remove(id) ?
-            Ok() :
-            NotFound();
+        return _contracts.Remove(id) ? Ok() : NotFound();
     }
 
     /// <summary>
@@ -119,8 +91,14 @@ public class ContractsController : BaseApiController<ContractsController>
     /// <param name="query">The query to filter contracts by.</param>
     /// <returns>The contracts that match the search query.</returns>
     [HttpGet]
-    public IEnumerable<Contract> Search(string? query)
+    [AllowAnonymous]
+    public ActionResult<IEnumerable<Contract>> Search(string? query)
     {
-        return _contracts.Search(query ?? string.Empty);
+        query ??= string.Empty;
+
+        if (User?.Identity?.IsAuthenticated ?? false)
+            return Ok(_contracts.Search(query));
+
+        return Ok(_contracts.SearchUnauthorized(query));
     }
 }

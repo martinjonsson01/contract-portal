@@ -35,24 +35,12 @@ public class ContractService : IContractService
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> FetchRecentContracts()
-    {
-        return _repo.Recent;
-    }
-
-    /// <inheritdoc />
     public void Add(Contract contract)
     {
         if (_repo.All.Any(otherContract => contract.Id.Equals(otherContract.Id)))
             throw new IdentifierAlreadyTakenException();
 
         _repo.Add(contract);
-    }
-
-    /// <inheritdoc />
-    public void AddRecent(Contract contract)
-    {
-        _repo.AddRecent(contract);
     }
 
     /// <inheritdoc />
@@ -68,9 +56,10 @@ public class ContractService : IContractService
     }
 
     /// <inheritdoc />
-    public IEnumerable<Contract> FetchFavorites()
+    public IEnumerable<ContractPreviewDto> SearchUnauthorized(string query)
     {
-        return _repo.Favorites;
+        IEnumerable<Contract> results = _search.Search(query, FetchAllContracts());
+        return ConvertToPreviews(results);
     }
 
     /// <inheritdoc />
@@ -83,5 +72,10 @@ public class ContractService : IContractService
     public Contract FetchContract(Guid id)
     {
         return _repo.FetchContract(id) ?? throw new ContractDoesNotExistException();
+    }
+
+    private static IEnumerable<ContractPreviewDto> ConvertToPreviews(IEnumerable<Contract> contracts)
+    {
+        return contracts.Select(contract => new ContractPreviewDto(contract));
     }
 }

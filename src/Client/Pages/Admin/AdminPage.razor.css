@@ -1,0 +1,4 @@
+﻿::deep .nav-link {
+    background: #e7e7e7;
+    color: var(--prodigo-dark-blue)
+}

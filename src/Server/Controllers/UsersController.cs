@@ -1,6 +1,12 @@
+using Application.Contracts;
 using Application.Exceptions;
 using Application.Users;
+using Blazorise.Extensions;
+using Domain.Contracts;
 using Domain.Users;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -31,18 +37,22 @@ public class UsersController : BaseApiController<UsersController>
     /// <param name="user">The user to add.</param>
     /// <returns>If the user was successfully added.</returns>
     /// <response code="400">The ID of the user was already taken.</response>
-    [HttpPost]
+    [HttpPut]
+    [Authorize("AdminOnly")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Create(User user)
+    public IActionResult Create([FromBody] User user)
     {
         try
         {
             _users.Add(user);
         }
-        catch (IdentifierAlreadyTakenException e)
+        catch (IdentifierAlreadyTakenException)
         {
-            Logger.LogInformation("ID of user was already taken: {Error}", e.Message);
-            return BadRequest();
+            _users.UpdateUser(user);
+        }
+        catch (UserNameTakenException)
+        {
+            return BadRequest($"Name {user.Name} is already taken");
         }
 
         return Ok();
@@ -54,6 +64,7 @@ public class UsersController : BaseApiController<UsersController>
     /// <param name="id">Id of the user to be removed.</param>
     /// <returns>If the user was successfully removed.</returns>
     [HttpDelete("{id:guid}")]
+    [Authorize("AdminOnly")]
     public IActionResult Remove(Guid id)
     {
         return _users.Remove(id) ?
@@ -66,19 +77,37 @@ public class UsersController : BaseApiController<UsersController>
     /// </summary>
     /// <returns>All the stored users.</returns>
     [HttpGet]
+    [Authorize("AdminOnly")]
     public IEnumerable<User> GetAll()
     {
         return _users.FetchAllUsers();
     }
 
     /// <summary>
-    /// Checks if a user with a certain username exists.
+    /// Authenticates a user.
     /// </summary>
-    /// <param name="username">The username.</param>
-    /// <returns>Whether a user with the specified username exists.</returns>
-    [HttpPost("validate")]
-    public IActionResult Validate([FromBody] string username)
+    /// <param name="user">The user to authenticate.</param>
+    /// <returns>An authentication token that can be used to identify the user.</returns>
+    [HttpPost("authenticate")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult Authenticate(User user)
     {
-        return _users.UserExists(username) ? Ok() : BadRequest();
+        try
+        {
+            AuthenticateResponse authResponse = _users.Authenticate(user.Name, user.Password);
+            return Ok(authResponse);
+        }
+        catch (UserDoesNotExistException e)
+        {
+            Logger.LogError("Can't authenticate a user that does not exist: {Exception}", e.Message);
+            return Unauthorized();
+        }
+        catch (InvalidPasswordException e)
+        {
+            Logger.LogError("An incorrect password was given for the user: {Exception}", e.Message);
+            return Unauthorized();
+        }
     }
 }

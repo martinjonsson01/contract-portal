@@ -1,25 +1,71 @@
-﻿@inherits LayoutComponentBase
-<CascadingValue Value="@_loggedInUser" Name="LoggedInUser">
-    <div class="page">
-        <main>
-            <div class="sticky-top">
-                <NavMenu />
-            </div>
-            <article class="content px-4">
-                @Body
-                <LoginModal OnUserLogInChange="@OnUserLogIn"/>
-            </article>
-        </main>
-    </div>
+@using System.Timers
+@inherits LayoutComponentBase
+@inject IJSRuntime Js
+@inject HttpClient Http
+@inject ISessionService Session
+@inject NavigationManager NavigationManager
+
+<CascadingValue Value="@Session" Name="Session">
+    <ThemeProvider Theme="@_theme">
+        <div class="page">
+            <main>
+                <div class="sticky-top">
+                    <NavMenu/>
+                </div>
+                <article>
+                    @Body
+                    <LoginModal/>
+                </article>
+                <Footer/>
+            </main>
+        </div>
+    </ThemeProvider>
 </CascadingValue>
 
 @code
 {
-    private void OnUserLogIn(string username)
+    private readonly Theme _theme = new()
     {
-        _loggedInUser = username;
-        StateHasChanged();
+        ColorOptions = new ThemeColorOptions
+        {
+            Primary = "#3e4b65",
+            Secondary = "#516285",
+            Dark = "222939",
+            Info = "#ffeeae",
+            Link = "#dadee8",
+            Danger = "#3D0F16",
+        },
+        IsRounded = true,
+    };
+
+        private const int InactivityLogoutMilliseconds = 1000 * 60 * 15; // 15 minutes
+
+    private readonly Timer _timer = new(InactivityLogoutMilliseconds);
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        await Session.TryResumeAsync();
+
+        _timer.Elapsed += LogOut;
+        _timer.AutoReset = false;
+
+        // Register JS-callbacks on the document that call ResetTimer when triggered.
+        await Js.InvokeVoidAsync("registerActivityCallback", DotNetObjectReference.Create(this));
     }
 
-    private string? _loggedInUser = string.Empty;
+    /// <summary>
+    /// Resets the inactivity timer. Call when user has shown signs of activity.
+    /// </summary>
+    [JSInvokable]
+    public void ResetTimer()
+    {
+        _timer.Stop();
+        _timer.Start();
+    }
+
+    private void LogOut(object? sender, ElapsedEventArgs elapsedEventArgs)
+    {
+        InvokeAsync(async () => await Session.EndAsync());
+    }
 }

@@ -2,6 +2,7 @@
 
 using Domain.StatusUpdates;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
@@ -36,5 +37,28 @@ public class StatusUpdatesController : BaseApiController<StatusUpdatesController
     public IEnumerable<StatusUpdate> All()
     {
         return _statusUpdates.FetchAll();
+    }
+
+    /// <summary>
+    /// Creates a new status update.
+    /// </summary>
+    /// <param name="statusUpdate">The status update to add.</param>
+    [HttpPut]
+    [Authorize("AdminOnly")]
+    public void Create([FromBody] StatusUpdate statusUpdate)
+    {
+        _statusUpdates.Add(statusUpdate);
+    }
+
+    /// <summary>
+    /// Removes the specified status update.
+    /// </summary>
+    /// <param name="id">Id of the status update to be removed.</param>
+    /// <returns>If the status update was successfully removed.</returns>
+    [HttpDelete("{id:guid}")]
+    [Authorize("AdminOnly")]
+    public IActionResult Remove(Guid id)
+    {
+        return _statusUpdates.Remove(id) ? Ok() : NotFound();
     }
 }

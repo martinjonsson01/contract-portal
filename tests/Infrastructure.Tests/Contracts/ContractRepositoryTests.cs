@@ -7,15 +7,22 @@ using Domain.Contracts;
 
 using FluentAssertions.Execution;
 
+using Infrastructure.Databases;
+
+using Microsoft.Extensions.Logging;
+
 namespace Infrastructure.Tests.Contracts;
 
-public class ContractRepositoryTests : IClassFixture<TestContractDatabaseFixture>
+[Collection("DatabaseTests")]
+public class ContractRepositoryTests : IClassFixture<TestDatabaseFixture>
 {
     private readonly IContractRepository _cut;
+    private readonly EFDatabaseContext _context;
 
-    public ContractRepositoryTests(TestContractDatabaseFixture fixture)
+    public ContractRepositoryTests(TestDatabaseFixture fixture)
     {
-        _cut = fixture.CreateContext();
+        _context = fixture.CreateContext();
+        _cut = new EFContractRepository(_context, Mock.Of<ILogger<EFContractRepository>>());
     }
 
     [Fact]
@@ -35,6 +42,9 @@ public class ContractRepositoryTests : IClassFixture<TestContractDatabaseFixture
     public void RemoveContract_ReturnsTrue_WhenContractExists()
     {
         // Arrange
+        _context.Contracts.Add(new Contract()); // Add contract so one exists.
+        _context.SaveChanges();
+
         Guid id = _cut.All.First().Id;
 
         // Act

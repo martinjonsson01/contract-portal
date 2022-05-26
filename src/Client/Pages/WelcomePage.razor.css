@@ -1,0 +1,25 @@
+.welcome-container {
+    background-image: url("https://prodigo.se/wp-content/uploads/2021/06/iStock-951514270.jpg");
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    height: calc(100vh - 3.75rem);
+    background-size: cover;
+    align-items: center;
+}
+
+.welcome-container h1 {
+    color: var(--prodigo-yellow);
+    text-shadow: 0 0 1rem black;
+    text-align: center;
+    margin-top: 10vh;
+}
+
+.btn-primary {
+    top: 5rem;
+    position: relative;
+    width: 25rem;
+    height: 6.25rem;
+    font-size: 2.3rem;
+}

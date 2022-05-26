@@ -1,0 +1,33 @@
+﻿@using Blazorise.Extensions
+@using System.Net.Http.Headers
+@inject IJSRuntime Js
+@inject ISessionService Session
+@inherits UpdateOnAuthenticateView
+
+@if (Session.IsAuthenticated)
+{
+    <div class="d-flex flex-row align-items-center">
+        <p id="logged-in" class="text-center m-0">
+            <i>Inloggad som <b>@Session.Username</b></i>
+        </p>
+        <button id="logout-button" class="btn btn-primary" @onclick="@(async () => await Session.EndAsync())">Logga ut</button>
+    </div>
+}
+else
+{
+    <button id="login-button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#log-in"
+            @onclick="FocusUsernameField">
+        Logga in
+    </button>
+}
+@code {
+
+    private async Task FocusUsernameField()
+    {
+        // Focuses the username text input element.
+        await Js.InvokeVoidAsync("focusElement", "#username");
+    }
+}

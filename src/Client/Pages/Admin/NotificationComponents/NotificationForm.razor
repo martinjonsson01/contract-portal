@@ -1,0 +1,59 @@
+﻿@using Domain.StatusUpdates
+@using Newtonsoft.Json
+@using System.Text
+@inject HttpClient _http
+
+<h4>Skicka ut ny notifikation</h4>
+<EditForm Model="@_statusUpdate" OnSubmit="UploadStatusUpdate">
+    <div class="mb-3">
+        <label for="alert-notification-input" class="form-label">Notifikationstyp</label>
+        <InputSelect id="alert-notification-input" class="form-control form-select" @bind-Value="@_statusUpdate.Alert">
+             <option selected>Välj typ</option>
+            @foreach (var alertOption in  Enum.GetValues(typeof(AlertLevel)))
+            {
+                <option value="@alertOption">@alertOption</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="mb-3">
+        <label for="text" class="form-label">Informationstext</label>
+        <InputText id="text" class="form-control" placeholder="Notifikationens innehåll" @bind-Value="@_statusUpdate.Text"/>
+    </div>
+    <button type="submit" class="btn btn-primary mb-3">Skicka</button>
+
+</EditForm>
+
+
+@code {
+
+    /// <summary>
+    /// Called when a StatusUpdate has been submitted successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<StatusUpdate> OnNotificationSent { get; set; } = EventCallback<StatusUpdate>.Empty;
+
+    private StatusUpdate _statusUpdate = CreateEmptyStatusUpdate();
+
+    private static StatusUpdate CreateEmptyStatusUpdate()
+    {
+        return new StatusUpdate
+        {
+            Alert = AlertLevel.Information,
+            Timestamp = DateTime.Now,
+            Text = string.Empty,
+        };
+    }
+
+    private async Task UploadStatusUpdate()
+    {
+        string json = JsonConvert.SerializeObject(_statusUpdate);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await _http.PutAsync($"api/v1/status-updates", content);
+        if (response.IsSuccessStatusCode)
+        {
+            await OnNotificationSent.InvokeAsync(_statusUpdate);
+            _statusUpdate = CreateEmptyStatusUpdate();
+        }
+    }
+
+}

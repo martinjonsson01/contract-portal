@@ -2,18 +2,24 @@
 @using Newtonsoft.Json
 @using Domain.Contracts
 @using System.Text
-@inject HttpClient _http
+@using Application.Users
+@inject HttpClient Http
+@inject ISessionService Session
 
-<button class="btn ms-auto p-2 flex-shrink-0" @onclick="ChangeFavorite">
-    @if (Contract.IsFavorite)
+<button id="favorite-button"
+        class="btn p-0 white-text"
+        @onclick="ChangeFavorite"
+        @onclick:stopPropagation="true"
+        @onclick:preventDefault="true">
+    @if (IsFavorite)
     {
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
         </svg>
     }
     else
     {
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
             <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
         </svg>
     }
@@ -31,23 +37,43 @@
     /// Called when a contract has its favorite status changed.
     /// </summary>
     [Parameter]
-    public EventCallback<Contract> OnFavoriteChange { get; set; } = EventCallback<Contract>.Empty;
+    public EventCallback<(Guid, bool)> OnFavoriteChange { get; set; } = EventCallback<(Guid, bool)>.Empty;
+
+    /// <summary>
+    /// Whether the contract is marked as favorite.
+    /// </summary>
+    private bool IsFavorite { get; set; }
+
+    private string BaseUrl => $"api/v1/users/{Session.UserId}/favorites";
+
+    /// <inheritdoc />
+    protected override async void OnInitialized()
+    {
+        if (Session.IsAuthenticated)
+        {
+            HttpResponseMessage response = await Http.GetAsync($"{BaseUrl}/{Contract.Id}");
+            IsFavorite = response.IsSuccessStatusCode;
+        }
+        else
+        {
+            IsFavorite = false;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
 
     private async Task ChangeFavorite()
     {
-        var patchDocument = new JsonPatchDocument<Contract>();
-        patchDocument.Replace(contract => contract.IsFavorite, !Contract.IsFavorite);
-        var serializedDocument = JsonConvert.SerializeObject(patchDocument);
-        var content = new StringContent(serializedDocument, Encoding.UTF8, "application/json-patch+json");
-
-        var response = await _http.PatchAsync($"/api/v1/Contracts/{Contract.Id}", content);
-        if (response.IsSuccessStatusCode)
+        if (Session.UserId is not null)
         {
-            var contract = await response.Content.ReadFromJsonAsync<Contract>();
-            if (contract != null) Contract = contract;
-            await InvokeAsync(StateHasChanged);
-            await OnFavoriteChange.InvokeAsync(Contract);
+            FavoriteContractDto favoriteContract = new() { UserId = Session.UserId.Value, ContractId = Contract.Id, IsFavorite = !IsFavorite };
+
+            HttpResponseMessage response = await Http.PostAsJsonAsync(BaseUrl, favoriteContract);
+            if (response.IsSuccessStatusCode)
+            {
+                IsFavorite = !IsFavorite;
+                await InvokeAsync(StateHasChanged);
+                await OnFavoriteChange.InvokeAsync((Contract.Id, IsFavorite));
+            }
         }
     }
-
 }

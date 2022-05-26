@@ -1,8 +1,16 @@
 ﻿@using Newtonsoft.Json
+@using System.Net
+@using JsonException = System.Text.Json.JsonException
 @typeparam TData
 @inject HttpClient _http;
+@inject ILogger<FetchData<TData>> _logger
+@inherits UpdateOnAuthenticateView
 
-@if (Data is null)
+@if (_errorMessage is not null && ShouldShowErrors)
+{
+    <p id="error-message">@_errorMessage</p>
+}
+else if (Data is null)
 {
     @LoadingIndicator
 }
@@ -33,14 +41,31 @@ else
     public RenderFragment LoadingIndicator { get; set; } = @<LoadingIndicator />;
 
     /// <summary>
+    /// Whether any errors that occur while fetching data should be shown to the user.
+    /// </summary>
+    [Parameter]
+    public bool ShouldShowErrors { get; set; } = true;
+
+    /// <summary>
+    /// Called after the component has been rendered with the fetched data.
+    /// </summary>
+    [Parameter]
+    public EventCallback AfterRenderedWithData { get; set; } = EventCallback.Empty;
+
+    /// <summary>
     /// The data that has been fetched.
     /// </summary>
     public TData? Data { get; set; }
 
+    private string? _errorMessage;
+
     /// <inheritdoc />
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await Fetch(Url);
+        if (Data is null && _errorMessage is null)
+            await Fetch(Url);
+        if (Data is not null)
+            await AfterRenderedWithData.InvokeAsync();
     }
 
     /// <summary>
@@ -48,8 +73,34 @@ else
     /// </summary>
     public async Task Fetch(string url)
     {
-        string json = await _http.GetStringAsync(url);
-        Data = JsonConvert.DeserializeObject<TData>(json);
+        HttpResponseMessage response = await _http.GetAsync(url);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            _errorMessage = CreateErrorMessage(response.StatusCode);
+            StateHasChanged();
+            return;
+        }
+
+        try
+        {
+            Data = await response.Content.ReadFromJsonAsync<TData>();
+        }
+        catch (JsonException exception)
+        {
+            _logger.LogError(exception, "Could not deserialize JSON");
+        }
+        _errorMessage = null;
+        StateHasChanged();
+    }
+
+    private string CreateErrorMessage(HttpStatusCode statusCode)
+    {
+        if (statusCode == HttpStatusCode.Unauthorized)
+        {
+            return "Du måste vara inloggad för att se detta innehåll.";
+        }
+        return "Ett okänt fel har inträffat.";
     }
 
 }

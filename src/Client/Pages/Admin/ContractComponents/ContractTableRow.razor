@@ -1,0 +1,57 @@
+﻿@using Domain.Contracts
+@inject HttpClient _http
+
+<tr class="contract-table-row" id=@($"contract_id_{Contract.Id}")>
+
+    <td>@Contract.Name</td>
+
+    <td>@Contract.SupplierName</td>
+
+    <td>
+        <button type="button"
+                class="btn btn-outline-primary m-0"
+                @onclick="@(async () => await ContractOpeningForEdit.InvokeAsync(Contract))">
+            <span class="oi oi-pencil"></span>
+        </button>
+    </td>
+
+    <!-- Button trigger modal -->
+    <td>
+        <button type="button"
+                class="btn btn-danger m-0"
+                data-bs-toggle="modal"
+                data-bs-target="#@($"modal_{Contract.Id}")">
+            <span class="oi oi-trash"></span>
+        </button>
+    </td>
+
+    <RemoveModal
+    Id=@Contract.Id
+    Title="Ta bort kontrakt"
+    Message="@($"Vill du ta bort kontraktet {Contract.Name}?")"
+    RemovalConfirmed="@(async () => await OnContractRemoved.InvokeAsync(Contract))"/>
+</tr>
+
+
+@code {
+
+    /// <summary>
+    /// Called when a contract has been removed successfully.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Contract> OnContractRemoved { get; set; } = EventCallback<Contract>.Empty;
+
+    /// <summary>
+    /// Called when a <see cref="Contract"/> is being opened to be edited.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Contract> ContractOpeningForEdit { get; set; } = EventCallback<Contract>.Empty;
+
+    /// <summary>
+    /// The contract.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public Contract Contract { get; set; } = new();
+
+
+}

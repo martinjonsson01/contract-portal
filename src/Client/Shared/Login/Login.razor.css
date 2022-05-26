@@ -1,0 +1,12 @@
+﻿#logged-in {
+    color: var(--prodigo-white);
+}
+
+button {
+    margin: 0.5rem 1.25rem;
+    color: var(--prodigo-white);
+}
+
+p {
+    padding-left: 1.25rem;
+}
