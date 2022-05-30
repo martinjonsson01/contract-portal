@@ -21,9 +21,8 @@ For local development, a database daemon needs to be running, and a database ins
 2. Add an environment variable with key `prodigo_portal_db_connectionstring` and value `Server=localhost;Database=ProdigoPortal;Trusted_Connection=True;` (guide
    for [Windows](https://docs.oracle.com/en/database/oracle/machine-learning/oml4r/1.5.1/oread/creating-and-modifying-environment-variables-on-windows.html#GUID-DD6F9982-60D5-48F6-8270-A27EC53807D0)
    and [MacOS](https://phoenixnap.com/kb/set-environment-variable-mac)
-3. In your IDE terminal, Navigate to the `Infrastructure` project using `cd src/Infrastructure/`.
-4. Install the Entity Framework tools using `dotnet tool install --global dotnet-ef`.
-5. Apply the database migrations using `dotnet ef database update`.
+3. Install the Entity Framework tools using `dotnet tool install --global dotnet-ef`
+4. Apply the database migrations: `dotnet ef database update -p src/Infrastructure/`
 
 ### Local environment configuration
 There are some environment secrets that need to be configured:

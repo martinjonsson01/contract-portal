@@ -1,18 +1,18 @@
-# Week 16
+# Week 17
 
 ## What do I want to learn or understand better?
-Från den tidigare veckan har jag inte jobbat med något som har påverkat stylingen av sidan och därmed inte uppnåt veckans förra mål, detta är något som jag återigen siktar på att göra. Dock har jag lärt mig lite mer om hur sökmotorer fungerar då det var detta jag jobbade på.
+Veckan som gick blev det inte heller så mycket fokus på styling då det fanns intressanta stories som handlade om Azure och att deploya hemsidan. Men läste ändå lite dokumentation för bootstrap så att det blir lättare i framtiden att använda dess CSS klasser. 
+
+Vill även lära mig hur man smidigast och vad som är vanligast att använda för att kryptera lösenord då det är något vi planerar att implementera nästa vecka. Detta kommer jag göra genom att försöka hitta projekt/artiklar som bygger på samma teknologi som vi och kolla på hur dom gör det.
 
 ## How can I help someone else, or the entire team, to learn something new?
-Hade inte möjlighet att delta på vår retrospective vilket gjorde att diskutera KPI:er med hela laget inte skedde. Detta är något jag tar med mig till nästa vecka.
+Diskuterade KPI:er och vi beslöt att testa en ny som förhoppningsvis ger oss mer insikt i hur nöjd vår kund är. 
 
-Det jag lyckades göra var en del code reviews samt att parprogrammera vilket gav mig och lagmedlemmar olika perspektiv på till exempel hur något kan implementeras. 
+Och återigen är det smidigaste sättet att bidra med olika synvinklar i code reviews. 
 
 ## What is my contribution towards the team’s use of Scrum?
-Samma som tidigare veckor så är jag deltagande på möten, samt delaktig i vår Daily-kanal. 
+Var scrum master så fick lite mer ansvar, till exempel så hjälpte jag vår product owner definiera nya userstories. Var även mer delaktig i diskussioner då jag fått fatta mer beslut som eventuellt påverkar hur mycket vi avviker eller förhåller oss till scrum.
 
 ## What is my contribution towards the team’s deliveries?
-Denna vecka hade jag inte möjligheten att koda lika mycket som planerat, dock som nämnt tidigare gjorde jag fortfarande code reviews.
-
-Kommande vecka planerar jag att prioritera kodandet (och denna kurs) högre.
+Lite kodande och reviews, men fick satt upp grunden för att deploya sidan. Detta gör att vi kan se att våra idéer fungerar och hur bra.
 
