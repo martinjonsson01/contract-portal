@@ -1,5 +1,6 @@
 ﻿@page "/contracts"
 @page "/contracts/{ContractId}"
+@inherits AuthenticationRequiredView
 @using System.Timers
 @using Domain.Contracts
 @inject IJSRuntime Js
@@ -53,6 +54,8 @@
     /// <inheritdoc />
     protected override void OnInitialized()
     {
+        base.OnInitialized();
+
         _analyticsTimer.Elapsed += SendAnalytics;
         _analyticsTimer.AutoReset = false;
     }
