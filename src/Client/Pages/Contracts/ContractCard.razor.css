@@ -5,8 +5,13 @@
     width: 20rem;
     height: 16rem;
     overflow: hidden;
-    background-color: #222939;
+    background-color: var(--prodigo-black);
     text-align: start !important;
+    cursor: pointer;
+}
+
+::deep button.btn {
+    color: var(--prodigo-white);
 }
 
 .prodigo-card-img {
@@ -15,6 +20,34 @@
     border-width: 0;
     padding: 0;
     border-radius: 0 !important;
+}
+
+.large.prodigo-card {
+    height: 20rem;
+    background-color: var(--prodigo-yellow);
+}
+
+.large .prodigo-card-img {
+    height: 35%;
+}
+
+.large .prodigo-card-title h4 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    color: var(--prodigo-black);
+    height: 10rem;
+
+    white-space: initial;
+}
+
+.prodigo-card-title h4 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.large ::deep button.btn {
+    color: var(--prodigo-black);
 }
 
 .prodigo-card-title {
