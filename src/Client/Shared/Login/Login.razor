@@ -10,7 +10,12 @@
         <p id="logged-in" class="text-center m-0">
             <i>Inloggad som <b>@Session.Username</b></i>
         </p>
-        <button id="logout-button" class="btn btn-primary" @onclick="@(async () => await Session.EndAsync())">Logga ut</button>
+        <button id="logout-button"
+                style="@ConfiguredStyle"
+                class="btn btn-primary"
+                @onclick="@(async () => await Session.EndAsync())">
+            Logga ut
+        </button>
     </div>
 }
 else
@@ -19,11 +24,32 @@ else
             class="btn btn-primary"
             data-bs-toggle="modal"
             data-bs-target="#log-in"
+            style="@ConfiguredStyle"
             @onclick="FocusUsernameField">
         Logga in
     </button>
 }
 @code {
+
+    /// <summary>
+    /// The width of the button.
+    /// </summary>
+    [Parameter]
+    public string Width { get; set; } = "5.5rem";
+
+    /// <summary>
+    /// The height of the button.
+    /// </summary>
+    [Parameter]
+    public string Height { get; set; } = "2.5rem";
+
+    /// <summary>
+    /// The font size of the text inside the button.
+    /// </summary>
+    [Parameter]
+    public string FontSize { get; set; } = "1rem";
+
+    private string ConfiguredStyle => $"width: {Width}; height: {Height}; font-size: {FontSize};";
 
     private async Task FocusUsernameField()
     {

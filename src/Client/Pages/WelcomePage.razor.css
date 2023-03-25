@@ -29,12 +29,11 @@
     color: var(--prodigo-dark-blue);
     font-size: 4rem;
     text-align: center;
-    margin-top: 10vh;
+    margin-top: 20vh;
 }
 
-.btn-primary {
-    top: 5rem;
-    position: relative;
+.login-button {
+    margin-top: 2rem;
     width: 25rem;
     height: 6.25rem;
     font-size: 2.3rem;
