@@ -6,10 +6,15 @@
 }
 
 .dashboard-background {
-    background-image: url("https://prodigo.se/wp-content/uploads/2021/05/cowomen-ZKHksse8tUU-unsplash-scaled.jpg");
+    background-image: url("./images/chairs.jpg");
     min-width: 100%;
     min-height: 100vh;
     background-size: cover;
+}
+
+.stairs.dashboard-background {
+    background-image: url("./images/stairs.jpg");
+    background-position: center;
 }
 
 .title {
