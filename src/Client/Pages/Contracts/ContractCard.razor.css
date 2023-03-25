@@ -27,6 +27,12 @@
     background-color: var(--prodigo-yellow);
 }
 
+.prodigo-card-title h4 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .large .prodigo-card-img {
     height: 35%;
 }
@@ -40,15 +46,33 @@
     white-space: initial;
 }
 
-.prodigo-card-title h4 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .large ::deep button.btn {
     color: var(--prodigo-black);
 }
+
+
+.huge.prodigo-card {
+    height: 19rem;
+    background-color: var(--prodigo-blue);
+}
+
+.huge .prodigo-card-img {
+    height: 65%;
+}
+
+.huge .prodigo-card-title h4 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    color: var(--prodigo-light-blue);
+    height: 4rem;
+
+    white-space: initial;
+}
+
+.huge ::deep button.btn {
+    color: var(--prodigo-light-blue);
+}
+
 
 .prodigo-card-title {
     width: 80%;
