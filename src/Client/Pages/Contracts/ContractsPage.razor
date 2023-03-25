@@ -2,7 +2,6 @@
 @page "/contracts/{ContractId}"
 @using System.Timers
 @using Domain.Contracts
-@using Blazorise.Extensions
 @inject IJSRuntime Js
 @inject IAnalytics Analytics
 
@@ -11,7 +10,8 @@
 <div class="container minimum-height d-flex flex-column">
     <SearchBar OnQueryChange="OnQueryChanged"/>
 
-    <RecentlyViewed @ref="_recentlyViewed"/>
+    <!-- At request of Disa Nilsson, this has been disabled.-->
+    <!--RecentlyViewed @ref="_recentlyViewed"/ -->
 
     <FetchData @ref="_dataFetcher"
                TData="IEnumerable<Contract>"
@@ -23,7 +23,7 @@
             <div class="prodigo-grid">
                 @foreach (Contract contract in contracts)
                 {
-                    <ContractCard Contract=@contract OnViewed="OnRecentlyViewed"/>
+                    <ContractCard Contract=@contract /> <!-- temporarily disabled: OnViewed="OnRecentlyViewed" -->
                     <ContractDetails Contract="@contract"/>
                 }
             </div>
@@ -40,7 +40,7 @@
     [Parameter]
     public string? ContractId { get; set; }
 
-    private RecentlyViewed _recentlyViewed = null!;
+    // temporarily disabled: private RecentlyViewed _recentlyViewed = null!;
 
     private FetchData<IEnumerable<Contract>> _dataFetcher = null!;
 
@@ -64,14 +64,15 @@
         Analytics.TrackEvent("contract_query", new { query = _latestQuery, });
     }
 
-    private void OnRecentlyViewed(Contract viewedContract)
+    // temporarily disabled:
+    /*private void OnRecentlyViewed(Contract viewedContract)
     {
         _recentlyViewed.AddViewedContract(viewedContract);
-    }
+    }*/
 
     private async Task OnQueryChanged(string query)
     {
-        _recentlyViewed.ShouldShowRecent = query.IsNullOrEmpty();
+        // temporarily disabled: _recentlyViewed.ShouldShowRecent = query.IsNullOrEmpty();
         string urlSafeQuery = Uri.EscapeDataString(query);
         var fetchUrl = $"api/v1/contracts?query={urlSafeQuery}";
         await _dataFetcher.Fetch(fetchUrl);
