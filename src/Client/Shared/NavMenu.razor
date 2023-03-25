@@ -15,11 +15,6 @@
                 @if (_session.IsAuthenticated)
                 {
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="dashboard">
-                            <span class="" aria-hidden="true"></span> Startsida
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
                         <NavLink class="nav-link" href="contracts">
                             <span class="" aria-hidden="true"></span> Avtalsportföljen
                         </NavLink>
@@ -46,5 +41,5 @@
 
 @code
 {
-    private string LogoUrl => _session.IsAuthenticated ? "dashboard" : "";
+    private string LogoUrl => _session.IsAuthenticated ? "contracts" : "";
 }

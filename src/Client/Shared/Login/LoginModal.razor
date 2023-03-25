@@ -72,7 +72,7 @@
             await Session.BeginAsync(authResponse);
 
             await Js.InvokeVoidAsync("closeModal", "#log-in");
-            NavigationManager.NavigateTo("dashboard");
+            NavigationManager.NavigateTo("contracts");
         }
         else
         {
