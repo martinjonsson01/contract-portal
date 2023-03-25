@@ -8,7 +8,7 @@
 @inject HttpClient _http
 @inject IJSRuntime _js
 
-<h4 id="contract-form-title">Skapa nytt kontrakt</h4>
+<h4 id="contract-form-title">Skapa nytt avtal</h4>
 
 <EditForm Model="@_contract" OnSubmit="ConvertAndUploadContract">
 
@@ -16,7 +16,7 @@
         <label for="contract-title" class="form-label">Titel</label>
         <InputText id="contract-title"
                    class="form-control"
-                   placeholder="Kontraktets namn"
+                   placeholder="Avtalets namn"
                    @bind-Value="@_contract.Name"/>
     </div>
     <div class="mb-3">
@@ -34,7 +34,7 @@
                   Placeholder="T.ex. vilken webbsida man ska gå in på"/>
     </div>
     <div class="mb-3">
-        <label for="contract-banner" class="form-label">Banderoll till kontrakt</label>
+        <label for="contract-banner" class="form-label">Banderoll till avtal</label>
         <InputFile id="contract-banner"
                    class="form-control"
                    accept=".png, .jpg, .jpeg, .gif"

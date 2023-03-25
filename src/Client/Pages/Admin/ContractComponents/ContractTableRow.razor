@@ -27,8 +27,8 @@
 
     <RemoveModal
     Id=@Contract.Id
-    Title="Ta bort kontrakt"
-    Message="@($"Vill du ta bort kontraktet {Contract.Name}?")"
+    Title="Ta bort avtal"
+    Message="@($"Vill du ta bort avtalet {Contract.Name}?")"
     RemovalConfirmed="@(async () => await OnContractRemoved.InvokeAsync(Contract))"/>
 </tr>
 
