@@ -1,5 +1,4 @@
 .welcome-container {
-    background-image: url("https://prodigo.se/wp-content/uploads/2021/06/iStock-951514270.jpg");
     padding: 0;
     margin-left: 0;
     margin-right: 0;
@@ -9,9 +8,26 @@
     align-items: center;
 }
 
+/* Necessary because otherwise it's too wide and horizontally scrolls. */
+.container-fluid .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.welcome-container img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.welcome-container .content {
+    align-items: center;
+    background-color: var(--prodigo-light-blue);
+    height: 100%;
+}
+
 .welcome-container h1 {
-    color: var(--prodigo-yellow);
-    text-shadow: 0 0 1rem black;
+    color: var(--prodigo-dark-blue);
+    font-size: 4rem;
     text-align: center;
     margin-top: 10vh;
 }
