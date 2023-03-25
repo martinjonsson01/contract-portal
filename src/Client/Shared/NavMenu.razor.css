@@ -1,3 +1,7 @@
+.navbar {
+    background-color: var(--prodigo-dark-blue);
+}
+
 .navbar-toggler {
     background-color: var(--prodigo-dark-blue);
     margin-left: 1.25rem;
