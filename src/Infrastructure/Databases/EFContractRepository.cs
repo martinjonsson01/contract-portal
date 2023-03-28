@@ -31,7 +31,7 @@ public sealed class EFContractRepository : IContractRepository
     /// <inheritdoc />
     public IEnumerable<Contract> All => Contracts.Include(contract => contract.Tags)
                                                  .Include(contract => contract.AdditionalDocument)
-                                                 .OrderBy(contract => contract.Name)
+                                                 .OrderBy(contract => contract.SupplierName)
                                                  .ToList();
 
     private DbSet<Contract> Contracts => _context.Contracts;

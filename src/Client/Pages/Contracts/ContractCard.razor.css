@@ -16,7 +16,7 @@
 
 .prodigo-card-img {
     height: 65%;
-    object-fit: cover;
+    object-fit: contain;
     border-width: 0;
     padding: 0;
     border-radius: 0 !important;
@@ -24,7 +24,7 @@
 
 .large.prodigo-card {
     height: 20rem;
-    background-color: var(--prodigo-yellow);
+    background-color: var(--prodigo-black);
 }
 
 .prodigo-card-title h4 {
@@ -40,7 +40,7 @@
 .large .prodigo-card-title h4 {
     font-size: 1.5rem;
     line-height: 2rem;
-    color: var(--prodigo-black);
+    color: var(--prodigo-white);
     height: 10rem;
 
     white-space: initial;
@@ -53,7 +53,7 @@
 
 .huge.prodigo-card {
     height: 19rem;
-    background-color: var(--prodigo-blue);
+    background-color: var(--prodigo-black);
 }
 
 .huge .prodigo-card-img {
