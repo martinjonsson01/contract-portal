@@ -1,5 +1,5 @@
 .navbar {
-    background-color: var(--prodigo-dark-blue);
+    background-color: var(--prodigo-dark-beige);
 }
 
 .navbar-toggler {
@@ -16,6 +16,10 @@
     letter-spacing: 0.06em;
 }
 
+.navbar-brand img {
+    height: 3rem;
+}
+
 .navbar {
     padding: 0.15625rem 0;
     height: 3.75rem;
@@ -23,11 +27,15 @@
 
 ::deep .navbar-nav .nav-link {
     font-size: 1.0625rem;
-    color: var(--prodigo-white);
+    color: var(--prodigo-black);
     padding-left: 1.25rem;
     padding-right: 1.25rem;
 }
 
+::deep .navbar-nav .nav-link.active {
+    color: var(--prodigo-red);
+}
+
 ::deep .navbar-nav .nav-link:hover {
-    color: var(--prodigo-light-blue);
+    color: var(--prodigo-red);
 }
