@@ -36,3 +36,14 @@ function registerActivityCallback(dotNetHelper) {
 function scrollToElement(selector) {
     document.querySelector(selector).scrollIntoView({behavior: 'smooth', block: 'start'});
 }
+
+function initializeSJWidget() {
+    console.log("Initializing SJ widget!");
+    var SJ = window.SJ;
+    console.log("Initializing SJ widget!", SJ);
+    var configuration = {
+        micrositeId: "2ebb925b-36ef-44ee-bb38-3ec8e677e57d",
+        language: "sv"
+    };
+    SJ.widget.init(configuration);
+}

@@ -80,6 +80,14 @@
     [Parameter]
     public EventCallback<(Guid, bool)> OnFavoriteChange { get; set; } = EventCallback<(Guid, bool)>.Empty;
 
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        await Js.InvokeVoidAsync("initializeSJWidget");
+    }
+
     private async Task AddToRecentlyViewed()
     {
         await OnViewed.InvokeAsync(Contract);
