@@ -85,7 +85,8 @@
     {
         await base.OnAfterRenderAsync(firstRender);
 
-        await Js.InvokeVoidAsync("initializeSJWidget");
+        if (Contract.Instructions.Contains("sj-widget"))
+            await Js.InvokeVoidAsync("initializeSJWidget");
     }
 
     private async Task AddToRecentlyViewed()

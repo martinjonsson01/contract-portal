@@ -38,10 +38,8 @@ function scrollToElement(selector) {
 }
 
 function initializeSJWidget() {
-    console.log("Initializing SJ widget!");
-    var SJ = window.SJ;
-    console.log("Initializing SJ widget!", SJ);
-    var configuration = {
+    const SJ = window.SJ;
+    const configuration = {
         micrositeId: "2ebb925b-36ef-44ee-bb38-3ec8e677e57d",
         language: "sv"
     };
