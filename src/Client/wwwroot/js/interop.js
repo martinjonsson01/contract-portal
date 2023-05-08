@@ -39,6 +39,14 @@ function scrollToElement(selector) {
 
 function initializeSJWidget() {
     const SJ = window.SJ;
+    if (SJ == null) {
+        console.log("window: ", window);
+        console.log("this: ", this);
+
+        console.error("Could not initialize SJ widget: can't find `window.SJ`");
+        return;
+    }
+
     const configuration = {
         micrositeId: "2ebb925b-36ef-44ee-bb38-3ec8e677e57d",
         language: "sv"
