@@ -4,8 +4,6 @@ using Application.Images;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-using MimeDetective.InMemory;
-
 namespace Infrastructure.Images;
 
 /// <summary>
@@ -45,8 +43,8 @@ internal class LocalFileRepository : IImageRepository, IDocumentRepository
         if (!_verifier.IsValid(stream))
             throw new InvalidImageException();
 
-        FileType type = stream.DetectMimeType();
-        string fileName = $"{Path.GetRandomFileName()}.{type.Extension}";
+        string extension = _verifier.GetFileExtensionOf(stream);
+        string fileName = $"{Path.GetRandomFileName()}.{extension}";
         string path = Path.Combine(_directoryPath, fileName);
 
 #pragma warning disable CA2007

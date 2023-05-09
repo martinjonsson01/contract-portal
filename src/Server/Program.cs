@@ -96,6 +96,7 @@ app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(uploadsDirectory),
     RequestPath = "/images",
+    ServeUnknownFileTypes = true,
 });
 app.UseStaticFiles(new StaticFileOptions
 {
