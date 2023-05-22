@@ -48,7 +48,7 @@ function initializeSJWidget() {
     }
 
     const configuration = {
-        micrositeId: "2ebb925b-36ef-44ee-bb38-3ec8e677e57d",
+        micrositeId: "0f46a766-8653-40ef-9e24-1759650a6b14",
         language: "sv"
     };
     SJ.widget.init(configuration);
