@@ -27,10 +27,14 @@ p {
 
 h1, h2, h3, h4, h5, h6 {
     scroll-margin-top: 4.5rem;
+
+    font-family: "droid-serif", serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 h1, h2 {
-    font-family: 'Merriweather', Helvetica, Arial, sans-serif;
+    font-family: "droid-serif", serif;
     letter-spacing: 0;
     font-weight: 600;
 }
