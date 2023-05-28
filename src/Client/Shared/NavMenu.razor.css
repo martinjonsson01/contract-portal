@@ -1,5 +1,6 @@
 .navbar {
     background-color: var(--prodigo-dark-beige);
+    font-family: "droid-serif", serif;
 }
 
 .navbar-toggler {
@@ -26,6 +27,7 @@
 }
 
 ::deep .navbar-nav .nav-link {
+    font-family: 'Merriweather', sans-serif;
     font-size: 1.0625rem;
     color: var(--prodigo-black);
     padding-left: 1.25rem;

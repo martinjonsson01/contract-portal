@@ -20,6 +20,14 @@ html, body {
     background-color: var(--prodigo-white);
 }
 
+.nav-item {
+    font-family: 'Merriweather', sans-serif;
+}
+
+label {
+    font-family: 'Merriweather', sans-serif;
+}
+
 p {
     font-size: 1.0625rem;
     line-height: 1.8125rem;
