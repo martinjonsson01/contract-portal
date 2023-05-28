@@ -60,9 +60,14 @@
             <div class="ms-5">
                 <p class="mt-3">Redan uppladdad fil:</p>
                 <ul class="mb-5">
-                    <li>
+                    <li class="d-flex flex-row justify-content-between">
                         <FileListItem Name="@_contract.AdditionalDocument.Name"
                                       Path="@_contract.AdditionalDocument.Path"/>
+                        <button type="button"
+                                class="btn btn-danger m-0"
+                                @onclick="RemoveAdditionalDocument">
+                            <span class="oi oi-trash"></span>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -300,6 +305,13 @@
             await OnContractUploaded.InvokeAsync(_contract);
             _contract = CreateEmptyContract();
         }
+    }
+
+    private void RemoveAdditionalDocument()
+    {
+        _contract.AdditionalDocument = null;
+        _additionalDocumentContent = null;
+        // todo: make sure that the document is deleted on the server as well.
     }
 
 }
