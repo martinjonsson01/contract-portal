@@ -28,12 +28,14 @@ internal class DocumentVerifier : IVerifier
     /// <returns>Whether the stream is a valid image.</returns>
     public bool IsValid(Stream stream)
     {
+        stream.Position = 0;
+        ImmutableArray<MimeTypeMatch> results = _inspector.Inspect(stream).ByMimeType();
+        stream.Position = 0;
+
         // Allow the following MIME-types:
         // word, pdf, excel, png, jpg, gif, jpeg
         string pattern =
             @"( (application) +\/ (msword | pdf | vnd.openxmlformats-officedocument.spreadsheetml.sheet | vnd.ms-excel )  | (image) +\/ (png | jpg | gif | jpeg))";
-
-        ImmutableArray<MimeTypeMatch> results = _inspector.Inspect(stream).ByMimeType();
         var rgDoc = new Regex(pattern, RegexOptions.IgnorePatternWhitespace);
 
         return results.Any(match => rgDoc.IsMatch(match.MimeType));
@@ -46,7 +48,9 @@ internal class DocumentVerifier : IVerifier
     /// <returns>The file extension of the stream file type.</returns>
     public string GetFileExtensionOf(Stream stream)
     {
+        stream.Position = 0;
         ImmutableArray<FileExtensionMatch> extensions = _inspector.Inspect(stream).ByFileExtension();
+        stream.Position = 0;
 
         return extensions.First().Extension;
     }
