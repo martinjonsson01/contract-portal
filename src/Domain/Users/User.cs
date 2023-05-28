@@ -51,4 +51,22 @@ public class User
     /// Gets the most recently viewed contracts.
     /// </summary>
     public IList<RecentlyViewedContract> RecentlyViewContracts { get; } = new List<RecentlyViewedContract>();
+
+    /// <summary>
+    /// Creates a shallow copy.
+    /// </summary>
+    /// <returns>A shallow copy.</returns>
+    public User Copy()
+    {
+        return new User
+        {
+            Company = this.Company,
+            Email = this.Email,
+            Favorites = this.Favorites,
+            Id = this.Id,
+            LatestPaymentDate = this.LatestPaymentDate,
+            Name = this.Name,
+            Password = this.Password,
+        };
+    }
 }

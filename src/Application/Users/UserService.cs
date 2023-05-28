@@ -70,9 +70,11 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public void UpdateUser(User user)
+    public void UpdateUser(User user, bool encryptPassword = true)
     {
-        EncryptPasswordOf(user);
+        if (encryptPassword)
+            EncryptPasswordOf(user);
+
         _repo.UpdateUser(user);
     }
 

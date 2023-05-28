@@ -4,7 +4,6 @@ using Application.Users;
 using Blazorise.Extensions;
 using Domain.Contracts;
 using Domain.Users;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +58,30 @@ public class UsersController : BaseApiController<UsersController>
     }
 
     /// <summary>
+    /// Updates the user.
+    /// </summary>
+    /// <param name="patchDocument">The patch to use to update the user.</param>
+    /// <param name="id">The id of the user to update.</param>
+    /// <returns>The updated user.</returns>
+    [HttpPatch("{id:guid}")]
+    [Authorize("AdminOnly")]
+    public IActionResult UpdateUser([FromBody] JsonPatchDocument<User> patchDocument, Guid id)
+    {
+        User user = _users.FetchUser(id);
+
+        // Only need to encrypt the password if it's been modified, otherwise
+        // we'd just be re-encrypting an already encrypted password.
+        bool shouldEncryptPassword = patchDocument.Operations.Any(operation => operation.path == "/Password");
+
+        patchDocument.ApplyTo(user, ModelState);
+        _users.UpdateUser(user, shouldEncryptPassword);
+
+        // Can't place model in an invalid state at the moment, as all states are considered valid.
+        // In the future we might want to add model validation here.
+        return new ObjectResult(user);
+    }
+
+    /// <summary>
     /// Removes the specified user.
     /// </summary>
     /// <param name="id">Id of the user to be removed.</param>
@@ -67,9 +90,7 @@ public class UsersController : BaseApiController<UsersController>
     [Authorize("AdminOnly")]
     public IActionResult Remove(Guid id)
     {
-        return _users.Remove(id) ?
-            Ok() :
-            NotFound();
+        return _users.Remove(id) ? Ok() : NotFound();
     }
 
     /// <summary>

@@ -6,6 +6,7 @@
 @using System.ComponentModel.DataAnnotations
 @using System.Net.Mail
 @using Application
+@using Microsoft.AspNetCore.JsonPatch
 @inject HttpClient _http
 @inject IJSRuntime _js
 
@@ -47,6 +48,9 @@
 
     private User _user = CreateUnspecifiedUser();
 
+    // Only has a value while a user is being edited.
+    private User? _uneditedUser = null;
+
     /// <summary>
     /// Populates the form with the values of the given <see cref="User"/>.
     /// </summary>
@@ -56,6 +60,7 @@
         await _js.InvokeVoidAsync("scrollToElement", "#user-form-title");
         _user = user;
         _user.Password = string.Empty;
+        _uneditedUser = user.Copy();
     }
 
     private static User CreateUnspecifiedUser()
@@ -84,13 +89,39 @@
 
     private async Task UploadUser()
     {
-        string json = JsonConvert.SerializeObject(_user);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await _http.PutAsync($"api/v1/users", content);
+        HttpResponseMessage response;
+        if (_uneditedUser is not null)
+        {
+            var patchDocument = new JsonPatchDocument();
+
+            if (_user.Name != _uneditedUser.Name)
+                patchDocument.Replace("/Name", _user.Name);
+            if (!string.IsNullOrEmpty(_user.Password))
+                patchDocument.Replace("/Password", _user.Password);
+            if (_user.Email != _uneditedUser.Email)
+                patchDocument.Replace("/Email", _user.Email);
+            if (_user.Company != _uneditedUser.Company)
+                patchDocument.Replace("/Company", _user.Company);
+            if (_user.LatestPaymentDate != _uneditedUser.LatestPaymentDate)
+                patchDocument.Replace("/LatestPaymentDate", _user.LatestPaymentDate);
+
+            var json = JsonConvert.SerializeObject(patchDocument);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            response = await _http.PatchAsync($"api/v1/users/{_user.Id}", content);
+        }
+        else
+        {
+            var json = JsonConvert.SerializeObject(_user);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            response = await _http.PutAsync($"api/v1/users", content);
+        }
+
+
         if (response.IsSuccessStatusCode)
         {
             await OnUserAdded.InvokeAsync(_user);
             _user = CreateUnspecifiedUser();
+            _uneditedUser = null;
         }
     }
 }

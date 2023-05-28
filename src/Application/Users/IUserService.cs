@@ -24,7 +24,8 @@ public interface IUserService
     /// Updates the user with the new values.
     /// </summary>
     /// <param name="user">The new user.</param>
-    void UpdateUser(User user);
+    /// <param name="encryptPassword">Whether to encrypt the password-field of the user.</param>
+    void UpdateUser(User user, bool encryptPassword = true);
 
     /// <summary>
     /// Gets the user.
