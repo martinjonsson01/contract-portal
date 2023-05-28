@@ -26,6 +26,14 @@
     height: 3.75rem;
 }
 
+#login-container {
+    background-color: var(--prodigo-dark-beige);
+}
+
+.nav-item {
+    background-color: var(--prodigo-dark-beige);
+}
+
 ::deep .navbar-nav .nav-link {
     font-family: 'Merriweather', sans-serif;
     font-size: 1.0625rem;
