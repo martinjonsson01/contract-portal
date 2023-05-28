@@ -53,11 +53,8 @@
                                 <h3>Övriga filer</h3>
                             </Title>
                             <Body>
-                            <a id="additional-document"
-                               href="@Contract.AdditionalDocument.Path"
-                               download="@Contract.AdditionalDocument.Name">
-                                Ladda ned @Contract.AdditionalDocument.Name
-                            </a>
+                            <FileListItem Name="@Contract.AdditionalDocument.Name"
+                                          Path="@Contract.AdditionalDocument.Path"/>
                             </Body>
                         </AccordionItem>
                     }

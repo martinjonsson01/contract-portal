@@ -38,11 +38,6 @@ internal class ImageVerifier : IVerifier
         bool anyMatchIsImage =
             results.Any(match => match.MimeType.StartsWith("image/", StringComparison.InvariantCulture));
 
-        foreach (MimeTypeMatch match in results)
-        {
-            Console.WriteLine("file MIME is " + match);
-        }
-
         // Allow MIME-types starting with image/ since all widely used image formats do.
         return anyMatchIsImage;
     }

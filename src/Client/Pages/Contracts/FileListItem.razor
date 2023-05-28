@@ -1,0 +1,20 @@
+﻿<a id="additional-document"
+   href="@Path"
+   download="@Name">
+    Ladda ned @Name
+</a>
+
+@code {
+
+    /// <summary>
+    /// The 'href' field of the link.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public string Path { get; set; } = null!;
+
+    /// <summary>
+    /// The filename.
+    /// </summary>
+    [Parameter, EditorRequired,]
+    public string Name { get; set; } = null!;
+}
